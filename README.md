@@ -22,38 +22,36 @@ for selection, seed sensitivity, and negative results.
 
 ## Quick start
 
-Requires Python 3.10 or newer. NumPy runs the simulator and baseline controllers;
-PyTorch is optional for learned policies and training. Install
-[uv](https://docs.astral.sh/uv/getting-started/installation/) first; the
-[usage guide](docs/usage.md) also covers the curl installer and pip setup.
+On Linux or macOS, start with Git and curl installed:
 
 ```bash
-git clone https://github.com/cpaxton/trace-transport.git
+curl -fsSL https://raw.githubusercontent.com/cpaxton/trace-transport/main/scripts/install.sh | bash
 cd trace-transport
-uv sync --locked
+trace-transport console --open
+```
 
+The installer sets up uv, locked dependencies including PyTorch, and the
+`trace-transport` command in `~/.local/bin`. If that directory is missing from
+PATH, follow the shell setup instruction printed by the installer.
+The browser runs at `http://127.0.0.1:8765`.
+See the [usage guide](docs/usage.md#quick-start) for manual installation,
+custom directories, and baseline-only setup. Python 3.10 or newer is supported.
+
+```bash
 # Deliver exact UTF-8 bytes through a lossy simulated network.
-uv run --locked trace-transport simulate --text 'Hello, こんにちは 🌐' \
+trace-transport simulate --text 'Hello, こんにちは 🌐' \
   --loss 0.1 --ack-loss 0.1 --seed 7 --show-text --output received.txt
 
-# Open the local browser test bench.
-uv run --locked trace-transport console --open
-
 # Compare fixed-rate and AIMD on ten paired trials.
-uv run --locked trace-transport benchmark
-```
+trace-transport benchmark
 
-The browser runs at `http://127.0.0.1:8765`. Benchmark reports are saved to
-`runs/benchmark.json`; browser reports go to `runs/console/`. Run any subcommand
-with `--help` for options.
-
-To try the bundled learned sender:
-
-```bash
-uv sync --locked --extra learn
-uv run --locked --extra learn trace-transport benchmark --controllers fixed aimd learned --reward completion \
+# Compare the bundled learned sender with the baselines.
+trace-transport benchmark --controllers fixed aimd learned --reward completion \
   --checkpoint artifacts/robust-v2-best.pt
 ```
+
+Benchmark reports are saved to `runs/benchmark.json`; browser reports go to
+`runs/console/`. Run any subcommand with `--help` for options.
 
 Exact reconstruction is enforced by protocol code. Incomplete transfers are
 reported explicitly. Messages must be valid UTF-8, are buffered in full, and are
