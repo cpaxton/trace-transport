@@ -14,13 +14,36 @@ requirement.
 multi-flow packet simulator, fixed-rate/AIMD controllers, a masked history
 transformer, PPO training, paired evaluation, and single-message UDP adapters are
 implemented, including MLP/GRU history baselines and versioned reward profiles.
-The learned policy currently controls the sender; receiver feedback
-and custom metadata are deterministic. Joint sender/receiver learning and a
+The default learned policy controls the sender. A separate receiver-only
+experiment learns bounded ACK batching and delay with a frozen AIMD sender;
+arbitrary metadata remains deterministic. Joint sender/receiver learning and a
 GPU-native simulator remain planned. The [paper working draft](paper/main.tex)
 describes the system and evaluation plan; preliminary diagnostics do not establish
 general superiority over transport baselines.
 
 ## Quick start
+
+On Linux or macOS, install into `./trace-transport` with Git and curl available:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/cpaxton/trace-transport/main/scripts/install.sh | bash
+```
+
+The [installer](scripts/install.sh) installs uv if missing, clones the repository,
+and installs locked dependencies including PyTorch. It adds a `trace-transport`
+command in `~/.local/bin` pointing to the checkout's environment, so normal use is
+`trace-transport console --open` without an `uv run` prefix. If that directory
+isn't on PATH, it prints the shell configuration line to add. Set
+`TRACE_TRANSPORT_BIN_DIR` to choose another command directory. It refuses to
+overwrite an unrelated command. It reuses an existing checkout without pulling or
+resetting your work. To choose a directory or skip PyTorch:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/cpaxton/trace-transport/main/scripts/install.sh \
+  | bash -s -- --dir "$HOME/trace-transport" --baseline-only
+```
+
+For manual installation:
 
 Install [uv](https://docs.astral.sh/uv/getting-started/installation/) (0.7.2 or
 newer), then run these commands from a terminal:
@@ -37,6 +60,11 @@ For an existing checkout, start with `uv sync --locked --extra learn`. The brows
 scenario and controllers, then click **Run comparison**. Ten trials per controller
 are selected by default. The bundled checkpoint enables learned-policy tests
 without training first.
+
+To add the plain command to PATH for an existing manual checkout, run
+`bash scripts/install.sh --dir "$PWD"` once. The installer keeps the environment
+in this checkout; keep that directory in place and use `uv sync --locked --extra
+learn` there after dependency updates.
 
 `uv` creates `.venv`, selects Python 3.12 from `.python-version`, and installs the
 versions in `uv.lock`. No manual virtualenv creation or activation is required.
@@ -584,13 +612,85 @@ The current TRC1 wire format, ACKs, retransmissions, reassembly, and completion
 digest are our own protocol. TCP is not in the data path, and replacing IP is
 outside this project's scope.
 
-Only sender pacing and the in-flight window are learned today. The next protocol
-experiment should add bounded receiver ACK timing and typed metadata actions,
-then compare them with deterministic feedback on held-out networks. Charge every
-feedback byte, retain the correctness kernel, test lost final ACKs and delayed
-duplicates, and ablate each new action before adding learned retransmission or
-redundancy decisions. Version the wire schema whenever endpoint compatibility
-changes. Joint endpoint learning and GPU simulation remain unimplemented.
+The sender policy controls pacing and optionally the in-flight window. The
+separate receiver-v1 experiment learns ACK batching and timing with the sender
+held fixed. Every feedback byte consumes simulated reverse-link capacity. The
+correctness kernel validates byte ranges and transmission IDs independently of
+the policy. Joint endpoint learning and GPU simulation remain unimplemented.
+
+### Receiver experiment: goals and win conditions
+
+The hypothesis is that local arrival history helps a receiver trade feedback
+overhead against sender stalls and recovery time. The largest opportunity is on
+asymmetric paths where ACKs compete for scarce return capacity. On clean paths,
+waiting to batch ACKs can make completion slower. There is no expected integrity
+advantage: exact reconstruction is a requirement for every controller.
+
+```bash
+uv run --locked --extra learn python scripts/receiver_experiment.py
+```
+
+The experiment trains three small history transformers (seeds 42/43/44, 80
+episodes each), with a frozen AIMD sender and two simultaneous Unicode transfers.
+Receiver observations are 22 local features over eight time steps; they contain
+arrivals, reordering, received ranges, pending feedback, and local timers, with
+no sender state, link capacity, queue occupancy, or hidden loss probability.
+Every 20 ms, two bounded actions choose a batch target of 1/2/4/8 ACK entries and
+a maximum delay of 0–25 ms. Completion feedback flushes immediately, and a timer
+flushes partial batches so the policy cannot permanently suppress feedback.
+
+ACK batches carry actual received byte ranges and transmission IDs under a new
+explicit packet kind (`ACK_BATCH=3`); older endpoints reject that kind. Encoded
+metadata stays within 512 bytes, splitting batches as necessary. ACK delay is
+carried on the wire and removed from the sender's RTT sample. This capability is
+**simulator-only**; the UDP adapter retains its original immediate feedback.
+
+Compare with immediate feedback and deterministic 2/4/8-entry delayed ACKs,
+including an 8-entry/25-ms policy. Select the learned seed and the strongest
+deterministic baseline using validation seeds 1000–1004, completion first and
+then common transport-v2 return. Freeze those choices before testing seeds
+2000–2019 on clean, asymmetric, lossy, changing-capacity, and outage cases.
+Training excludes the outage preset. Scenario families otherwise overlap; this
+is held-out randomness, not evidence of broad out-of-distribution generalization.
+
+**Win condition:** both selected policies complete every test transfer exactly,
+and the learned receiver either reduces completion time with a paired 95%
+confidence interval below zero without increasing mean feedback bytes, or
+reduces feedback bytes with a paired 95% interval below zero while the completion
+time interval's upper bound stays within +5%. Bootstrap whole paired seeds,
+keeping dependent flows and scenarios together. Report failures, total data
+bytes, retransmissions, and undiscounted team return too. A better reward alone
+does not establish a win. These small diagnostic intervals are not a deployment
+claim, and simulated time currently excludes neural inference cost.
+
+The runner writes its configuration, training logs, validation selection, raw
+paired results, and receiver checkpoints to `runs/receiver-v1/`. Receiver and
+sender checkpoints have distinct schemas and cannot be interchanged. Learned
+metadata, retransmission, redundancy, and joint self-play are subsequent
+experiments, each requiring an ablation against tuned deterministic controls.
+
+#### Receiver-v1 result
+
+The [recorded experiment](artifacts/receiver-v1-results.json) **did not meet the
+win condition**. Validation selected learned seed 43 and delayed-8/25-ms feedback.
+On the reserved test seeds:
+
+| Receiver | Exact completed transfers | Feedback bytes | Mean elapsed seconds |
+| --- | ---: | ---: | ---: |
+| Immediate ACK | 215/240 | 3,765,162 | 4.788 |
+| Learned receiver, seed 43 | 223/240 | 3,099,580 | 4.354 |
+| Deterministic batch 8, delay 25 ms | 240/240 | 2,505,897 | 3.777 |
+
+All reconstructed payloads were correct. Elapsed time includes deadline duration
+for failed transfers; it is not a successful-transfer latency statistic. Every
+learned-policy failure occurred on the 24-kbit/s reverse path. Relative to the
+validation-selected baseline, the learned receiver used 23.7% more feedback and
+had 15.3% greater mean elapsed time. The useful gain here came from deterministic
+batching, not learning. Three short training runs do not establish that learning
+cannot help; they establish that this training budget and policy did not help.
+The [candidate checkpoint](artifacts/receiver-v1-candidate.pt) is retained for
+reproduction, not promoted as a better default. The [configuration](experiments/receiver-v1.json)
+records training budgets, scenarios, seed splits, selection, and win conditions.
 
 The first implementation uses a deliberately understandable reliability kernel:
 

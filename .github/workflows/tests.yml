@@ -24,6 +24,7 @@ jobs:
       - run: uv sync --locked
       - run: uv run --locked pytest -q
       - run: node --check src/trace_transport/web/app.js
+      - run: bash -n scripts/install.sh
       - run: uv run --locked trace-transport benchmark --trials 2 --report runs/ci-benchmark.json
 
   learned-policies:

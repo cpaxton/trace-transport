@@ -292,9 +292,44 @@ ablation also completes validation, so the experiment does not isolate the new
 reward as the cause of improvement. Scenarios are fixed diagnostic conditions,
 not an Internet deployment benchmark; flows within a trial are dependent.
 
+\section{Receiver-only diagnostic}
+We freeze the AIMD sender and train a separate eight-step history transformer
+(width 32, one layer) on 22 receiver-local features. Two actions select an ACK
+batch target from $\{1,2,4,8\}$ and a maximum delay in $[0,25]$ ms. A timer flushes
+partial batches; completion feedback is immediate. An explicit experimental
+packet kind carries bounded batches of actual received ranges and transmission
+IDs. Encoded feedback consumes reverse-link capacity, and explicit ACK delay is
+removed from RTT samples. This extension is simulator-only.
+
+Three training seeds receive 80 episodes each. Validation seeds 1000--1004 select
+the learned candidate and a deterministic baseline by completion, then common
+undiscounted transport-v2 return. Test seeds 2000--2019 remain separate. Six
+scenarios include clean, two asymmetric reverse paths, loss, changing forward
+capacity, and an outage; the outage family is absent from training. Two flows
+share each trial. Other scenario families overlap training, so held-out seeds do
+not constitute general out-of-distribution evaluation.
+
+The diagnostic win requires exact completion of every transfer for both selected
+policies, plus either lower elapsed time with a paired 95\% interval below zero
+and no greater mean feedback, or lower feedback with a paired interval below
+zero and elapsed-time upper confidence bound within $+5\%$. Bootstrap resampling
+uses whole seeds, retaining dependent flows and scenarios together.
+
+Validation selects learned seed 43 and deterministic batch-8/25-ms feedback.
+On 240 final-test transfers, the learned receiver completes 223, immediate ACKs
+complete 215, and the selected deterministic baseline completes 240. No wrong
+payloads occur. Feedback totals are respectively 3,099,580, 3,765,162, and
+2,505,897 bytes. The learned candidate has 23.7\% more feedback and 15.3\% greater
+mean elapsed time than the selected baseline, counting deadlines for failures.
+All 17 learned-candidate failures occur with the 24-kbit/s reverse path.
+The win condition fails: batching helps this testbed, but this short learning
+experiment does not outperform tuned deterministic batching. Simulated elapsed
+time excludes actor inference cost. Configurations, raw paired records, training
+logs, and a separately versioned candidate checkpoint accompany the repository.
+
 \section{Implementation stages and open questions}
 The sequence is: (1) reliable CPU text transfer, (2) a history-based learned
-sender, (3) a validated GPU backend, (4) learned receiver feedback and additional
+sender, (3) a validated GPU backend, (4) joint learned feedback and additional
 protocol heads, and (5) a real datagram adapter with multi-host evaluation.
 The full target combines these pieces with reproducible configurations,
 checkpoints, bounded resources, and explicit failure semantics.

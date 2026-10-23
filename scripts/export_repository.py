@@ -19,8 +19,8 @@ def source_paths(root):
                                       "paper/main.tex", "paper/references.bib", "artifacts/SHA256SUMS")]
     for pattern in ("src/**/*.py", "src/trace_transport/scenarios/*.json", "src/trace_transport/web/*.html",
                     "src/trace_transport/web/*.css", "src/trace_transport/web/*.js", "tests/*.py",
-                    "scripts/*.py", "experiments/*.json", ".github/workflows/*.yml", "artifacts/*.json",
-                    "artifacts/robust-v2-best.pt"):
+                    "scripts/*.py", "scripts/*.sh", "experiments/*.json", ".github/workflows/*.yml", "artifacts/*.json",
+                    "artifacts/robust-v2-best.pt", "artifacts/receiver-v1-candidate.pt"):
         paths.extend(root.glob(pattern))
     return sorted({path.relative_to(root) for path in paths if path.is_file()})
 

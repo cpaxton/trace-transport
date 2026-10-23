@@ -156,7 +156,8 @@ class TransferResult:
 
 class PacketSimulator:
     def __init__(self, texts: list[str], config: NetworkConfig | None = None, *, seed: int = 0,
-                 start_times: list[float] | None = None, receiver_metadata: dict | None = None):
+                 start_times: list[float] | None = None, receiver_metadata: dict | None = None,
+                 receiver_feedback: bool = False):
         if not texts:
             raise ValueError("at least one text transfer is required")
         self.config = config or NetworkConfig()
@@ -183,6 +184,14 @@ class PacketSimulator:
         self.feedback_bytes = [0] * len(texts)
         self._wake_generation = [0] * len(texts)
         self.processed_events = 0
+        self.feedback_schedulers = []
+        if receiver_feedback:
+            from .feedback import FeedbackScheduler
+            for index in range(len(texts)):
+                def schedule(time, callback, generation):
+                    self._schedule(time, lambda: callback(generation, self.now))
+                self.feedback_schedulers.append(FeedbackScheduler(
+                    lambda ack, i=index: self._transmit(i, ack, feedback=True), schedule))
         for index in range(len(texts)):
             self._schedule_wake(index)
 
@@ -259,7 +268,10 @@ class PacketSimulator:
         else:
             ack = self.receivers[index].on_data(packet, self.now)
             if ack is not None:
-                self._transmit(index, ack, feedback=True)
+                if self.feedback_schedulers:
+                    self.feedback_schedulers[index].on_ack(ack, self.now)
+                else:
+                    self._transmit(index, ack, feedback=True)
 
     def advance(self, actions, *, until: float | None = None) -> None:
         if self.finished:

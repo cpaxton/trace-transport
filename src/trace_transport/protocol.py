@@ -8,7 +8,7 @@ from dataclasses import dataclass, field
 import hashlib
 import math
 
-from .wire import ACK, DATA, MAX_PAYLOAD, Packet
+from .wire import ACK, DATA, MAX_PAYLOAD, ACK_BATCH, Packet
 
 MAX_MESSAGE_BYTES = 16 * 1024 * 1024
 RATE_MIN = 2_000.0
@@ -156,6 +156,26 @@ class Sender:
         return packet
 
     def on_ack(self, packet: Packet, now: float) -> bool:
+        if packet.kind == ACK_BATCH:
+            entries = packet.metadata.get("acks")
+            if not isinstance(entries, list) or not 2 <= len(entries) <= 8:
+                return False
+            # Validate the entire envelope before changing sender state.
+            for entry in entries:
+                if not isinstance(entry, list) or len(entry) != 4:
+                    return False
+                tx, offset, length, delay = entry
+                if any(type(x) is not int or x < 0 for x in (tx, offset, length)):
+                    return False
+                if type(delay) not in (int, float) or not math.isfinite(delay) or not 0 <= delay <= .025:
+                    return False
+            accepted = False
+            for tx, offset, length, delay in entries:
+                metadata = {k: v for k, v in packet.metadata.items() if k != "acks"}
+                metadata.update(length=length, ack_delay=delay)
+                accepted |= self.on_ack(Packet(ACK, packet.message_id, tx, offset, packet.total,
+                                               metadata=metadata), now)
+            return accepted
         if packet.kind != ACK or packet.message_id != self.message_id or packet.total != len(self.payload):
             return False
         segment = self.segments.get(packet.offset)
@@ -171,7 +191,10 @@ class Sender:
                 return False
             self.verified_completion = True
         if packet.transmission_id == segment.transmission_id:
-            sample = max(1e-6, now - segment.sent_at)
+            delay = packet.metadata.get("ack_delay", 0.)
+            if type(delay) not in (int, float) or not math.isfinite(delay) or not 0 <= delay <= .025:
+                delay = 0.
+            sample = max(1e-6, now - segment.sent_at - delay)
             self.rtt_samples.append(sample)
             self.min_rtt = min(self.min_rtt, sample) if self.min_rtt else sample
             if self.srtt:
