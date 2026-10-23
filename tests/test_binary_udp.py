@@ -16,8 +16,9 @@ def png_fixture():
     return b'\x89PNG\r\n\x1a\n'+chunk(b'IHDR',header)+chunk(b'IDAT',zlib.compress(pixels))+chunk(b'IEND',b'')
 
 
+@pytest.mark.parametrize('learned',[False,True])
 @pytest.mark.parametrize('payload',[b'',bytes(range(256))*8,png_fixture()])
-def test_binary_file_transfer_and_lost_completion_without_os_sockets(tmp_path,monkeypatch,payload):
+def test_binary_file_transfer_and_lost_completion_without_os_sockets(tmp_path,monkeypatch,payload,learned):
     endpoints={};dropped=[]
     class Socket:
         def __init__(self,*args):
@@ -40,13 +41,20 @@ def test_binary_file_transfer_and_lost_completion_without_os_sockets(tmp_path,mo
             except Empty:raise TimeoutError
         def recv(self,size):return self.recvfrom(size)[0]
     monkeypatch.setattr(binary_udp,'socket',SimpleNamespace(socket=Socket,AF_INET=0,SOCK_DGRAM=0,timeout=TimeoutError))
+    checkpoint=None
+    if learned:
+        pytest.importorskip('torch')
+        from trace_transport.joint_models import JointModelConfig,SenderActor,ReceiverActor,CentralCritic,save_checkpoint
+        cfg=JointModelConfig(history=4,width=32,layers=1);checkpoint=tmp_path/'actor.pt'
+        save_checkpoint(checkpoint,SenderActor(cfg),ReceiverActor(cfg),CentralCritic(),cfg,{})
     ready=Queue();out=tmp_path/'received.bin'
     with ThreadPoolExecutor(1) as executor:
         future=executor.submit(binary_udp.receive_bytes,'127.0.0.1',0,out,timeout=3,linger=.8,ready=ready.put)
         port=ready.get(timeout=1)
-        result=binary_udp.send_bytes(payload,'127.0.0.1',port,traffic_class='image',timeout=2)
+        result=binary_udp.send_bytes(payload,'127.0.0.1',port,traffic_class='image',timeout=2,checkpoint=checkpoint)
         received=future.result(timeout=4)
     assert result['completed'] and received['completed']
     assert result['sha256']==received['sha256']
     assert out.read_bytes()==payload
     assert dropped
+    assert result["policy_decisions"]>0 if learned else result["policy_decisions"]==0

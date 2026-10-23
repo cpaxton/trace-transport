@@ -24,6 +24,22 @@ def _rank(rows,reference):
     return feasible,-a['interactive_miss_rate'],-a['wire_per_delivered_byte']
 
 
+def _ready(root,directories,progress,output,wait):
+    for directory in directories:
+        while not (root/directory/'final.pt').exists():
+            progress.update(phase='waiting-for-training',run=directory);_write(output/'progress.json',progress)
+            if not wait:raise RuntimeError(f'training incomplete: {directory}; rerun with --wait')
+            print('waiting for',directory,flush=True);time.sleep(30)
+    for directory in directories:
+        _,_,model_cfg,meta=load_checkpoint(root/directory/'final.pt')
+        config=meta['training']
+        if meta['decisions']<config['decisions']:raise ValueError('incomplete training checkpoint')
+        if directory.startswith('seed') and config['seed']!=int(directory[4:]):raise ValueError('seed/directory mismatch')
+        if directory=='history1' and model_cfg.history!=1:raise ValueError('history ablation is not one-step')
+        if directory=='sender-only' and config.get('learn_receiver',True):raise ValueError('receiver was not frozen')
+        if directory=='receiver-only' and config.get('learn_sender',True):raise ValueError('sender was not frozen')
+
+
 def run(root,*,device='cpu',environments=4,wait=False,quick=False):
     root=Path(root);output=root/'study';output.mkdir(parents=True,exist_ok=True)
     plan=dict(version='joint-study-v1',calibration_seeds=list(range(30000,30000+(2 if quick else 4))),
@@ -63,19 +79,7 @@ def run(root,*,device='cpu',environments=4,wait=False,quick=False):
             baseline_validation[name]=evaluate(seeds=plan['validation_seeds'],baseline=configs[name],environments=environments,production=full_prod,drain=full_drain)
         reference_name=select_baseline(baseline_validation);reference=configs[reference_name]
         _write(output/'baseline.json',dict(selected=reference_name,config=reference,validation=baseline_validation))
-    for directory in ['seed42','seed43','seed44','history1','sender-only','receiver-only']:
-        while not (root/directory/'final.pt').exists():
-            progress.update(phase='waiting-for-training',run=directory);_write(output/'progress.json',progress)
-            if not wait:raise RuntimeError(f'training incomplete: {directory}; rerun with --wait')
-            print('waiting for',directory,flush=True);time.sleep(30)
-    for directory in ['seed42','seed43','seed44','history1','sender-only','receiver-only']:
-        _,_,model_cfg,meta=load_checkpoint(root/directory/'final.pt')
-        config=meta['training']
-        if meta['decisions']<config['decisions']:raise ValueError('incomplete training checkpoint')
-        if directory.startswith('seed') and config['seed']!=int(directory[4:]):raise ValueError('seed/directory mismatch')
-        if directory=='history1' and model_cfg.history!=1:raise ValueError('history ablation is not one-step')
-        if directory=='sender-only' and config.get('learn_receiver',True):raise ValueError('receiver was not frozen')
-        if directory=='receiver-only' and config.get('learn_sender',True):raise ValueError('sender was not frozen')
+    _ready(root,['seed42','seed43','seed44'],progress,output,wait)
     screen_reference=evaluate(seeds=plan['screen_seeds'],baseline=reference,environments=environments,
         production=2 if quick else 6,drain=2 if quick else 4)
     _write(output/'screen-reference.json',screen_reference)
@@ -96,6 +100,7 @@ def run(root,*,device='cpu',environments=4,wait=False,quick=False):
         ranked=sorted([str(p.relative_to(root)) for p in paths[1:]],key=lambda key:_rank(screen[key],screen_reference),reverse=True)
         candidates.extend(ranked[:2])
     validation_path=output/'validation.json';validation=json.loads(validation_path.read_text()) if validation_path.exists() else {}
+    progress.update(phase='full-validation');_write(output/'progress.json',progress)
     for key in dict.fromkeys(candidates):
         if key not in validation:
             validation[key]=evaluate(seeds=plan['validation_seeds'],checkpoint=root/key,device=device,environments=environments,production=full_prod,drain=full_drain)
@@ -105,7 +110,13 @@ def run(root,*,device='cpu',environments=4,wait=False,quick=False):
     selection=dict(checkpoint=selected,baseline=reference_name,validation_summaries={k:summarize(v) for k,v in validation.items()})
     _write(output/'selection.json',selection)
     export_actors(root/selected,output/'joint-v1-actors.pt')
+    _ready(root,['history1','sender-only','receiver-only'],progress,output,wait)
     result=dict(plan=plan,selection=selection,baseline=reference,final_test={},ood={})
+    if (output/'results.json').exists():
+        cached=json.loads((output/'results.json').read_text())
+        if any(cached.get(k)!=v for k,v in [('plan',plan),('selection',selection),('baseline',reference)]):
+            raise ValueError('cached held-out results disagree with frozen selection or plan')
+        result=cached
     modes=[('joint',root/selected,True,True),('baseline',None,False,False),
            ('sender-crossplay',root/selected,True,False),('receiver-crossplay',root/selected,False,True),
            ('history1',root/'history1/final.pt',True,True),('sender-only-training',root/'sender-only/final.pt',True,True),
@@ -114,6 +125,10 @@ def run(root,*,device='cpu',environments=4,wait=False,quick=False):
     for suite,seeds,ood in [('final_test',plan['test_seeds'],False),('ood',plan['ood_seeds'],True)]:
         for label,path,send,receive in modes:
             progress.update(phase=suite,run=label);_write(output/'progress.json',progress)
+            if label in result[suite]:
+                if [r['seed'] for r in result[suite][label]['records']]!=seeds:
+                    raise ValueError('cached held-out seed list mismatch')
+                continue
             rows=evaluate(seeds=seeds,checkpoint=path,baseline=reference,device=device,environments=environments,
                 production=full_prod,drain=full_drain,ood=ood,sender_enabled=send,receiver_enabled=receive)
             result[suite][label]=dict(summary=summarize(rows),records=rows)

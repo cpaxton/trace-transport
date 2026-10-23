@@ -186,9 +186,7 @@ class Sender:
         if complete and (prefix != len(self.payload) or meta.get("sha256") != self.expected_digest):
             return False
         # Summaries can only credit complete ranges actually sent by this sender.
-        covered = [s for off, s in self.segments.items()
-                   if off + len(s.payload) <= prefix or
-                   any(low <= off and off + len(s.payload) <= high for low, high in ranges)]
+        covered = self._receipt_coverage(prefix, ranges)
         if any(not s.attempts for s in covered):
             return False
         if type(meta.get("length")) is not int or meta['length'] != len(anchor.payload):
@@ -207,6 +205,7 @@ class Sender:
             segment.transmission_id = None
             segment.transmission_ids.clear()
             segment.acknowledged = True
+            self._ack_index(segment)
             self.acknowledged_bytes += len(segment.payload)
         self.last_ack_at = now
         self.peer_metadata = meta.copy()
@@ -218,6 +217,14 @@ class Sender:
         if self.completed_at is None and self.verified_completion and all(s.acknowledged for s in self.segments.values()):
             self.completed_at = now
         return True
+
+    def _receipt_coverage(self, prefix, ranges):
+        return [s for off, s in self.segments.items()
+                if off + len(s.payload) <= prefix or
+                any(low <= off and off + len(s.payload) <= high for low, high in ranges)]
+
+    def _ack_index(self, segment):
+        """Optional acceleration hook; reference sender has no auxiliary index."""
 
     def on_ack(self, packet: Packet, now: float) -> bool:
         if packet.kind == ACK_RECEIPT:
@@ -275,6 +282,7 @@ class Sender:
         segment.transmission_id = None
         segment.transmission_ids.clear()
         segment.acknowledged = True
+        self._ack_index(segment)
         self.acknowledged_bytes += len(segment.payload)
         self.last_ack_at = now
         self.peer_metadata = packet.metadata.copy()

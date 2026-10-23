@@ -39,6 +39,8 @@ def main(argv=None):
     demo.add_argument('--drain-seconds',type=float,default=5)
     demo.add_argument('--report',type=Path,default=Path('runs/joint-demo.json'))
     send=commands.add_parser('send-file')
+    send.add_argument('--checkpoint',type=Path,help='experimental joint sender actor; deterministic receiver, single-file distribution shift')
+    send.add_argument('--device',default='cpu')
     send.add_argument('--input',type=Path,required=True);send.add_argument('--host',default='127.0.0.1')
     send.add_argument('--port',type=int,default=9001);send.add_argument('--timeout',type=float,default=30)
     send.add_argument('--class',dest='traffic_class',choices=['interactive','image','map','bulk'],default='bulk')
@@ -98,7 +100,7 @@ def main(argv=None):
         if args.command=='send-file':
             from .messages import MAX_MESSAGE_BYTES
             if args.input.stat().st_size>MAX_MESSAGE_BYTES:p.error('file exceeds the 16-MiB message limit')
-            result=send_bytes(args.input.read_bytes(),args.host,args.port,traffic_class=args.traffic_class,timeout=args.timeout)
+            result=send_bytes(args.input.read_bytes(),args.host,args.port,traffic_class=args.traffic_class,timeout=args.timeout,checkpoint=args.checkpoint,device=args.device)
         else:result=receive_bytes(args.host,args.port,args.output,timeout=args.timeout,linger=args.linger,
             ready=(lambda port:print(json.dumps({'ready':True,'port':port}),flush=True)) if args.ready_json else None)
         print(json.dumps(result,indent=2));return 0 if result['completed'] else 2

@@ -102,7 +102,6 @@ def train(output,cfg=JointTrainConfig(),model_cfg=JointModelConfig(),resume=None
     if resume is None and (output/'config.json').exists():raise ValueError('training output already exists; use a new run directory')
     torch.set_num_threads(1);torch.manual_seed(cfg.seed)
     if cfg.device.startswith('cuda') and not torch.cuda.is_available():raise RuntimeError('requested CUDA is unavailable')
-    pool=EnvironmentPool(cfg.environments)
     sender=SenderActor(model_cfg).to(cfg.device);receiver=ReceiverActor(model_cfg).to(cfg.device);critic=CentralCritic().to(cfg.device)
     optimizers=[torch.optim.Adam(m.parameters(),lr=cfg.learning_rate) for m in (sender,receiver,critic)]
     obs=[];states=[];histories=[];episodes=list(range(cfg.environments));next_episode=cfg.environments
@@ -117,10 +116,12 @@ def train(output,cfg=JointTrainConfig(),model_cfg=JointModelConfig(),resume=None
         sender.load_state_dict(data['sender']);receiver.load_state_dict(data['receiver']);critic.load_state_dict(data['critic'])
         for optimizer,state in zip(optimizers,data['optimizers']):optimizer.load_state_dict(state)
         decisions=old['decisions'];world_steps=old['world_steps'];updates=old['updates'];last_checkpoint=decisions
+        if decisions>=cfg.decisions:raise ValueError('resume checkpoint has already reached training budget')
         next_episode=max(old['episode_counters'])+1
         episodes=list(range(next_episode,next_episode+cfg.environments));next_episode+=cfg.environments
         torch.set_rng_state(old['torch_rng'])
         if cfg.device.startswith('cuda'):torch.cuda.set_rng_state_all(old['cuda_rng'])
+        metadata['resume_history']=old.get('resume_history',[])+([old['resume']] if 'resume' in old else [])
         metadata['resume']={'source':str(resume),'sha256':hashlib.sha256(resume.read_bytes()).hexdigest(),
             'decisions':decisions,'collector_reset':True,
             'description':'Optimizer and RNG continuation; in-flight worlds and local histories reset with fresh episode seeds.'}
@@ -137,6 +138,7 @@ def train(output,cfg=JointTrainConfig(),model_cfg=JointModelConfig(),resume=None
         stage='easy' if decisions<cfg.decisions*cfg.easy_fraction else 'full'
         o,state,_=pool.reset(index,_seed(cfg.seed,episode),cfg.production_seconds,cfg.drain_seconds,stage)
         return o,state,Histories(o,model_cfg)
+    pool=EnvironmentPool(cfg.environments)
     try:
         for i in range(cfg.environments):
             o,state,h=reset(i,episodes[i]);obs.append(o);states.append(state);histories.append(h)
@@ -201,4 +203,10 @@ def train(output,cfg=JointTrainConfig(),model_cfg=JointModelConfig(),resume=None
         temp=output/'progress.tmp';temp.write_text(json.dumps(log,indent=2)+'\n');temp.replace(output/'progress.json')
         (output/'episodes.json').write_text(json.dumps(completed,indent=2)+'\n')
         return output/'final.pt'
+    except BaseException as exc:
+        failure=dict(phase='interrupted' if isinstance(exc,KeyboardInterrupt) else 'failed',
+            pid=os.getpid(),decisions=decisions,world_steps=world_steps,error=repr(exc),
+            checkpoint=str(output/'latest.pt'))
+        temp=output/'failure.tmp';temp.write_text(json.dumps(failure,indent=2)+'\n');temp.replace(output/'failure.json')
+        raise
     finally:pool.close()

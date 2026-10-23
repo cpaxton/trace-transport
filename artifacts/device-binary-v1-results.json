@@ -1,0 +1,193 @@
+{
+  "kind": "bounded device engineering test",
+  "devices": [
+    {
+      "device": "herman",
+      "condition": "wifi-stationary",
+      "started_unix": 1792792919.5566435,
+      "finished_unix": 1792792959.726022,
+      "source_sha256": "c2b3cf2cbfa71e87004a47e45a9a7493da35ea3fddc21566d35b039d27c017eb",
+      "classes": {
+        "interactive": {
+          "trials": 3,
+          "exact": 3,
+          "payload_bytes": 1152,
+          "mean_sender_elapsed_seconds": 0.012717087665805593,
+          "total_retransmitted_payload_bytes": 0,
+          "policy_decisions": 0
+        },
+        "image": {
+          "trials": 3,
+          "exact": 3,
+          "payload_bytes": 196992,
+          "mean_sender_elapsed_seconds": 2.032778848670811,
+          "total_retransmitted_payload_bytes": 0,
+          "policy_decisions": 0
+        },
+        "map": {
+          "trials": 3,
+          "exact": 3,
+          "payload_bytes": 524288,
+          "mean_sender_elapsed_seconds": 5.3666953823364265,
+          "total_retransmitted_payload_bytes": 0,
+          "policy_decisions": 0
+        }
+      },
+      "icmp": {
+        "transmitted": 80,
+        "received": 80,
+        "loss_fraction": 0.0,
+        "rtt_min_mean_max_mdev_ms": [
+          0.831,
+          3.44,
+          30.15,
+          4.971
+        ]
+      },
+      "controller": "deterministic-reliability"
+    },
+    {
+      "device": "herman",
+      "condition": "wifi-stationary",
+      "started_unix": 1792793140.6499565,
+      "finished_unix": 1792793180.8701541,
+      "source_sha256": "c8fcbf676964bb043032e5a38cf64078f167557abfd949e0375dbb32108b6161",
+      "classes": {
+        "interactive": {
+          "trials": 3,
+          "exact": 3,
+          "payload_bytes": 1152,
+          "mean_sender_elapsed_seconds": 0.012430985996616073,
+          "total_retransmitted_payload_bytes": 0,
+          "policy_decisions": 3
+        },
+        "image": {
+          "trials": 3,
+          "exact": 3,
+          "payload_bytes": 196992,
+          "mean_sender_elapsed_seconds": 0.804756249000396,
+          "total_retransmitted_payload_bytes": 0,
+          "policy_decisions": 115
+        },
+        "map": {
+          "trials": 3,
+          "exact": 3,
+          "payload_bytes": 524288,
+          "mean_sender_elapsed_seconds": 1.219775208000404,
+          "total_retransmitted_payload_bytes": 0,
+          "policy_decisions": 177
+        }
+      },
+      "icmp": {
+        "transmitted": 80,
+        "received": 80,
+        "loss_fraction": 0.0,
+        "rtt_min_mean_max_mdev_ms": [
+          0.764,
+          36.701,
+          318.449,
+          82.837
+        ]
+      },
+      "controller": "joint-sender-single-file",
+      "checkpoint_sha256": "82edeacdb0c7f439fd4881af4fe875d32305ce2c279c33f6e6481ee4280609bc"
+    },
+    {
+      "device": "caliban",
+      "condition": "ethernet",
+      "started_unix": 1792792923.2840314,
+      "finished_unix": 1792792963.644052,
+      "source_sha256": "c2b3cf2cbfa71e87004a47e45a9a7493da35ea3fddc21566d35b039d27c017eb",
+      "classes": {
+        "interactive": {
+          "trials": 3,
+          "exact": 3,
+          "payload_bytes": 1152,
+          "mean_sender_elapsed_seconds": 0.011443071993805157,
+          "total_retransmitted_payload_bytes": 0,
+          "policy_decisions": 0
+        },
+        "image": {
+          "trials": 3,
+          "exact": 3,
+          "payload_bytes": 196992,
+          "mean_sender_elapsed_seconds": 1.9583290290029254,
+          "total_retransmitted_payload_bytes": 0,
+          "policy_decisions": 0
+        },
+        "map": {
+          "trials": 3,
+          "exact": 3,
+          "payload_bytes": 524288,
+          "mean_sender_elapsed_seconds": 5.429065265333823,
+          "total_retransmitted_payload_bytes": 0,
+          "policy_decisions": 0
+        }
+      },
+      "icmp": {
+        "transmitted": 80,
+        "received": 80,
+        "loss_fraction": 0.0,
+        "rtt_min_mean_max_mdev_ms": [
+          0.114,
+          0.62,
+          0.711,
+          0.101
+        ]
+      },
+      "controller": "deterministic-reliability"
+    },
+    {
+      "device": "caliban",
+      "condition": "ethernet",
+      "started_unix": 1792793143.2989688,
+      "finished_unix": 1792793183.6601076,
+      "source_sha256": "c8fcbf676964bb043032e5a38cf64078f167557abfd949e0375dbb32108b6161",
+      "classes": {
+        "interactive": {
+          "trials": 3,
+          "exact": 3,
+          "payload_bytes": 1152,
+          "mean_sender_elapsed_seconds": 0.011562135667190887,
+          "total_retransmitted_payload_bytes": 0,
+          "policy_decisions": 3
+        },
+        "image": {
+          "trials": 3,
+          "exact": 3,
+          "payload_bytes": 196992,
+          "mean_sender_elapsed_seconds": 0.7251376543329874,
+          "total_retransmitted_payload_bytes": 0,
+          "policy_decisions": 107
+        },
+        "map": {
+          "trials": 3,
+          "exact": 3,
+          "payload_bytes": 524288,
+          "mean_sender_elapsed_seconds": 1.08423508599905,
+          "total_retransmitted_payload_bytes": 0,
+          "policy_decisions": 159
+        }
+      },
+      "icmp": {
+        "transmitted": 80,
+        "received": 80,
+        "loss_fraction": 0.0,
+        "rtt_min_mean_max_mdev_ms": [
+          0.149,
+          0.649,
+          0.809,
+          0.064
+        ]
+      },
+      "controller": "joint-sender-single-file",
+      "checkpoint_sha256": "82edeacdb0c7f439fd4881af4fe875d32305ce2c279c33f6e6481ee4280609bc"
+    }
+  ],
+  "limitations": [
+    "Sequential synthetic payloads; stationary devices; controller runs were not randomized paired trials.",
+    "ICMP RTT/loss observations do not estimate available bandwidth or UDP loss.",
+    "Learned trials use a sender-only final checkpoint with a deterministic receiver and single-file distribution shift; no jointly learned receiver deployed.",
+    "Raw observations retained locally under runs/devices; no credentials published."
+  ]
+}

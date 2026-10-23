@@ -33,3 +33,5 @@ def test_resume_preserves_optimizer_budget_and_initial_policy(tmp_path):
     assert final['metadata']['resume']['decisions']==before
     assert final['metadata']['resume']['collector_reset']
     assert (tmp_path/'initial.pt').read_bytes()==original
+    with pytest.raises(ValueError,match='already reached'):
+        train(tmp_path,cfg,model,resume=tmp_path/'final.pt')

@@ -3,6 +3,7 @@
 The router never exposes capacities, impairment schedules, or RNG state through
 actor observations. Legacy TRC1 simulations remain independent of this backend.
 """
+from bisect import bisect_left, bisect_right
 from collections import Counter
 from dataclasses import dataclass,field,replace,asdict
 import copy
@@ -43,7 +44,21 @@ class SessionSender(Sender):
     def __init__(self,*args,**kwargs):
         super().__init__(*args,**kwargs)
         self.in_flight=TransmissionMap()
-        self.offsets=list(self.segments);self.fresh_cursor=0;self.retries=[];self.expiries=[]
+        self.offsets=list(self.segments);self.unacknowledged=self.offsets.copy();self.fresh_cursor=0;self.retries=[];self.expiries=[]
+    def _receipt_coverage(self,prefix,ranges):
+        # Already acknowledged segments have attempts>0 and need no further
+        # validation or credit. Only scan still-unacknowledged offsets in ranges.
+        covered=[]
+        for low,high in [(0,prefix),*ranges]:
+            start=bisect_left(self.unacknowledged,low)
+            end=bisect_right(self.unacknowledged,high)
+            covered.extend(self.segments[off] for off in self.unacknowledged[start:end]
+                           if off+len(self.segments[off].payload)<=high)
+        return covered
+    def _ack_index(self,segment):
+        position=bisect_left(self.unacknowledged,segment.offset)
+        if position<len(self.unacknowledged) and self.unacknowledged[position]==segment.offset:
+            self.unacknowledged.pop(position)
     def _expire(self,now):
         while self.expiries and self.expiries[0][0]<=now+1e-10:
             _,tx=heapq.heappop(self.expiries)

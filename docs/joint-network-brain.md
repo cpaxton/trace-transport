@@ -116,8 +116,53 @@ trace-transport send-file --input image.png --host 127.0.0.1 --port 9001 --class
 
 The same commands carry text files or map deltas without decoding. Messages are
 limited to 16 MiB and successful receive writes exact verified bytes atomically.
-Real loopback PNG and map-buffer transfers were checked. This file adapter uses
-the deterministic reliability/controller path; joint learned session deployment
+Real loopback PNG and map-buffer transfers were checked. By default this file adapter uses
+the deterministic reliability/controller path. An optional experimental sender
+actor is described below; joint learned session deployment
 on Herman or Caliban is a subsequent integration step. A production system also
 needs authentication, resource limits, cancellation/stale-image policy, fairness,
 and measured device traces before claims about robot performance.
+
+## Device engineering checks
+
+The source-only probe runs on Python 3.10+ without installing a package on the
+receiver. It copies only seven Python modules into a unique `/tmp` ZIP and retains
+synthetic received files there for inspection:
+
+```bash
+uv run --locked python -m scripts.device_binary_trials \
+  --ssh jetson1@herman --address HOST_IP --condition wifi-stationary \
+  --report runs/devices/herman-binary.json
+```
+
+The probe sends three trials each of Unicode text, valid 256×256 RGB PNG bytes,
+and a 512-KiB synthetic map. It also saves 80 ICMP observations over approximately
+40 seconds. These raw RTT/loss observations are not `service-trace-v1` capacity
+recordings. They must not be relabeled as measured available bandwidth.
+
+Both Herman (Wi-Fi) and Caliban (Ethernet) completed all nine deterministic trials
+and all nine experimental learned-sender trials. See
+[device results](../artifacts/device-binary-v1-results.json). These are bounded
+correctness checks, not randomized paired performance comparisons.
+
+`send-file --checkpoint CHECKPOINT` now optionally runs the joint sender actor on
+the local host with a deterministic remote receiver. The same option is available
+in the probe. It constructs endpoint-local sender history using the simulation's
+normalizations and applies rate/window residuals every 20 ms; message selection
+is trivial for a single pending file. Producer rates and opposite-role traffic
+are zero because these are single-file tests. They differ from the persistent
+mixed training workload. The receiver actor is not deployed by this adapter.
+A completed sender-only final checkpoint was used for the hardware checks,
+independently of joint-policy validation selection. No claim of learned transport
+superiority follows from exact recovery alone.
+
+After a full study finishes, prepare reviewable artifacts with:
+
+```bash
+uv run --locked --extra learn python -m scripts.package_joint_study
+```
+
+Packaging requires the completed full study and recomputes the paired comparisons
+from raw records. It exports actor weights without the critic/optimizers, stores
+compressed training logs and configurations, and records source hashes. It never
+publishes or merges a PR automatically.

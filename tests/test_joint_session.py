@@ -146,3 +146,35 @@ def test_indexed_global_flight_and_timers_match_reference_world():
         for key in x[0]:assert np.array_equal(x[0][key],y[0][key])
         for session in a.sessions:assert session.flight_bytes==sum(session.flight.values())
     assert a.metrics()==b.metrics()
+
+
+def test_indexed_receipts_match_reference_for_large_reordered_ranges_and_forgery():
+    import random
+    from trace_transport.protocol import Sender
+    from trace_transport.joint_session import SessionSender
+    from trace_transport.session_receiver import SessionReceiver
+    from trace_transport.wire import Packet,ACK_RECEIPT
+    payload=bytes(range(256))*2048
+    a=Sender(payload,7,rate=100000000,cwnd=4000000,feedback_delay_budget=.25)
+    b=SessionSender(payload,7,rate=100000000,cwnd=4000000,feedback_delay_budget=.25)
+    receiver=SessionReceiver();packets=[]
+    for _ in range(len(a.segments)):
+        x=a.poll(a.next_send_at);y=b.poll(b.next_send_at)
+        assert x==y;packets.append(x)
+    random.Random(13).shuffle(packets)
+    for i,packet in enumerate(packets):
+        ack=receiver.on_data(packet,.1+i*.001)
+        assert a.on_ack(ack,.2+i*.001)==b.on_ack(ack,.2+i*.001)
+        assert a.acknowledged_bytes==b.acknowledged_bytes
+        assert a.flight_bytes==b.flight_bytes
+        if i%31==0:
+            invalid=replace(ack,metadata={**ack.metadata,'ranges':[[1,2],[0,3]]})
+            assert not a.on_ack(invalid,.3+i*.001)
+            assert not b.on_ack(invalid,.3+i*.001)
+    assert a.complete and b.complete and not b.unacknowledged
+    for cls in [Sender,SessionSender]:
+        s=cls(payload,9);packet=s.poll(0)
+        forged=Packet(ACK_RECEIPT,9,packet.transmission_id,0,len(payload),metadata={
+            'length':len(packet.payload),'prefix':len(payload),'ranges':[],'complete':False})
+        assert not s.on_ack(forged,.1)  # Claims unsent bytes.
+        assert s.acknowledged_bytes==0

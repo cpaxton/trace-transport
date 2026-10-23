@@ -25,6 +25,11 @@ action/observation spaces, and predeclared win conditions. The [paper working dr
 describes the system and evaluation plan; preliminary diagnostics do not establish
 general superiority over transport baselines.
 
+The [device checks](artifacts/device-binary-v1-results.json) recovered all 36
+synthetic text/image/map transfers across Herman Wi-Fi and Caliban Ethernet,
+including an experimental sender-only actor with deterministic feedback. These
+are correctness checks; the full joint-policy study remains the performance test.
+
 ## Quick start
 
 On Linux or macOS, install into `./trace-transport` with Git and curl available:

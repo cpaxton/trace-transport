@@ -56,6 +56,18 @@ wire cost per delivered byte, and zero corrupt delivery. Training reward alone
 cannot establish this result. The real binary UDP adapter remains deterministic;
 deployment of the joint learned actors on robot hardware is future work.
 
+\paragraph{Bounded device checks.}
+A desktop sender transferred synthetic Unicode text, valid 256-by-256 RGB PNG
+images, and 512-KiB map buffers to Herman over stationary Wi-Fi and Caliban over
+Ethernet. Three trials per payload and device succeeded with deterministic
+control (18/18) and with the separately trained sender-only actor and a
+deterministic receiver (18/18). The latter adapter constructs local sender
+histories and controls rate/window; a single pending message has trivial
+scheduling. This differs from the persistent mixed training workload and does
+not deploy a learned receiver. The sequential, nonrandomized checks establish
+byte-exact recovery, not a learned performance advantage. Eighty ICMP probes per
+recording provide RTT/loss observations, not available-bandwidth estimates.
+
 \section{Motivation and scope}
 An endpoint cannot directly observe network capacity, competing senders, router
 queues, or future failures. Its decisions must depend on local transmission
