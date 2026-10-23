@@ -20,23 +20,7 @@ BASELINES={'immediate':(1,0.),'delayed-2':(2,.01),'delayed-4':(4,.01),
            'delayed-8':(8,.01),'delayed-8-25ms':(8,.025)}
 
 
-def domains():
-    cases = {
-        'loss-bursts':(NetworkConfig(loss=.01,ack_loss=.01,feedback_bandwidth_bps=64000,
-            loss_changes=((.2,.4,.5),(.55,.01,.01),(1.2,.5,.4),(1.6,.01,.01)),deadline=25),2,32768),
-        'delay-drift':(NetworkConfig(feedback_bandwidth_bps=64000,rtt_changes=((.2,.1),(.4,.2),(.8,.35),(1.5,.1),(2.,.05)),deadline=25),2,32768),
-        'long-rtt':(NetworkConfig(base_rtt=.3,feedback_bandwidth_bps=64000,deadline=25),2,32768),
-        'reverse-12k':(NetworkConfig(feedback_bandwidth_bps=12000,deadline=25),2,32768),
-        'six-flows':(NetworkConfig(feedback_bandwidth_bps=192000,deadline=25),6,32768),
-        'large-message':(NetworkConfig(bandwidth_bps=2000000,feedback_bandwidth_bps=128000,deadline=25),2,131072),
-        'small-queue':(NetworkConfig(feedback_bandwidth_bps=64000,feedback_queue_bytes=2048,
-                                    queue_bytes=2048,deadline=25),2,32768),
-        'reverse-changes':(NetworkConfig(feedback_bandwidth_bps=32000,
-             feedback_capacity_changes=((.3,512000),(.9,16000),(2.,64000)),deadline=25),2,32768),
-    }
-    cases.update({case['name']:(NetworkConfig(**case['network']),case['flows'],case['message_bytes'])
-                  for case in wifi_cases()})
-    return cases
+from trace_transport.network_models import generalization_cases as domains
 
 
 def main():

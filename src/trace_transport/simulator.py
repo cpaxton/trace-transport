@@ -27,6 +27,7 @@ class NetworkConfig:
     payload_size: int = 512
     initial_rate: float = 128_000
     initial_cwnd: float = 16_384
+    feedback_delay_budget: float = 0.0
     control_interval: float = 0.02
     deadline: float = 10.0
     max_message_bytes: int = MAX_MESSAGE_BYTES
@@ -44,6 +45,8 @@ class NetworkConfig:
             value = getattr(self, name)
             if not math.isfinite(value) or value <= 0:
                 raise ValueError(f"{name} must be finite and positive")
+        if not math.isfinite(self.feedback_delay_budget) or not 0 <= self.feedback_delay_budget <= 1:
+            raise ValueError("feedback delay budget must lie in [0,1] seconds")
         for name in ("base_rtt", "jitter"):
             if not math.isfinite(getattr(self, name)) or getattr(self, name) < 0:
                 raise ValueError(f"{name} must be finite and nonnegative")
@@ -186,7 +189,8 @@ class PacketSimulator:
         cfg = self.config
         self.senders = [Sender(text.encode("utf-8"), self.random.getrandbits(64),
                                payload_size=cfg.payload_size, rate=cfg.initial_rate,
-                               cwnd=cfg.initial_cwnd, max_message_bytes=cfg.max_message_bytes)
+                               cwnd=cfg.initial_cwnd, max_message_bytes=cfg.max_message_bytes,
+                               feedback_delay_budget=cfg.feedback_delay_budget)
                         for text in texts]
         self.receivers = [Receiver(max_message_bytes=cfg.max_message_bytes, metadata=receiver_metadata,
                                    receipt_feedback=receipt_feedback)
@@ -206,7 +210,8 @@ class PacketSimulator:
                 def schedule(time, callback, generation):
                     self._schedule(time, lambda: callback(generation, self.now))
                 self.feedback_schedulers.append(FeedbackScheduler(
-                    lambda ack, i=index: self._transmit(i, ack, feedback=True), schedule))
+                    lambda ack, i=index: self._transmit(i, ack, feedback=True), schedule,
+                    max_delay=max(.025,cfg.feedback_delay_budget)))
         for index in range(len(texts)):
             self._schedule_wake(index)
 

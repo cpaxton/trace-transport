@@ -34,13 +34,17 @@ class Segment:
 class Sender:
     def __init__(self, payload: bytes, message_id: int, *, payload_size: int = 512,
                  rate: float = 128_000, cwnd: float = 16_384,
-                 max_message_bytes: int = MAX_MESSAGE_BYTES):
+                 max_message_bytes: int = MAX_MESSAGE_BYTES, feedback_delay_budget: float = 0.):
         if not 1 <= payload_size <= MAX_PAYLOAD:
             raise ValueError(f"payload_size must be between 1 and {MAX_PAYLOAD}")
         if len(payload) > max_message_bytes:
             raise ValueError("message exceeds configured receive capacity; chunk it first")
         if not math.isfinite(rate) or not math.isfinite(cwnd) or rate <= 0 or cwnd <= 0:
             raise ValueError("rate and cwnd must be finite and positive")
+        if not math.isfinite(feedback_delay_budget) or not 0 <= feedback_delay_budget <= 1:
+            raise ValueError("feedback delay budget must be finite and between 0 and 1 second")
+        self.feedback_delay_budget = feedback_delay_budget
+        self.max_ack_delay = max(.025, feedback_delay_budget)
         self.payload = payload
         self.expected_digest = hashlib.sha256(payload).hexdigest()
         self.verified_completion = False
@@ -74,7 +78,8 @@ class Sender:
 
     @property
     def rto(self) -> float:
-        return min(3.0, max(0.1, self.srtt + 4 * self.rttvar)) if self.srtt else 0.3
+        base = min(3.0, max(0.1, self.srtt + 4 * self.rttvar)) if self.srtt else 0.3
+        return base + self.feedback_delay_budget
 
     @property
     def unsent_bytes(self) -> int:
@@ -228,7 +233,7 @@ class Sender:
                 tx, offset, length, delay = entry
                 if any(type(x) is not int or x < 0 for x in (tx, offset, length)):
                     return False
-                if type(delay) not in (int, float) or not math.isfinite(delay) or not 0 <= delay <= .025:
+                if type(delay) not in (int, float) or not math.isfinite(delay) or not 0 <= delay <= self.max_ack_delay:
                     return False
             accepted = False
             for tx, offset, length, delay in entries:
@@ -253,7 +258,7 @@ class Sender:
             self.verified_completion = True
         if packet.transmission_id == segment.transmission_id:
             delay = packet.metadata.get("ack_delay", 0.)
-            if type(delay) not in (int, float) or not math.isfinite(delay) or not 0 <= delay <= .025:
+            if type(delay) not in (int, float) or not math.isfinite(delay) or not 0 <= delay <= self.max_ack_delay:
                 delay = 0.
             sample = max(1e-6, now - segment.sent_at - delay)
             self.rtt_samples.append(sample)

@@ -4,7 +4,7 @@ trace-transport receiver-experiment --protocol receipts --profile randomized
 Selection uses validation only; final test is evaluated after selection.
 """
 import argparse
-from dataclasses import asdict
+from dataclasses import asdict,replace
 import hashlib
 import json
 from pathlib import Path
@@ -87,9 +87,11 @@ def train(seed, episodes, output, *, receipt_feedback=False, profile="presets", 
     return path
 
 
-def evaluate(model, baseline, seeds, *, receipt_feedback=False):
+def evaluate(model, baseline, seeds, *, receipt_feedback=False, feedback_delay_budget=None):
     records = []
     for name, config in scenarios().items():
+        if feedback_delay_budget is not None:
+            config=replace(config,feedback_delay_budget=feedback_delay_budget)
         for seed in seeds:
             results, score, _ = episode(config, seed=seed, model=model, baseline=baseline, receipt_feedback=receipt_feedback)
             records.append(dict(scenario=name, seed=seed,

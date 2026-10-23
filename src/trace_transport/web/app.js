@@ -25,7 +25,7 @@ function plan() {
   const data = {scenario: $("scenario").value, trials: number("trials"), flows: number("flows"),
     seed: number("seed"), message_bytes: Math.round(number("payload") * 1024),
     controllers: ["fixed", "aimd", "learned"].filter(id => $(id).checked),
-    checkpoint: $("checkpoint").value || null, reward: $("reward").value,
+    checkpoint: $("checkpoint").value || null, reward: $("reward").value, feedback_profile: $("feedback-profile").value,
     network: {bandwidth_bps: number("bandwidth") * 1e6, base_rtt: number("rtt") / 1000,
       jitter: number("jitter") / 1000, loss: number("loss") / 100, ack_loss: number("ack-loss") / 100,
       corruption: number("corruption") / 100, ack_corruption: number("ack-corruption") / 100,

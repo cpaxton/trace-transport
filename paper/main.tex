@@ -365,6 +365,53 @@ this budget. The one-observation ablation still receives endpoint counters and
 timers; it is not a host without memory. Real-device traces are needed to
 calibrate persistence and assess transfer beyond these stylized models.
 
+\section{Control headroom and feedback-wait budgets}
+A wider study first sweeps constant ACK controls. Selecting a constant separately
+for each scenario using validation labels reduces test elapsed time by 4.9\%
+but increases feedback by 25.6\%; this is neither deployable nor an upper bound
+on a time-varying policy. A categorical receiver initialized at the strong
+baseline, trained for 320 episodes per seed, selects its initial checkpoint on
+validation and exactly matches the deterministic control on 240 diagnostic
+transfers. Increasing training alone does not establish an advantage.
+
+The old action range also caps ACK waiting at 25 ms, while sender timers do not
+explicitly budget intentional feedback waiting. We configure a 250-ms maximum
+feedback-wait budget at both endpoints and add that budget to RTO. This is a
+shared simulator configuration, not on-wire negotiation. Validation seeds
+17000--17004 select batch-8/250-ms feedback; test seeds 18000--18019 remain
+separate. All three diagnostic arms complete 240/240 exact transfers:
+\begin{center}
+\begin{tabular}{lrr}
+\toprule
+Protocol arm & Mean seconds & Total wire bytes \\
+\midrule
+Old ACK policy and timers & 2.367 & 15,608,314 \\
+Old ACK policy, budgeted timers & 2.172 & 12,328,675 \\
+Longer ACK wait, budgeted timers & 1.491 & 10,558,204 \\
+\bottomrule
+\end{tabular}
+\end{center}
+The combined change reduces mean elapsed time 37.0\%, ACK bytes 70.5\%, and
+total wire bytes 32.4\%. The paired seed-block 95\% interval for elapsed-time
+difference is $[-1.067,-0.675]$ seconds. On generalization seeds 19000--19019,
+completion rises from 551/560 to 560/560. The timer-only arm is faster there,
+while the longer-wait arm saves more feedback: these are distinct tradeoffs,
+and generalization elapsed means include deadlines for failures.
+
+These gains are deterministic protocol improvements. A categorical policy over
+21 feedback controls, trained with the new budget, completes 240/240 diagnostic
+transfers but is slower and uses more ACK bytes than its validation-selected
+constant baseline. On another generalization split it completes 559/560,
+compared with 560/560 for the latency-focused deterministic control. A learned
+sender correction likewise has no clear total-wire advantage over strong
+deterministic senders. A feedback-only criterion would conceal extra data
+traffic; the sender analysis was corrected after inspecting its breakdown and
+is exploratory. Finally, a new mixed workload combines two 128-KiB bulk
+transfers with sixteen staggered 1-KiB messages. Frozen controllers expose bulk
+timeouts and multi-second short-message tail latency, motivating future
+application-aware training rather than inferring superiority from small,
+simultaneous-transfer diagnostics.
+
 \section{Implementation stages and open questions}
 The sequence is: (1) reliable CPU text transfer, (2) a history-based learned
 sender, (3) a validated GPU backend, (4) joint learned feedback and additional

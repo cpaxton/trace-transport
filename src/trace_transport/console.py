@@ -21,6 +21,7 @@ from .cli import run_simulation
 from .simulator import NetworkConfig
 from .suite import load_manifest
 from .network_models import wifi_cases
+from .feedback import profile_config
 
 STATIC = Path(__file__).with_name("web")
 
@@ -29,7 +30,7 @@ def model_catalog(root):
     models = []
     for directory in ("artifacts", "checkpoints"):
         for path in sorted((Path(root) / directory).glob("*.pt")):
-            if path.stem.startswith("receiver-"):
+            if path.stem.startswith(("receiver-", "sender-residual-")):
                 continue
             models.append({"id": path.relative_to(root).as_posix(), "label": path.stem,
                            "bytes": path.stat().st_size})
@@ -77,7 +78,8 @@ def validated_plan(request, catalog):
     for value in overrides.values():
         if type(value) not in (int, float) or not math.isfinite(value):
             raise ValueError("network controls must be finite numbers")
-    config = NetworkConfig(**{**case["network"], **overrides})
+    feedback_profile=request.get("feedback_profile","legacy")
+    config = profile_config(NetworkConfig(**{**case["network"], **overrides}),feedback_profile)
     if not .1 <= config.deadline <= 60:
         raise ValueError("deadline must be between 0.1 and 60 simulated seconds")
     if not 100_000 <= config.bandwidth_bps <= 100_000_000:
@@ -88,7 +90,7 @@ def validated_plan(request, catalog):
     return {"scenario": case["name"], "trials": trials, "flows": flows, "seed": seed,
             "message_bytes": len(text.encode("utf-8")) if text is not None else size,
             "text": text, "controllers": controllers, "checkpoint": checkpoint,
-            "network": asdict(config), "reward": reward}
+            "network": asdict(config), "reward": reward,"feedback_profile":feedback_profile}
 
 
 class TestBench:
@@ -153,7 +155,7 @@ class TestBench:
                     checkpoint = str(self.root / plan["checkpoint"]) if controller == "learned" else None
                     _, report = run_simulation([text] * plan["flows"], config, controller,
                                                seed=seed, checkpoint=checkpoint, reward_profile=plan["reward"],
-                                               include_rtt_samples=True, progress=progress)
+                                               include_rtt_samples=True, progress=progress,feedback_profile=plan["feedback_profile"])
                     with self.lock:
                         job["reports"].append(report)
                         job["traces"].append({"seed": seed, "controller": controller,

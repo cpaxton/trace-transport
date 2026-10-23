@@ -10,10 +10,21 @@ from .wire import ACK_BATCH, ACK_RECEIPT, Packet
 
 MAX_ACK_DELAY = .025
 MAX_ACK_BATCH = 8
+FEEDBACK_PROFILES = {'legacy': None, 'budgeted': .025, 'sparse': .25}
+
+
+def profile_config(config, name):
+    if not isinstance(name,str) or name not in FEEDBACK_PROFILES:
+        raise ValueError('unknown feedback profile')
+    return replace(config, feedback_delay_budget=.25) if name != 'legacy' else config
+
 
 
 class FeedbackScheduler:
-    def __init__(self, emit, schedule):
+    def __init__(self, emit, schedule, *, max_delay=MAX_ACK_DELAY):
+        if not math.isfinite(max_delay) or not 0 <= max_delay <= 1:
+            raise ValueError("invalid feedback delay limit")
+        self.max_delay=max_delay
         self.emit, self.schedule = emit, schedule
         self.pending = {}
         self.batch_size, self.delay = 1, 0.0
@@ -33,7 +44,7 @@ class FeedbackScheduler:
             raise ValueError('receiver action requires two finite values')
         a, b = (max(-1., min(1., float(x))) for x in action)
         self.batch_size = (1, 2, 4, 8)[min(3, int((a + 1) * 2))]
-        self.delay = (b + 1) * MAX_ACK_DELAY / 2
+        self.delay = (b + 1) * self.max_delay / 2
 
     def on_ack(self, ack, now):
         self.arrivals += 1
@@ -85,11 +96,11 @@ class FeedbackScheduler:
     def _packet(self, items, now):
         ack = items[-1][0]
         metadata = dict(ack.metadata)
-        metadata['ack_delay'] = min(MAX_ACK_DELAY, max(0., now - items[-1][1]))
+        metadata['ack_delay'] = min(self.max_delay, max(0., now - items[-1][1]))
         if len(items) == 1:
             return replace(ack, metadata=metadata)
         metadata['acks'] = [[a.transmission_id, a.offset, a.metadata['length'],
-                             min(MAX_ACK_DELAY, max(0., now - time))] for a, time in items]
+                             min(self.max_delay, max(0., now - time))] for a, time in items]
         return replace(ack, kind=ACK_BATCH, metadata=metadata)
 
     def _send(self, items, now):

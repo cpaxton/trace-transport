@@ -1,0 +1,1694 @@
+{
+  "receiver-headroom": {
+    "actions": [
+      [
+        1,
+        0.0
+      ],
+      [
+        2,
+        0.001
+      ],
+      [
+        2,
+        0.005
+      ],
+      [
+        2,
+        0.01
+      ],
+      [
+        2,
+        0.025
+      ],
+      [
+        4,
+        0.001
+      ],
+      [
+        4,
+        0.005
+      ],
+      [
+        4,
+        0.01
+      ],
+      [
+        4,
+        0.025
+      ],
+      [
+        8,
+        0.001
+      ],
+      [
+        8,
+        0.005
+      ],
+      [
+        8,
+        0.01
+      ],
+      [
+        8,
+        0.025
+      ]
+    ],
+    "validation_seeds": [
+      6000,
+      6001,
+      6002,
+      6003,
+      6004
+    ],
+    "test_seeds": [
+      7000,
+      7001,
+      7002,
+      7003,
+      7004,
+      7005,
+      7006,
+      7007,
+      7008,
+      7009,
+      7010,
+      7011,
+      7012,
+      7013,
+      7014,
+      7015,
+      7016,
+      7017,
+      7018,
+      7019
+    ],
+    "cases": {
+      "clean": {
+        "network": {
+          "bandwidth_bps": 1000000,
+          "feedback_bandwidth_bps": 1000000,
+          "base_rtt": 0.05,
+          "jitter": 0.002,
+          "loss": 0,
+          "ack_loss": 0,
+          "corruption": 0.0,
+          "ack_corruption": 0.0,
+          "duplicate": 0.0,
+          "queue_bytes": 16384,
+          "feedback_queue_bytes": 16384,
+          "payload_size": 512,
+          "initial_rate": 128000,
+          "initial_cwnd": 16384,
+          "control_interval": 0.02,
+          "deadline": 12,
+          "max_message_bytes": 16777216,
+          "capacity_changes": [],
+          "feedback_capacity_changes": [],
+          "loss_changes": [],
+          "rtt_changes": [],
+          "outages": []
+        },
+        "payload_bytes": 32768
+      },
+      "asymmetric-64k": {
+        "network": {
+          "bandwidth_bps": 1000000,
+          "feedback_bandwidth_bps": 64000,
+          "base_rtt": 0.05,
+          "jitter": 0.005,
+          "loss": 0.02,
+          "ack_loss": 0.02,
+          "corruption": 0.0,
+          "ack_corruption": 0.0,
+          "duplicate": 0.0,
+          "queue_bytes": 16384,
+          "feedback_queue_bytes": 16384,
+          "payload_size": 512,
+          "initial_rate": 128000,
+          "initial_cwnd": 16384,
+          "control_interval": 0.02,
+          "deadline": 12,
+          "max_message_bytes": 16777216,
+          "capacity_changes": [],
+          "feedback_capacity_changes": [],
+          "loss_changes": [],
+          "rtt_changes": [],
+          "outages": []
+        },
+        "payload_bytes": 32768
+      },
+      "asymmetric-24k": {
+        "network": {
+          "bandwidth_bps": 1000000,
+          "feedback_bandwidth_bps": 24000,
+          "base_rtt": 0.05,
+          "jitter": 0.005,
+          "loss": 0.02,
+          "ack_loss": 0.02,
+          "corruption": 0.0,
+          "ack_corruption": 0.0,
+          "duplicate": 0.0,
+          "queue_bytes": 16384,
+          "feedback_queue_bytes": 16384,
+          "payload_size": 512,
+          "initial_rate": 128000,
+          "initial_cwnd": 16384,
+          "control_interval": 0.02,
+          "deadline": 12,
+          "max_message_bytes": 16777216,
+          "capacity_changes": [],
+          "feedback_capacity_changes": [],
+          "loss_changes": [],
+          "rtt_changes": [],
+          "outages": []
+        },
+        "payload_bytes": 32768
+      },
+      "lossy": {
+        "network": {
+          "bandwidth_bps": 1000000,
+          "feedback_bandwidth_bps": 1000000,
+          "base_rtt": 0.05,
+          "jitter": 0.005,
+          "loss": 0.1,
+          "ack_loss": 0.15,
+          "corruption": 0.01,
+          "ack_corruption": 0.01,
+          "duplicate": 0.0,
+          "queue_bytes": 16384,
+          "feedback_queue_bytes": 16384,
+          "payload_size": 512,
+          "initial_rate": 128000,
+          "initial_cwnd": 16384,
+          "control_interval": 0.02,
+          "deadline": 15,
+          "max_message_bytes": 16777216,
+          "capacity_changes": [],
+          "feedback_capacity_changes": [],
+          "loss_changes": [],
+          "rtt_changes": [],
+          "outages": []
+        },
+        "payload_bytes": 32768
+      },
+      "changing": {
+        "network": {
+          "bandwidth_bps": 1000000,
+          "feedback_bandwidth_bps": 64000,
+          "base_rtt": 0.05,
+          "jitter": 0.005,
+          "loss": 0.02,
+          "ack_loss": 0.02,
+          "corruption": 0.0,
+          "ack_corruption": 0.0,
+          "duplicate": 0.0,
+          "queue_bytes": 16384,
+          "feedback_queue_bytes": 16384,
+          "payload_size": 512,
+          "initial_rate": 128000,
+          "initial_cwnd": 16384,
+          "control_interval": 0.02,
+          "deadline": 15,
+          "max_message_bytes": 16777216,
+          "capacity_changes": [
+            [
+              0.3,
+              250000
+            ],
+            [
+              0.8,
+              2000000
+            ]
+          ],
+          "feedback_capacity_changes": [],
+          "loss_changes": [],
+          "rtt_changes": [],
+          "outages": []
+        },
+        "payload_bytes": 32768
+      },
+      "outage": {
+        "network": {
+          "bandwidth_bps": 1000000,
+          "feedback_bandwidth_bps": 48000,
+          "base_rtt": 0.05,
+          "jitter": 0.005,
+          "loss": 0.02,
+          "ack_loss": 0.1,
+          "corruption": 0.0,
+          "ack_corruption": 0.0,
+          "duplicate": 0.0,
+          "queue_bytes": 16384,
+          "feedback_queue_bytes": 16384,
+          "payload_size": 512,
+          "initial_rate": 128000,
+          "initial_cwnd": 16384,
+          "control_interval": 0.02,
+          "deadline": 15,
+          "max_message_bytes": 16777216,
+          "capacity_changes": [],
+          "feedback_capacity_changes": [],
+          "loss_changes": [],
+          "rtt_changes": [],
+          "outages": [
+            [
+              0.2,
+              0.5
+            ]
+          ]
+        },
+        "payload_bytes": 32768
+      },
+      "wifi-steady": {
+        "network": {
+          "bandwidth_bps": 6000000,
+          "feedback_bandwidth_bps": 1000000,
+          "base_rtt": 0.012,
+          "jitter": 0.002,
+          "loss": 0.005,
+          "ack_loss": 0.005,
+          "corruption": 0.0,
+          "ack_corruption": 0.0,
+          "duplicate": 0.0,
+          "queue_bytes": 16384,
+          "feedback_queue_bytes": 16384,
+          "payload_size": 512,
+          "initial_rate": 128000,
+          "initial_cwnd": 16384,
+          "control_interval": 0.02,
+          "deadline": 20,
+          "max_message_bytes": 16777216,
+          "capacity_changes": [],
+          "feedback_capacity_changes": [],
+          "loss_changes": [],
+          "rtt_changes": [],
+          "outages": []
+        },
+        "payload_bytes": 131072
+      },
+      "wifi-contention": {
+        "network": {
+          "bandwidth_bps": 6000000,
+          "feedback_bandwidth_bps": 1000000,
+          "base_rtt": 0.012,
+          "jitter": 0.004,
+          "loss": 0.005,
+          "ack_loss": 0.005,
+          "corruption": 0.0,
+          "ack_corruption": 0.0,
+          "duplicate": 0.0,
+          "queue_bytes": 16384,
+          "feedback_queue_bytes": 16384,
+          "payload_size": 512,
+          "initial_rate": 128000,
+          "initial_cwnd": 16384,
+          "control_interval": 0.02,
+          "deadline": 20,
+          "max_message_bytes": 16777216,
+          "capacity_changes": [
+            [
+              0.1,
+              3000000
+            ],
+            [
+              0.3,
+              800000
+            ],
+            [
+              0.9,
+              800000
+            ],
+            [
+              1.5,
+              3000000
+            ],
+            [
+              2.0,
+              6000000
+            ]
+          ],
+          "feedback_capacity_changes": [
+            [
+              0.1,
+              512000
+            ],
+            [
+              0.3,
+              64000
+            ],
+            [
+              0.9,
+              64000
+            ],
+            [
+              1.5,
+              256000
+            ],
+            [
+              2.0,
+              1000000
+            ]
+          ],
+          "loss_changes": [],
+          "rtt_changes": [],
+          "outages": []
+        },
+        "payload_bytes": 131072
+      },
+      "wifi-mobile-fade": {
+        "network": {
+          "bandwidth_bps": 6000000,
+          "feedback_bandwidth_bps": 1000000,
+          "base_rtt": 0.012,
+          "jitter": 0.005,
+          "loss": 0.005,
+          "ack_loss": 0.005,
+          "corruption": 0.0,
+          "ack_corruption": 0.0,
+          "duplicate": 0.0,
+          "queue_bytes": 16384,
+          "feedback_queue_bytes": 16384,
+          "payload_size": 512,
+          "initial_rate": 128000,
+          "initial_cwnd": 16384,
+          "control_interval": 0.02,
+          "deadline": 20,
+          "max_message_bytes": 16777216,
+          "capacity_changes": [
+            [
+              0.1,
+              3000000
+            ],
+            [
+              0.3,
+              1000000
+            ],
+            [
+              0.5,
+              400000
+            ],
+            [
+              1.0,
+              400000
+            ],
+            [
+              1.5,
+              2000000
+            ],
+            [
+              2.0,
+              6000000
+            ]
+          ],
+          "feedback_capacity_changes": [
+            [
+              0.1,
+              512000
+            ],
+            [
+              0.3,
+              128000
+            ],
+            [
+              0.5,
+              48000
+            ],
+            [
+              1.0,
+              48000
+            ],
+            [
+              1.5,
+              256000
+            ],
+            [
+              2.0,
+              1000000
+            ]
+          ],
+          "loss_changes": [
+            [
+              0.1,
+              0.02,
+              0.02
+            ],
+            [
+              0.3,
+              0.06,
+              0.08
+            ],
+            [
+              0.5,
+              0.12,
+              0.15
+            ],
+            [
+              1.0,
+              0.12,
+              0.15
+            ],
+            [
+              1.5,
+              0.03,
+              0.03
+            ],
+            [
+              2.0,
+              0.005,
+              0.005
+            ]
+          ],
+          "rtt_changes": [
+            [
+              0.1,
+              0.02
+            ],
+            [
+              0.3,
+              0.04
+            ],
+            [
+              0.5,
+              0.07
+            ],
+            [
+              1.0,
+              0.07
+            ],
+            [
+              1.5,
+              0.03
+            ],
+            [
+              2.0,
+              0.012
+            ]
+          ],
+          "outages": []
+        },
+        "payload_bytes": 131072
+      },
+      "wifi-burst-loss": {
+        "network": {
+          "bandwidth_bps": 3000000,
+          "feedback_bandwidth_bps": 512000,
+          "base_rtt": 0.015,
+          "jitter": 0.004,
+          "loss": 0.005,
+          "ack_loss": 0.005,
+          "corruption": 0.0,
+          "ack_corruption": 0.0,
+          "duplicate": 0.0,
+          "queue_bytes": 16384,
+          "feedback_queue_bytes": 16384,
+          "payload_size": 512,
+          "initial_rate": 128000,
+          "initial_cwnd": 16384,
+          "control_interval": 0.02,
+          "deadline": 20,
+          "max_message_bytes": 16777216,
+          "capacity_changes": [],
+          "feedback_capacity_changes": [],
+          "loss_changes": [
+            [
+              0.1,
+              0.6,
+              0.5
+            ],
+            [
+              0.25,
+              0.005,
+              0.005
+            ],
+            [
+              0.5,
+              0.5,
+              0.7
+            ],
+            [
+              0.7,
+              0.005,
+              0.005
+            ],
+            [
+              1.2,
+              0.7,
+              0.6
+            ],
+            [
+              1.4,
+              0.005,
+              0.005
+            ]
+          ],
+          "rtt_changes": [],
+          "outages": []
+        },
+        "payload_bytes": 131072
+      }
+    },
+    "selection": "completed transfers first, then mean transport-v2 return; validation only",
+    "oracle": "per-scenario constant control, uses hidden scenario label; not deployable"
+  },
+  "receiver-v3": {
+    "version": "receiver-v3",
+    "seeds": [
+      42,
+      43,
+      44
+    ],
+    "episodes": 320,
+    "actions": [
+      [
+        1,
+        0.0
+      ],
+      [
+        2,
+        0.001
+      ],
+      [
+        2,
+        0.005
+      ],
+      [
+        2,
+        0.01
+      ],
+      [
+        2,
+        0.025
+      ],
+      [
+        4,
+        0.001
+      ],
+      [
+        4,
+        0.005
+      ],
+      [
+        4,
+        0.01
+      ],
+      [
+        4,
+        0.025
+      ],
+      [
+        8,
+        0.001
+      ],
+      [
+        8,
+        0.005
+      ],
+      [
+        8,
+        0.01
+      ],
+      [
+        8,
+        0.025
+      ]
+    ],
+    "history": 8,
+    "training_domain": {
+      "forward_bps": [
+        250000,
+        4000000
+      ],
+      "reverse_bps": [
+        24000,
+        1000000
+      ],
+      "rtt_seconds": [
+        0.01,
+        0.18
+      ],
+      "data_loss": [
+        0,
+        0.12
+      ],
+      "ack_loss": [
+        0,
+        0.15
+      ],
+      "jitter_seconds": [
+        0,
+        0.02
+      ],
+      "corruption": [
+        0,
+        0.01
+      ],
+      "flows": [
+        1,
+        4
+      ],
+      "queues_bytes": [
+        4096,
+        8192,
+        16384,
+        32768
+      ],
+      "message_bytes": [
+        16384,
+        32768,
+        49152
+      ],
+      "degradation_probability": 0.8,
+      "outage_probability": 0.3,
+      "onset_seconds": [
+        0.1,
+        0.7
+      ],
+      "decline_seconds": [
+        0.2,
+        0.8
+      ],
+      "hold_seconds": [
+        0.4,
+        2.0
+      ],
+      "recovery_seconds": [
+        0.3,
+        1.2
+      ],
+      "deadline_seconds": 20,
+      "model": "persistent latent degradation; correlated capacity/loss/access-delay; causal FIFO queues"
+    },
+    "validation_seeds": [
+      8000,
+      8001,
+      8002,
+      8003,
+      8004
+    ],
+    "test_seeds": [
+      9000,
+      9001,
+      9002,
+      9003,
+      9004,
+      9005,
+      9006,
+      9007,
+      9008,
+      9009,
+      9010,
+      9011,
+      9012,
+      9013,
+      9014,
+      9015,
+      9016,
+      9017,
+      9018,
+      9019
+    ],
+    "snapshot_every": 40,
+    "selection": "validation completion first, then common transport-v2 return; initial snapshot eligible",
+    "optimizer": {
+      "lr": 0.0001,
+      "epochs": 4,
+      "episodes_per_update": 4,
+      "minibatch": 256,
+      "clip": 0.2,
+      "target_kl": 0.015,
+      "entropy": 0.001
+    },
+    "initial_prior": "90% batch8/delay25ms, other controls share 10%"
+  },
+  "sender-residual-v1": {
+    "version": "sender-residual-v1",
+    "episodes": 320,
+    "seeds": [
+      42,
+      43,
+      44
+    ],
+    "domain": {
+      "forward_bps": [
+        250000,
+        4000000
+      ],
+      "reverse_bps": [
+        24000,
+        1000000
+      ],
+      "rtt_seconds": [
+        0.01,
+        0.18
+      ],
+      "data_loss": [
+        0,
+        0.12
+      ],
+      "ack_loss": [
+        0,
+        0.15
+      ],
+      "jitter_seconds": [
+        0,
+        0.02
+      ],
+      "corruption": [
+        0,
+        0.01
+      ],
+      "flows": [
+        1,
+        4
+      ],
+      "queues_bytes": [
+        4096,
+        8192,
+        16384,
+        32768
+      ],
+      "message_bytes": [
+        16384,
+        32768,
+        49152
+      ],
+      "degradation_probability": 0.8,
+      "outage_probability": 0.3,
+      "onset_seconds": [
+        0.1,
+        0.7
+      ],
+      "decline_seconds": [
+        0.2,
+        0.8
+      ],
+      "hold_seconds": [
+        0.4,
+        2.0
+      ],
+      "recovery_seconds": [
+        0.3,
+        1.2
+      ],
+      "deadline_seconds": 20,
+      "model": "persistent latent degradation; correlated capacity/loss/access-delay; causal FIFO queues"
+    },
+    "validation_seeds": [
+      10000,
+      10001,
+      10002,
+      10003,
+      10004
+    ],
+    "test_seeds": [
+      11000,
+      11001,
+      11002,
+      11003,
+      11004,
+      11005,
+      11006,
+      11007,
+      11008,
+      11009,
+      11010,
+      11011,
+      11012,
+      11013,
+      11014,
+      11015,
+      11016,
+      11017,
+      11018,
+      11019
+    ],
+    "baseline": "local BDP-window + AIMD rate",
+    "residual_scale": 0.5,
+    "receiver": "receipt batch8/25ms",
+    "history": 8,
+    "selection": "validation completion, then common transport-v2 return; initial snapshot eligible",
+    "optimizer": {
+      "lr": 0.0001,
+      "epochs": 4,
+      "minibatch": 256,
+      "episodes_per_update": 4,
+      "clip": 0.2,
+      "target_kl": 0.015,
+      "entropy": 0.001
+    }
+  },
+  "protocol-generalization-v1": {
+    "test_seeds": [
+      13000,
+      13001,
+      13002,
+      13003,
+      13004,
+      13005,
+      13006,
+      13007,
+      13008,
+      13009,
+      13010,
+      13011,
+      13012,
+      13013,
+      13014,
+      13015,
+      13016,
+      13017,
+      13018,
+      13019
+    ],
+    "selected": "sender-residual-s44-e0080.pt",
+    "baseline_selected_on_validation": "aimd",
+    "selection": "none on this generalization suite",
+    "receiver": "receipt batch8/25ms"
+  },
+  "mixed-workload-v1": {
+    "version": "mixed-workload-v1",
+    "seed_start": 15000,
+    "trials": 5,
+    "payload_bytes": [
+      131072,
+      131072,
+      1024,
+      1024,
+      1024,
+      1024,
+      1024,
+      1024,
+      1024,
+      1024,
+      1024,
+      1024,
+      1024,
+      1024,
+      1024,
+      1024,
+      1024,
+      1024
+    ],
+    "starts": [
+      0.0,
+      0.0,
+      0.1,
+      0.2,
+      0.30000000000000004,
+      0.4,
+      0.5,
+      0.6,
+      0.7000000000000001,
+      0.8,
+      0.9,
+      1.0,
+      1.1,
+      1.2000000000000002,
+      1.3000000000000003,
+      1.4000000000000001,
+      1.5000000000000002,
+      1.6
+    ],
+    "cases": {
+      "clean-shared": {
+        "bandwidth_bps": 1000000,
+        "feedback_bandwidth_bps": 1000000,
+        "base_rtt": 0.05,
+        "jitter": 0.001,
+        "loss": 0,
+        "ack_loss": 0,
+        "corruption": 0.0,
+        "ack_corruption": 0.0,
+        "duplicate": 0.0,
+        "queue_bytes": 16384,
+        "feedback_queue_bytes": 16384,
+        "payload_size": 512,
+        "initial_rate": 128000,
+        "initial_cwnd": 16384,
+        "control_interval": 0.02,
+        "deadline": 30,
+        "max_message_bytes": 16777216,
+        "capacity_changes": [],
+        "feedback_capacity_changes": [],
+        "loss_changes": [],
+        "rtt_changes": [],
+        "outages": []
+      },
+      "small-queue": {
+        "bandwidth_bps": 500000,
+        "feedback_bandwidth_bps": 1000000,
+        "base_rtt": 0.05,
+        "jitter": 0.005,
+        "loss": 0.02,
+        "ack_loss": 0.02,
+        "corruption": 0.0,
+        "ack_corruption": 0.0,
+        "duplicate": 0.0,
+        "queue_bytes": 4096,
+        "feedback_queue_bytes": 16384,
+        "payload_size": 512,
+        "initial_rate": 128000,
+        "initial_cwnd": 16384,
+        "control_interval": 0.02,
+        "deadline": 30,
+        "max_message_bytes": 16777216,
+        "capacity_changes": [],
+        "feedback_capacity_changes": [],
+        "loss_changes": [],
+        "rtt_changes": [],
+        "outages": []
+      },
+      "wifi-mobile-fade": {
+        "bandwidth_bps": 6000000,
+        "feedback_bandwidth_bps": 1000000,
+        "base_rtt": 0.012,
+        "jitter": 0.005,
+        "loss": 0.005,
+        "ack_loss": 0.005,
+        "corruption": 0.0,
+        "ack_corruption": 0.0,
+        "duplicate": 0.0,
+        "queue_bytes": 16384,
+        "feedback_queue_bytes": 16384,
+        "payload_size": 512,
+        "initial_rate": 128000,
+        "initial_cwnd": 16384,
+        "control_interval": 0.02,
+        "deadline": 30,
+        "max_message_bytes": 16777216,
+        "capacity_changes": [
+          [
+            0.1,
+            3000000
+          ],
+          [
+            0.3,
+            1000000
+          ],
+          [
+            0.5,
+            400000
+          ],
+          [
+            1.0,
+            400000
+          ],
+          [
+            1.5,
+            2000000
+          ],
+          [
+            2.0,
+            6000000
+          ]
+        ],
+        "feedback_capacity_changes": [
+          [
+            0.1,
+            512000
+          ],
+          [
+            0.3,
+            128000
+          ],
+          [
+            0.5,
+            48000
+          ],
+          [
+            1.0,
+            48000
+          ],
+          [
+            1.5,
+            256000
+          ],
+          [
+            2.0,
+            1000000
+          ]
+        ],
+        "loss_changes": [
+          [
+            0.1,
+            0.02,
+            0.02
+          ],
+          [
+            0.3,
+            0.06,
+            0.08
+          ],
+          [
+            0.5,
+            0.12,
+            0.15
+          ],
+          [
+            1.0,
+            0.12,
+            0.15
+          ],
+          [
+            1.5,
+            0.03,
+            0.03
+          ],
+          [
+            2.0,
+            0.005,
+            0.005
+          ]
+        ],
+        "rtt_changes": [
+          [
+            0.1,
+            0.02
+          ],
+          [
+            0.3,
+            0.04
+          ],
+          [
+            0.5,
+            0.07
+          ],
+          [
+            1.0,
+            0.07
+          ],
+          [
+            1.5,
+            0.03
+          ],
+          [
+            2.0,
+            0.012
+          ]
+        ],
+        "outages": []
+      },
+      "wifi-burst-loss": {
+        "bandwidth_bps": 3000000,
+        "feedback_bandwidth_bps": 512000,
+        "base_rtt": 0.015,
+        "jitter": 0.004,
+        "loss": 0.005,
+        "ack_loss": 0.005,
+        "corruption": 0.0,
+        "ack_corruption": 0.0,
+        "duplicate": 0.0,
+        "queue_bytes": 16384,
+        "feedback_queue_bytes": 16384,
+        "payload_size": 512,
+        "initial_rate": 128000,
+        "initial_cwnd": 16384,
+        "control_interval": 0.02,
+        "deadline": 30,
+        "max_message_bytes": 16777216,
+        "capacity_changes": [],
+        "feedback_capacity_changes": [],
+        "loss_changes": [
+          [
+            0.1,
+            0.6,
+            0.5
+          ],
+          [
+            0.25,
+            0.005,
+            0.005
+          ],
+          [
+            0.5,
+            0.5,
+            0.7
+          ],
+          [
+            0.7,
+            0.005,
+            0.005
+          ],
+          [
+            1.2,
+            0.7,
+            0.6
+          ],
+          [
+            1.4,
+            0.005,
+            0.005
+          ]
+        ],
+        "rtt_changes": [],
+        "outages": []
+      },
+      "reverse-constrained": {
+        "bandwidth_bps": 1000000,
+        "feedback_bandwidth_bps": 32000,
+        "base_rtt": 0.05,
+        "jitter": 0.005,
+        "loss": 0.02,
+        "ack_loss": 0.02,
+        "corruption": 0.0,
+        "ack_corruption": 0.0,
+        "duplicate": 0.0,
+        "queue_bytes": 16384,
+        "feedback_queue_bytes": 16384,
+        "payload_size": 512,
+        "initial_rate": 128000,
+        "initial_cwnd": 16384,
+        "control_interval": 0.02,
+        "deadline": 30,
+        "max_message_bytes": 16777216,
+        "capacity_changes": [],
+        "feedback_capacity_changes": [],
+        "loss_changes": [],
+        "rtt_changes": [],
+        "outages": []
+      }
+    },
+    "selection": "none; frozen policies; exploratory challenge set"
+  },
+  "feedback-budget-v1": {
+    "version": "feedback-budget-v1",
+    "actions": [
+      [
+        8,
+        0.025
+      ],
+      [
+        16,
+        0.025
+      ],
+      [
+        32,
+        0.025
+      ],
+      [
+        8,
+        0.1
+      ],
+      [
+        16,
+        0.1
+      ],
+      [
+        32,
+        0.1
+      ],
+      [
+        8,
+        0.25
+      ],
+      [
+        16,
+        0.25
+      ],
+      [
+        32,
+        0.25
+      ]
+    ],
+    "budget": 0.25,
+    "validation_seeds": [
+      17000,
+      17001,
+      17002,
+      17003,
+      17004
+    ],
+    "test_seeds": [
+      18000,
+      18001,
+      18002,
+      18003,
+      18004,
+      18005,
+      18006,
+      18007,
+      18008,
+      18009,
+      18010,
+      18011,
+      18012,
+      18013,
+      18014,
+      18015,
+      18016,
+      18017,
+      18018,
+      18019
+    ],
+    "generalization_seeds": [
+      19000,
+      19001,
+      19002,
+      19003,
+      19004,
+      19005,
+      19006,
+      19007,
+      19008,
+      19009,
+      19010,
+      19011,
+      19012,
+      19013,
+      19014,
+      19015,
+      19016,
+      19017,
+      19018,
+      19019
+    ],
+    "selection": "global constant action: validation completion first, then transport-v2 return",
+    "domains": {
+      "clean": {
+        "network": {
+          "bandwidth_bps": 1000000,
+          "feedback_bandwidth_bps": 1000000,
+          "base_rtt": 0.05,
+          "jitter": 0.002,
+          "loss": 0,
+          "ack_loss": 0,
+          "corruption": 0.0,
+          "ack_corruption": 0.0,
+          "duplicate": 0.0,
+          "queue_bytes": 16384,
+          "feedback_queue_bytes": 16384,
+          "payload_size": 512,
+          "initial_rate": 128000,
+          "initial_cwnd": 16384,
+          "feedback_delay_budget": 0.0,
+          "control_interval": 0.02,
+          "deadline": 12,
+          "max_message_bytes": 16777216,
+          "capacity_changes": [],
+          "feedback_capacity_changes": [],
+          "loss_changes": [],
+          "rtt_changes": [],
+          "outages": []
+        },
+        "flows": 2,
+        "payload_bytes": 32768
+      },
+      "asymmetric-64k": {
+        "network": {
+          "bandwidth_bps": 1000000,
+          "feedback_bandwidth_bps": 64000,
+          "base_rtt": 0.05,
+          "jitter": 0.005,
+          "loss": 0.02,
+          "ack_loss": 0.02,
+          "corruption": 0.0,
+          "ack_corruption": 0.0,
+          "duplicate": 0.0,
+          "queue_bytes": 16384,
+          "feedback_queue_bytes": 16384,
+          "payload_size": 512,
+          "initial_rate": 128000,
+          "initial_cwnd": 16384,
+          "feedback_delay_budget": 0.0,
+          "control_interval": 0.02,
+          "deadline": 12,
+          "max_message_bytes": 16777216,
+          "capacity_changes": [],
+          "feedback_capacity_changes": [],
+          "loss_changes": [],
+          "rtt_changes": [],
+          "outages": []
+        },
+        "flows": 2,
+        "payload_bytes": 32768
+      },
+      "asymmetric-24k": {
+        "network": {
+          "bandwidth_bps": 1000000,
+          "feedback_bandwidth_bps": 24000,
+          "base_rtt": 0.05,
+          "jitter": 0.005,
+          "loss": 0.02,
+          "ack_loss": 0.02,
+          "corruption": 0.0,
+          "ack_corruption": 0.0,
+          "duplicate": 0.0,
+          "queue_bytes": 16384,
+          "feedback_queue_bytes": 16384,
+          "payload_size": 512,
+          "initial_rate": 128000,
+          "initial_cwnd": 16384,
+          "feedback_delay_budget": 0.0,
+          "control_interval": 0.02,
+          "deadline": 12,
+          "max_message_bytes": 16777216,
+          "capacity_changes": [],
+          "feedback_capacity_changes": [],
+          "loss_changes": [],
+          "rtt_changes": [],
+          "outages": []
+        },
+        "flows": 2,
+        "payload_bytes": 32768
+      },
+      "lossy": {
+        "network": {
+          "bandwidth_bps": 1000000,
+          "feedback_bandwidth_bps": 1000000,
+          "base_rtt": 0.05,
+          "jitter": 0.005,
+          "loss": 0.1,
+          "ack_loss": 0.15,
+          "corruption": 0.01,
+          "ack_corruption": 0.01,
+          "duplicate": 0.0,
+          "queue_bytes": 16384,
+          "feedback_queue_bytes": 16384,
+          "payload_size": 512,
+          "initial_rate": 128000,
+          "initial_cwnd": 16384,
+          "feedback_delay_budget": 0.0,
+          "control_interval": 0.02,
+          "deadline": 15,
+          "max_message_bytes": 16777216,
+          "capacity_changes": [],
+          "feedback_capacity_changes": [],
+          "loss_changes": [],
+          "rtt_changes": [],
+          "outages": []
+        },
+        "flows": 2,
+        "payload_bytes": 32768
+      },
+      "changing": {
+        "network": {
+          "bandwidth_bps": 1000000,
+          "feedback_bandwidth_bps": 64000,
+          "base_rtt": 0.05,
+          "jitter": 0.005,
+          "loss": 0.02,
+          "ack_loss": 0.02,
+          "corruption": 0.0,
+          "ack_corruption": 0.0,
+          "duplicate": 0.0,
+          "queue_bytes": 16384,
+          "feedback_queue_bytes": 16384,
+          "payload_size": 512,
+          "initial_rate": 128000,
+          "initial_cwnd": 16384,
+          "feedback_delay_budget": 0.0,
+          "control_interval": 0.02,
+          "deadline": 15,
+          "max_message_bytes": 16777216,
+          "capacity_changes": [
+            [
+              0.3,
+              250000
+            ],
+            [
+              0.8,
+              2000000
+            ]
+          ],
+          "feedback_capacity_changes": [],
+          "loss_changes": [],
+          "rtt_changes": [],
+          "outages": []
+        },
+        "flows": 2,
+        "payload_bytes": 32768
+      },
+      "outage": {
+        "network": {
+          "bandwidth_bps": 1000000,
+          "feedback_bandwidth_bps": 48000,
+          "base_rtt": 0.05,
+          "jitter": 0.005,
+          "loss": 0.02,
+          "ack_loss": 0.1,
+          "corruption": 0.0,
+          "ack_corruption": 0.0,
+          "duplicate": 0.0,
+          "queue_bytes": 16384,
+          "feedback_queue_bytes": 16384,
+          "payload_size": 512,
+          "initial_rate": 128000,
+          "initial_cwnd": 16384,
+          "feedback_delay_budget": 0.0,
+          "control_interval": 0.02,
+          "deadline": 15,
+          "max_message_bytes": 16777216,
+          "capacity_changes": [],
+          "feedback_capacity_changes": [],
+          "loss_changes": [],
+          "rtt_changes": [],
+          "outages": [
+            [
+              0.2,
+              0.5
+            ]
+          ]
+        },
+        "flows": 2,
+        "payload_bytes": 32768
+      }
+    },
+    "protocol": "same configured .25s delay budget at both endpoints; not negotiated"
+  },
+  "receiver-wide-v1": {
+    "version": "receiver-wide-v1",
+    "seeds": [
+      42,
+      43,
+      44
+    ],
+    "episodes": 320,
+    "actions": [
+      [
+        1,
+        0.0
+      ],
+      [
+        2,
+        0.001
+      ],
+      [
+        2,
+        0.005
+      ],
+      [
+        2,
+        0.01
+      ],
+      [
+        2,
+        0.025
+      ],
+      [
+        4,
+        0.001
+      ],
+      [
+        4,
+        0.005
+      ],
+      [
+        4,
+        0.01
+      ],
+      [
+        4,
+        0.025
+      ],
+      [
+        8,
+        0.001
+      ],
+      [
+        8,
+        0.005
+      ],
+      [
+        8,
+        0.01
+      ],
+      [
+        8,
+        0.025
+      ],
+      [
+        8,
+        0.1
+      ],
+      [
+        8,
+        0.25
+      ],
+      [
+        16,
+        0.025
+      ],
+      [
+        16,
+        0.1
+      ],
+      [
+        16,
+        0.25
+      ],
+      [
+        32,
+        0.025
+      ],
+      [
+        32,
+        0.1
+      ],
+      [
+        32,
+        0.25
+      ]
+    ],
+    "feedback_delay_budget": 0.25,
+    "wide": true,
+    "history": 8,
+    "training_domain": {
+      "forward_bps": [
+        250000,
+        4000000
+      ],
+      "reverse_bps": [
+        24000,
+        1000000
+      ],
+      "rtt_seconds": [
+        0.01,
+        0.18
+      ],
+      "data_loss": [
+        0,
+        0.12
+      ],
+      "ack_loss": [
+        0,
+        0.15
+      ],
+      "jitter_seconds": [
+        0,
+        0.02
+      ],
+      "corruption": [
+        0,
+        0.01
+      ],
+      "flows": [
+        1,
+        4
+      ],
+      "queues_bytes": [
+        4096,
+        8192,
+        16384,
+        32768
+      ],
+      "message_bytes": [
+        16384,
+        32768,
+        49152
+      ],
+      "degradation_probability": 0.8,
+      "outage_probability": 0.3,
+      "onset_seconds": [
+        0.1,
+        0.7
+      ],
+      "decline_seconds": [
+        0.2,
+        0.8
+      ],
+      "hold_seconds": [
+        0.4,
+        2.0
+      ],
+      "recovery_seconds": [
+        0.3,
+        1.2
+      ],
+      "deadline_seconds": 20,
+      "model": "persistent latent degradation; correlated capacity/loss/access-delay; causal FIFO queues"
+    },
+    "validation_seeds": [
+      21000,
+      21001,
+      21002,
+      21003,
+      21004
+    ],
+    "test_seeds": [
+      22000,
+      22001,
+      22002,
+      22003,
+      22004,
+      22005,
+      22006,
+      22007,
+      22008,
+      22009,
+      22010,
+      22011,
+      22012,
+      22013,
+      22014,
+      22015,
+      22016,
+      22017,
+      22018,
+      22019
+    ],
+    "snapshot_every": 40,
+    "selection": "validation completion first, then common transport-v2 return; initial snapshot eligible",
+    "optimizer": {
+      "lr": 0.0001,
+      "epochs": 4,
+      "episodes_per_update": 4,
+      "minibatch": 256,
+      "clip": 0.2,
+      "target_kl": 0.015,
+      "entropy": 0.001
+    },
+    "initial_prior": "8% batch8/delay250ms; rest uniform"
+  },
+  "receiver-wide-generalization-v1": {
+    "test_seeds": [
+      23000,
+      23001,
+      23002,
+      23003,
+      23004,
+      23005,
+      23006,
+      23007,
+      23008,
+      23009,
+      23010,
+      23011,
+      23012,
+      23013,
+      23014,
+      23015,
+      23016,
+      23017,
+      23018,
+      23019
+    ],
+    "winner": "receiver-v3-s42-e0200.pt",
+    "baseline": [
+      16,
+      0.25
+    ],
+    "feedback_delay_budget": 0.25,
+    "selection": "none on these generalization seeds"
+  }
+}

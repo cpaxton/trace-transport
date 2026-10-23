@@ -29,6 +29,7 @@
         <label class="policy check"><input id="aimd" type="checkbox" checked><span><b>AIMD</b><small>Additive increase, multiplicative decrease</small></span><span class="dot amber"></span></label>
         <label class="policy check"><input id="learned" type="checkbox"><span><b>Learned policy</b><small id="learned-hint">Transformer, MLP, or GRU checkpoint</small></span><span class="dot teal"></span></label>
         <label>Checkpoint<select id="checkpoint"></select></label>
+        <label>Feedback protocol<select id="feedback-profile"><option value="budgeted">Receipt summaries · latency focused</option><option value="sparse">Receipt summaries · fewer ACKs</option><option value="legacy">Legacy per-packet ACKs</option></select></label>
         <label>Scoring<select id="reward"><option value="completion">Completion focused · v2 / γ 0.999</option><option value="legacy">Legacy · v1 / γ 0.99</option></select></label>
         <button type="submit" id="run" class="primary">▶ Run comparison</button><button type="button" id="stop" class="secondary" hidden>Stop batch</button>
         <p class="hint footnote">Runs on your machine. Simulation time can advance faster than wall time.</p>

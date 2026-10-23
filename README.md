@@ -754,7 +754,35 @@ trace-transport receiver-experiment --protocol receipts --profile randomized --h
 uv run --locked --extra learn python scripts/receiver_generalization.py
 ```
 
-### Wi-Fi conditions and useful temporal structure
+### Beyond receiver-v2: feedback timing and stronger tests
+
+The next [experiment batch](docs/experiments/protocol-v3.md) found a larger
+improvement in feedback timing and sender timers. On fresh diagnostic seeds,
+configuring a 250-ms feedback-wait budget at both endpoints and using a longer
+ACK wait reduced mean completion time **37%**, ACK bytes **70%**, and total wire
+bytes **32%**, with **240/240 exact completions**. A separate generalization run
+improved from 551/560 to 560/560 completions. These are deterministic protocol
+gains; neither the new categorical receiver nor a learned pacing/window
+correction has beaten the strongest tuned controls.
+
+The browser now offers **Receipt summaries · latency focused** and **Receipt
+summaries · fewer ACKs**, alongside legacy ACKs. The latency-focused profile is
+the browser default. Longer waits can save traffic while slowing some paths;
+the report records the selected profile and configured timer budget. CLI:
+
+```bash
+trace-transport benchmark --feedback-profile budgeted --reward completion
+trace-transport benchmark --feedback-profile sparse --reward completion
+```
+
+These profiles are simulation settings with a shared configured delay budget,
+not on-wire negotiation or deployed learned receiver behavior. The experiment
+report includes control sweeps, 320-episode training runs for three seeds,
+validation-selected checkpoints, a total-wire accounting check, and a new
+mixed bulk/short-message challenge. Keeping that stronger test set exposes
+remaining delivery failures and multi-second short-message tail latency.
+
+### Wi-Fi model structure
 
 Randomization happens **between episodes**; within an episode the hidden service
 conditions persist and evolve. A degradation has a randomized onset, a gradual

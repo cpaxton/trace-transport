@@ -12,9 +12,12 @@ from .controllers import make_controller
 from .environment import TransportEnv
 from .simulator import NetworkConfig
 from .rewards import reward_spec
+from .feedback import FEEDBACK_PROFILES,profile_config
 
 
 def _network_arguments(parser):
+    parser.add_argument("--feedback-profile", choices=list(FEEDBACK_PROFILES), default="legacy",
+                        help="legacy ACKs, budgeted receipt summaries, or sparse receipt summaries")
     parser.add_argument("--bandwidth-mbps", type=float, default=1.0)
     parser.add_argument("--rtt-ms", type=float, default=50.0)
     parser.add_argument("--jitter-ms", type=float, default=5.0)
@@ -58,11 +61,16 @@ def _read_text(args):
 
 
 def run_simulation(texts, config, controller, *, seed=0, checkpoint=None, device="cpu", start_times=None,
-                   include_rtt_samples=False, reward_profile="legacy", progress=None):
+                   include_rtt_samples=False, reward_profile="legacy", progress=None, feedback_profile="legacy"):
+    config=profile_config(config,feedback_profile)
     policy = make_controller(controller, len(texts), checkpoint=checkpoint, device=device)
     env = TransportEnv(texts, config, action_dimensions=policy.action_dimensions, start_times=start_times,
-                       reward_profile=reward_profile)
+                       reward_profile=reward_profile,receiver_feedback=feedback_profile!="legacy",
+                       receipt_feedback=feedback_profile!="legacy")
     obs, _ = env.reset(seed=seed)
+    if feedback_profile != 'legacy':
+        for scheduler in env.simulator.feedback_schedulers:
+            scheduler.batch_size,scheduler.delay=8,FEEDBACK_PROFILES[feedback_profile]
     policy.reset(obs)
     returns = [0.0] * len(texts)
     discounted_returns = [0.0] * len(texts)
@@ -96,6 +104,7 @@ def run_simulation(texts, config, controller, *, seed=0, checkpoint=None, device
         })
     report = {
         "controller": controller, "seed": seed, "config": asdict(config),
+        "feedback_profile": feedback_profile,
         "checkpoint": str(checkpoint) if controller in ("transformer", "learned") else None,
         "checkpoint_sha256": (hashlib.sha256(Path(checkpoint).read_bytes()).hexdigest()
                               if controller in ("transformer", "learned") else None),
@@ -114,6 +123,8 @@ def run_simulation(texts, config, controller, *, seed=0, checkpoint=None, device
 def build_parser():
     parser = argparse.ArgumentParser(prog="trace-transport", description=__doc__)
     commands = parser.add_subparsers(dest="command", required=True)
+    commands.add_parser("receiver-categorical", add_help=False, help="train a baseline-initialized categorical receiver")
+    commands.add_parser("sender-experiment", add_help=False, help="train residual pacing/window control")
     commands.add_parser("receiver-experiment", add_help=False,
                         help="train and evaluate a receiver-only policy (requires learn extra)")
     console = commands.add_parser("console", help="open the local browser test bench with live charts and batch controls")
@@ -216,6 +227,12 @@ def main(argv=None):
     if arguments and arguments[0] == "receiver-experiment":
         from .receiver_experiment import main as receiver_main
         return receiver_main(arguments[1:])
+    if arguments and arguments[0] in ("receiver-categorical", "sender-experiment"):
+        if arguments[0] == "receiver-categorical":
+            from .receiver_v3 import main as research_main
+        else:
+            from .sender_experiment import main as research_main
+        return research_main(arguments[1:])
     parser = build_parser()
     args = parser.parse_args(arguments)
     try:
@@ -273,7 +290,7 @@ def main(argv=None):
                 [text] * args.flows, config, args.controller, seed=args.seed,
                 checkpoint=args.checkpoint, device=args.device,
                 start_times=[i * args.stagger_seconds for i in range(args.flows)],
-                reward_profile=args.reward,
+                reward_profile=args.reward,feedback_profile=args.feedback_profile,
             )
             if args.output is not None and results[0].completed:
                 args.output.write_bytes(results[0].received_text.encode("utf-8"))
@@ -290,7 +307,7 @@ def main(argv=None):
                 for controller in args.controllers:
                     _, run = run_simulation([text] * args.flows, config, controller, seed=seed,
                                             checkpoint=args.checkpoint, device=args.device, include_rtt_samples=True,
-                                            reward_profile=args.reward)
+                                            reward_profile=args.reward,feedback_profile=args.feedback_profile)
                     runs.append(run)
             report = {
                 "benchmark": {"trials": args.seeds, "flows": args.flows,
