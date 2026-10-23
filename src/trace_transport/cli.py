@@ -123,6 +123,14 @@ def run_simulation(texts, config, controller, *, seed=0, checkpoint=None, device
 def build_parser():
     parser = argparse.ArgumentParser(prog="trace-transport", description=__doc__)
     commands = parser.add_subparsers(dest="command", required=True)
+    commands.add_parser("joint-train", add_help=False, help="joint sender/receiver MAPPO training")
+    commands.add_parser("joint-study", add_help=False, help="calibrate, validate and test paired joint policies")
+    commands.add_parser("joint-status", add_help=False, help="read live joint-training and study status")
+    commands.add_parser("joint-evaluate", add_help=False, help="evaluate a paired checkpoint or deterministic session policy")
+    commands.add_parser("joint-headroom", add_help=False, help="privileged snapshot look-ahead diagnostic")
+    commands.add_parser("joint-simulate", add_help=False, help="persistent binary robot workload")
+    commands.add_parser("send-file", add_help=False, help="send an opaque binary file over TRC2")
+    commands.add_parser("receive-file", add_help=False, help="receive a binary image/map/file over TRC2")
     commands.add_parser("receiver-categorical", add_help=False, help="train a baseline-initialized categorical receiver")
     commands.add_parser("sender-experiment", add_help=False, help="train residual pacing/window control")
     commands.add_parser("receiver-experiment", add_help=False,
@@ -233,6 +241,9 @@ def main(argv=None):
         else:
             from .sender_experiment import main as research_main
         return research_main(arguments[1:])
+    if arguments and arguments[0] in ("joint-train","joint-simulate","send-file","receive-file","joint-study","joint-headroom","joint-status","joint-evaluate"):
+        from .joint_cli import main as joint_main
+        return joint_main(arguments)
     parser = build_parser()
     args = parser.parse_args(arguments)
     try:

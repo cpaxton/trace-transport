@@ -16,8 +16,12 @@ transformer, PPO training, paired evaluation, and single-message UDP adapters ar
 implemented, including MLP/GRU history baselines and versioned reward profiles.
 The default learned policy controls the sender. A separate receiver-only
 experiment learns bounded ACK batching and delay with a frozen AIMD sender;
-arbitrary metadata remains deterministic. Joint sender/receiver learning and a
-GPU-native simulator remain planned. The [paper working draft](paper/main.tex)
+arbitrary metadata remains deterministic. A new persistent-session experiment now
+jointly trains sender and receiver transformers with CPU packet workers and
+batched GPU learning, bounded mixed text/image/map producers, and correlated
+Wi-Fi-like service conditions. A GPU-native packet simulator remains planned.
+See [the joint experiment guide](docs/joint-network-brain.md) for commands,
+action/observation spaces, and predeclared win conditions. The [paper working draft](paper/main.tex)
 describes the system and evaluation plan; preliminary diagnostics do not establish
 general superiority over transport baselines.
 
@@ -618,7 +622,8 @@ The sender policy controls pacing and optionally the in-flight window. The
 separate receiver-v1 experiment learns ACK batching and timing with the sender
 held fixed. Every feedback byte consumes simulated reverse-link capacity. The
 correctness kernel validates byte ranges and transmission IDs independently of
-the policy. Joint endpoint learning and GPU simulation remain unimplemented.
+the policy. Joint endpoint learning is implemented in the separate persistent-session experiment;
+GPU-native packet simulation remains unimplemented.
 
 ### Receiver experiment: goals and win conditions
 

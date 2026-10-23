@@ -30,7 +30,7 @@ def model_catalog(root):
     models = []
     for directory in ("artifacts", "checkpoints"):
         for path in sorted((Path(root) / directory).glob("*.pt")):
-            if path.stem.startswith(("receiver-", "sender-residual-")):
+            if path.stem.startswith(("receiver-", "sender-residual-", "joint-")):
                 continue
             models.append({"id": path.relative_to(root).as_posix(), "label": path.stem,
                            "bytes": path.stat().st_size})
@@ -267,11 +267,19 @@ def make_handler(bench):
             path = urlparse(self.path).path
             static = {"/": ("index.html", "text/html; charset=utf-8"),
                       "/app.js": ("app.js", "application/javascript; charset=utf-8"),
-                      "/style.css": ("style.css", "text/css; charset=utf-8")}
+                      "/style.css": ("style.css", "text/css; charset=utf-8"),
+                      "/joint": ("joint.html", "text/html; charset=utf-8"),
+                      "/joint.js": ("joint.js", "application/javascript; charset=utf-8")}
             try:
                 if path in static:
                     file, kind = static[path]
                     self.send_body(200, (STATIC / file).read_bytes(), kind)
+                elif path == "/api/joint/status":
+                    from .joint_monitor import status
+                    self.send_body(200,status(bench.root))
+                elif path == "/api/joint/report.json":
+                    from .joint_monitor import report
+                    self.send_body(200,report(bench.root))
                 elif path == "/api/catalog":
                     self.send_body(200, bench.catalog())
                 else:

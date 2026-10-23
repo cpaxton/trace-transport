@@ -24,11 +24,37 @@ while a small transformer initially controls sending rate and later additional
 protocol decisions. We describe a seeded CPU reference, a proposed batched GPU
 backend, and an evaluation plan covering correctness, fairness, generalization,
 and real datagram operation. The CPU simulator, sender policy, PPO training loop,
-and single-message UDP adapters are implemented. Joint receiver learning and GPU
-packet simulation remain future work. Preliminary CPU diagnostics show progress
+and single-message UDP adapters are implemented. A separate persistent-session implementation now jointly trains local sender and
+receiver transformers with a centralized critic, bounded mixed binary workloads,
+and batched GPU learning over CPU packet workers. GPU-native packet simulation
+remains future work. Held-out joint-policy superiority has not been established. Preliminary CPU diagnostics show progress
 over an earlier learned sender while exposing training-seed sensitivity; they do
 not establish general superiority or novelty.
 \end{abstract}
+
+\section{Persistent-session joint experiment}
+The joint implementation uses two local transformer actors and a training-only
+centralized critic. Sender actions control rate, flight window, and queued-message
+selection; receiver actions control bounded ACK batching and timing. A fixed
+reliability kernel enforces exact binary recovery. Histories persist across
+messages. Interactive text has a 100-ms deadline; images and map deltas provide
+bulk progress objectives. Backpressure counts blocked interactive offers as misses.
+
+The version-two curriculum samples correlated fades, contention, outages,
+asymmetric service, and feasible through overloaded wire loads. It accounts for
+headers and bidirectional feedback; an earlier undercounting sampler was retired.
+Shared airtime approximates Wi-Fi service above the MAC and is not a calibrated
+802.11 model. Six five-million-decision runs cover three joint seeds, one-step
+history, and frozen-role ablations. CPU event workers feed batched GPU inference
+and optimization. Actor exports exclude the centralized critic.
+
+Validation chooses among deterministic rate, scheduling, and feedback controls
+before disjoint held-out testing. Acceptance requires a 20\% relative deadline-miss
+reduction with a paired bootstrap interval below zero, at least 95\% of reference
+image/map goodput and delivered volume, no completion-ratio loss, at most 105\%
+wire cost per delivered byte, and zero corrupt delivery. Training reward alone
+cannot establish this result. The real binary UDP adapter remains deterministic;
+deployment of the joint learned actors on robot hardware is future work.
 
 \section{Motivation and scope}
 An endpoint cannot directly observe network capacity, competing senders, router

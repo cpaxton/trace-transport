@@ -215,7 +215,7 @@ class Sender:
             self.receiver_credit = credit
         if complete:
             self.verified_completion = True
-        if self.verified_completion and all(s.acknowledged for s in self.segments.values()):
+        if self.completed_at is None and self.verified_completion and all(s.acknowledged for s in self.segments.values()):
             self.completed_at = now
         return True
 
@@ -281,7 +281,7 @@ class Sender:
         credit = packet.metadata.get("credit")
         if type(credit) is int and credit >= 0:
             self.receiver_credit = credit
-        if self.verified_completion and all(s.acknowledged for s in self.segments.values()):
+        if self.completed_at is None and self.verified_completion and all(s.acknowledged for s in self.segments.values()):
             self.completed_at = now
         return True
 

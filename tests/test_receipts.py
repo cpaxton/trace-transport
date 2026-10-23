@@ -94,3 +94,12 @@ def test_receipt_summary_reserves_scheduler_delay_budget():
     assert emitted
     emitted[-1].encode()  # sparse ranges plus metadata plus ACK delay all fit
     assert len(emitted[-1].metadata['ranges'])<8
+
+
+def test_duplicate_receipt_cannot_move_first_confirmation_timestamp():
+    sender=Sender(b'abc',7);receiver=Receiver(receipt_feedback=True)
+    ack=receiver.on_data(sender.poll(0),.05)
+    assert sender.on_ack(ack,.1)
+    assert sender.completed_at==.1
+    sender.on_ack(ack,.2)
+    assert sender.completed_at==.1

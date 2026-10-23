@@ -118,6 +118,15 @@ def test_http_routes_serve_the_application_and_block_cross_origin_jobs(tmp_path)
         status, content = request(bench, "GET", "/")
         assert status == 200 and b"Controller comparison" in content
         assert request(bench, "GET", "/app.js")[0] == 200
+        assert request(bench, "GET", "/joint")[0] == 200
+        assert request(bench, "GET", "/joint.js")[0] == 200
+        code, body = request(bench, "GET", "/api/joint/status")
+        assert code == 200 and "runs" in json.loads(body)
+        assert request(bench, "GET", "/api/joint/report.json")[0] == 404
+        report_dir = tmp_path / "runs/joint-v1/study"
+        report_dir.mkdir(parents=True)
+        (report_dir / "results.json").write_text(json.dumps({"final_test": {}}))
+        assert request(bench, "GET", "/api/joint/report.json")[0] == 200
         status, content = request(bench, "GET", "/api/catalog")
         assert status == 200
         assert {"clean", "lossy", "changing", "stress", "wifi-mobile-fade"} <= {

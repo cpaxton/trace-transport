@@ -1,0 +1,14 @@
+[
+  {
+    "file": "image.png",
+    "bytes": 74,
+    "exact": true,
+    "elapsed": 0.0006297779909800738
+  },
+  {
+    "file": "map.bin",
+    "bytes": 65536,
+    "exact": true,
+    "elapsed": 0.7159694289875915
+  }
+]

@@ -1,0 +1,130 @@
+{
+  "kind": "privileged finite-candidate look-ahead probe, not an optimal bound",
+  "decisions": [
+    {
+      "time": 0.02,
+      "rate": 0.5,
+      "ack": 0,
+      "reward": 0.0002818295334347827
+    },
+    {
+      "time": 0.04,
+      "rate": 0.0,
+      "ack": 0,
+      "reward": 0.017392702516919132
+    }
+  ],
+  "metrics": {
+    "desired": {
+      "interactive": 3,
+      "image": 1
+    },
+    "blocked": {},
+    "admitted": {
+      "interactive": 3,
+      "image": 1
+    },
+    "messages": 4,
+    "completed": 0,
+    "wrong": 0,
+    "interactive_miss_rate": 0.0,
+    "interactive_on_time": 2,
+    "interactive_pending_deadlines": 1,
+    "interactive_unavoidable_bound": 0,
+    "interactive_avoidable_misses": 0,
+    "image_bytes": 0,
+    "map_bytes": 0,
+    "delivered_bytes": 512,
+    "total_wire_bytes": 6915,
+    "feedback_bytes": 486,
+    "elapsed": 0.04,
+    "actual_image_fps": 0.0,
+    "admitted_image_fps": 0.5,
+    "pending_confirmation_bytes": 33536,
+    "pending_messages": 4,
+    "events": 25,
+    "messages_detail": [
+      {
+        "message_id": 1,
+        "traffic_class": "interactive",
+        "completed": false,
+        "receiver_complete": true,
+        "delivered_bytes": 256,
+        "offered_at": 0.0032142441689506263,
+        "admitted_at": 0.0032142441689506263,
+        "delivered_at": 0.027840857814007355,
+        "confirmed_at": null,
+        "deadline_ms": 100.0,
+        "on_time": true
+      },
+      {
+        "message_id": 2,
+        "traffic_class": "image",
+        "completed": false,
+        "receiver_complete": false,
+        "delivered_bytes": 0,
+        "offered_at": 0.0034086036553925897,
+        "admitted_at": 0.0034086036553925897,
+        "delivered_at": null,
+        "confirmed_at": null,
+        "deadline_ms": null,
+        "on_time": false
+      },
+      {
+        "message_id": 4,
+        "traffic_class": "interactive",
+        "completed": false,
+        "receiver_complete": true,
+        "delivered_bytes": 256,
+        "offered_at": 0.03543613902173315,
+        "admitted_at": 0.03543613902173315,
+        "delivered_at": 0.03659556511224704,
+        "confirmed_at": null,
+        "deadline_ms": 100.0,
+        "on_time": true
+      },
+      {
+        "message_id": 3,
+        "traffic_class": "interactive",
+        "completed": false,
+        "receiver_complete": false,
+        "delivered_bytes": 0,
+        "offered_at": 0.029310328277268666,
+        "admitted_at": 0.029310328277268666,
+        "delivered_at": null,
+        "confirmed_at": null,
+        "deadline_ms": 100.0,
+        "on_time": false
+      }
+    ],
+    "network": [
+      {
+        "attempted_packets": 12,
+        "admitted_packets": 12,
+        "attempted_bytes": 6658,
+        "admitted_bytes": 6658,
+        "queue_drops": 0,
+        "random_drops": 0,
+        "outage_drops": 0,
+        "delivered_packets": 7,
+        "corrupted_packets": 0,
+        "corruption_rejections": 0,
+        "generated_duplicates": 1
+      },
+      {
+        "attempted_packets": 3,
+        "admitted_packets": 3,
+        "attempted_bytes": 849,
+        "admitted_bytes": 849,
+        "queue_drops": 0,
+        "random_drops": 0,
+        "outage_drops": 0,
+        "delivered_packets": 0,
+        "corrupted_packets": 0,
+        "corruption_rejections": 0,
+        "generated_duplicates": 0
+      }
+    ],
+    "interactive_p95": 0.023453254267329585
+  }
+}
