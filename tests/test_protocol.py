@@ -88,6 +88,21 @@ def test_wrong_completion_digest_is_not_accepted():
     assert sender.on_ack(ack, .03)
 
 
+def test_ack_cannot_reuse_another_ranges_transmission_id():
+    sender, receiver = Sender(b"abcdef", 1, payload_size=3), Receiver()
+    first = sender.poll(0)
+    second = sender.poll(.01)
+    ack = receiver.on_data(first, .02)
+    wrong_range = Packet(ACK, 1, first.transmission_id, second.offset, 6,
+                         metadata={**ack.metadata, "length": len(second.payload)})
+    assert not sender.on_ack(wrong_range, .03)
+    assert sender.acknowledged_bytes == 0
+    assert sender.on_ack(ack, .04)
+    assert not sender.complete
+    assert sender.on_ack(receiver.on_data(second, .05), .06)
+    assert sender.complete and not any(s.transmission_ids for s in sender.segments.values())
+
+
 def test_message_and_action_limits():
     with pytest.raises(ValueError, match="capacity"):
         Sender(b"too long", 1, max_message_bytes=2)

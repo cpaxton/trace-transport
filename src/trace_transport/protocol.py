@@ -4,7 +4,7 @@ Packets carry one independently acknowledged byte range. Timers use seconds from
 a monotonic clock supplied by the caller. Late and duplicate ACKs are harmless.
 """
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 import hashlib
 import math
 
@@ -27,6 +27,7 @@ class Segment:
     sent_at: float = 0.0
     timeout_at: float = math.inf
     wire_bytes: int = 0
+    transmission_ids: set[int] = field(default_factory=set)
 
 
 class Sender:
@@ -143,6 +144,7 @@ class Sender:
             self.retransmitted_bytes += len(segment.payload)
         segment.attempts += 1
         segment.transmission_id = tx
+        segment.transmission_ids.add(tx)
         segment.sent_at = now
         segment.timeout_at = now + min(3.0, self.rto * 2 ** min(segment.attempts - 1, 4))
         segment.wire_bytes = wire_bytes
@@ -159,10 +161,10 @@ class Sender:
         segment = self.segments.get(packet.offset)
         if segment is None or segment.acknowledged or not segment.attempts:
             return False
-        if packet.metadata.get("length") != len(segment.payload):
+        if type(packet.metadata.get("length")) is not int or packet.metadata["length"] != len(segment.payload):
             return False
         # ACKs may refer to an earlier transmission of the same byte range.
-        if packet.transmission_id <= 0 or packet.transmission_id >= self.next_transmission_id:
+        if packet.transmission_id not in segment.transmission_ids:
             return False
         if packet.metadata.get("complete") is True:
             if packet.metadata.get("sha256") != self.expected_digest:
@@ -181,6 +183,7 @@ class Sender:
             del self.in_flight[segment.transmission_id]
             self.flight_bytes -= segment.wire_bytes
         segment.transmission_id = None
+        segment.transmission_ids.clear()
         segment.acknowledged = True
         self.acknowledged_bytes += len(segment.payload)
         self.last_ack_at = now

@@ -20,12 +20,66 @@ GPU-native simulator remain planned. The [paper working draft](paper/main.tex)
 describes the system and evaluation plan; preliminary diagnostics do not establish
 general superiority over transport baselines.
 
-## Run it
+## Quick start
+
+Install [uv](https://docs.astral.sh/uv/getting-started/installation/) (0.7.2 or
+newer), then run these commands from a terminal:
+
+```bash
+git clone https://github.com/cpaxton/trace-transport.git
+cd trace-transport
+uv sync --locked --extra learn
+uv run --locked --extra learn trace-transport console --open
+```
+
+For an existing checkout, start with `uv sync --locked --extra learn`. The browser opens at
+`http://127.0.0.1:8765`; if it does not, open that address manually. Choose a
+scenario and controllers, then click **Run comparison**. Ten trials per controller
+are selected by default. The bundled checkpoint enables learned-policy tests
+without training first.
+
+`uv` creates `.venv`, selects Python 3.12 from `.python-version`, and installs the
+versions in `uv.lock`. No manual virtualenv creation or activation is required.
+Python 3.10 and newer remain supported; use `uv sync --python 3.10` to override
+the default. PyTorch is optional: for baseline controllers only, run
+`uv sync --locked` and omit `--extra learn` from commands. Development tools,
+including pytest, are in the default `dev` dependency group.
+
+### Useful first commands
+
+```bash
+# Baselines: 10 paired trials with readable scores and a JSON report.
+uv run --locked trace-transport benchmark
+
+# Compare the shipped model with the baselines.
+uv run --locked --extra learn trace-transport benchmark \
+  --controllers fixed aimd learned --reward completion \
+  --checkpoint artifacts/robust-v2-best.pt
+
+# Verify the complete implementation, including learned policies.
+uv run --locked --extra learn pytest -q
+```
+
+### Startup troubleshooting
+
+- **`uv` is not found:** install it using the link above, reopen your terminal,
+  and check `uv --version`.
+- **No `.venv` exists:** run `uv sync --locked --extra learn`; `uv` creates it.
+- **Learned policy is disabled:** include `--extra learn` to install PyTorch.
+- **Tests load unrelated ROS or system plugins:** run
+  `env -u PYTHONPATH uv run --locked --extra learn pytest -q` from a clean shell.
+- **Port 8765 is busy:** add `--port 8766` and open the printed address.
+- **Browser does not open:** leave the console command running and open its URL.
+- **Running outside the checkout:** change to the repository directory first;
+  `console --root /path/to/trace-transport` controls model/report discovery.
+- **A stale lockfile is reported:** use `uv lock` after intentionally changing
+  dependencies, then commit `pyproject.toml` and `uv.lock` together. Routine
+  startup and CI use `--locked` so they do not silently change resolved versions.
 
 ### Browser test bench
 
 ```bash
-.venv/bin/trace-transport console --open
+uv run --locked --extra learn trace-transport console --open
 ```
 
 Open `http://127.0.0.1:8765` if the browser does not open automatically. The local
@@ -50,41 +104,39 @@ is sufficient for baseline trials; install the `learn` extra for checkpoints.
 
 ### Command-line setup
 
-Python 3.10 or newer is required. The simulator needs NumPy; PyTorch is optional
-unless training or using a transformer checkpoint.
+The simulator needs NumPy; PyTorch is optional unless training or using a learned
+checkpoint. This lightweight setup runs only the baseline controllers:
 
 ```bash
-python3 -m venv .venv
-source .venv/bin/activate
-python -m pip install -e ".[dev]"
+uv sync --locked
 
 # Send arbitrary inline text and save the exact UTF-8 bytes.
-trace-transport simulate --text 'Hello, こんにちは 🌐' \
+uv run --locked trace-transport simulate --text 'Hello, こんにちは 🌐' \
   --loss 0.1 --ack-loss 0.1 --seed 7 --show-text --output received.txt
 
 # Competing senders, an outage, and changing capacity.
-trace-transport simulate --text 'Competing traffic' --flows 4 \
+uv run --locked trace-transport simulate --text 'Competing traffic' --flows 4 \
   --outage 0.1 0.4 --capacity-change 0.5 2.0 --report runs/scenario.json
 
 # For meaningful congestion behavior, supply a larger UTF-8 file of your own.
-trace-transport evaluate --input message.txt --flows 4 --seeds 5 \
+uv run --locked trace-transport evaluate --input message.txt --flows 4 --seeds 5 \
   --controllers fixed aimd --report runs/baselines.json
 
-pytest -q
+uv run --locked pytest -q
 ```
 
 ### Ten-trial benchmark and RL score
 
 ```bash
 # Ten paired trials for fixed-rate and AIMD: two 32 KiB transfers per trial.
-trace-transport benchmark
+uv run --locked trace-transport benchmark
 
 # Include a trained checkpoint, with the same workload and seeds for every controller.
-trace-transport benchmark --controllers fixed aimd transformer \
+uv run --locked --extra learn trace-transport benchmark --controllers fixed aimd transformer \
   --checkpoint checkpoints/smoke.pt --trials 10 --seed 100
 
 # More severe impairments or your own exact UTF-8 input.
-trace-transport benchmark --input message.txt --loss 0.1 --ack-loss 0.1 \
+uv run --locked trace-transport benchmark --input message.txt --loss 0.1 --ack-loss 0.1 \
   --corruption 0.02 --ack-corruption 0.02 --flows 4 --trials 10
 ```
 
@@ -137,21 +189,21 @@ The repository includes the selected CPU-loadable checkpoint at
 without training:
 
 ```bash
-trace-transport benchmark --controllers fixed aimd learned --reward completion \
+uv run --locked --extra learn trace-transport benchmark --controllers fixed aimd learned --reward completion \
   --checkpoint artifacts/robust-v2-best.pt
 ```
 
 ```bash
-python -m pip install -e ".[learn]"
+uv sync --locked --extra learn
 
 # A software smoke run, not a claim of a good congestion controller.
-trace-transport train --updates 5 --envs 4 --flows 2 --rollout-steps 32 \
+uv run --locked --extra learn trace-transport train --updates 5 --envs 4 --flows 2 --rollout-steps 32 \
   --epochs 2 --history 16 --output checkpoints/smoke.pt
 
-trace-transport simulate --text 'A learned sender 🌐' \
+uv run --locked --extra learn trace-transport simulate --text 'A learned sender 🌐' \
   --controller transformer --checkpoint checkpoints/smoke.pt --show-text
 
-trace-transport evaluate --input message.txt --flows 4 --seeds 5 \
+uv run --locked --extra learn trace-transport evaluate --input message.txt --flows 4 --seeds 5 \
   --controllers fixed aimd transformer --checkpoint checkpoints/smoke.pt \
   --report runs/learned-comparison.json
 ```
@@ -207,18 +259,18 @@ These settings approximately match parameter counts, not computational cost:
 
 ```bash
 # Substitute architecture, width, and layers from the table for each baseline.
-trace-transport train --architecture transformer --width 64 --layers 2 \
+uv run --locked --extra learn trace-transport train --architecture transformer --width 64 --layers 2 \
   --history 16 --profile robust --reward completion --flows 4 --envs 8 \
   --min-message-bytes 16384 --max-message-bytes 98304 --episode-seconds 20 \
   --updates 400 --rollout-steps 64 --epochs 2 --seed 42 \
   --output checkpoints/robust-v2-transformer-s42.pt
 
 # Checkpoint metadata selects transformer/MLP/GRU automatically.
-trace-transport simulate --controller learned \
+uv run --locked --extra learn trace-transport simulate --controller learned \
   --checkpoint checkpoints/robust-v2-transformer-s42.pt \
   --reward completion --text 'A learned protocol 🌐'
 
-trace-transport suite --reward completion --trials 10 --seed 1000 \
+uv run --locked --extra learn trace-transport suite --reward completion --trials 10 --seed 1000 \
   --policy candidate=checkpoints/robust-v2-transformer-s42.pt
 ```
 
@@ -264,13 +316,13 @@ selection/final-evaluation procedure after the declared checkpoints are trained:
 
 ```bash
 # Reuse completed checkpoints to reproduce validation and final evaluation.
-python scripts/compare_learning.py --plan experiments/robust-v2.json
+uv run --locked --extra learn python scripts/compare_learning.py --plan experiments/robust-v2.json
 
 # Train missing candidates first, then run the declared comparisons.
-python scripts/compare_learning.py --plan experiments/robust-v2.json --train
+uv run --locked --extra learn python scripts/compare_learning.py --plan experiments/robust-v2.json --train
 
 # Use the selected model for exact text transfer.
-trace-transport simulate --controller learned --reward completion \
+uv run --locked --extra learn trace-transport simulate --controller learned --reward completion \
   --checkpoint checkpoints/robust-v2-best.pt --text 'Reliable text 🌐' --show-text
 ```
 
@@ -303,10 +355,10 @@ stability fix.
 
 ```bash
 # Build a clean Git bundle and source archive without modifying this workspace's .git.
-python scripts/export_repository.py
+uv run --locked python scripts/export_repository.py
 
 # From a terminal with GitHub access, initialize the empty destination repository.
-python scripts/export_repository.py --push
+uv run --locked python scripts/export_repository.py --push
 ```
 
 The exporter includes source, tests, browser assets, CI, paper sources, experiment
@@ -325,18 +377,18 @@ checkpoints on identical scenarios instead of changing the benchmark between run
 
 ```bash
 # A longer sender-only training run, using the same model size as the smoke run.
-trace-transport train --updates 300 --envs 8 --flows 2 --rollout-steps 64 \
+uv run --locked --extra learn trace-transport train --updates 300 --envs 8 --flows 2 --rollout-steps 64 \
   --epochs 2 --history 16 --seed 42 --output checkpoints/longer-seed42.pt
 
 # Evaluate baselines and both checkpoints using a separate range of evaluation seeds.
-trace-transport suite --trials 10 --seed 1000 \
+uv run --locked --extra learn trace-transport suite --trials 10 --seed 1000 \
   --policy smoke=checkpoints/smoke.pt \
   --policy trained=checkpoints/longer-seed42.pt \
   --report runs/longer-seed42-suite.json
 
 # A quicker check or a larger evaluation set.
-trace-transport suite --cases clean lossy --trials 2
-trace-transport suite --trials 50 --seed 2000 \
+uv run --locked trace-transport suite --cases clean lossy --trials 2
+uv run --locked --extra learn trace-transport suite --trials 50 --seed 2000 \
   --policy candidate=checkpoints/longer-seed42.pt
 ```
 
@@ -382,14 +434,14 @@ The simulator reports incomplete transfers rather than accepting partial text.
 Reproduce it after training with:
 
 ```bash
-python - <<'PY'
+uv run --locked python - <<'PY'
 from pathlib import Path
 Path("runs").mkdir(exist_ok=True)
 Path("runs/stress.txt").write_bytes(
     ("A history-based transport test: こんにちは 🌐\r\n" * 1500).encode("utf-8")
 )
 PY
-trace-transport evaluate --input runs/stress.txt --flows 4 --seed 17 --seeds 1 \
+uv run --locked --extra learn trace-transport evaluate --input runs/stress.txt --flows 4 --seed 17 --seeds 1 \
   --loss 0.1 --ack-loss 0.1 --jitter-ms 20 --queue-bytes 8192 \
   --outage 0.2 0.5 --capacity-change 1 2 --deadline 20 \
   --controllers fixed aimd transformer --checkpoint checkpoints/smoke.pt \
@@ -401,14 +453,14 @@ trace-transport evaluate --input runs/stress.txt --flows 4 --seed 17 --seeds 1 \
 In one terminal:
 
 ```bash
-trace-transport listen --host 127.0.0.1 --port 9000 --output received.txt \
+uv run --locked trace-transport listen --host 127.0.0.1 --port 9000 --output received.txt \
   --metadata '{"experiment":"custom-feedback"}'
 ```
 
 In another:
 
 ```bash
-trace-transport send --host 127.0.0.1 --port 9000 --text 'Across UDP 🌐'
+uv run --locked trace-transport send --host 127.0.0.1 --port 9000 --text 'Across UDP 🌐'
 ```
 
 Use a reachable interface/address instead of loopback for separate hosts. The
@@ -526,9 +578,19 @@ Deployment uses the trained policy without requiring an online training process.
 
 We control both ends, so the full protocol may choose its own message types,
 feedback representation, ACK policy, retransmission strategy, and metadata.
-It need not imitate TCP's handshake, state machine, or header format. An eventual
-UDP adapter supplies datagrams between hosts; UDP is an outer carrier, not the
-learned protocol's semantics.
+It need not imitate TCP's handshake, state machine, or header format. The working
+UDP adapter supplies datagrams between hosts; UDP is the outer carrier.
+The current TRC1 wire format, ACKs, retransmissions, reassembly, and completion
+digest are our own protocol. TCP is not in the data path, and replacing IP is
+outside this project's scope.
+
+Only sender pacing and the in-flight window are learned today. The next protocol
+experiment should add bounded receiver ACK timing and typed metadata actions,
+then compare them with deterministic feedback on held-out networks. Charge every
+feedback byte, retain the correctness kernel, test lost final ACKs and delayed
+duplicates, and ablate each new action before adding learned retransmission or
+redundancy decisions. Version the wire schema whenever endpoint compatibility
+changes. Joint endpoint learning and GPU simulation remain unimplemented.
 
 The first implementation uses a deliberately understandable reliability kernel:
 
