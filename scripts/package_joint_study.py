@@ -11,6 +11,14 @@ import tempfile
 RUNS=('seed42','seed43','seed44','history1','sender-only','receiver-only')
 
 
+def learning_evidence(metadata,results):
+    trained=metadata.get('decisions',0)>0
+    return dict(selected_training_decisions=metadata.get('decisions',0),trained_policy_selected=trained,
+        learning_win={suite:bool(trained and results[suite]['comparison']['win']) for suite in ['final_test','ood']},
+        interpretation='Initial policy selected: do not attribute held-out performance to learning.' if not trained else
+                       'A trained policy was selected; consult held-out guards and uncertainty.')
+
+
 def package(root,run_root,artifacts):
     root,run_root,artifacts=Path(root),Path(run_root),Path(artifacts)
     study=run_root/'study'
@@ -20,16 +28,18 @@ def package(root,run_root,artifacts):
         raise ValueError('only a completed full study may be published as joint-v1 results')
     if any(len(results[suite].get('joint',{}).get('records',[]))!=40 for suite in ['final_test','ood']):
         raise ValueError('expected all 40 held-out seeds in each suite')
-    from trace_transport.joint_models import export_actors
+    from trace_transport.joint_models import export_actors,load_checkpoint
     from trace_transport.joint_evaluation import compare
     for suite in ['final_test','ood']:
         expected=compare(results[suite]['joint']['records'],results[suite]['baseline']['records'])
         if expected!=results[suite]['comparison']:raise ValueError('comparison does not match raw records')
     artifacts.mkdir(parents=True,exist_ok=True)
-    manifest=dict(kind='completed joint-domain-v2 study',configs={},source_sha256={},files={})
+    _,_,_,selected_metadata=load_checkpoint(study/'joint-v1-actors.pt')
+    results['learning_evidence']=learning_evidence(selected_metadata,results)
+    manifest=dict(kind='completed joint-domain-v2 study',configs={},source_sha256={},files={},learning_evidence=results['learning_evidence'])
     with tempfile.TemporaryDirectory(dir=artifacts,prefix='.joint-package-') as temporary:
         staging=Path(temporary)
-        shutil.copyfile(study/'results.json',staging/'joint-v1-results.json')
+        (staging/'joint-v1-results.json').write_text(json.dumps(results,indent=2)+'\n')
         for source,name in [('plan.json','plan'),('baseline.json','baseline'),('selection.json','selection'),
                             ('validation.json','validation'),('calibration.json','calibration'),('screening.json','screening')]:
             shutil.copyfile(study/source,staging/f'joint-v1-{name}.json')

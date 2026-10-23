@@ -110,7 +110,6 @@ def run(root,*,device='cpu',environments=4,wait=False,quick=False):
     selection=dict(checkpoint=selected,baseline=reference_name,validation_summaries={k:summarize(v) for k,v in validation.items()})
     _write(output/'selection.json',selection)
     export_actors(root/selected,output/'joint-v1-actors.pt')
-    _ready(root,['history1','sender-only','receiver-only'],progress,output,wait)
     result=dict(plan=plan,selection=selection,baseline=reference,final_test={},ood={})
     if (output/'results.json').exists():
         cached=json.loads((output/'results.json').read_text())
@@ -124,6 +123,8 @@ def run(root,*,device='cpu',environments=4,wait=False,quick=False):
     # Ablations are fixed final-budget models, not selected using test outcomes.
     for suite,seeds,ood in [('final_test',plan['test_seeds'],False),('ood',plan['ood_seeds'],True)]:
         for label,path,send,receive in modes:
+            if path is not None and path.parent.name in ('history1','sender-only','receiver-only'):
+                _ready(root,[path.parent.name],progress,output,wait)
             progress.update(phase=suite,run=label);_write(output/'progress.json',progress)
             if label in result[suite]:
                 if [r['seed'] for r in result[suite][label]['records']]!=seeds:
