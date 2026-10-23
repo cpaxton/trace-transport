@@ -23,11 +23,15 @@ for selection, seed sensitivity, and negative results.
 The [device checks](artifacts/device-binary-v1-results.json) recovered all 36
 synthetic text/image/map transfers across Herman Wi-Fi and Caliban Ethernet,
 including an experimental sender-only actor with deterministic feedback. These
-are correctness checks; the full joint-policy study remains the performance test.
+are correctness checks. The [completed joint study](docs/experiments/joint-v1.md)
+selected the initial policy and did not establish a learning win.
 
 The [next throughput experiment](docs/goodput-v2-plan.md) targets maximum verified
 useful delivery, with continuously backlogged traffic and deadline constraints
 for mixed workloads. It is a separate versioned plan.
+
+[Experiment register](docs/experiments/register.md): dated runs, results, negative
+outcomes, and planned work.
 
 ## Quick start
 
