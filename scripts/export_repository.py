@@ -15,7 +15,7 @@ import tempfile
 
 def source_paths(root):
     root = Path(root).resolve()
-    paths = [root / name for name in ("README.md", ".gitignore", "pyproject.toml", "uv.lock", ".python-version", "LICENSE",
+    paths = [root / name for name in ("README.md", "AGENTS.md", "CONTRIBUTING.md", ".github/pull_request_template.md", ".gitignore", "pyproject.toml", "uv.lock", ".python-version", "LICENSE",
                                       "paper/main.tex", "paper/references.bib", "artifacts/SHA256SUMS")]
     for pattern in ("src/**/*.py", "src/trace_transport/scenarios/*.json", "src/trace_transport/web/*.html",
                     "src/trace_transport/web/*.css", "src/trace_transport/web/*.js", "tests/*.py",

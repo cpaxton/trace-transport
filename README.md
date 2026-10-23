@@ -2,7 +2,7 @@
 
 **A self-play testbed for history-based learned network protocols.**
 
-[GitHub repository](https://github.com/cpaxton/trace-transport)
+[GitHub repository](https://github.com/cpaxton/trace-transport) · [Contributing](CONTRIBUTING.md)
 
 Trace Transport trains small transformers to exchange arbitrary text exactly
 over networks with unknown capacity, packet loss, changing latency, and competing
