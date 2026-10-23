@@ -7,8 +7,8 @@ from actor exports. Models are shared between sessions of the same role.
 
 ## Run it
 
-Install learning dependencies with `uv sync --locked --extra learn`, then use the
-installed `trace-transport` command (activate `.venv` or use `uv run`).
+The curl installer includes learning dependencies and the `trace-transport`
+command. For manual setup, see the [usage guide](usage.md#quick-start).
 
 ```bash
 trace-transport joint-simulate --clients 2 --report runs/joint-demo.json
