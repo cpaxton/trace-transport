@@ -25,6 +25,10 @@ synthetic text/image/map transfers across Herman Wi-Fi and Caliban Ethernet,
 including an experimental sender-only actor with deterministic feedback. These
 are correctness checks; the full joint-policy study remains the performance test.
 
+The [next throughput experiment](docs/goodput-v2-plan.md) targets maximum verified
+useful delivery, with continuously backlogged traffic and deadline constraints
+for mixed workloads. It is a separate versioned plan.
+
 ## Quick start
 
 On Linux or macOS, start with Git and curl installed:
@@ -71,6 +75,7 @@ and durable recovery across crashes remain future work.
 - [Protocol design and roadmap](docs/design.md): correctness, local observations, action spaces, and planned GPU/joint learning work.
 - [Receiver experiments and device trials](docs/receiver-experiments.md): feedback timing, Wi-Fi models, results, and real-device setup.
 - [Joint network experiment](docs/joint-network-brain.md): persistent sessions, training commands, and acceptance criteria.
+- [Maximum throughput plan](docs/goodput-v2-plan.md): backlogged bulk traffic and deadline-constrained goodput.
 - [Development](docs/development.md): implementation map, verification, source export, and paper build.
 - [Paper working draft](paper/main.tex) and [bibliography](paper/references.bib).
 

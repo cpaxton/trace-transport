@@ -193,3 +193,10 @@ comparison; tests match complete records under nonzero deterministic controls.
 As with other batched floating-point inference, cross-batch bit-for-bit equality
 is not promised for arbitrary trained actors. The simulation's seeded event/RNG
 semantics and the frozen selection/acceptance criteria remain unchanged.
+
+## Next objective: maximum useful throughput
+
+The [goodput-v2 plan](goodput-v2-plan.md) adds a continuously backlogged bulk
+source and verified goodput optimization, both for bulk-only maximum speed and
+for mixed traffic constrained by the 100-ms interactive target. This is a
+separate versioned objective; it does not change joint-v1 scores or win criteria.

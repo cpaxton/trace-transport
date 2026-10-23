@@ -10,6 +10,7 @@
 | [Receiver experiments and device trials](receiver-experiments.md) | Feedback timing, receiver results, Wi-Fi models, device setup |
 | [Protocol-v3 experiments](experiments/protocol-v3.md) | Feedback budgets and stronger generalization tests |
 | [Joint network experiment](joint-network-brain.md) | Persistent sessions, mixed workloads, joint training and acceptance criteria |
+| [Maximum throughput plan](goodput-v2-plan.md) | Backlogged bulk traffic, verified goodput, and deadline-constrained optimization |
 | [Development](development.md) | Implementation map, test coverage, source export, paper build |
 
 Command examples assume the curl installer has added `trace-transport` to PATH.

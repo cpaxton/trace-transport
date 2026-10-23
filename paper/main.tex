@@ -56,6 +56,17 @@ wire cost per delivered byte, and zero corrupt delivery. Training reward alone
 cannot establish this result. The real binary UDP adapter remains deterministic;
 deployment of the joint learned actors on robot hardware is future work.
 
+\paragraph{Next throughput objective (planned).}
+A separate version-two experiment will keep bulk traffic continuously backlogged
+and maximize verified useful bytes per second, including finite-object completion
+time. Mixed traffic retains the 100-ms interactive target through explicit
+noninferiority constraints on deadline misses, bounded queues, wire overhead, and
+active-host service. Retransmissions and dropped bytes are not useful throughput.
+The proposed acceptance threshold is 10\% more goodput with a positive paired
+confidence interval, subject to latency and reliability guards and comparison
+against a strong adaptive deterministic reference. This objective requires new
+training and evaluation; it does not redefine the current deadline-first study.
+
 \paragraph{Bounded device checks.}
 A desktop sender transferred synthetic Unicode text, valid 256-by-256 RGB PNG
 images, and 512-KiB map buffers to Herman over stationary Wi-Fi and Caliban over
