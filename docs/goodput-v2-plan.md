@@ -45,8 +45,10 @@ when there is demand and spare capacity, then react when congestion or service
 changes make continued increases wasteful. A large fixed rate is not a useful
 substitute for that behavior.
 
-Initialize from a strong adaptive deterministic teacher, then train the actors
-jointly. Score verified goodput directly. If incremental unique-byte progress is
+Start with zero residuals around a strong adaptive deterministic teacher, then
+train the actors jointly. If the actor replaces teacher logic, first learn to
+imitate it. Checkpoints must record the teacher controls and objective/workload
+versions so evaluation and live inference compose the same policy. Score verified goodput directly. If incremental unique-byte progress is
 used to make rewards denser, use potential-based shaping with a terminal
 correction rather than rewarding endless partial objects. Keep deadline, queue,
 wire-cost and active-host constraints explicit. Compare simple policies and
@@ -57,7 +59,7 @@ solution to a misaligned objective.
 
 Before the next training run, freeze the proposed targets: at least 10% more
 verified goodput with a paired 95% interval above zero; mixed-traffic deadline
-miss noninferiority within 0.5 percentage points; at most 5% more wire bytes per
+miss noninferiority with the upper confidence bound within 0.5 percentage points; at most 5% more wire bytes per
 useful byte; zero wrong deliveries; and no starvation of active hosts. Tune and
 select the deterministic reference under the same constraints. The current slow
 fixed-rate file adapter is a correctness reference, not sufficient evidence of a

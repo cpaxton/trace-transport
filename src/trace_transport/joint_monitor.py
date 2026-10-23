@@ -41,7 +41,14 @@ def status(root):
             records=value.get('records',[]);p95=[r['interactive_p95'] for r in records if r.get('interactive_p95') is not None]
             rows.append(dict(name=name,**value['summary'],mean_session_p95=sum(p95)/len(p95) if p95 else None))
         tables[suite]=rows
-    return dict(runs=runs,study=_read(study/'progress.json',{}),selection=_read(study/'selection.json',{}),
+    progress=_read(study/'progress.json',{})
+    modes={'joint','baseline','sender-crossplay','receiver-crossplay','history1','sender-only-training','receiver-only-training'}
+    if progress.get('phase') in ('final_test','ood') and progress.get('run') in modes:
+        partial=_read(study/'partial'/f"{progress['phase']}-{progress['run']}.json",{})
+        if partial:
+            progress['case_completed']=len(partial.get('records',[]))
+            progress['case_total']=len(partial.get('identity',{}).get('seeds',[]))
+    return dict(runs=runs,study=progress,selection=_read(study/'selection.json',{}),
                 baseline=_read(study/'baseline.json',{}).get('selected'),tables=tables,
                 comparisons={suite:results.get(suite,{}).get('comparison') for suite in ['final_test','ood']})
 
