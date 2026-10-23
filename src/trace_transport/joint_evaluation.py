@@ -45,7 +45,7 @@ def constant_baseline_actor(actor,role):
 
 
 def evaluate(*,seeds,checkpoint=None,baseline=None,device='cpu',environments=8,production=20.,drain=20.,ood=False,
-             sender_enabled=True,receiver_enabled=True,trace_network=None,on_record=None):
+             sender_enabled=True,receiver_enabled=True,trace_network=None,on_record=None,asynchronous=True):
     baseline=baseline or dict(rate='fixed',scheduler='edf',feedback='budgeted')
     torch.set_num_threads(1)
     sender=receiver=config=None
@@ -81,34 +81,52 @@ def evaluate(*,seeds,checkpoint=None,baseline=None,device='cpu',environments=8,p
                         pool.pipes[i].send(('finish-baseline',None))
                     else:del assigned[i]
             return sorted(records,key=lambda r:r['seed'])
-        while assigned:
-            # Park completed workers at a zero-work step by sending only to active pipes.
-            active=sorted(assigned);current=[obs[i] for i in active]
+        def actions_for(active):
+            current=[obs[i] for i in active]
             actions=[(np.zeros((len(o['sender']),3),np.float32),np.zeros(len(o['receiver']),np.int64)) for o in current]
-            if infer:
-                hs=[histories[i] for i in active]
-                for o,h in zip(current,hs):h.append(o)
-                with torch.inference_mode():
-                    if infer_sender:
-                        packed,mapping=_pack(current,hs,'sender',device)
-                        if packed is not None:
-                            a=sender.act(*packed).cpu().numpy()
-                            for (e,j),value in zip(mapping,a):actions[e][0][j]=value
-                    if infer_receiver:
-                        packed,mapping=_pack(current,hs,'receiver',device)
-                        if packed is not None:
-                            a=receiver.act(*packed).cpu().numpy()
-                            for (e,j),value in zip(mapping,a):actions[e][1][j]=value
-            for i,action in zip(active,actions):pool.send_step(i,action)
-            for i in active:
-                o,_,_,done,metrics,_=pool.receive(i);obs[i]=o
-                if done:
-                    seed,label=assigned[i];metrics.update(seed=seed,domain=label)
-                    records.append(metrics)
-                    if on_record is not None:on_record(metrics)
-                    if next_index<len(seeds):
-                        obs[i],histories[i]=reset(i,seeds[next_index]);next_index+=1
-                    else:del assigned[i]
+            hs=[histories[i] for i in active]
+            for o,h in zip(current,hs):h.append(o)
+            with torch.inference_mode():
+                if infer_sender:
+                    packed,mapping=_pack(current,hs,'sender',device)
+                    if packed is not None:
+                        a=sender.act(*packed).cpu().numpy()
+                        for (e,j),value in zip(mapping,a):actions[e][0][j]=value
+                if infer_receiver:
+                    packed,mapping=_pack(current,hs,'receiver',device)
+                    if packed is not None:
+                        a=receiver.act(*packed).cpu().numpy()
+                        for (e,j),value in zip(mapping,a):actions[e][1][j]=value
+            return actions
+        def accept(i,result):
+            nonlocal next_index
+            o,_,_,done,metrics,_=result;obs[i]=o
+            if done:
+                seed,label=assigned[i];metrics.update(seed=seed,domain=label)
+                records.append(metrics)
+                if on_record is not None:on_record(metrics)
+                if next_index<len(seeds):
+                    obs[i],histories[i]=reset(i,seeds[next_index]);next_index+=1
+                else:del assigned[i]
+
+        if asynchronous:
+            from multiprocessing.connection import wait
+            by_pipe={pool.pipes[i]:i for i in assigned}
+            ready=set(assigned);pending=set()
+            while assigned:
+                active=sorted(ready)
+                if active:
+                    actions=actions_for(active)
+                    for i,action in zip(active,actions):pool.send_step(i,action)
+                    pending.update(active);ready.clear()
+                for pipe in wait([pool.pipes[i] for i in pending]):
+                    i=by_pipe[pipe];pending.remove(i);accept(i,pool.receive(i))
+                    if i in assigned:ready.add(i)
+        else:
+            while assigned:
+                active=sorted(assigned);actions=actions_for(active)
+                for i,action in zip(active,actions):pool.send_step(i,action)
+                for i in active:accept(i,pool.receive(i))
         return sorted(records,key=lambda r:r['seed'])
     finally:pool.close()
 

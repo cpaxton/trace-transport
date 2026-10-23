@@ -51,3 +51,15 @@ def test_constant_actor_fast_path_matches_complete_simulated_evaluation(tmp_path
     # A tiny nonzero learned control must never be classified as constant.
     with torch.no_grad():sender.control.weight[0,0]=1e-10
     assert not constant_baseline_actor(sender,'sender')
+
+
+def test_asynchronous_worlds_match_synchronous_controls_with_nonzero_actions(tmp_path):
+    import torch
+    from trace_transport.joint_models import JointModelConfig,SenderActor,ReceiverActor,CentralCritic,save_checkpoint
+    from trace_transport.joint_evaluation import evaluate
+    cfg=JointModelConfig(history=4,width=32,layers=1);sender=SenderActor(cfg);receiver=ReceiverActor(cfg)
+    with torch.no_grad():
+        sender.control.bias.copy_(torch.tensor([.05,-.05]));receiver.head.bias[-1]=1.
+    path=tmp_path/'controlled.pt';save_checkpoint(path,sender,receiver,CentralCritic(),cfg,{'decisions':1})
+    kwargs=dict(seeds=[701,702,703],environments=2,production=.1,drain=.5,checkpoint=path)
+    assert evaluate(**kwargs,asynchronous=True)==evaluate(**kwargs,asynchronous=False)

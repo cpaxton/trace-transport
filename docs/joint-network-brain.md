@@ -185,3 +185,11 @@ the shortcut.
 Held-out progress is saved per completed seed under `study/partial`, keyed by the
 frozen selection and seed list. Resume reuses finished whole sessions and runs
 only missing seeds; it never reports an incomplete mode as a full comparison.
+
+Evaluation now schedules ready worlds asynchronously, preserving each world's
+local history and control-step order instead of waiting for the slowest world at
+every tick. Synchronous evaluation remains available through the Python API for
+comparison; tests match complete records under nonzero deterministic controls.
+As with other batched floating-point inference, cross-batch bit-for-bit equality
+is not promised for arbitrary trained actors. The simulation's seeded event/RNG
+semantics and the frozen selection/acceptance criteria remain unchanged.
