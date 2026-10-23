@@ -45,7 +45,7 @@ def constant_baseline_actor(actor,role):
 
 
 def evaluate(*,seeds,checkpoint=None,baseline=None,device='cpu',environments=8,production=20.,drain=20.,ood=False,
-             sender_enabled=True,receiver_enabled=True,trace_network=None):
+             sender_enabled=True,receiver_enabled=True,trace_network=None,on_record=None):
     baseline=baseline or dict(rate='fixed',scheduler='edf',feedback='budgeted')
     torch.set_num_threads(1)
     sender=receiver=config=None
@@ -65,6 +65,22 @@ def evaluate(*,seeds,checkpoint=None,baseline=None,device='cpu',environments=8,p
     try:
         for i in range(pool.count):
             o,h=reset(i,seeds[next_index]);next_index+=1;obs.append(o);histories.append(h)
+        if not infer:
+            # Deterministic/constant policies need no per-tick actor IPC. Workers
+            # execute the identical control steps locally, preserving timer order.
+            from multiprocessing.connection import wait
+            by_pipe={pool.pipes[i]:i for i in assigned}
+            for i in assigned:pool.pipes[i].send(('finish-baseline',None))
+            while assigned:
+                for pipe in wait([pool.pipes[i] for i in assigned]):
+                    i=by_pipe[pipe];metrics=pool.receive(i);seed,label=assigned[i]
+                    metrics.update(seed=seed,domain=label);records.append(metrics)
+                    if on_record is not None:on_record(metrics)
+                    if next_index<len(seeds):
+                        obs[i],histories[i]=reset(i,seeds[next_index]);next_index+=1
+                        pool.pipes[i].send(('finish-baseline',None))
+                    else:del assigned[i]
+            return sorted(records,key=lambda r:r['seed'])
         while assigned:
             # Park completed workers at a zero-work step by sending only to active pipes.
             active=sorted(assigned);current=[obs[i] for i in active]
@@ -83,12 +99,13 @@ def evaluate(*,seeds,checkpoint=None,baseline=None,device='cpu',environments=8,p
                         if packed is not None:
                             a=receiver.act(*packed).cpu().numpy()
                             for (e,j),value in zip(mapping,a):actions[e][1][j]=value
-            for i,action in zip(active,actions):pool.pipes[i].send(('step',action))
+            for i,action in zip(active,actions):pool.send_step(i,action)
             for i in active:
                 o,_,_,done,metrics,_=pool.receive(i);obs[i]=o
                 if done:
                     seed,label=assigned[i];metrics.update(seed=seed,domain=label)
                     records.append(metrics)
+                    if on_record is not None:on_record(metrics)
                     if next_index<len(seeds):
                         obs[i],histories[i]=reset(i,seeds[next_index]);next_index+=1
                     else:del assigned[i]

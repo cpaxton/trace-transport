@@ -130,8 +130,23 @@ def run(root,*,device='cpu',environments=4,wait=False,quick=False):
                 if [r['seed'] for r in result[suite][label]['records']]!=seeds:
                     raise ValueError('cached held-out seed list mismatch')
                 continue
-            rows=evaluate(seeds=seeds,checkpoint=path,baseline=reference,device=device,environments=environments,
-                production=full_prod,drain=full_drain,ood=ood,sender_enabled=send,receiver_enabled=receive)
+            partial=output/'partial'/f'{suite}-{label}.json'
+            identity=dict(selection=selection,baseline=reference,seeds=seeds,ood=ood)
+            saved={}
+            if partial.exists():
+                cached=json.loads(partial.read_text())
+                if cached.get('identity')!=identity:raise ValueError('partial held-out selection or seed mismatch')
+                for row in cached['records']:
+                    if row['seed'] not in seeds or row['seed'] in saved:raise ValueError('invalid partial seed records')
+                    saved[row['seed']]=row
+            def record(row):
+                saved[row['seed']]=row
+                _write(partial,dict(identity=identity,records=[saved[seed] for seed in sorted(saved)]))
+            missing=[seed for seed in seeds if seed not in saved]
+            if missing:
+                evaluate(seeds=missing,checkpoint=path,baseline=reference,device=device,environments=environments,
+                    production=full_prod,drain=full_drain,ood=ood,sender_enabled=send,receiver_enabled=receive,on_record=record)
+            rows=[saved[seed] for seed in seeds]
             result[suite][label]=dict(summary=summarize(rows),records=rows)
             _write(output/'results.json',result);print(suite,label,summarize(rows),flush=True)
         result[suite]['comparison']=compare(result[suite]['joint']['records'],result[suite]['baseline']['records'])

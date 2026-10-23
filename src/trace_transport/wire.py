@@ -14,6 +14,7 @@ MAX_PAYLOAD = 1200
 _HEADER = struct.Struct("!4sBQQQQHI")
 _CRC = struct.Struct("!I")
 MAGIC = b"TRC1"
+_METADATA_ENCODER = json.JSONEncoder(separators=(",", ":"), sort_keys=True, allow_nan=False)
 
 
 @dataclass(frozen=True)
@@ -33,9 +34,10 @@ class Packet:
             raise ValueError("payload must be bytes within the datagram budget")
         if not isinstance(self.metadata, dict):
             raise ValueError("metadata must be a JSON object")
-        metadata = json.dumps(
-            self.metadata, separators=(",", ":"), sort_keys=True, allow_nan=False
-        ).encode("utf-8")
+        # A long study exposed a native _json encoder segmentation fault on
+        # shallow receipt dictionaries. Avoid its container encoder; preserve
+        # the same canonical bytes with the Python iterator implementation.
+        metadata = "".join(_METADATA_ENCODER.iterencode(self.metadata, _one_shot=False)).encode("utf-8")
         if len(metadata) > MAX_METADATA:
             raise ValueError("metadata exceeds its 512-byte wire budget")
         for value in (self.message_id, self.transmission_id, self.offset, self.total):

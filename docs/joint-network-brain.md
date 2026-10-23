@@ -166,3 +166,22 @@ Packaging requires the completed full study and recomputes the paired comparison
 from raw records. It exports actor weights without the critic/optimizers, stores
 compressed training logs and configurations, and records source hashes. It never
 publishes or merges a PR automatically.
+
+The first full study used optimizer continuation after interruptions, with fresh
+collector worlds explicitly recorded at each available resume point. The one-step
+history run required several continuations and returned native exit code 139 in
+a tracked run. This is not a bit-for-bit uninterrupted training comparison, and
+a later worker diagnostic located a crash inside CPython 3.12.10's native JSON
+container encoder during receipt serialization. The underlying native cause
+remains unconfirmed. Wire encoding now uses the Python iterator with byte-for-byte
+canonical JSON parity checks as a mitigation. Worker diagnostics now
+include the seed, control step, and exit code. Remaining evaluation was continued
+with cached completed modes, eight workers, and one numerical-library thread per
+worker. Initial actors with exactly zero control and constant follow-baseline
+heads can be evaluated through the mathematically identical baseline path; tests
+compare that path with explicit actor inference, and any nonzero control excludes
+the shortcut.
+
+Held-out progress is saved per completed seed under `study/partial`, keyed by the
+frozen selection and seed list. Resume reuses finished whole sessions and runs
+only missing seeds; it never reports an incomplete mode as a full comparison.

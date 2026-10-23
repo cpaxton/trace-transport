@@ -40,8 +40,10 @@ def test_constant_actor_fast_path_matches_complete_simulated_evaluation(tmp_path
     assert constant_baseline_actor(sender,'sender') and constant_baseline_actor(receiver,'receiver')
     path=tmp_path/'initial.pt';save_checkpoint(path,sender,receiver,CentralCritic(),cfg,{'decisions':0})
     # Initial joint actors follow the fixed/EDF/budgeted teacher for every input.
-    kwargs=dict(seeds=[701],environments=1,production=.1,drain=.5)
-    baseline=evaluate(**kwargs)
+    kwargs=dict(seeds=[701,702,703],environments=2,production=.1,drain=.5)
+    observed=[]
+    baseline=evaluate(on_record=observed.append,**kwargs)
+    assert sorted(observed,key=lambda r:r["seed"])==baseline
     assert evaluate(checkpoint=path,**kwargs)==baseline
     from trace_transport import joint_evaluation
     monkeypatch.setattr(joint_evaluation,'constant_baseline_actor',lambda actor,role:False)

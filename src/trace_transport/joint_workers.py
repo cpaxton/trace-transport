@@ -6,6 +6,8 @@ from .joint_session import JointTransportEnv
 
 
 def _worker(pipe):
+    import faulthandler
+    faulthandler.enable()
     env=None
     try:
         while True:
@@ -28,6 +30,12 @@ def _worker(pipe):
                         s.baseline_batch,s.baseline_delay,s.baseline_ack_mode=s.batch,s.delay,s.ack_mode
                     obs=env.observe()
                 pipe.send((obs,env.critic_state(obs),label))
+            elif command=='finish-baseline':
+                import numpy as np
+                actions=(np.zeros((env.count,3),np.float32),np.zeros(env.count,np.int64))
+                while not env.done():env.step(*actions)
+                metrics=env.metrics();metrics.pop('messages_detail',None)
+                pipe.send(metrics)
             elif command=='step':
                 obs,reward,done,_,info=env.step(*args)
                 metrics=None
@@ -43,7 +51,7 @@ def _worker(pipe):
 
 class EnvironmentPool:
     def __init__(self,count):
-        self.count=count;self.pipes=[];self.processes=[]
+        self.count=count;self.pipes=[];self.processes=[];self.context=[None]*count
         context=get_context('spawn')
         for _ in range(count):
             parent,child=context.Pipe()
@@ -51,13 +59,20 @@ class EnvironmentPool:
             process.start();child.close();self.pipes.append(parent);self.processes.append(process)
     def receive(self,index):
         if not self.pipes[index].poll(300):raise TimeoutError('CPU environment worker stalled')
-        result=self.pipes[index].recv()
-        if isinstance(result[0],str) and result[0]=='ERROR':raise RuntimeError(result[1]+'\n'+result[2])
+        try:result=self.pipes[index].recv()
+        except EOFError as exc:
+            self.processes[index].join(timeout=.1)
+            raise RuntimeError(f'CPU worker {index} disconnected; exitcode={self.processes[index].exitcode}; context={self.context[index]}') from exc
+        if isinstance(result,(tuple,list)) and result and isinstance(result[0],str) and result[0]=='ERROR':raise RuntimeError(result[1]+'\n'+result[2])
         return result
     def reset(self,index,*args):
+        self.context[index]={'seed':args[0],'steps':0}
         self.pipes[index].send(('reset',args));return self.receive(index)
+    def send_step(self,index,action):
+        self.context[index]['steps']+=1
+        self.pipes[index].send(('step',action))
     def send_steps(self,actions):
-        for pipe,action in zip(self.pipes,actions):pipe.send(('step',action))
+        for i,action in enumerate(actions):self.send_step(i,action)
     def collect(self):return [self.receive(i) for i in range(self.count)]
     def close(self):
         for pipe in self.pipes:

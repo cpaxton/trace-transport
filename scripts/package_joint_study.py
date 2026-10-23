@@ -51,10 +51,13 @@ def package(root,run_root,artifacts):
             training[run]=[json.loads(line) for line in (path/'training.jsonl').read_text().splitlines()]
             export_actors(path/'final.pt',staging/f'joint-v1-{run}-actors.pt')
         with gzip.GzipFile(filename=str(staging/'joint-v1-training.json.gz'),mode='wb',mtime=0) as out:
-            out.write(json.dumps(training).encode())
+            out.write(json.dumps(training,indent=2).encode())
         for pattern in ['src/**/*.py','scripts/*.py','tests/*.py','docs/**/*.md','paper/*.tex','paper/*.bib']:
             for path in sorted(root.glob(pattern)):
                 manifest['source_sha256'][str(path.relative_to(root))]=hashlib.sha256(path.read_bytes()).hexdigest()
+        for name in ['README.md','AGENTS.md','CONTRIBUTING.md','pyproject.toml','uv.lock','.python-version']:
+            path=root/name
+            if path.exists():manifest['source_sha256'][name]=hashlib.sha256(path.read_bytes()).hexdigest()
         for path in staging.iterdir():manifest['files'][path.name]=hashlib.sha256(path.read_bytes()).hexdigest()
         (staging/'joint-v1-manifest.json').write_text(json.dumps(manifest,indent=2)+'\n')
         for path in staging.iterdir():path.replace(artifacts/path.name)
