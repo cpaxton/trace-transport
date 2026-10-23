@@ -12,6 +12,11 @@
 | [Joint network experiment](joint-network-brain.md) | Persistent sessions, mixed workloads, joint training and acceptance criteria |
 | [Development](development.md) | Implementation map, test coverage, source export, paper build |
 
+Command examples assume the curl installer has added `trace-transport` to PATH.
+Run them from the checkout so bundled checkpoints and scripts resolve. Python
+scripts and test commands use `.venv/bin/python` to select the installed environment.
+Manual installation is covered in the [usage guide](usage.md#quick-start).
+
 Start with the quick start, then use the usage guide for command examples.
 Training reward and held-out performance are separate measurements; the training
 guide preserves unfinished work and negative results alongside successful runs.

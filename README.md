@@ -72,7 +72,7 @@ and durable recovery across crashes remain future work.
 ## Development checks
 
 ```bash
-uv run --locked --extra learn pytest -q
+.venv/bin/python -m pytest -q
 ```
 
 Learning tests require the `learn` extra. Real socket tests may skip in restricted

@@ -13,7 +13,7 @@ curl -fsSL https://raw.githubusercontent.com/cpaxton/trace-transport/main/script
 The [installer](../scripts/install.sh) installs uv if missing, clones the repository,
 and installs locked dependencies including PyTorch. It adds a `trace-transport`
 command in `~/.local/bin` pointing to the checkout's environment, so normal use is
-`trace-transport console --open` without an `uv run` prefix. If that directory
+`trace-transport console --open`. If that directory
 isn't on PATH, it prints the shell configuration line to add. Set
 `TRACE_TRANSPORT_BIN_DIR` to choose another command directory. It refuses to
 overwrite an unrelated command. It reuses an existing checkout without pulling or
@@ -33,10 +33,12 @@ newer), then run these commands from a terminal:
 git clone https://github.com/cpaxton/trace-transport.git
 cd trace-transport
 uv sync --locked --extra learn
-uv run --locked --extra learn trace-transport console --open
+source .venv/bin/activate
+trace-transport console --open
 ```
 
-For an existing checkout, start with `uv sync --locked --extra learn`. The browser opens at
+For an existing manual checkout, run `uv sync --locked --extra learn` and
+`source .venv/bin/activate`. The browser opens at
 `http://127.0.0.1:8765`; if it does not, open that address manually. Choose a
 scenario and controllers, then click **Run comparison**. Ten trials per controller
 are selected by default. The bundled checkpoint enables learned-policy tests
@@ -48,25 +50,26 @@ in this checkout; keep that directory in place and use `uv sync --locked --extra
 learn` there after dependency updates.
 
 `uv` creates `.venv`, selects Python 3.12 from `.python-version`, and installs the
-versions in `uv.lock`. No manual virtualenv creation or activation is required.
+versions in `uv.lock`. Manual setup requires activating `.venv`; the curl installer provides a command
+that selects its environment automatically.
 Python 3.10 and newer remain supported; use `uv sync --python 3.10` to override
 the default. PyTorch is optional: for baseline controllers only, run
-`uv sync --locked` and omit `--extra learn` from commands. Development tools,
+`uv sync --locked` and activate `.venv`. Development tools,
 including pytest, are in the default `dev` dependency group.
 
 ## Useful first commands
 
 ```bash
 # Baselines: 10 paired trials with readable scores and a JSON report.
-uv run --locked trace-transport benchmark
+trace-transport benchmark
 
 # Compare the shipped model with the baselines.
-uv run --locked --extra learn trace-transport benchmark \
+trace-transport benchmark \
   --controllers fixed aimd learned --reward completion \
   --checkpoint artifacts/robust-v2-best.pt
 
 # Verify the complete implementation, including learned policies.
-uv run --locked --extra learn pytest -q
+.venv/bin/python -m pytest -q
 ```
 
 ## Startup troubleshooting
@@ -76,7 +79,7 @@ uv run --locked --extra learn pytest -q
 - **No `.venv` exists:** run `uv sync --locked --extra learn`; `uv` creates it.
 - **Learned policy is disabled:** include `--extra learn` to install PyTorch.
 - **Tests load unrelated ROS or system plugins:** run
-  `env -u PYTHONPATH uv run --locked --extra learn pytest -q` from a clean shell.
+  `env -u PYTHONPATH .venv/bin/python -m pytest -q` from a clean shell.
 - **Port 8765 is busy:** add `--port 8766` and open the printed address.
 - **Browser does not open:** leave the console command running and open its URL.
 - **Running outside the checkout:** change to the repository directory first;
@@ -88,7 +91,7 @@ uv run --locked --extra learn pytest -q
 ## Browser test bench
 
 ```bash
-uv run --locked --extra learn trace-transport console --open
+trace-transport console --open
 ```
 
 Open `http://127.0.0.1:8765` if the browser does not open automatically. The local
@@ -118,34 +121,35 @@ checkpoint. This lightweight setup runs only the baseline controllers:
 
 ```bash
 uv sync --locked
+source .venv/bin/activate
 
 # Send arbitrary inline text and save the exact UTF-8 bytes.
-uv run --locked trace-transport simulate --text 'Hello, こんにちは 🌐' \
+trace-transport simulate --text 'Hello, こんにちは 🌐' \
   --loss 0.1 --ack-loss 0.1 --seed 7 --show-text --output received.txt
 
 # Competing senders, an outage, and changing capacity.
-uv run --locked trace-transport simulate --text 'Competing traffic' --flows 4 \
+trace-transport simulate --text 'Competing traffic' --flows 4 \
   --outage 0.1 0.4 --capacity-change 0.5 2.0 --report runs/scenario.json
 
 # For meaningful congestion behavior, supply a larger UTF-8 file of your own.
-uv run --locked trace-transport evaluate --input message.txt --flows 4 --seeds 5 \
+trace-transport evaluate --input message.txt --flows 4 --seeds 5 \
   --controllers fixed aimd --report runs/baselines.json
 
-uv run --locked pytest -q
+.venv/bin/python -m pytest -q
 ```
 
 ## Ten-trial benchmark and RL score
 
 ```bash
 # Ten paired trials for fixed-rate and AIMD: two 32 KiB transfers per trial.
-uv run --locked trace-transport benchmark
+trace-transport benchmark
 
 # Include a trained checkpoint, with the same workload and seeds for every controller.
-uv run --locked --extra learn trace-transport benchmark --controllers fixed aimd transformer \
+trace-transport benchmark --controllers fixed aimd transformer \
   --checkpoint checkpoints/smoke.pt --trials 10 --seed 100
 
 # More severe impairments or your own exact UTF-8 input.
-uv run --locked trace-transport benchmark --input message.txt --loss 0.1 --ack-loss 0.1 \
+trace-transport benchmark --input message.txt --loss 0.1 --ack-loss 0.1 \
   --corruption 0.02 --ack-corruption 0.02 --flows 4 --trials 10
 ```
 
@@ -195,14 +199,14 @@ inside the sender. Run any subcommand with `--help` for options.
 In one terminal:
 
 ```bash
-uv run --locked trace-transport listen --host 127.0.0.1 --port 9000 --output received.txt \
+trace-transport listen --host 127.0.0.1 --port 9000 --output received.txt \
   --metadata '{"experiment":"custom-feedback"}'
 ```
 
 In another:
 
 ```bash
-uv run --locked trace-transport send --host 127.0.0.1 --port 9000 --text 'Across UDP 🌐'
+trace-transport send --host 127.0.0.1 --port 9000 --text 'Across UDP 🌐'
 ```
 
 Use a reachable interface/address instead of loopback for separate hosts. The

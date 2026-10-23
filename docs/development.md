@@ -35,10 +35,10 @@ The [design and roadmap](design.md) describes the broader target.
 
 ```bash
 # Build a clean Git bundle and source archive without modifying this workspace's .git.
-uv run --locked python scripts/export_repository.py
+.venv/bin/python scripts/export_repository.py
 
 # From a terminal with GitHub access, initialize the empty destination repository.
-uv run --locked python scripts/export_repository.py --push
+.venv/bin/python scripts/export_repository.py --push
 ```
 
 The exporter includes source, tests, browser assets, CI, paper sources, experiment

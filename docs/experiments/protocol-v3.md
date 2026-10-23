@@ -143,14 +143,14 @@ trace-transport console --open
 trace-transport benchmark --feedback-profile budgeted --reward completion
 trace-transport benchmark --feedback-profile sparse --reward completion
 
-uv run --locked --extra learn python scripts/receiver_headroom.py
+.venv/bin/python scripts/receiver_headroom.py
 trace-transport receiver-categorical
 trace-transport sender-experiment
-uv run --locked --extra learn python scripts/protocol_generalization.py
-uv run --locked --extra learn python scripts/mixed_workload.py
-uv run --locked --extra learn python scripts/feedback_budget_experiment.py
+.venv/bin/python scripts/protocol_generalization.py
+.venv/bin/python scripts/mixed_workload.py
+.venv/bin/python scripts/feedback_budget_experiment.py
 trace-transport receiver-categorical --wide
-uv run --locked --extra learn python scripts/receiver_wide_generalization.py
+.venv/bin/python scripts/receiver_wide_generalization.py
 ```
 
 The new feedback profiles are simulation controls. UDP currently supports

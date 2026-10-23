@@ -11,7 +11,7 @@ waiting to batch ACKs can make completion slower. There is no expected integrity
 advantage: exact reconstruction is a requirement for every controller.
 
 ```bash
-uv run --locked --extra learn python scripts/receiver_experiment.py
+.venv/bin/python scripts/receiver_experiment.py
 ```
 
 The experiment trains three small history transformers (seeds 42/43/44, 80
@@ -133,7 +133,7 @@ trace-transport receiver-experiment --protocol receipts --profile randomized \
   --validation-seed 3000 --test-seed 4000 --output runs/receiver-v2-randomized
 trace-transport receiver-experiment --protocol receipts --profile randomized --history 1 \
   --validation-seed 3000 --test-seed 4000 --output runs/receiver-v2-memoryless
-uv run --locked --extra learn python scripts/receiver_generalization.py
+.venv/bin/python scripts/receiver_generalization.py
 ```
 
 ## Beyond receiver-v2: feedback timing and stronger tests
@@ -201,11 +201,11 @@ authenticated ControlMaster connection. The harness uses noninteractive SSH.
 
 ```bash
 # Replace the address with the robot's UDP-reachable LAN address.
-uv run --locked python scripts/device_trials.py --ssh jetson1@herman \
+.venv/bin/python scripts/device_trials.py --ssh jetson1@herman \
   --address ROBOT_IP --condition wifi-stationary --trials 10 \
   --interface wlan0 --report runs/devices/herman-wifi.json
 
-uv run --locked python scripts/device_trials.py --ssh caliban \
+.venv/bin/python scripts/device_trials.py --ssh caliban \
   --address 192.168.1.55 --condition ethernet --trials 10 \
   --report runs/devices/caliban-ethernet.json
 ```

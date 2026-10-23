@@ -6,25 +6,22 @@
 
 The repository includes the selected CPU-loadable checkpoint at
 `artifacts/robust-v2-best.pt`, its SHA-256, and a compact diagnostic report at
-`artifacts/robust-v2-results.json`. After installing the `learn` extra, try it
-without training:
+`artifacts/robust-v2-results.json`. The curl installer includes learning dependencies, so try it without training:
 
 ```bash
-uv run --locked --extra learn trace-transport benchmark --controllers fixed aimd learned --reward completion \
+trace-transport benchmark --controllers fixed aimd learned --reward completion \
   --checkpoint artifacts/robust-v2-best.pt
 ```
 
 ```bash
-uv sync --locked --extra learn
-
 # A software smoke run, not a claim of a good congestion controller.
-uv run --locked --extra learn trace-transport train --updates 5 --envs 4 --flows 2 --rollout-steps 32 \
+trace-transport train --updates 5 --envs 4 --flows 2 --rollout-steps 32 \
   --epochs 2 --history 16 --output checkpoints/smoke.pt
 
-uv run --locked --extra learn trace-transport simulate --text 'A learned sender 🌐' \
+trace-transport simulate --text 'A learned sender 🌐' \
   --controller transformer --checkpoint checkpoints/smoke.pt --show-text
 
-uv run --locked --extra learn trace-transport evaluate --input message.txt --flows 4 --seeds 5 \
+trace-transport evaluate --input message.txt --flows 4 --seeds 5 \
   --controllers fixed aimd transformer --checkpoint checkpoints/smoke.pt \
   --report runs/learned-comparison.json
 ```
@@ -80,18 +77,18 @@ These settings approximately match parameter counts, not computational cost:
 
 ```bash
 # Substitute architecture, width, and layers from the table for each baseline.
-uv run --locked --extra learn trace-transport train --architecture transformer --width 64 --layers 2 \
+trace-transport train --architecture transformer --width 64 --layers 2 \
   --history 16 --profile robust --reward completion --flows 4 --envs 8 \
   --min-message-bytes 16384 --max-message-bytes 98304 --episode-seconds 20 \
   --updates 400 --rollout-steps 64 --epochs 2 --seed 42 \
   --output checkpoints/robust-v2-transformer-s42.pt
 
 # Checkpoint metadata selects transformer/MLP/GRU automatically.
-uv run --locked --extra learn trace-transport simulate --controller learned \
+trace-transport simulate --controller learned \
   --checkpoint checkpoints/robust-v2-transformer-s42.pt \
   --reward completion --text 'A learned protocol 🌐'
 
-uv run --locked --extra learn trace-transport suite --reward completion --trials 10 --seed 1000 \
+trace-transport suite --reward completion --trials 10 --seed 1000 \
   --policy candidate=checkpoints/robust-v2-transformer-s42.pt
 ```
 
@@ -137,13 +134,13 @@ selection/final-evaluation procedure after the declared checkpoints are trained:
 
 ```bash
 # Reuse completed checkpoints to reproduce validation and final evaluation.
-uv run --locked --extra learn python scripts/compare_learning.py --plan experiments/robust-v2.json
+.venv/bin/python scripts/compare_learning.py --plan experiments/robust-v2.json
 
 # Train missing candidates first, then run the declared comparisons.
-uv run --locked --extra learn python scripts/compare_learning.py --plan experiments/robust-v2.json --train
+.venv/bin/python scripts/compare_learning.py --plan experiments/robust-v2.json --train
 
 # Use the selected model for exact text transfer.
-uv run --locked --extra learn trace-transport simulate --controller learned --reward completion \
+trace-transport simulate --controller learned --reward completion \
   --checkpoint checkpoints/robust-v2-best.pt --text 'Reliable text 🌐' --show-text
 ```
 
@@ -182,18 +179,18 @@ checkpoints on identical scenarios instead of changing the benchmark between run
 
 ```bash
 # A longer sender-only training run, using the same model size as the smoke run.
-uv run --locked --extra learn trace-transport train --updates 300 --envs 8 --flows 2 --rollout-steps 64 \
+trace-transport train --updates 300 --envs 8 --flows 2 --rollout-steps 64 \
   --epochs 2 --history 16 --seed 42 --output checkpoints/longer-seed42.pt
 
 # Evaluate baselines and both checkpoints using a separate range of evaluation seeds.
-uv run --locked --extra learn trace-transport suite --trials 10 --seed 1000 \
+trace-transport suite --trials 10 --seed 1000 \
   --policy smoke=checkpoints/smoke.pt \
   --policy trained=checkpoints/longer-seed42.pt \
   --report runs/longer-seed42-suite.json
 
 # A quicker check or a larger evaluation set.
-uv run --locked trace-transport suite --cases clean lossy --trials 2
-uv run --locked --extra learn trace-transport suite --trials 50 --seed 2000 \
+trace-transport suite --cases clean lossy --trials 2
+trace-transport suite --trials 50 --seed 2000 \
   --policy candidate=checkpoints/longer-seed42.pt
 ```
 
@@ -239,14 +236,14 @@ The simulator reports incomplete transfers rather than accepting partial text.
 Reproduce it after training with:
 
 ```bash
-uv run --locked python - <<'PY'
+.venv/bin/python - <<'PY'
 from pathlib import Path
 Path("runs").mkdir(exist_ok=True)
 Path("runs/stress.txt").write_bytes(
     ("A history-based transport test: こんにちは 🌐\r\n" * 1500).encode("utf-8")
 )
 PY
-uv run --locked --extra learn trace-transport evaluate --input runs/stress.txt --flows 4 --seed 17 --seeds 1 \
+trace-transport evaluate --input runs/stress.txt --flows 4 --seed 17 --seeds 1 \
   --loss 0.1 --ack-loss 0.1 --jitter-ms 20 --queue-bytes 8192 \
   --outage 0.2 0.5 --capacity-change 1 2 --deadline 20 \
   --controllers fixed aimd transformer --checkpoint checkpoints/smoke.pt \
