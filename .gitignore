@@ -1,0 +1,30 @@
+__pycache__/
+.venv/
+.pytest_cache/
+*.egg-info/
+build/
+dist/
+.aws/
+.codex/
+.agents/
+.env
+.env.*
+!.env.example
+*.swp
+*.swo
+
+# Local training artifacts
+runs/
+checkpoints/
+
+# LaTeX build products (keep source and bibliography)
+paper/*.aux
+paper/*.bbl
+paper/*.blg
+paper/*.fdb_latexmk
+paper/*.fls
+paper/*.log
+paper/*.out
+paper/*.pdf
+paper/*.synctex.gz
+paper/*.toc

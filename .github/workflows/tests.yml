@@ -1,0 +1,41 @@
+name: Tests
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  simulator:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.10", "3.12"]
+    env:
+      UV_PYTHON: ${{ matrix.python-version }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          version: "0.7.2"
+          enable-cache: true
+      - run: uv sync --locked
+      - run: uv run --locked pytest -q
+      - run: node --check src/trace_transport/web/app.js
+      - run: uv run --locked trace-transport benchmark --trials 2 --report runs/ci-benchmark.json
+
+  learned-policies:
+    runs-on: ubuntu-latest
+    env:
+      UV_PYTHON: "3.12"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          version: "0.7.2"
+          enable-cache: true
+      - run: uv sync --locked --extra learn
+      - run: uv run --locked --extra learn pytest -q
+      - run: uv run --locked --extra learn trace-transport simulate --controller learned --checkpoint artifacts/robust-v2-best.pt --reward completion --text 'CI exact delivery 🌐'

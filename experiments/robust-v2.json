@@ -1,0 +1,234 @@
+{
+  "name": "robust-v2",
+  "runs": [
+    {
+      "model": {
+        "features": 22,
+        "history": 16,
+        "width": 64,
+        "heads": 4,
+        "layers": 2,
+        "action_dimensions": 1,
+        "architecture": "transformer"
+      },
+      "training": {
+        "updates": 400,
+        "environments": 8,
+        "flows": 4,
+        "rollout_steps": 64,
+        "epochs": 2,
+        "minibatch": 128,
+        "learning_rate": 0.0003,
+        "seed": 42,
+        "device": "cpu",
+        "threads": 1,
+        "min_message_bytes": 16384,
+        "max_message_bytes": 98304,
+        "episode_seconds": 20,
+        "profile": "robust",
+        "reward_profile": "completion"
+      },
+      "parameters": 102723,
+      "label": "transformer-s42",
+      "checkpoint": "checkpoints/robust-v2-transformer-s42.pt"
+    },
+    {
+      "model": {
+        "features": 22,
+        "history": 16,
+        "width": 64,
+        "heads": 4,
+        "layers": 2,
+        "action_dimensions": 1,
+        "architecture": "transformer"
+      },
+      "training": {
+        "updates": 400,
+        "environments": 8,
+        "flows": 4,
+        "rollout_steps": 64,
+        "epochs": 2,
+        "minibatch": 128,
+        "learning_rate": 0.0003,
+        "seed": 43,
+        "device": "cpu",
+        "threads": 1,
+        "min_message_bytes": 16384,
+        "max_message_bytes": 98304,
+        "episode_seconds": 20,
+        "profile": "robust",
+        "reward_profile": "completion"
+      },
+      "parameters": 102723,
+      "label": "transformer-s43",
+      "checkpoint": "checkpoints/robust-v2-transformer-s43.pt"
+    },
+    {
+      "model": {
+        "features": 22,
+        "history": 16,
+        "width": 152,
+        "heads": 4,
+        "layers": 3,
+        "action_dimensions": 1,
+        "architecture": "mlp"
+      },
+      "training": {
+        "updates": 400,
+        "environments": 8,
+        "flows": 4,
+        "rollout_steps": 64,
+        "epochs": 2,
+        "minibatch": 128,
+        "learning_rate": 0.0003,
+        "seed": 42,
+        "device": "cpu",
+        "threads": 1,
+        "min_message_bytes": 16384,
+        "max_message_bytes": 98304,
+        "episode_seconds": 20,
+        "profile": "robust",
+        "reward_profile": "completion"
+      },
+      "parameters": 103211,
+      "label": "mlp-s42",
+      "checkpoint": "checkpoints/robust-v2-mlp-s42.pt"
+    },
+    {
+      "model": {
+        "features": 22,
+        "history": 16,
+        "width": 152,
+        "heads": 4,
+        "layers": 3,
+        "action_dimensions": 1,
+        "architecture": "mlp"
+      },
+      "training": {
+        "updates": 400,
+        "environments": 8,
+        "flows": 4,
+        "rollout_steps": 64,
+        "epochs": 2,
+        "minibatch": 128,
+        "learning_rate": 0.0003,
+        "seed": 43,
+        "device": "cpu",
+        "threads": 1,
+        "min_message_bytes": 16384,
+        "max_message_bytes": 98304,
+        "episode_seconds": 20,
+        "profile": "robust",
+        "reward_profile": "completion"
+      },
+      "parameters": 103211,
+      "label": "mlp-s43",
+      "checkpoint": "checkpoints/robust-v2-mlp-s43.pt"
+    },
+    {
+      "model": {
+        "features": 22,
+        "history": 16,
+        "width": 104,
+        "heads": 4,
+        "layers": 2,
+        "action_dimensions": 1,
+        "architecture": "gru"
+      },
+      "training": {
+        "updates": 400,
+        "environments": 8,
+        "flows": 4,
+        "rollout_steps": 64,
+        "epochs": 2,
+        "minibatch": 128,
+        "learning_rate": 0.0003,
+        "seed": 42,
+        "device": "cpu",
+        "threads": 1,
+        "min_message_bytes": 16384,
+        "max_message_bytes": 98304,
+        "episode_seconds": 20,
+        "profile": "robust",
+        "reward_profile": "completion"
+      },
+      "parameters": 105875,
+      "label": "gru-s42",
+      "checkpoint": "checkpoints/robust-v2-gru-s42.pt"
+    },
+    {
+      "model": {
+        "features": 22,
+        "history": 16,
+        "width": 104,
+        "heads": 4,
+        "layers": 2,
+        "action_dimensions": 1,
+        "architecture": "gru"
+      },
+      "training": {
+        "updates": 400,
+        "environments": 8,
+        "flows": 4,
+        "rollout_steps": 64,
+        "epochs": 2,
+        "minibatch": 128,
+        "learning_rate": 0.0003,
+        "seed": 43,
+        "device": "cpu",
+        "threads": 1,
+        "min_message_bytes": 16384,
+        "max_message_bytes": 98304,
+        "episode_seconds": 20,
+        "profile": "robust",
+        "reward_profile": "completion"
+      },
+      "parameters": 105875,
+      "label": "gru-s43",
+      "checkpoint": "checkpoints/robust-v2-gru-s43.pt"
+    }
+  ],
+  "validation": {
+    "seed": 1000,
+    "trials": 10
+  },
+  "final_test": {
+    "seed": 2000,
+    "trials": 20
+  },
+  "suite_sha256": "b6db4d0f4bb7a6723de9953d856017c81993019ec28e7324dcbf92bdde3a34df",
+  "selection": "Choose checkpoint on validation: maximize completed transfers, then mean per-scenario RL score.",
+  "ablation": "Train a robust transformer with legacy reward at seed 42, same update budget.",
+  "reward_ablation": {
+    "label": "legacy-reward",
+    "checkpoint": "checkpoints/robust-v2-legacy-reward-s42.pt",
+    "model": {
+      "features": 22,
+      "history": 16,
+      "width": 64,
+      "heads": 4,
+      "layers": 2,
+      "action_dimensions": 1,
+      "architecture": "transformer"
+    },
+    "training": {
+      "updates": 400,
+      "environments": 8,
+      "flows": 4,
+      "rollout_steps": 64,
+      "epochs": 2,
+      "minibatch": 128,
+      "learning_rate": 0.0003,
+      "seed": 42,
+      "device": "cpu",
+      "threads": 1,
+      "min_message_bytes": 16384,
+      "max_message_bytes": 98304,
+      "episode_seconds": 20,
+      "profile": "robust",
+      "reward_profile": "legacy"
+    },
+    "parameters": 102723
+  },
+  "previous_checkpoint": "checkpoints/longer-seed42.pt"
+}

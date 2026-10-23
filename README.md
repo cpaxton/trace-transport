@@ -22,6 +22,34 @@ general superiority over transport baselines.
 
 ## Run it
 
+### Browser test bench
+
+```bash
+.venv/bin/trace-transport console --open
+```
+
+Open `http://127.0.0.1:8765` if the browser does not open automatically. The local
+dashboard runs real simulation batches with:
+
+- Clean, lossy, changing-capacity, and stress presets plus editable network controls.
+- Ten paired trials by default, configurable payloads, arbitrary inline UTF-8 text, and concurrent senders.
+- Fixed-rate, AIMD, and a selectable learned checkpoint from `artifacts/` or `checkpoints/`.
+- Live delivery bars, RTT/rate telemetry, completion and integrity counters, and controller score tables.
+- Per-trial delivery/rate charts, JSON/CSV downloads, and cancellation that retains completed trials.
+
+The simulator runs faster than wall time. Plots explicitly use simulated seconds;
+the batch header separately shows elapsed wall time. CRC failures and missing
+feedback are real simulated events. Observer telemetry is for inspection only
+and does not give the actor access to hidden network state. The common selected
+reward is used for every controller. Reports are also saved to `runs/console/`.
+
+Use `--port 8766` for another port, or `--root /path/to/project` to locate that
+project's models and report directory. The server binds to loopback, uses bundled
+HTML/CSS/JS, and has no frontend package installation or external service. NumPy
+is sufficient for baseline trials; install the `learn` extra for checkpoints.
+
+### Command-line setup
+
 Python 3.10 or newer is required. The simulator needs NumPy; PyTorch is optional
 unless training or using a transformer checkpoint.
 
@@ -252,6 +280,40 @@ running the final test. It copies the chosen checkpoint to `--best-checkpoint`
 (default `checkpoints/robust-v2-best.pt`). On a fresh checkout the optional previous
 checkpoint may be absent; new candidates and baselines are still compared.
 Reserve new test seeds if using these results to tune the next experiment.
+
+For PPO stability experiments, `train` also supports `--target-kl 0.01` to stop
+further optimization within an update when its estimated KL exceeds 1.5 times
+the target. `--checkpoint-every 100` retains intermediate `.u0100.pt` snapshots
+rather than only the final weights. JSONL logs include estimated KL, clip
+fraction, optimizer-step count, early-stop status, and latent exploration scale.
+Both options default off, preserving old experiment plans. Old configuration
+records are normalized before comparison so newly added optional defaults do
+not invalidate existing checkpoints.
+
+The first KL-limited follow-up did not resolve seed sensitivity. With a 0.01
+target, seed 42 stopped optimization early in 108/400 updates, yet its final
+checkpoint still completed 0/50 validation transfers. Its update-100/200
+snapshots completed 20/50, exposing the later loss of useful behavior. Seed 43
+and all of its snapshots completed 50/50. The earlier selected checkpoint had
+the better mean score on this diagnostic set and remains the bundled default.
+See `artifacts/stability-v1-results.json`; this is a diagnostic, not a successful
+stability fix.
+
+### Source export and GitHub publication
+
+```bash
+# Build a clean Git bundle and source archive without modifying this workspace's .git.
+python scripts/export_repository.py
+
+# From a terminal with GitHub access, initialize the empty destination repository.
+python scripts/export_repository.py --push
+```
+
+The exporter includes source, tests, browser assets, CI, paper sources, experiment
+plans, the selected synthetic-data checkpoint, and compact result summaries.
+It excludes environments, raw runs, other checkpoints, and local tool state.
+`dist/publication/manifest.json` records each exported file's SHA-256 and the Git
+commit. `--push` uses configured Git credentials and refuses a nonempty destination.
 
 ### Compare progress on a fixed scenario suite
 

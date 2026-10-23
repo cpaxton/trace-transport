@@ -1,0 +1,310 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage[hidelinks]{hyperref}
+\usepackage[expansion=false]{microtype}
+
+\title{Trace Transport: A Self-Play Testbed for\\History-Based Learned Network Protocols}
+\author{Project working draft}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We describe an initial experimental platform for learning endpoint communication
+policies from local network histories. The application task is exact delivery of
+arbitrary UTF-8 text over a datagram network with unknown and changing capacity,
+delay, loss, and competing traffic. Both peers are under our control, permitting
+jointly designed feedback, metadata, and recovery decisions without TCP wire
+compatibility. A deterministic reliability kernel enforces payload correctness,
+while a small transformer initially controls sending rate and later additional
+protocol decisions. We describe a seeded CPU reference, a proposed batched GPU
+backend, and an evaluation plan covering correctness, fairness, generalization,
+and real datagram operation. The CPU simulator, sender policy, PPO training loop,
+and single-message UDP adapters are implemented. Joint receiver learning and GPU
+packet simulation remain future work. Preliminary CPU diagnostics show progress
+over an earlier learned sender while exposing training-seed sensitivity; they do
+not establish general superiority or novelty.
+\end{abstract}
+
+\section{Motivation and scope}
+An endpoint cannot directly observe network capacity, competing senders, router
+queues, or future failures. Its decisions must depend on local transmission
+records and received messages. A history-based policy can attempt to infer
+latent conditions and adapt its communication behavior. Our concrete application
+is exact text transfer: successful output must match the original byte sequence,
+including whitespace and Unicode encoding. The policy never generates substitute
+payload content.
+
+Both endpoints run the experimental protocol. We can therefore optimize sender
+and receiver behavior together, including the representation and timing of
+feedback. The network remains an external datagram service. IP routing and
+compatibility with unmodified TCP peers are outside the initial scope. Permanent
+partitions produce explicit incomplete transfers; resumable sessions initially
+assume retained endpoint state.
+
+\section{Related work and positioning}
+Remy synthesizes endpoint congestion-control rules from network assumptions and
+an optimization objective~\cite{winstein2013remy}. Aurora studies deep reinforcement
+learning for congestion control with a Gym-based experimental
+interface~\cite{jay2019aurora}. MVFST-RL integrates asynchronous reinforcement
+learning with QUIC and addresses action and inference delays in an operational
+transport~\cite{sivakumar2019mvfst}.
+
+Transformers over network histories also have direct precedent. The Jazz preprint
+uses historical observations for transformer-based multipath congestion
+control~\cite{wang2025jazz}. The TCCO preprint investigates transformer-based
+control across wireless subflows~\cite{zhang2026tcco}. These works motivate a
+history-based controller but mean that this architectural choice alone is not a
+novel contribution.
+
+Trace Transport's intended experimental focus is a compact combination of exact
+application delivery, jointly controlled peers, budgeted custom feedback, and
+scalable packet simulation. Whether this constitutes a useful contribution
+requires implementation, comparison, and further literature review. TCP's
+reliability specification and QUIC recovery provide reference mechanisms, not
+mandatory wire formats~\cite{rfc9293,rfc9002}.
+
+\section{Problem formulation}
+Let $s_t$ denote the full network and endpoint state at control step $t$. This
+includes packet queues, scheduled arrivals, hidden link conditions, and endpoint
+buffers. Endpoint $i$ receives local observation $o_t^i$ and maintains history
+\begin{equation}
+ h_t^i = \bigl((o_\tau^i,a_{\tau-1}^i,\Delta t_\tau)\bigr)_{\tau=t-H+1}^{t}.
+\end{equation}
+Padding and validity masks handle startup and missing measurements. A shared
+role-conditioned policy samples $a_t^i\sim\pi_\theta(\cdot\mid h_t^i)$.
+Endpoints interact through network packets; sharing policy weights does not
+give them shared runtime observations. Actions precede the next environment
+transition. The task is partially observable and becomes a cooperative multi-agent
+problem when both peers and multiple connections are trained jointly.
+
+For source bytes $x$ and reconstructed output $\hat{x}$, verified success requires
+\begin{equation}
+ \operatorname{complete}(x,\hat{x}) \iff
+ |x|=|\hat{x}|\ \land\ \forall j,\ x_j=\hat{x}_j.
+\end{equation}
+The verifier operates outside the policy. A deadline bounds finite-transfer
+episodes; lack of connectivity does not imply that delivery is possible.
+
+\section{Protocol and controller}
+\subsection{Reliability kernel and metadata}
+The initial kernel uses connection and message identifiers, byte offsets, final
+lengths, unique transmission identifiers, explicit received ranges, reassembly,
+and duplicate suppression. Integrity and completion checks are deterministic.
+Receiver credit bounds accepted new data, while retransmission and probe rules
+prevent feedback loss from causing permanent protocol deadlock. Exactly-once
+application delivery is limited to a live session; durable crash semantics are
+not provided initially.
+
+All feedback and custom metadata travel through the simulated network. Headers,
+ACKs, probes, and learned symbols consume bandwidth and face delay and loss.
+Start with typed metadata before introducing bounded discrete learned messages.
+Metadata may describe local arrivals or buffer state, but cannot reveal hidden
+router state. RTT sampling uses echoed timestamps without assuming synchronized
+clocks. The first representation is an engineering scaffold and may change as
+the learned protocol expands.
+
+\subsection{Observations and architecture}
+Initial observations aggregate 20\,ms windows: sent bytes, newly acknowledged
+unique bytes, retransmissions, estimated losses, RTT statistics and trends,
+outstanding data, pacing rate, congestion window, receiver credit, unsent bytes,
+feedback age, previous actions, role, and received metadata. Measurements have
+validity masks and fixed-scale normalization. No true capacity or queue occupancy
+is supplied to the actor.
+
+The starting model is a causal transformer with $H=64$ windows, two layers,
+width 64, four attention heads, and actor and value heads. These are proposed
+hyperparameters, not validated selections. Model comparisons include a stacked
+history MLP and a recurrent policy at comparable budgets. Session resets clear
+history, while rollout boundaries retain the required preceding context.
+
+The implementation also supports a flattened-history MLP and a GRU over the same
+masked finite window. A 16-window transformer of width 64 with two layers has
+102,723 parameters; an MLP of width 152 with three layers has 103,211; and a
+two-layer GRU of width 104 has 105,875. These match parameter budgets rather than
+computation. The GRU carries no additional hidden context between policy calls.
+Inactive training endpoint slots are excluded from the optimization objective.
+
+\subsection{Action spaces}
+The first policy controls pacing with a scalar $a_r\in[-1,1]$:
+\begin{equation}
+ r_{t+1}=\operatorname{clip}\bigl(r_t\exp(0.2a_r),r_{\min},r_{\max}\bigr).
+\end{equation}
+A second stage introduces $a_w\in[-1,1]$ with an analogous update for the
+congestion window. Bounds do not depend on hidden capacity. Pacing applies to
+retransmissions as well as new data; receiver credit constrains newly introduced
+payload separately.
+
+Later policy heads choose eligible retransmissions, packet sizes, feedback
+timing, bounded metadata, scheduling, redundancy, and available paths. Masked
+actions invoke defined protocol operations. They cannot alter payload bytes or
+acknowledge data that has not arrived. We introduce heads separately so their
+benefit and overhead can be measured. The full system jointly trains sender and
+receiver policies with explicit roles.
+
+\section{Reference environment and GPU scaling}
+The CPU reference simulates a finite FIFO bottleneck with byte-based
+serialization, forward and feedback paths, propagation delay, jitter, and
+independent random and queue-overflow loss. Scripted cases add duplication,
+reordering, burst loss, changing capacity, and temporary disconnections. A
+20\,ms control interval does not quantize all network events to 20\,ms: the
+reference preserves event timing and paced departures.
+
+Proposed initial ranges are 0.5--20\,Mbit/s, 10--200\,ms base RTT,
+0--5\% random loss, and 8--128\,KiB bottleneck queues. Begin with one transfer,
+then add 2--8 competing senders and receiver-side control. Short text checks
+correctness; longer or repeated messages exercise steady-state congestion.
+Large messages use bounded buffering and backpressure.
+
+The GPU backend will batch independent networks with interacting endpoints
+within each network. Packet slots, queues, histories, and actions have fixed
+bounded layouts and explicit masks. Immutable payload references avoid repeated
+string copies. Physical queue drops and implementation storage exhaustion are
+separate outcomes. A bounded event or fine-tick implementation must be checked
+against CPU timing and conservation invariants before training at scale.
+
+Benchmark batches of 128, 512, and 2,048 four-sender networks without presuming
+they fit a particular device. Keep simulation, inference, rollouts, and updates
+on-device. Store observations once and reconstruct history windows for training.
+Time remains causal; parallelism comes primarily from independent networks.
+Report memory, packet events per second, transitions per second, simulated time
+per wall-clock second, and learning time to a stated target. Multi-GPU sharding
+is deferred until a single-device implementation is validated.
+
+\section{Training objective and evaluation plan}
+The initial PPO objective rewards unique acknowledged payload progress $B_t$
+and penalizes estimated RTT inflation $D_t$ and overhead wire bytes $O_t$:
+\begin{equation}
+ R_t = \frac{B_t}{B_0}-\alpha\frac{D_t}{D_0}
+       -\beta\frac{O_t}{B_0}.
+\end{equation}
+Here $B_0,D_0$ are fixed reference scales. Overhead includes feedback,
+headers, probes, metadata, and duplicate payload. Finite transfers also receive
+a verified completion bonus and an unfinished-transfer penalty. When feedback
+becomes learned, training credit comes from independently verified receiver
+delivery, rather than trusting generated acknowledgments; that verifier does
+not become an actor observation. Delayed feedback must be considered in credit
+assignment.
+
+A second, versioned completion-focused objective addresses the original short
+discount horizon. For message length $L$, active elapsed time $\Delta t$, RTT
+inflation $D_t$ in seconds, progress $B_t$, and overhead $O_t$, define
+\begin{align}
+ R_t^{(2)} ={}& \frac{B_t}{\max(L,1)}
+ + 2\,\mathbf{1}_{\mathrm{complete}} - 2\,\mathbf{1}_{\mathrm{timeout}}
+ - 0.05\Delta t \nonumber\\
+ &-0.01\frac{D_t}{0.1}\Delta t
+ -0.1\frac{O_t}{\max(L,512)}.
+\end{align}
+The original profile uses $\gamma=0.99$ and the second $\gamma=0.999$. At
+20\,ms intervals, a terminal reward after 20 seconds is weighted by approximately
+$0.000043$ or $0.368$, respectively. The second profile gives waiting an explicit
+cost and retains more of the completion signal. Evaluation specifies one common
+profile for all controllers; different reward definitions are not aggregated.
+Neither profile relaxes byte correctness.
+
+The robust training sampler includes one to four senders, up to 15\% random loss
+and 2\% corruption, changing capacity, asymmetric feedback capacity, and outages.
+Clean episodes remain in the mixture. This sampler is separate from the frozen
+evaluation manifest. The experiment compares two training seeds per architecture
+and an old-reward ablation, selects on validation seeds, then evaluates fresh
+final-test seeds.
+
+For joint multi-flow training, evaluate a network objective such as
+$\sum_{i\in\mathcal{A}_t}\log(\epsilon+g_t^i/g_0)$, where
+$\mathcal{A}_t$ contains active backlogged flows and $g_t^i$ is verified goodput.
+Declare how joins, leaves, and idle periods affect the active set. Network-level
+training signals are distinct from runtime peer communication. A centralized
+critic, if used, must be reported explicitly.
+
+\begin{table}[ht]
+\centering
+\small
+\begin{tabular}{@{}p{0.23\linewidth}p{0.69\linewidth}@{}}
+\toprule
+Question & Planned evidence \\
+\midrule
+Correct delivery & Exact bytes, empty and Unicode messages, duplicated packets,
+lost feedback, outages, deadlines, and bounded-buffer behavior. \\
+Control quality & Completion-time distributions, goodput, RTT percentiles,
+wire overhead, and recovery traffic. \\
+Fairness & Per-flow outcomes, Jain's index, and worst-flow waiting time under
+joins, leaves, and heterogeneous RTTs. \\
+History benefit & Transformer versus MLP and recurrent models; history-length
+and inference-cost ablations. \\
+Protocol freedom & Sender-only versus joint training; metadata budgets,
+feedback timing, and recovery-action ablations. \\
+Generalization & Held-out parameter combinations, traces, traffic mixes,
+and multiple independent training seeds. \\
+Scalability & Reference agreement, timing error, memory, environment throughput,
+and training time to target. \\
+\bottomrule
+\end{tabular}
+\caption{Evaluation plan beyond the preliminary software diagnostics.}
+\end{table}
+
+Fixed-rate and AIMD baselines use identical reliability code and paired scenario
+seeds. AIMD alone is not a full TCP implementation. Later comparisons use actual
+TCP or QUIC controllers under a common emulator. A single-message UDP adapter
+reuses the protocol and policy interface. It saves received text atomically,
+verifies a completion digest, and retains receiver state for a finite interval
+to repeat lost final feedback. A worker thread computes policy decisions while
+the sender continues under the last action, following the asynchronous execution
+concern raised by MVFST-RL~\cite{sivakumar2019mvfst}. Multi-host performance remains
+to be measured under controlled impairment.
+
+\section{Preliminary software experiment}
+An exploratory comparison trains two seeds per history architecture for 400
+updates under the robust sampler and completion-focused reward. Each run collects
+approximately half a million active transitions. A seventh run trains a robust
+transformer with the original reward as an ablation. Validation uses ten paired
+seeds per fixed scenario, and selects first by completed transfers and then by
+mean per-scenario completion-focused return. Final evaluation uses twenty fresh
+seeds per scenario, after recording the selection.
+
+\begin{table}[ht]
+\centering
+\small
+\begin{tabular}{@{}lrrrr@{}}
+\toprule
+Scenario & Fixed & AIMD & Previous & Selected \\
+\midrule
+Clean & 40/40 & 40/40 & 40/40 & 40/40 \\
+Lossy/corrupt & 40/40 & 40/40 & 40/40 & 40/40 \\
+Changing/outage & 40/40 & 40/40 & 38/40 & 40/40 \\
+Four-sender stress & 80/80 & 4/80 & 26/80 & 80/80 \\
+\bottomrule
+\end{tabular}
+\caption{Completed exact transfers on reserved final-test seeds. ``Previous'' is
+the earlier 300-update sender; ``Selected'' is transformer training seed 43.}
+\end{table}
+
+The selected transformer completes all 200 transfers without wrong payloads, as
+does fixed-rate. This shows progress over the previous learned sender, not general
+superiority over conventional transport. Seed sensitivity is substantial: the
+other completion-focused transformer completes none of its 100 validation
+transfers, while both MLPs and both GRUs complete all of theirs. The old-reward
+ablation also completes validation, so the experiment does not isolate the new
+reward as the cause of improvement. Scenarios are fixed diagnostic conditions,
+not an Internet deployment benchmark; flows within a trial are dependent.
+
+\section{Implementation stages and open questions}
+The sequence is: (1) reliable CPU text transfer, (2) a history-based learned
+sender, (3) a validated GPU backend, (4) learned receiver feedback and additional
+protocol heads, and (5) a real datagram adapter with multi-host evaluation.
+The full target combines these pieces with reproducible configurations,
+checkpoints, bounded resources, and explicit failure semantics.
+
+Open questions include the value of attention versus cheaper memory models,
+feedback representations that justify their wire cost, generalization under
+unseen workloads, and the fidelity needed for simulator-trained policies to
+transfer to real packet timing. Arbitrary metadata and self-play enlarge the
+design space but do not themselves establish better communication behavior.
+
+\bibliographystyle{plain}
+\bibliography{references}
+\end{document}

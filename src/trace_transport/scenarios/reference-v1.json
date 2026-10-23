@@ -1,0 +1,55 @@
+{
+  "version": 1,
+  "name": "reference-v1",
+  "description": "Fixed diagnostic cases. Keep this version unchanged when comparing checkpoints.",
+  "cases": [
+    {
+      "name": "clean",
+      "description": "Two competing senders without random loss, corruption, or jitter.",
+      "message_bytes": 32768,
+      "flows": 2,
+      "network": {"bandwidth_bps": 2000000, "loss": 0, "ack_loss": 0, "jitter": 0, "deadline": 10}
+    },
+    {
+      "name": "lossy",
+      "description": "The standard benchmark, including 1% wire corruption in both directions.",
+      "message_bytes": 32768,
+      "flows": 2,
+      "network": {"loss": 0.02, "ack_loss": 0.02, "corruption": 0.01, "ack_corruption": 0.01, "deadline": 10}
+    },
+    {
+      "name": "changing",
+      "description": "Capacity falls and recovers while both directions experience a temporary outage.",
+      "message_bytes": 65536,
+      "flows": 2,
+      "network": {
+        "bandwidth_bps": 1500000,
+        "base_rtt": 0.08,
+        "jitter": 0.02,
+        "loss": 0.02,
+        "ack_loss": 0.02,
+        "corruption": 0.01,
+        "ack_corruption": 0.01,
+        "queue_bytes": 8192,
+        "capacity_changes": [[0.3, 500000], [1.2, 3000000]],
+        "outages": [[0.5, 0.8]],
+        "deadline": 15
+      }
+    },
+    {
+      "name": "stress",
+      "description": "Four longer transfers with 10% data/ACK loss, an outage, and a small bottleneck queue.",
+      "message_bytes": 81000,
+      "flows": 4,
+      "network": {
+        "loss": 0.1,
+        "ack_loss": 0.1,
+        "jitter": 0.02,
+        "queue_bytes": 8192,
+        "capacity_changes": [[1, 2000000]],
+        "outages": [[0.2, 0.5]],
+        "deadline": 20
+      }
+    }
+  ]
+}

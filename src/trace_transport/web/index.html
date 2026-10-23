@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Trace Transport · Test bench</title>
+  <link rel="stylesheet" href="/style.css"><script src="/app.js" defer></script>
+</head>
+<body>
+<header class="topbar"><a class="brand" href="/">↔ <span>TRACE <b>TRANSPORT</b></span></a><span class="local"><i></i> LOCAL TEST BENCH</span><span class="version">EXACT BYTES. REAL PACKETS.</span></header>
+<main>
+  <div class="heading"><div><p class="eyebrow">PROTOCOL EXPERIMENTS</p><h1>Put the network to the test.</h1><p class="subtitle">Compare controllers on the same seeded network. See what arrives, what gets lost, and what it costs.</p></div><span id="status" class="status">Ready</span></div>
+  <div id="error" role="alert" class="error" hidden></div>
+  <div class="workspace">
+    <aside class="panel controls">
+      <form id="setup">
+        <div class="section-title"><span class="step">01</span><h2>Set the conditions</h2></div>
+        <label>Scenario<select id="scenario"></select></label><p id="scenario-description" class="hint"></p>
+        <div class="fields"><label>Trials / controller<input id="trials" type="number" value="10" min="1" max="50" required></label><label>Concurrent senders<input id="flows" type="number" value="2" min="1" max="8" required></label></div>
+        <div class="fields"><label>Payload · KiB<input id="payload" type="number" value="32" min="0.001" max="2048" step="any" required></label><label>Starting seed<input id="seed" type="number" value="3000" min="0" step="1" required></label></div>
+        <details><summary>Send my own text</summary><label class="check"><input id="use-text" type="checkbox"> Use inline UTF-8 text</label><textarea id="text" rows="3" placeholder="Hello, こんにちは 🌐"></textarea><p class="hint">Whitespace and Unicode are preserved exactly. Empty text is valid.</p></details>
+        <div class="divider"></div>
+        <div class="fields"><label>Bandwidth · Mbit/s<input id="bandwidth" type="number" min="0.1" max="100" step="0.1" required></label><label>Base RTT · ms<input id="rtt" type="number" min="0" max="2000" step="1" required></label></div>
+        <div class="fields"><label>Data loss · %<input id="loss" type="number" min="0" max="100" step="0.5" required></label><label>ACK loss · %<input id="ack-loss" type="number" min="0" max="100" step="0.5" required></label></div>
+        <div class="fields"><label>Data corruption · %<input id="corruption" type="number" min="0" max="100" step="0.5" required></label><label>ACK corruption · %<input id="ack-corruption" type="number" min="0" max="100" step="0.5" required></label></div>
+        <details><summary>Timing &amp; buffers</summary><div class="fields"><label>Jitter · ms<input id="jitter" type="number" min="0" max="1000" step="1"></label><label>Queue · KiB<input id="queue" type="number" min="1" max="1024" step="1"></label></div><label>Deadline · simulated seconds<input id="deadline" type="number" min="0.1" max="60" step="0.1"></label><p class="hint">Changing and stress presets retain their scheduled capacity changes and outages.</p></details>
+        <div class="divider"></div>
+        <div class="section-title"><span class="step">02</span><h2>Choose the controllers</h2></div>
+        <label class="policy check"><input id="fixed" type="checkbox" checked><span><b>Fixed rate</b><small>A constant pacing reference</small></span><span class="dot blue"></span></label>
+        <label class="policy check"><input id="aimd" type="checkbox" checked><span><b>AIMD</b><small>Additive increase, multiplicative decrease</small></span><span class="dot amber"></span></label>
+        <label class="policy check"><input id="learned" type="checkbox"><span><b>Learned policy</b><small id="learned-hint">Transformer, MLP, or GRU checkpoint</small></span><span class="dot teal"></span></label>
+        <label>Checkpoint<select id="checkpoint"></select></label>
+        <label>Scoring<select id="reward"><option value="completion">Completion focused · v2 / γ 0.999</option><option value="legacy">Legacy · v1 / γ 0.99</option></select></label>
+        <button type="submit" id="run" class="primary">▶ Run comparison</button><button type="button" id="stop" class="secondary" hidden>Stop batch</button>
+        <p class="hint footnote">Runs on your machine. Simulation time can advance faster than wall time.</p>
+      </form>
+    </aside>
+    <section class="results" aria-live="polite">
+      <div class="panel batch-head"><div><p class="eyebrow">BATCH PROGRESS</p><h2 id="batch-title">Your next experiment starts here.</h2><p id="batch-detail" class="muted">10 paired trials. Identical conditions. Exact-byte verification.</p></div><span id="elapsed" class="mono">—</span><div class="progress-track"><div id="batch-progress"></div></div></div>
+      <div class="metrics"><div class="panel metric"><span>DELIVERY SUCCESS</span><strong id="completion">—</strong><small id="completion-detail">No transfers scored yet</small></div><div class="panel metric"><span>CRC REJECTIONS</span><strong id="crc">—</strong><small>Damaged datagrams caught</small></div><div class="panel metric"><span>RETRANSMITTED</span><strong id="retry">—</strong><small>Share of transmitted payload</small></div><div class="panel metric"><span>WRONG PAYLOADS</span><strong id="wrong">—</strong><small>Exact reconstruction checks</small></div></div>
+      <div class="panel network-panel"><div class="panel-title"><h2>The wire, right now</h2><span id="current-run" class="muted mono">Waiting for a run</span></div>
+        <div class="network"><div class="endpoint"><div class="node">↗</div><b id="senders-title">SENDERS</b><small id="senders-info">Paced application bytes</small></div><div class="wire"><span>DATA →</span><i></i></div><div class="endpoint bottleneck"><div class="node">▤</div><b>SHARED BOTTLENECK</b><small id="drops-info">Finite queue · variable delay</small></div><div class="wire"><span>→ DELIVERY</span><i></i></div><div class="endpoint"><div class="node">✓</div><b>RECEIVER</b><small id="received-info">Reassemble &amp; verify</small></div></div>
+        <div class="ack-line">← ACKNOWLEDGMENTS &amp; CUSTOM FEEDBACK</div><div id="flow-bars" class="flow-bars"><div class="empty-inline">Per-flow delivery appears as the simulator runs.</div></div>
+      </div>
+      <div class="panel comparison"><div class="panel-title"><div><h2>Controller comparison</h2><p class="hint">RL score includes failures. Completion time includes successful transfers only.</p></div><div class="downloads"><a id="download-json" class="download disabled" href="#" download>↓ JSON</a><a id="download-csv" class="download disabled" href="#" download>↓ CSV</a></div></div>
+        <div class="table-scroll"><table><thead><tr><th>Controller</th><th>Complete</th><th>Exact RX</th><th>Drops</th><th>Retry</th><th>Done p50</th><th>RL score ↑</th></tr></thead><tbody id="comparison"><tr><td colspan="7" class="empty">Run a batch to compare real outcomes.</td></tr></tbody></table></div>
+      </div>
+      <div class="panel traces"><div class="panel-title"><h2>Inspect a trial</h2><select id="trace"><option value="live">Follow current trial</option></select></div><div class="charts"><div><p class="chart-label">CONFIRMED DELIVERY <span>% of source bytes</span></p><svg id="delivery-chart" viewBox="0 0 480 180" role="img" aria-label="Acknowledged delivery over simulated time"></svg></div><div><p class="chart-label">SENDING RATE <span>KiB / second</span></p><svg id="rate-chart" viewBox="0 0 480 180" role="img" aria-label="Sender pacing rates over simulated time"></svg></div></div><p id="trace-caption" class="hint">Each line is a sender. The x-axis is simulated seconds.</p></div>
+      <p class="bottom-note">CRC rejection is packet corruption caught on the wire. A missing message is incomplete, never counted as a correct payload. <span id="scoring-note">Scores use the selected common reward for every controller.</span></p>
+    </section>
+  </div>
+</main>
+</body>
+</html>
