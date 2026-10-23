@@ -30,3 +30,36 @@ def test_baseline_selection_protects_bulk_before_deadline_optimization():
     candidates={'starved':[record(ontime=100,image_bytes=1,map_bytes=1)],
                 'eligible':[record(ontime=75)],'slower':[record(ontime=50)]}
     assert select_baseline(candidates)=='eligible'
+
+
+def test_constant_actor_fast_path_matches_complete_simulated_evaluation(tmp_path,monkeypatch):
+    import torch
+    from trace_transport.joint_models import JointModelConfig,SenderActor,ReceiverActor,CentralCritic,save_checkpoint
+    from trace_transport.joint_evaluation import constant_baseline_actor,evaluate
+    cfg=JointModelConfig(history=4,width=32,layers=1);sender=SenderActor(cfg);receiver=ReceiverActor(cfg)
+    assert constant_baseline_actor(sender,'sender') and constant_baseline_actor(receiver,'receiver')
+    path=tmp_path/'initial.pt';save_checkpoint(path,sender,receiver,CentralCritic(),cfg,{'decisions':0})
+    # Initial joint actors follow the fixed/EDF/budgeted teacher for every input.
+    kwargs=dict(seeds=[701,702,703],environments=2,production=.1,drain=.5)
+    observed=[]
+    baseline=evaluate(on_record=observed.append,**kwargs)
+    assert sorted(observed,key=lambda r:r["seed"])==baseline
+    assert evaluate(checkpoint=path,**kwargs)==baseline
+    from trace_transport import joint_evaluation
+    monkeypatch.setattr(joint_evaluation,'constant_baseline_actor',lambda actor,role:False)
+    assert evaluate(checkpoint=path,**kwargs)==baseline
+    # A tiny nonzero learned control must never be classified as constant.
+    with torch.no_grad():sender.control.weight[0,0]=1e-10
+    assert not constant_baseline_actor(sender,'sender')
+
+
+def test_asynchronous_worlds_match_synchronous_controls_with_nonzero_actions(tmp_path):
+    import torch
+    from trace_transport.joint_models import JointModelConfig,SenderActor,ReceiverActor,CentralCritic,save_checkpoint
+    from trace_transport.joint_evaluation import evaluate
+    cfg=JointModelConfig(history=4,width=32,layers=1);sender=SenderActor(cfg);receiver=ReceiverActor(cfg)
+    with torch.no_grad():
+        sender.control.bias.copy_(torch.tensor([.05,-.05]));receiver.head.bias[-1]=1.
+    path=tmp_path/'controlled.pt';save_checkpoint(path,sender,receiver,CentralCritic(),cfg,{'decisions':1})
+    kwargs=dict(seeds=[701,702,703],environments=2,production=.1,drain=.5,checkpoint=path)
+    assert evaluate(**kwargs,asynchronous=True)==evaluate(**kwargs,asynchronous=False)

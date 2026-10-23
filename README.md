@@ -20,6 +20,19 @@ fixed-rate also completed 200/200. These results do not establish general
 superiority over transport baselines. See the [training and evaluation guide](docs/training.md)
 for selection, seed sensitivity, and negative results.
 
+The [device checks](artifacts/device-binary-v1-results.json) recovered all 36
+synthetic text/image/map transfers across Herman Wi-Fi and Caliban Ethernet,
+including an experimental sender-only actor with deterministic feedback. These
+are correctness checks. The [completed joint study](docs/experiments/joint-v1.md)
+selected the initial policy and did not establish a learning win.
+
+The [next throughput experiment](docs/goodput-v2-plan.md) targets maximum verified
+useful delivery, with continuously backlogged traffic and deadline constraints
+for mixed workloads. It is a separate versioned plan.
+
+[Experiment register](docs/experiments/register.md): dated runs, results, negative
+outcomes, and planned work.
+
 ## Quick start
 
 On Linux or macOS, start with Git and curl installed:
@@ -66,6 +79,7 @@ and durable recovery across crashes remain future work.
 - [Protocol design and roadmap](docs/design.md): correctness, local observations, action spaces, and planned GPU/joint learning work.
 - [Receiver experiments and device trials](docs/receiver-experiments.md): feedback timing, Wi-Fi models, results, and real-device setup.
 - [Joint network experiment](docs/joint-network-brain.md): persistent sessions, training commands, and acceptance criteria.
+- [Maximum throughput plan](docs/goodput-v2-plan.md): backlogged bulk traffic and deadline-constrained goodput.
 - [Development](docs/development.md): implementation map, verification, source export, and paper build.
 - [Paper working draft](paper/main.tex) and [bibliography](paper/references.bib).
 

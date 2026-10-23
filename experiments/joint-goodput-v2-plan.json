@@ -1,0 +1,60 @@
+{
+  "version": "joint-goodput-v2-plan",
+  "status": "design; not trained or evaluated",
+  "existing_study": "joint-v1 remains frozen and is reported under its original deadline-first criteria",
+  "primary_objective": "maximize unique bytes of fully verified objects delivered per second in a fixed measurement window",
+  "modes": [
+    "bulk-only maximum speed",
+    "mixed traffic with deadline constraints"
+  ],
+  "workload": {
+    "bulk_source": "continuously backlogged, credit-driven, bounded queues",
+    "payloads": [
+      "UTF-8 text",
+      "encoded image bytes",
+      "map deltas",
+      "arbitrary binary objects"
+    ],
+    "measurement": "fixed offered/measurement interval; report startup and bounded drain separately",
+    "correctness": "whole-object hash verification and exact bytes; no credit for retransmissions or duplicate delivery",
+    "concurrency": "one and many active hosts, plus host joins, departures and correlated path changes"
+  },
+  "controls": [
+    "pacing rate",
+    "in-flight byte window",
+    "class/message scheduling",
+    "ACK batching and timing"
+  ],
+  "training": {
+    "initialization": "start from exact strong adaptive teacher behavior using zero residuals; use imitation if replacing teacher logic",
+    "reward": "verified useful delivery; incremental byte progress only through potential-based shaping with explicit terminal correction",
+    "constraints": [
+      "interactive deadline misses",
+      "bounded producer and network queues",
+      "wire cost per useful byte",
+      "active-host starvation"
+    ],
+    "selection": "validation only; freeze before fresh paired tests; retain the initial teacher as a candidate",
+    "checkpoint_contract": "record reward/workload versions and teacher controls so export and live inference use the same baseline"
+  },
+  "proposed_win_conditions_to_freeze_before_training": {
+    "relative_goodput_improvement": 0.1,
+    "paired_goodput_difference_ci95_lower_bound": "strictly positive",
+    "interactive_deadline_ms": 100,
+    "deadline_miss_noninferiority_margin_absolute": 0.005,
+    "wire_per_delivered_byte_max_relative": 1.05,
+    "wrong_deliveries": 0,
+    "active_host_starvation": "none; report per-host goodput and fairness",
+    "reference": "strongest validated adaptive deterministic control under the same constraints",
+    "deadline_miss_difference_ci95_upper_bound_max": 0.005
+  },
+  "required_reports": [
+    "verified receiver goodput and sender-confirmed goodput",
+    "finite-object completion time and confirmed completion fraction",
+    "interactive deadline misses including blocked desired offers",
+    "queue occupancy, latency tails, loss and retransmission overhead",
+    "per-host goodput and resource use",
+    "goodput/deadline Pareto frontier and ablations",
+    "real wall-clock transfers including steady-state actor inference cost"
+  ]
+}

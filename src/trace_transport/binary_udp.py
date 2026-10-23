@@ -13,10 +13,14 @@ from .session_receiver import SessionReceiver
 from .wire import DATA
 
 
-def send_bytes(payload,host,port,*,traffic_class='bulk',timeout=30.):
+def send_bytes(payload,host,port,*,traffic_class='bulk',timeout=30.,checkpoint=None,device='cpu'):
     message=Message(payload,traffic_class)
     if not math.isfinite(timeout) or timeout<=0:raise ValueError('timeout must be positive')
     nonce=secrets.randbits(64);sender=Sender(payload,secrets.randbits(64),feedback_delay_budget=.25)
+    policy=None
+    if checkpoint is not None:
+        from .live_sender import JointFileSender
+        policy=JointFileSender(checkpoint,traffic_class,device)
     wire_sent=feedback_received=0;started=time.monotonic()
     with socket.socket(socket.AF_INET,socket.SOCK_DGRAM) as sock:
         sock.connect((host,port))
@@ -24,6 +28,7 @@ def send_bytes(payload,host,port,*,traffic_class='bulk',timeout=30.):
             now=time.monotonic()-started
             if now>=timeout:break
             sender._expire(now)
+            if policy is not None:policy.tick(sender,now)
             room=not sender.flight_bytes or sender.flight_bytes+1024<=sender.cwnd
             packet=sender.poll(now) if room else None
             if packet is not None:
@@ -47,6 +52,7 @@ def send_bytes(payload,host,port,*,traffic_class='bulk',timeout=30.):
     return dict(completed=sender.complete,receiver_confirmed=sender.verified_completion,payload_bytes=len(payload),
         sha256=hashlib.sha256(payload).hexdigest(),elapsed_seconds=time.monotonic()-started,
         total_wire_bytes=wire_sent+feedback_received,data_wire_bytes=wire_sent,feedback_received_bytes=feedback_received,
+        controller='joint-sender-single-file' if policy is not None else 'deterministic',policy_decisions=policy.decisions if policy is not None else 0,
         retransmitted_payload_bytes=sender.retransmitted_bytes,protocol='TRC2-single-file')
 
 

@@ -116,8 +116,87 @@ trace-transport send-file --input image.png --host 127.0.0.1 --port 9001 --class
 
 The same commands carry text files or map deltas without decoding. Messages are
 limited to 16 MiB and successful receive writes exact verified bytes atomically.
-Real loopback PNG and map-buffer transfers were checked. This file adapter uses
-the deterministic reliability/controller path; joint learned session deployment
+Real loopback PNG and map-buffer transfers were checked. By default this file adapter uses
+the deterministic reliability/controller path. An optional experimental sender
+actor is described below; joint learned session deployment
 on Herman or Caliban is a subsequent integration step. A production system also
 needs authentication, resource limits, cancellation/stale-image policy, fairness,
 and measured device traces before claims about robot performance.
+
+## Device engineering checks
+
+The source-only probe runs on Python 3.10+ without installing a package on the
+receiver. It copies only seven Python modules into a unique `/tmp` ZIP and retains
+synthetic received files there for inspection:
+
+```bash
+uv run --locked python -m scripts.device_binary_trials \
+  --ssh jetson1@herman --address HOST_IP --condition wifi-stationary \
+  --report runs/devices/herman-binary.json
+```
+
+The probe sends three trials each of Unicode text, valid 256×256 RGB PNG bytes,
+and a 512-KiB synthetic map. It also saves 80 ICMP observations over approximately
+40 seconds. These raw RTT/loss observations are not `service-trace-v1` capacity
+recordings. They must not be relabeled as measured available bandwidth.
+
+Both Herman (Wi-Fi) and Caliban (Ethernet) completed all nine deterministic trials
+and all nine experimental learned-sender trials. See
+[device results](../artifacts/device-binary-v1-results.json). These are bounded
+correctness checks, not randomized paired performance comparisons.
+
+`send-file --checkpoint CHECKPOINT` now optionally runs the joint sender actor on
+the local host with a deterministic remote receiver. The same option is available
+in the probe. It constructs endpoint-local sender history using the simulation's
+normalizations and applies rate/window residuals every 20 ms; message selection
+is trivial for a single pending file. Producer rates and opposite-role traffic
+are zero because these are single-file tests. They differ from the persistent
+mixed training workload. The receiver actor is not deployed by this adapter.
+A completed sender-only final checkpoint was used for the hardware checks,
+independently of joint-policy validation selection. No claim of learned transport
+superiority follows from exact recovery alone.
+
+After a full study finishes, prepare reviewable artifacts with:
+
+```bash
+uv run --locked --extra learn python -m scripts.package_joint_study
+```
+
+Packaging requires the completed full study and recomputes the paired comparisons
+from raw records. It exports actor weights without the critic/optimizers, stores
+compressed training logs and configurations, and records source hashes. It never
+publishes or merges a PR automatically.
+
+The first full study used optimizer continuation after interruptions, with fresh
+collector worlds explicitly recorded at each available resume point. The one-step
+history run required several continuations and returned native exit code 139 in
+a tracked run. This is not a bit-for-bit uninterrupted training comparison, and
+a later worker diagnostic located a crash inside CPython 3.12.10's native JSON
+container encoder during receipt serialization. The underlying native cause
+remains unconfirmed. Wire encoding now uses the Python iterator with byte-for-byte
+canonical JSON parity checks as a mitigation. Worker diagnostics now
+include the seed, control step, and exit code. Remaining evaluation was continued
+with cached completed modes, eight workers, and one numerical-library thread per
+worker. Initial actors with exactly zero control and constant follow-baseline
+heads can be evaluated through the mathematically identical baseline path; tests
+compare that path with explicit actor inference, and any nonzero control excludes
+the shortcut.
+
+Held-out progress is saved per completed seed under `study/partial`, keyed by the
+frozen selection and seed list. Resume reuses finished whole sessions and runs
+only missing seeds; it never reports an incomplete mode as a full comparison.
+
+Evaluation now schedules ready worlds asynchronously, preserving each world's
+local history and control-step order instead of waiting for the slowest world at
+every tick. Synchronous evaluation remains available through the Python API for
+comparison; tests match complete records under nonzero deterministic controls.
+As with other batched floating-point inference, cross-batch bit-for-bit equality
+is not promised for arbitrary trained actors. The simulation's seeded event/RNG
+semantics and the frozen selection/acceptance criteria remain unchanged.
+
+## Next objective: maximum useful throughput
+
+The [goodput-v2 plan](goodput-v2-plan.md) adds a continuously backlogged bulk
+source and verified goodput optimization, both for bulk-only maximum speed and
+for mixed traffic constrained by the 100-ms interactive target. This is a
+separate versioned objective; it does not change joint-v1 scores or win criteria.

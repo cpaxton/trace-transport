@@ -35,3 +35,8 @@ bash -n scripts/install.sh
 Describe the problem, resulting behavior, and checks performed. For experimental
 changes, distinguish training metrics, engineering acceptance, validation, and
 held-out results. Never commit device credentials or raw local run directories.
+
+Track experiments in [the dated register](docs/experiments/register.md). Add an
+entry at launch, update it on completion, and link configurations, seed splits,
+results and checkpoint hashes. Preserve negative results and distinguish planned
+work from completed evidence. Update the paper when reporting scientific results.

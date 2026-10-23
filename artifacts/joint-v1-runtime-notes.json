@@ -1,0 +1,23 @@
+{
+  "training": "Six fixed-budget runs completed. Optimizer/RNG continuation used after interruptions, with explicit fresh collector worlds; this is not exact uninterrupted replay.",
+  "native_fault": {
+    "observed_exit_codes": [
+      139,
+      -11
+    ],
+    "worker_seed": 50016,
+    "worker_control_steps": 603,
+    "stack": "CPython 3.12.10 json.encoder.iterencode -> Packet.encode -> SessionReceiver.on_data",
+    "cause": "Underlying native defect unconfirmed; no claim of a GPU-specific fault."
+  },
+  "mitigation": "Packet metadata uses Python JSON container iteration, retaining canonical bytes; parity checked against standard dumps on 200 varied receipts. Worker faults identify seed, step and exit code.",
+  "evaluation": "Completed modes cached. Remaining modes continued with eight workers and one numerical-library thread per worker; subsequent per-seed checkpoints retain completed whole sessions.",
+  "observed_runtime_after_study": {
+    "python": "3.12.10",
+    "numpy": "2.5.4",
+    "torch": "2.14.1+cu130",
+    "cuda_build": "13.0",
+    "gpu": "NVIDIA GeForce RTX 4090",
+    "logical_cpus": 32
+  }
+}

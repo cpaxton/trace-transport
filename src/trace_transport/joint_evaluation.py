@@ -35,12 +35,24 @@ def baseline_rank(records,maximum_bulk):
     return (bulk>=.95*maximum_bulk,-s['interactive_miss_rate'],-s['wire_per_delivered_byte'])
 
 
+def constant_baseline_actor(actor,role):
+    """Recognize exact initialized argmax/zero-residual policies, not approximate ones."""
+    if not all(torch.isfinite(p).all() for p in actor.parameters()):return False
+    zero=lambda p:bool(torch.count_nonzero(p)==0)
+    if role=='sender':
+        return all(zero(p) for layer in [actor.control,actor.query] for p in [layer.weight,layer.bias]) and zero(actor.follow.weight) and bool(actor.follow.bias[0]>0)
+    return zero(actor.head.weight) and bool(actor.head.bias[0]>actor.head.bias[1:].max())
+
+
 def evaluate(*,seeds,checkpoint=None,baseline=None,device='cpu',environments=8,production=20.,drain=20.,ood=False,
-             sender_enabled=True,receiver_enabled=True,trace_network=None):
+             sender_enabled=True,receiver_enabled=True,trace_network=None,on_record=None,asynchronous=True):
     baseline=baseline or dict(rate='fixed',scheduler='edf',feedback='budgeted')
     torch.set_num_threads(1)
     sender=receiver=config=None
     if checkpoint:sender,receiver,config,metadata=load_checkpoint(checkpoint,device)
+    infer_sender=checkpoint is not None and sender_enabled and not constant_baseline_actor(sender,'sender')
+    infer_receiver=checkpoint is not None and receiver_enabled and not constant_baseline_actor(receiver,'receiver')
+    infer=infer_sender or infer_receiver
     pool=EnvironmentPool(min(environments,len(seeds)))
     obs=[];histories=[];assigned={};next_index=0;records=[]
     def reset(i,seed):
@@ -49,37 +61,72 @@ def evaluate(*,seeds,checkpoint=None,baseline=None,device='cpu',environments=8,p
         if checkpoint and receiver_enabled:teacher['feedback']='budgeted'
         o,_,label=pool.reset(i,seed,production,drain,'full',ood,teacher,trace_network)
         assigned[i]=(seed,label)
-        return o,Histories(o,config) if checkpoint else None
+        return o,Histories(o,config) if infer else None
     try:
         for i in range(pool.count):
             o,h=reset(i,seeds[next_index]);next_index+=1;obs.append(o);histories.append(h)
-        while assigned:
-            # Park completed workers at a zero-work step by sending only to active pipes.
-            active=sorted(assigned);current=[obs[i] for i in active]
-            actions=[(np.zeros((len(o['sender']),3),np.float32),np.zeros(len(o['receiver']),np.int64)) for o in current]
-            if checkpoint:
-                hs=[histories[i] for i in active]
-                for o,h in zip(current,hs):h.append(o)
-                with torch.inference_mode():
-                    if sender_enabled:
-                        packed,mapping=_pack(current,hs,'sender',device)
-                        if packed is not None:
-                            a=sender.act(*packed).cpu().numpy()
-                            for (e,j),value in zip(mapping,a):actions[e][0][j]=value
-                    if receiver_enabled:
-                        packed,mapping=_pack(current,hs,'receiver',device)
-                        if packed is not None:
-                            a=receiver.act(*packed).cpu().numpy()
-                            for (e,j),value in zip(mapping,a):actions[e][1][j]=value
-            for i,action in zip(active,actions):pool.pipes[i].send(('step',action))
-            for i in active:
-                o,_,_,done,metrics,_=pool.receive(i);obs[i]=o
-                if done:
-                    seed,label=assigned[i];metrics.update(seed=seed,domain=label)
-                    records.append(metrics)
+        if not infer:
+            # Deterministic/constant policies need no per-tick actor IPC. Workers
+            # execute the identical control steps locally, preserving timer order.
+            from multiprocessing.connection import wait
+            by_pipe={pool.pipes[i]:i for i in assigned}
+            for i in assigned:pool.pipes[i].send(('finish-baseline',None))
+            while assigned:
+                for pipe in wait([pool.pipes[i] for i in assigned]):
+                    i=by_pipe[pipe];metrics=pool.receive(i);seed,label=assigned[i]
+                    metrics.update(seed=seed,domain=label);records.append(metrics)
+                    if on_record is not None:on_record(metrics)
                     if next_index<len(seeds):
                         obs[i],histories[i]=reset(i,seeds[next_index]);next_index+=1
+                        pool.pipes[i].send(('finish-baseline',None))
                     else:del assigned[i]
+            return sorted(records,key=lambda r:r['seed'])
+        def actions_for(active):
+            current=[obs[i] for i in active]
+            actions=[(np.zeros((len(o['sender']),3),np.float32),np.zeros(len(o['receiver']),np.int64)) for o in current]
+            hs=[histories[i] for i in active]
+            for o,h in zip(current,hs):h.append(o)
+            with torch.inference_mode():
+                if infer_sender:
+                    packed,mapping=_pack(current,hs,'sender',device)
+                    if packed is not None:
+                        a=sender.act(*packed).cpu().numpy()
+                        for (e,j),value in zip(mapping,a):actions[e][0][j]=value
+                if infer_receiver:
+                    packed,mapping=_pack(current,hs,'receiver',device)
+                    if packed is not None:
+                        a=receiver.act(*packed).cpu().numpy()
+                        for (e,j),value in zip(mapping,a):actions[e][1][j]=value
+            return actions
+        def accept(i,result):
+            nonlocal next_index
+            o,_,_,done,metrics,_=result;obs[i]=o
+            if done:
+                seed,label=assigned[i];metrics.update(seed=seed,domain=label)
+                records.append(metrics)
+                if on_record is not None:on_record(metrics)
+                if next_index<len(seeds):
+                    obs[i],histories[i]=reset(i,seeds[next_index]);next_index+=1
+                else:del assigned[i]
+
+        if asynchronous:
+            from multiprocessing.connection import wait
+            by_pipe={pool.pipes[i]:i for i in assigned}
+            ready=set(assigned);pending=set()
+            while assigned:
+                active=sorted(ready)
+                if active:
+                    actions=actions_for(active)
+                    for i,action in zip(active,actions):pool.send_step(i,action)
+                    pending.update(active);ready.clear()
+                for pipe in wait([pool.pipes[i] for i in pending]):
+                    i=by_pipe[pipe];pending.remove(i);accept(i,pool.receive(i))
+                    if i in assigned:ready.add(i)
+        else:
+            while assigned:
+                active=sorted(assigned);actions=actions_for(active)
+                for i,action in zip(active,actions):pool.send_step(i,action)
+                for i in active:accept(i,pool.receive(i))
         return sorted(records,key=lambda r:r['seed'])
     finally:pool.close()
 

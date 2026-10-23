@@ -20,6 +20,7 @@ def source_paths(root):
     for pattern in ("src/**/*.py", "src/trace_transport/scenarios/*.json", "src/trace_transport/web/*.html",
                     "src/trace_transport/web/*.css", "src/trace_transport/web/*.js", "tests/*.py",
                     "scripts/*.py", "scripts/*.sh", "experiments/*.json", ".github/workflows/*.yml", "artifacts/*.json",
+                    "artifacts/joint-v1-*-actors.pt", "artifacts/joint-v1-actors.pt", "artifacts/joint-v1-training.json.gz",
                     "artifacts/robust-v2-best.pt", "artifacts/receiver-v1-candidate.pt",
                     "artifacts/receiver-v2-*.pt", "artifacts/receiver-v2-training.json.gz",
                     "artifacts/receiver-v3-candidate.pt", "artifacts/receiver-wide-v1-candidate.pt",

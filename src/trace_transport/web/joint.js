@@ -29,14 +29,16 @@ function renderRuns() {
 }
 function renderResults() {
   const suite = el("joint-suite").value, rows = snapshot.tables[suite] || [], root = el("joint-table");root.replaceChildren();el("joint-comparison").textContent = "";
-  el("joint-study").textContent = `Study: ${snapshot.study.phase || "not started"}${snapshot.study.run ? ` · ${snapshot.study.run}` : ""}. Reference: ${snapshot.baseline || "selected on validation"}.`;
+  el("joint-study").textContent = `Study: ${snapshot.study.phase || "not started"}${snapshot.study.run ? ` · ${snapshot.study.run}` : ""}${snapshot.study.case_total ? ` · ${snapshot.study.case_completed}/${snapshot.study.case_total} cases` : ""}. Reference: ${snapshot.baseline || "selected on validation"}.`;
+  const selected = snapshot.selection.checkpoint, initial = selected?.endsWith("/initial.pt");
+  el("joint-selection").textContent = selected ? `Selected checkpoint: ${selected}.${initial ? " Untrained baseline-following policy: training did not improve validation ranking." : ""}` : "Checkpoint selection pending.";
   if (!rows.length) { const p = document.createElement("p");p.className = "joint-empty";p.textContent = "Results will appear here after training and validation finish.";root.append(p);return; }
   const table = document.createElement("table"), header = table.createTHead().insertRow();
   for (const text of ["Policy", "Late interactive", "Image MiB/s", "Map MiB/s", "Confirmed / admitted", "Wire / delivered byte", "Mean session p95"]) {const cell = document.createElement("th");cell.textContent = text;header.append(cell);}
   const body = table.createTBody();
-  for (const row of rows) {const tr = body.insertRow();for (const value of [row.name, `${number(row.interactive_miss_rate * 100)}%`, number(row.image_goodput / 1048576, 3), number(row.map_goodput / 1048576, 3), `${row.completed} / ${row.admitted}`, number(row.wire_per_delivered_byte, 2), row.mean_session_p95 == null ? "—" : `${number(row.mean_session_p95 * 1000)} ms`]) tr.insertCell().textContent = value;}
+  for (const row of rows) {const tr = body.insertRow();for (const value of [row.name === "joint" ? (initial ? "selected initial policy" : "selected joint policy") : row.name, `${number(row.interactive_miss_rate * 100)}%`, number(row.image_goodput / 1048576, 3), number(row.map_goodput / 1048576, 3), `${row.completed} / ${row.admitted}`, number(row.wire_per_delivered_byte, 2), row.mean_session_p95 == null ? "—" : `${number(row.mean_session_p95 * 1000)} ms`]) tr.insertCell().textContent = value;}
   root.append(table);el("joint-download").hidden = false;
-  const cmp = snapshot.comparisons[suite];el("joint-comparison").textContent = cmp ? `Predeclared win condition: ${cmp.win ? "met" : "not met"}. Deadline misses count desired interactive opportunities, including backpressure. Bulk delivery and total-wire guards also apply.` : "Evaluation in progress.";
+  const cmp = snapshot.comparisons[suite];el("joint-comparison").textContent = cmp ? `Predeclared win condition: ${cmp.win ? "met" : "not met"}. Deadline misses count desired interactive opportunities, including backpressure. Bulk delivery and total-wire guards also apply.${initial ? " The selected policy is untrained; this is not evidence of a learning gain." : ""}` : "Evaluation in progress.";
 }
 async function refresh() {
   try {const response = await fetch("/api/joint/status");if (!response.ok) throw new Error(`Status ${response.status}`);snapshot = await response.json();renderRuns();renderResults();el("joint-status").textContent = snapshot.runs.some(r => r.phase === "training") ? "Training" : "Local results";el("joint-error").hidden = true;}

@@ -14,47 +14,24 @@
 \maketitle
 
 \begin{abstract}
-We describe an initial experimental platform for learning endpoint communication
-policies from local network histories. The application task is exact delivery of
-arbitrary UTF-8 text over a datagram network with unknown and changing capacity,
-delay, loss, and competing traffic. Both peers are under our control, permitting
-jointly designed feedback, metadata, and recovery decisions without TCP wire
-compatibility. A deterministic reliability kernel enforces payload correctness,
-while a small transformer initially controls sending rate and later additional
-protocol decisions. We describe a seeded CPU reference, a proposed batched GPU
-backend, and an evaluation plan covering correctness, fairness, generalization,
-and real datagram operation. The CPU simulator, sender policy, PPO training loop,
-and single-message UDP adapters are implemented. A separate persistent-session implementation now jointly trains local sender and
-receiver transformers with a centralized critic, bounded mixed binary workloads,
-and batched GPU learning over CPU packet workers. GPU-native packet simulation
-remains future work. Held-out joint-policy superiority has not been established. Preliminary CPU diagnostics show progress
-over an earlier learned sender while exposing training-seed sensitivity; they do
-not establish general superiority or novelty.
+We present a testbed for exact text and binary-object delivery over datagram
+networks with unknown and changing capacity, latency, loss, and competing hosts.
+Both endpoints are controlled, allowing custom feedback and metadata without TCP
+wire compatibility. A deterministic reliability kernel enforces byte correctness;
+local history transformers control sender pacing, flight window, scheduling, and
+receiver feedback. CPU event workers support joint MAPPO with batched GPU
+learning and a training-only centralized critic. Deterministic feedback-budget
+changes improve earlier diagnostic completion time, but learning has not shown
+general superiority. In the mixed-workload joint study, six five-million-decision
+runs finish and validation selects the initial policy. On 40 held-out sessions
+its deadline-miss rate is 40.00\%, versus 40.71\% for the selected deterministic
+reference, failing the predeclared 20\% relative-improvement target. The selected
+policy is untrained, so this difference is not a learning gain. Thirty-six bounded
+real-device transfers recover exact synthetic text, image, and map bytes; the
+learned-sender checks retain deterministic remote feedback and do not establish
+performance superiority. We document negative results, runtime limitations, and a
+separate planned objective for maximum verified goodput with backlogged traffic.
 \end{abstract}
-
-\section{Persistent-session joint experiment}
-The joint implementation uses two local transformer actors and a training-only
-centralized critic. Sender actions control rate, flight window, and queued-message
-selection; receiver actions control bounded ACK batching and timing. A fixed
-reliability kernel enforces exact binary recovery. Histories persist across
-messages. Interactive text has a 100-ms deadline; images and map deltas provide
-bulk progress objectives. Backpressure counts blocked interactive offers as misses.
-
-The version-two curriculum samples correlated fades, contention, outages,
-asymmetric service, and feasible through overloaded wire loads. It accounts for
-headers and bidirectional feedback; an earlier undercounting sampler was retired.
-Shared airtime approximates Wi-Fi service above the MAC and is not a calibrated
-802.11 model. Six five-million-decision runs cover three joint seeds, one-step
-history, and frozen-role ablations. CPU event workers feed batched GPU inference
-and optimization. Actor exports exclude the centralized critic.
-
-Validation chooses among deterministic rate, scheduling, and feedback controls
-before disjoint held-out testing. Acceptance requires a 20\% relative deadline-miss
-reduction with a paired bootstrap interval below zero, at least 95\% of reference
-image/map goodput and delivered volume, no completion-ratio loss, at most 105\%
-wire cost per delivered byte, and zero corrupt delivery. Training reward alone
-cannot establish this result. The real binary UDP adapter remains deterministic;
-deployment of the joint learned actors on robot hardware is future work.
 
 \section{Motivation and scope}
 An endpoint cannot directly observe network capacity, competing senders, router
@@ -438,10 +415,126 @@ timeouts and multi-second short-message tail latency, motivating future
 application-aware training rather than inferring superiority from small,
 simultaneous-transfer diagnostics.
 
+\section{Persistent-session joint experiment}
+The joint implementation uses two local transformer actors and a training-only
+centralized critic. Sender actions control rate, flight window, and queued-message
+selection; receiver actions control bounded ACK batching and timing. A fixed
+reliability kernel enforces exact binary recovery. Histories persist across
+messages. Interactive text has a 100-ms deadline; images and map deltas provide
+bulk progress objectives. Backpressure counts blocked interactive offers as misses.
+
+The version-two curriculum samples correlated fades, contention, outages,
+asymmetric service, and feasible through overloaded wire loads. It accounts for
+headers and bidirectional feedback; an earlier undercounting sampler was retired.
+Shared airtime approximates Wi-Fi service above the MAC and is not a calibrated
+802.11 model. Six five-million-decision runs cover three joint seeds, one-step
+history, and frozen-role ablations. CPU event workers feed batched GPU inference
+and optimization. Actor exports exclude the centralized critic.
+
+Validation chooses among deterministic rate, scheduling, and feedback controls
+before disjoint held-out testing. Acceptance requires a 20\% relative deadline-miss
+reduction with a paired bootstrap interval below zero, at least 95\% of reference
+image/map goodput and delivered volume, no completion-ratio loss, at most 105\%
+wire cost per delivered byte, and zero corrupt delivery. Training reward alone
+cannot establish this result. The binary UDP adapter optionally runs a local
+learned sender with deterministic remote feedback; deploying a learned receiver
+and persistent joint sessions on hardware remains future work.
+
+\subsection{Selection and held-out result}
+Calibration uses seeds 30000--30003, checkpoint screening 40000--40003, and full
+validation 41000--41011. Joint training seeds are 42, 43, and 44; one-step history,
+sender-only training, and receiver-only training use seed 42 and the same nominal
+five-million active-endpoint decision budget. Full validation compares three initial snapshots with six trained candidates
+chosen by screening.
+All initial snapshots implement the same deterministic behavior. Validation
+selects \texttt{seed42/initial.pt}; training does not improve the selected policy.
+The deterministic reference is fixed-rate/EDF with batch-8 feedback and a 250-ms
+maximum wait. The initial actors follow fixed-rate/EDF and the 25-ms feedback
+teacher. Their difference is a deterministic feedback configuration, not learning.
+
+Fresh test seeds 50000--50039 and OOD seeds 60000--60039 are disjoint from
+selection data. Each case has 20 seconds of production and up to 20 seconds of
+draining. Table~\ref{tab:joint-primary} reports the completed primary comparisons.
+Goodput counts receiver-completed object bytes divided by total simulated session
+time; neural execution time is excluded from simulation. OOD includes asymmetric
+handoffs, longer RTTs, and additional hosts, including physically infeasible
+100-ms intervals. Desired interactive offers, including blocked offers, remain
+in the deadline denominator.
+
+\begin{table}[ht]
+\centering\small
+\begin{tabular}{llrrrr}
+\toprule
+Suite & Control & Misses (\%) & Image MiB/s & Map MiB/s & Wire/useful \\
+\midrule
+Test & Reference & 40.71 & 0.0758 & 0.0760 & 1.569 \\
+Test & Selected initial & 40.00 & 0.0795 & 0.0773 & 1.613 \\
+OOD & Reference & 79.68 & 0.0421 & 0.0320 & 1.839 \\
+OOD & Selected initial & 79.07 & 0.0486 & 0.0381 & 1.823 \\
+\bottomrule
+\end{tabular}
+\caption{The selected joint architecture uses its untrained baseline-following
+actors. This table does not compare a successful learned policy against a baseline.}
+\label{tab:joint-primary}
+\end{table}
+
+Test relative miss reduction is 1.74\%, with a paired seed-block bootstrap
+95\% interval for the absolute miss-rate difference of
+$[-1.729,0.194]$ percentage points. The interval includes zero and the reduction
+is below 20\%. The strict confirmed-completion-ratio guard also fails:
+99.96974\% versus 99.97109\%. Image/map goodput and volume, wire-cost, and
+integrity guards pass. OOD relative reduction is 0.76\%, with a difference
+interval of $[-0.947,-0.348]$ percentage points; this is below the target despite
+excluding zero. No learning win is established in either suite. The reliability
+kernel reports no wrong delivery in the completed cases. Cross-play and
+separately trained role/history ablations are reported alongside the primary
+policy, not used to change the frozen test selection. All 560 case/mode evaluations
+finish (seven modes, 40 cases, two suites), with no wrong delivery observed.
+
+\paragraph{Runtime and reproducibility limits.}
+Training continued from saved actor, critic, optimizer, RNG, and decision-counter
+states after interruptions. Collector worlds and histories restarted with fresh
+episode seeds, so this is not bit-for-bit uninterrupted training. The history-one
+run returned native exit code 139. Later worker diagnostics captured a segmentation
+fault in CPython 3.12.10's JSON encoder during receipt serialization at network
+seed 50016. A Python-level container encoder preserves canonical wire bytes in
+parity tests and avoids that observed path; the underlying native cause remains
+unconfirmed. Per-case persistence protects completed held-out sessions.
+Asynchronous independent-world evaluation avoids global per-tick worker barriers;
+GPU batching may change floating-point round-off and is not claimed bit-identical
+across execution configurations. Runtime notes, source/configuration hashes,
+checkpoints, and negative results accompany the experiment register in
+\texttt{docs/experiments/register.md}.
+
+\paragraph{Next throughput objective (planned).}
+A separate version-two experiment will keep bulk traffic continuously backlogged
+and maximize verified useful bytes per second, including finite-object completion
+time. Mixed traffic retains the 100-ms interactive target through explicit
+noninferiority constraints on deadline misses, bounded queues, wire overhead, and
+active-host service. Retransmissions and dropped bytes are not useful throughput.
+The proposed acceptance threshold is 10\% more goodput with a positive paired
+confidence interval, subject to latency and reliability guards and comparison
+against a strong adaptive deterministic reference. This objective requires new
+training and evaluation; it does not redefine the current deadline-first study.
+
+\paragraph{Bounded device checks.}
+A desktop sender transferred synthetic Unicode text, valid 256-by-256 RGB PNG
+images, and 512-KiB map buffers to Herman over stationary Wi-Fi and Caliban over
+Ethernet. Three trials per payload and device succeeded with deterministic
+control (18/18) and with the separately trained sender-only actor and a
+deterministic receiver (18/18). The latter adapter constructs local sender
+histories and controls rate/window; a single pending message has trivial
+scheduling. This differs from the persistent mixed training workload and does
+not deploy a learned receiver. The sequential, nonrandomized checks establish
+byte-exact recovery, not a learned performance advantage. Eighty ICMP probes per
+recording provide RTT/loss observations, not available-bandwidth estimates.
+
 \section{Implementation stages and open questions}
-The sequence is: (1) reliable CPU text transfer, (2) a history-based learned
-sender, (3) a validated GPU backend, (4) joint learned feedback and additional
-protocol heads, and (5) a real datagram adapter with multi-host evaluation.
+Implemented stages include reliable CPU transfer, history-based sender learning,
+receiver learning, joint sender/receiver training over CPU packet workers, and
+bounded binary datagram checks on two real devices. A GPU-native packet backend,
+joint learned-receiver hardware deployment, and maximum-goodput training remain
+future work.
 The full target combines these pieces with reproducible configurations,
 checkpoints, bounded resources, and explicit failure semantics.
 
