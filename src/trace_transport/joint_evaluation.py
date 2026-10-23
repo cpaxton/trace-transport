@@ -35,12 +35,24 @@ def baseline_rank(records,maximum_bulk):
     return (bulk>=.95*maximum_bulk,-s['interactive_miss_rate'],-s['wire_per_delivered_byte'])
 
 
+def constant_baseline_actor(actor,role):
+    """Recognize exact initialized argmax/zero-residual policies, not approximate ones."""
+    if not all(torch.isfinite(p).all() for p in actor.parameters()):return False
+    zero=lambda p:bool(torch.count_nonzero(p)==0)
+    if role=='sender':
+        return all(zero(p) for layer in [actor.control,actor.query] for p in [layer.weight,layer.bias]) and zero(actor.follow.weight) and bool(actor.follow.bias[0]>0)
+    return zero(actor.head.weight) and bool(actor.head.bias[0]>actor.head.bias[1:].max())
+
+
 def evaluate(*,seeds,checkpoint=None,baseline=None,device='cpu',environments=8,production=20.,drain=20.,ood=False,
              sender_enabled=True,receiver_enabled=True,trace_network=None):
     baseline=baseline or dict(rate='fixed',scheduler='edf',feedback='budgeted')
     torch.set_num_threads(1)
     sender=receiver=config=None
     if checkpoint:sender,receiver,config,metadata=load_checkpoint(checkpoint,device)
+    infer_sender=checkpoint is not None and sender_enabled and not constant_baseline_actor(sender,'sender')
+    infer_receiver=checkpoint is not None and receiver_enabled and not constant_baseline_actor(receiver,'receiver')
+    infer=infer_sender or infer_receiver
     pool=EnvironmentPool(min(environments,len(seeds)))
     obs=[];histories=[];assigned={};next_index=0;records=[]
     def reset(i,seed):
@@ -49,7 +61,7 @@ def evaluate(*,seeds,checkpoint=None,baseline=None,device='cpu',environments=8,p
         if checkpoint and receiver_enabled:teacher['feedback']='budgeted'
         o,_,label=pool.reset(i,seed,production,drain,'full',ood,teacher,trace_network)
         assigned[i]=(seed,label)
-        return o,Histories(o,config) if checkpoint else None
+        return o,Histories(o,config) if infer else None
     try:
         for i in range(pool.count):
             o,h=reset(i,seeds[next_index]);next_index+=1;obs.append(o);histories.append(h)
@@ -57,16 +69,16 @@ def evaluate(*,seeds,checkpoint=None,baseline=None,device='cpu',environments=8,p
             # Park completed workers at a zero-work step by sending only to active pipes.
             active=sorted(assigned);current=[obs[i] for i in active]
             actions=[(np.zeros((len(o['sender']),3),np.float32),np.zeros(len(o['receiver']),np.int64)) for o in current]
-            if checkpoint:
+            if infer:
                 hs=[histories[i] for i in active]
                 for o,h in zip(current,hs):h.append(o)
                 with torch.inference_mode():
-                    if sender_enabled:
+                    if infer_sender:
                         packed,mapping=_pack(current,hs,'sender',device)
                         if packed is not None:
                             a=sender.act(*packed).cpu().numpy()
                             for (e,j),value in zip(mapping,a):actions[e][0][j]=value
-                    if receiver_enabled:
+                    if infer_receiver:
                         packed,mapping=_pack(current,hs,'receiver',device)
                         if packed is not None:
                             a=receiver.act(*packed).cpu().numpy()
