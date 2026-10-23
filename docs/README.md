@@ -13,6 +13,8 @@
 | [Joint-v1 results](experiments/joint-v1.md) | Completed held-out/OOD comparisons, negative learning result, checkpoints and limitations |
 | [Joint network experiment](joint-network-brain.md) | Persistent sessions, mixed workloads, joint training and acceptance criteria |
 | [Maximum throughput plan](goodput-v2-plan.md) | Backlogged bulk traffic, verified goodput, and deadline-constrained optimization |
+| [Learning opportunities](research/learning-opportunities.md) | Literature, history-dependent challenges, stronger baselines and fairness |
+| [Goodput-v2 active experiment](experiments/goodput-v2.md) | Calibration, bounded CPU pilot, scoring and resource isolation |
 | [Development](development.md) | Implementation map, test coverage, source export, paper build |
 
 Command examples assume the curl installer has added `trace-transport` to PATH.

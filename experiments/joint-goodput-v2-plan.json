@@ -1,6 +1,6 @@
 {
   "version": "joint-goodput-v2-plan",
-  "status": "design; not trained or evaluated",
+  "status": "v2.0 mixed pilot completed; validation selected initial teacher, no learned win; reserved tests unopened",
   "existing_study": "joint-v1 remains frozen and is reported under its original deadline-first criteria",
   "primary_objective": "maximize unique bytes of fully verified objects delivered per second in a fixed measurement window",
   "modes": [
@@ -56,5 +56,6 @@
     "per-host goodput and resource use",
     "goodput/deadline Pareto frontier and ablations",
     "real wall-clock transfers including steady-state actor inference cost"
-  ]
+  ],
+  "active_experiment": "goodput-v2.0"
 }

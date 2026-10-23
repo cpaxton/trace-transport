@@ -5,7 +5,9 @@ The existing joint-v1 experiment prioritizes 100-ms interactive deadlines and
 requires bulk throughput to stay near a reference; that is a different objective.
 Its training, selection and test criteria remain frozen. The machine-readable
 extension is [joint-goodput-v2-plan.json](../experiments/joint-goodput-v2-plan.json).
-This document is a plan, not a claim that the extension is implemented or trained.
+The first [bounded prototype and CPU pilot](experiments/goodput-v2.md) are now
+implemented/running. The full acceptance program remains a plan, not a claim of a
+trained throughput win.
 
 ## Two workloads
 
@@ -83,3 +85,7 @@ CPU reference. Real-device tests must measure wall-clock completion and include
 steady-state inference costs, using the same receiver, workload and randomized
 controller order. These extensions need new training and held-out evaluation;
 the completed device smoke transfers do not establish the new objective.
+
+The [literature review and difficulty ladder](research/learning-opportunities.md)
+explains the new loss-cause, feedback-bottleneck and churn cases, stronger
+baselines, and exploration/credit-assignment changes.

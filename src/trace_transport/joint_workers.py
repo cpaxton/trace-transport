@@ -15,11 +15,20 @@ def _worker(pipe):
             if command=='close':break
             if command=='reset':
                 seed,production,drain,stage,*options=args
-                cfg,workload,label=sample_case(seed,production=production,drain=drain,stage=stage,ood=options[0] if options else False)
+                task=options[3] if len(options)>3 else 'deadline-v1'
+                if task=='goodput-v2':
+                    from .goodput import sample_case as sampler,GoodputEnv
+                elif task=='deadline-v1':sampler=sample_case
+                else:raise ValueError('unknown experiment profile')
+                cfg,workload,label=sampler(seed,production=production,drain=drain,stage=stage,ood=options[0] if options else False)
                 if len(options)>2 and options[2] is not None:
                     from .simulator import NetworkConfig
                     cfg=NetworkConfig(**options[2]);label={'family':'heldout-recording','trace_replay':True}
-                env=JointTransportEnv(cfg,workload);obs,_=env.reset(seed=seed)
+                if len(options)>1 and 'initial_rate' in options[1]:
+                    from dataclasses import replace
+                    cfg=replace(cfg,initial_rate=options[1]['initial_rate'])
+                env=GoodputEnv(cfg,workload,churn=label.get('churn',False),churn_times=label.get('churn_times')) if task=='goodput-v2' else JointTransportEnv(cfg,workload)
+                obs,_=env.reset(seed=seed)
                 if len(options)>1:
                     baseline=options[1]
                     for s in env.sessions:

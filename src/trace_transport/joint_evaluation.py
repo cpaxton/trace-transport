@@ -45,11 +45,16 @@ def constant_baseline_actor(actor,role):
 
 
 def evaluate(*,seeds,checkpoint=None,baseline=None,device='cpu',environments=8,production=20.,drain=20.,ood=False,
-             sender_enabled=True,receiver_enabled=True,trace_network=None,on_record=None,asynchronous=True):
+             sender_enabled=True,receiver_enabled=True,trace_network=None,on_record=None,asynchronous=True,profile='deadline-v1'):
     baseline=baseline or dict(rate='fixed',scheduler='edf',feedback='budgeted')
     torch.set_num_threads(1)
     sender=receiver=config=None
-    if checkpoint:sender,receiver,config,metadata=load_checkpoint(checkpoint,device)
+    if checkpoint:
+        sender,receiver,config,metadata=load_checkpoint(checkpoint,device)
+        recorded=metadata.get('profile','deadline-v1')
+        if profile!='deadline-v1' and profile!=recorded:raise ValueError('checkpoint/profile mismatch')
+        profile=recorded
+        teacher_config=metadata.get('baseline',dict(rate='fixed',scheduler='edf',feedback='budgeted'))
     infer_sender=checkpoint is not None and sender_enabled and not constant_baseline_actor(sender,'sender')
     infer_receiver=checkpoint is not None and receiver_enabled and not constant_baseline_actor(receiver,'receiver')
     infer=infer_sender or infer_receiver
@@ -57,9 +62,10 @@ def evaluate(*,seeds,checkpoint=None,baseline=None,device='cpu',environments=8,p
     obs=[];histories=[];assigned={};next_index=0;records=[]
     def reset(i,seed):
         teacher=dict(baseline)
-        if checkpoint and sender_enabled:teacher.update(rate='fixed',scheduler='edf')
-        if checkpoint and receiver_enabled:teacher['feedback']='budgeted'
-        o,_,label=pool.reset(i,seed,production,drain,'full',ood,teacher,trace_network)
+        if checkpoint and sender_enabled:teacher.update(rate=teacher_config['rate'],scheduler=teacher_config['scheduler'])
+        if checkpoint and sender_enabled and 'initial_rate' in teacher_config:teacher['initial_rate']=teacher_config['initial_rate']
+        if checkpoint and receiver_enabled:teacher['feedback']=teacher_config['feedback']
+        o,_,label=pool.reset(i,seed,production,drain,'full',ood,teacher,trace_network,profile)
         assigned[i]=(seed,label)
         return o,Histories(o,config) if infer else None
     try:

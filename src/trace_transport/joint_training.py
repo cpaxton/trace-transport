@@ -6,6 +6,7 @@ no router state enters an actor tensor. Session histories survive message ends.
 from dataclasses import asdict,dataclass
 import json
 import hashlib
+import math
 import os
 from pathlib import Path
 import time
@@ -22,6 +23,12 @@ from .learning import generalized_advantages
 
 @dataclass(frozen=True)
 class JointTrainConfig:
+    profile:str="deadline-v1"
+    teacher_rate:str="fixed"
+    teacher_initial_rate:float=128000.
+    teacher_prior:float=.9
+    gae_lambda:float=.95
+    gpu_memory_fraction:float=.15
     decisions:int=5_000_000
     environments:int=16
     rollout:int=256
@@ -39,6 +46,9 @@ class JointTrainConfig:
     def __post_init__(self):
         if min(self.decisions,self.environments,self.rollout,self.epochs,self.minibatch,self.checkpoint_every)<1:
             raise ValueError('training budgets must be positive')
+        if not 2000<=self.teacher_initial_rate<=2000000:raise ValueError('invalid initial pacing rate')
+        if self.profile not in ('deadline-v1','goodput-v2') or self.teacher_rate not in ('fixed','aimd','bdp','delay'):raise ValueError('invalid profile/teacher')
+        if not 0<self.teacher_prior<1 or not 0<self.gpu_memory_fraction<=.5 or not 0<=self.gae_lambda<=1:raise ValueError('invalid memory/GAE limits')
         if self.learning_rate<=0 or not 0<=self.easy_fraction<=1:raise ValueError('invalid optimizer/curriculum')
 
 
@@ -102,17 +112,35 @@ def train(output,cfg=JointTrainConfig(),model_cfg=JointModelConfig(),resume=None
     if resume is None and (output/'config.json').exists():raise ValueError('training output already exists; use a new run directory')
     torch.set_num_threads(1);torch.manual_seed(cfg.seed)
     if cfg.device.startswith('cuda') and not torch.cuda.is_available():raise RuntimeError('requested CUDA is unavailable')
+    if cfg.device.startswith('cuda'):torch.cuda.set_per_process_memory_fraction(cfg.gpu_memory_fraction)
+    if cfg.profile=='goodput-v2':
+        from .goodput import DOMAIN as domain
+    else:domain=DOMAIN
+    baseline=dict(rate=cfg.teacher_rate,scheduler='edf',feedback='budgeted')
+    if cfg.profile=='goodput-v2':baseline['initial_rate']=cfg.teacher_initial_rate
     sender=SenderActor(model_cfg).to(cfg.device);receiver=ReceiverActor(model_cfg).to(cfg.device);critic=CentralCritic().to(cfg.device)
+    if cfg.profile=='goodput-v2':
+        # Greedy teacher equivalence is insufficient: sampling must start close
+        # to it too, rather than uniformly random scheduling/ACK decisions.
+        from .joint_session import MAX_CANDIDATES,ACK_ACTIONS
+        odds=cfg.teacher_prior/(1-cfg.teacher_prior)
+        with torch.no_grad():
+            sender.follow.bias.fill_(math.log(MAX_CANDIDATES*odds))
+            receiver.head.bias[0]=math.log(len(ACK_ACTIONS)*odds)
+            sender.log_std.fill_(-3.)
     optimizers=[torch.optim.Adam(m.parameters(),lr=cfg.learning_rate) for m in (sender,receiver,critic)]
     obs=[];states=[];histories=[];episodes=list(range(cfg.environments));next_episode=cfg.environments
     decisions=0;world_steps=0;updates=0;last_checkpoint=0;start=time.monotonic();completed=[]
-    metadata=dict(training=asdict(cfg),model=asdict(model_cfg),domain=DOMAIN,reward='joint-deadline-v1',baseline=dict(rate='fixed',scheduler='edf',feedback='budgeted'))
+    source_hashes={name:hashlib.sha256((Path(__file__).parent/name).read_bytes()).hexdigest() for name in ['goodput.py','joint_session.py','joint_models.py','joint_workers.py','joint_training.py','protocol.py','wire.py','session_receiver.py','learning.py']} if cfg.profile=='goodput-v2' else {}
+    metadata=dict(training=asdict(cfg),model=asdict(model_cfg),domain=domain,profile=cfg.profile,
+        reward='verified-goodput-v2.0' if cfg.profile=='goodput-v2' else 'joint-deadline-v1',baseline=baseline,source_sha256=source_hashes)
     if resume is not None:
         resume=Path(resume)
         data=torch.load(resume,map_location='cpu',weights_only=True)
         old=data['metadata']
-        if data.get('format_version')!='joint-v1' or old['training']!=asdict(cfg) or old['model']!=asdict(model_cfg) or old['domain']!=DOMAIN or old['reward']!=metadata['reward']:
+        if data.get('format_version')!='joint-v1' or JointTrainConfig(**old['training'])!=cfg or old['model']!=asdict(model_cfg) or old['domain']!=domain or old['reward']!=metadata['reward']:
             raise ValueError('resume requires matching training, model, domain and reward configuration')
+        if cfg.profile=='goodput-v2' and old.get('source_sha256')!=source_hashes:raise ValueError('goodput resume source changed; version the next experiment')
         sender.load_state_dict(data['sender']);receiver.load_state_dict(data['receiver']);critic.load_state_dict(data['critic'])
         for optimizer,state in zip(optimizers,data['optimizers']):optimizer.load_state_dict(state)
         decisions=old['decisions'];world_steps=old['world_steps'];updates=old['updates'];last_checkpoint=decisions
@@ -136,7 +164,7 @@ def train(output,cfg=JointTrainConfig(),model_cfg=JointModelConfig(),resume=None
              'torch_rng':torch.get_rng_state(),'cuda_rng':torch.cuda.get_rng_state_all() if cfg.device.startswith('cuda') else []},optimizers)
     def reset(index,episode):
         stage='easy' if decisions<cfg.decisions*cfg.easy_fraction else 'full'
-        o,state,_=pool.reset(index,_seed(cfg.seed,episode),cfg.production_seconds,cfg.drain_seconds,stage)
+        o,state,_=pool.reset(index,_seed(cfg.seed,episode),cfg.production_seconds,cfg.drain_seconds,stage,False,baseline,None,cfg.profile)
         return o,state,Histories(o,model_cfg)
     pool=EnvironmentPool(cfg.environments)
     try:
@@ -176,7 +204,7 @@ def train(output,cfg=JointTrainConfig(),model_cfg=JointModelConfig(),resume=None
                     else:obs[i],states[i]=o,state
                 if decisions>=cfg.decisions:break
             with torch.no_grad():bootstrap=critic(_tensor(np.asarray(states),cfg.device)).cpu()
-            advantages,returns=generalized_advantages(torch.stack(rewards),torch.stack(values),torch.stack(terminals),bootstrap,gamma=.999)
+            advantages,returns=generalized_advantages(torch.stack(rewards),torch.stack(values),torch.stack(terminals),bootstrap,gamma=.999,lam=cfg.gae_lambda)
             collection_seconds=time.monotonic()-collection_start
             s_stats=_actor_update(sender,optimizers[0],sender_records,advantages.to(cfg.device),cfg,cfg.device,'sender')
             r_stats=_actor_update(receiver,optimizers[1],receiver_records,advantages.to(cfg.device),cfg,cfg.device,'receiver')

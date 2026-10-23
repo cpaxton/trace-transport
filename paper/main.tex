@@ -529,6 +529,44 @@ not deploy a learned receiver. The sequential, nonrandomized checks establish
 byte-exact recovery, not a learned performance advantage. Eighty ICMP probes per
 recording provide RTT/loss observations, not available-bandwidth estimates.
 
+\section{Harder but learnable follow-up tasks}
+Additional noise does not itself create a learning advantage. Aurora motivates
+using local history to distinguish congestion and non-congestion
+loss~\cite{jay2019aurora}; Remy emphasizes specifying a design range and objective
+and evaluating mismatches~\cite{winstein2013remy}. Our follow-up therefore adds
+switching loss causes, reverse-feedback bottlenecks, randomized handoff timing,
+and source-flow churn, while keeping causes and future schedules out of actor
+inputs. These are proposed synthetic challenges, not reproduced paper results
+or calibrated robot wireless models.
+
+Orca motivates combining learned and conventional control~\cite{abbasloo2020orca}.
+The prototype learns residuals around a tuned adaptive teacher. A delay-target
+reference uses Copa's rate/queue-delay relation as inspiration but omits its full
+coexistence logic~\cite{arun2018copa}; it is not a Copa reproduction. PCC Vivace
+also motivates comparing with online utility optimization rather than treating
+deep RL as the only learning approach~\cite{dong2018vivace}. MOCC makes objective
+preferences explicit inputs~\cite{ma2022mocc}; our initial follow-up has a fixed
+mixed-traffic objective, with preference-conditioned control left for a later
+version. Jury highlights fairness generalization~\cite{tian2025jury}, motivating
+per-host service and starvation checks in addition to aggregate throughput.
+
+A diagnostic of joint-v1 initialization identified an exploration mismatch: a
+baseline receiver logit of 0.5 among 21 alternatives gives only about 7.3\%
+probability of sampling baseline feedback, despite greedy baseline equivalence.
+The follow-up starts with a 90\% receiver teacher prior, at least 90\% scheduling
+teacher probability, smaller continuous noise, and longer GAE credit assignment.
+Verified 16-KiB image and 64-KiB map objects provide more frequent completion
+rewards. Measurement excludes the two-second drain from six-second verified
+throughput; a separately counted auxiliary drain reward supports reliability.
+A CPU pilot completed 300,011 decisions in 251 seconds. A seven-snapshot
+validation sweep selects the initial teacher; no trained snapshot passes the
+deadline guard, and reserved tests remain unopened. Repeated evaluation of the
+final checkpoint differed despite identical checkpoint hashes and network seeds;
+fixed-shape per-world inference is required in the next version. No new learned
+win is claimed. Its dedicated user service bounds CPU affinity, RAM, swap and tasks and
+avoids terminal output and GPU contention. The terminal-server crash cause remains
+unconfirmed. The register records this experiment separately from joint-v1.
+
 \section{Implementation stages and open questions}
 Implemented stages include reliable CPU transfer, history-based sender learning,
 receiver learning, joint sender/receiver training over CPU packet workers, and

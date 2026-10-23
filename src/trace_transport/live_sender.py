@@ -32,7 +32,9 @@ class JointFileSender:
     def __init__(self,checkpoint,traffic_class,device='cpu'):
         import torch
         torch.set_num_threads(1)
-        self.actor,_,self.config,_=load_checkpoint(checkpoint,device)
+        self.actor,_,self.config,metadata=load_checkpoint(checkpoint,device)
+        if metadata.get('profile','deadline-v1')!='deadline-v1':
+            raise ValueError('this live adapter does not compose the goodput-v2 adaptive teacher')
         self.device=device;self.traffic_class=traffic_class
         self.history=np.zeros((1,self.config.history,len(SENDER_FEATURES)),np.float32)
         self.valid=np.zeros((1,self.config.history),bool)
