@@ -5,6 +5,7 @@ feedback can be repaired. Session multiplexing and durable restart are future wo
 """
 
 import math
+import hashlib
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 import secrets
@@ -85,10 +86,10 @@ def send_udp(text: str, host: str, port: int, *, deadline=20.0, controller="aimd
 
 
 def receive_udp(host: str, port: int, output: Path, *, timeout=30.0, linger=10.0,
-                metadata=None, ready=None) -> dict:
+                metadata=None, ready=None, receipt_feedback=False) -> dict:
     if not math.isfinite(timeout) or timeout <= 0 or not math.isfinite(linger) or linger < 0:
         raise ValueError("timeout must be positive and linger nonnegative, both finite")
-    receiver = Receiver(metadata=metadata)
+    receiver = Receiver(metadata=metadata, receipt_feedback=receipt_feedback)
     feedback_bytes = 0
     peer = None
     saved = False
@@ -131,4 +132,5 @@ def receive_udp(host: str, port: int, output: Path, *, timeout=30.0, linger=10.0
             sock.sendto(encoded, address)
             feedback_bytes += len(encoded)
     return {"completed": saved, "payload_bytes": receiver.received_bytes,
+            "sha256": hashlib.sha256(receiver.reconstruct()).hexdigest() if saved else None,
             "feedback_wire_bytes": feedback_bytes, "output": str(output) if saved else None}

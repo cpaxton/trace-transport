@@ -45,9 +45,9 @@ def observations(sim):
     return np.asarray(rows, dtype=np.float32)
 
 
-def make_model(seed=0):
+def make_model(seed=0, history=8):
     torch.manual_seed(seed)
-    return HistoryTransformer(ModelConfig(history=8, width=32, heads=4, layers=1, action_dimensions=2))
+    return HistoryTransformer(ModelConfig(history=history, width=32, heads=4, layers=1, action_dimensions=2))
 
 
 def save(path, model, training):
@@ -67,10 +67,11 @@ def load(path):
 
 
 def episode(config, *, seed, payload_bytes=32768, flows=2, model=None,
-            baseline=None, stochastic=False):
+            baseline=None, stochastic=False, receipt_feedback=False):
     # Exact Unicode including CRLF. Same workload for all receiver policies.
     text = ('receiver 🌐\r\n' * (payload_bytes // 15 + 1)).encode()[:payload_bytes].decode('utf-8', errors='ignore')
-    env = TransportEnv([text] * flows, config, reward_profile='completion', receiver_feedback=True)
+    env = TransportEnv([text] * flows, config, reward_profile='completion', receiver_feedback=True,
+                       receipt_feedback=receipt_feedback)
     sender_obs, _ = env.reset(seed=seed)
     sender = AimdController(flows)
     sender.reset(sender_obs)

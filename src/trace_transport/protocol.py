@@ -8,7 +8,7 @@ from dataclasses import dataclass, field
 import hashlib
 import math
 
-from .wire import ACK, DATA, MAX_PAYLOAD, ACK_BATCH, Packet
+from .wire import ACK, DATA, MAX_PAYLOAD, ACK_BATCH, ACK_RECEIPT, Packet
 
 MAX_MESSAGE_BYTES = 16 * 1024 * 1024
 RATE_MIN = 2_000.0
@@ -22,6 +22,7 @@ class Segment:
     offset: int
     payload: bytes
     acknowledged: bool = False
+    acknowledged_tx: int | None = None
     attempts: int = 0
     transmission_id: int | None = None
     sent_at: float = 0.0
@@ -155,7 +156,67 @@ class Sender:
         self.payload_sent += len(segment.payload)
         return packet
 
+    def _on_receipt(self, packet: Packet, now: float) -> bool:
+        if packet.message_id != self.message_id or packet.total != len(self.payload):
+            return False
+        anchor = self.segments.get(packet.offset)
+        if anchor is None or (packet.transmission_id not in anchor.transmission_ids
+                              and packet.transmission_id != anchor.acknowledged_tx):
+            return False
+        meta = packet.metadata
+        prefix, ranges = meta.get("prefix"), meta.get("ranges")
+        if type(prefix) is not int or not 0 <= prefix <= len(self.payload):
+            return False
+        if not isinstance(ranges, list) or len(ranges) > 8:
+            return False
+        previous = prefix
+        for pair in ranges:
+            if not isinstance(pair, list) or len(pair) != 2:
+                return False
+            low, high = pair
+            if any(type(x) is not int for x in pair) or not previous <= low < high <= len(self.payload):
+                return False
+            previous = high
+        complete = meta.get("complete") is True
+        if complete and (prefix != len(self.payload) or meta.get("sha256") != self.expected_digest):
+            return False
+        # Summaries can only credit complete ranges actually sent by this sender.
+        covered = [s for off, s in self.segments.items()
+                   if off + len(s.payload) <= prefix or
+                   any(low <= off and off + len(s.payload) <= high for low, high in ranges)]
+        if any(not s.attempts for s in covered):
+            return False
+        if type(meta.get("length")) is not int or meta['length'] != len(anchor.payload):
+            return False
+        if not anchor.acknowledged:
+            # Only the explicitly echoed transmission contributes an RTT sample.
+            self.on_ack(Packet(ACK, packet.message_id, packet.transmission_id, packet.offset,
+                               packet.total, metadata=meta), now)
+        for segment in covered:
+            if segment.acknowledged:
+                continue
+            if segment.transmission_id in self.in_flight:
+                del self.in_flight[segment.transmission_id]
+                self.flight_bytes -= segment.wire_bytes
+            segment.acknowledged_tx = segment.transmission_id
+            segment.transmission_id = None
+            segment.transmission_ids.clear()
+            segment.acknowledged = True
+            self.acknowledged_bytes += len(segment.payload)
+        self.last_ack_at = now
+        self.peer_metadata = meta.copy()
+        credit = meta.get('credit')
+        if type(credit) is int and credit >= 0:
+            self.receiver_credit = credit
+        if complete:
+            self.verified_completion = True
+        if self.verified_completion and all(s.acknowledged for s in self.segments.values()):
+            self.completed_at = now
+        return True
+
     def on_ack(self, packet: Packet, now: float) -> bool:
+        if packet.kind == ACK_RECEIPT:
+            return self._on_receipt(packet, now)
         if packet.kind == ACK_BATCH:
             entries = packet.metadata.get("acks")
             if not isinstance(entries, list) or not 2 <= len(entries) <= 8:
@@ -205,6 +266,7 @@ class Sender:
         if segment.transmission_id in self.in_flight:
             del self.in_flight[segment.transmission_id]
             self.flight_bytes -= segment.wire_bytes
+        segment.acknowledged_tx = packet.transmission_id
         segment.transmission_id = None
         segment.transmission_ids.clear()
         segment.acknowledged = True
@@ -220,17 +282,22 @@ class Sender:
 
 
 class Receiver:
-    def __init__(self, *, max_message_bytes: int = MAX_MESSAGE_BYTES, metadata: dict | None = None):
+    def __init__(self, *, max_message_bytes: int = MAX_MESSAGE_BYTES, metadata: dict | None = None,
+                 receipt_feedback: bool = False):
         self.max_message_bytes = max_message_bytes
+        self.receipt_feedback = receipt_feedback
         self.custom_metadata = metadata or {}
         if not isinstance(self.custom_metadata, dict):
             raise ValueError("custom metadata must be a JSON object")
-        if {"length", "credit", "received", "complete", "sha256"} & self.custom_metadata.keys():
+        if {"length", "credit", "received", "complete", "sha256", "prefix", "ranges", "ack_delay", "acks"} & self.custom_metadata.keys():
             raise ValueError("custom metadata cannot override reliability fields")
-        Packet(ACK, 0, 0, 0, 0, metadata={
+        worst_metadata = {
             **self.custom_metadata, "length": MAX_PAYLOAD, "credit": max_message_bytes,
             "received": max_message_bytes, "complete": True, "sha256": "0" * 64,
-        }).encode()
+        }
+        if receipt_feedback:
+            worst_metadata.update(prefix=max_message_bytes, ranges=[], ack_delay=.024999999999999998)
+        Packet(ACK, 0, 0, 0, 0, metadata=worst_metadata).encode()
         self.message_id: int | None = None
         self.total: int | None = None
         self.chunks: dict[int, bytes] = {}
@@ -270,6 +337,30 @@ class Receiver:
         if self.complete:
             metadata["sha256"] = hashlib.sha256(self.reconstruct()).hexdigest()
         ack = Packet(ACK, packet.message_id, packet.transmission_id, packet.offset, packet.total, metadata=metadata)
+        if self.receipt_feedback:
+            spans = []
+            for off, data in sorted(self.chunks.items()):
+                end = off + len(data)
+                if spans and spans[-1][1] == off:
+                    spans[-1][1] = end
+                else:
+                    spans.append([off, end])
+            prefix = spans.pop(0)[1] if spans and spans[0][0] == 0 else 0
+            metadata.update(prefix=prefix, ranges=spans[:8])
+            ack = Packet(ACK_RECEIPT, packet.message_id, packet.transmission_id,
+                         packet.offset, packet.total, metadata=metadata)
+            # Retain a cumulative prefix when sparse selective ranges exceed the budget.
+            while True:
+                try:
+                    # Leave room for the scheduler's explicit delay field too.
+                    Packet(ACK_RECEIPT, packet.message_id, packet.transmission_id,
+                           packet.offset, packet.total,
+                           metadata={**metadata, "ack_delay": .024999999999999998}).encode()
+                    break
+                except ValueError:
+                    if not metadata['ranges']:
+                        raise
+                    metadata['ranges'].pop()
         ack.encode()  # Reject an oversized metadata extension at the source.
         return ack
 

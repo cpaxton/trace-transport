@@ -27,12 +27,13 @@ def test_udp_exact_text_on_loopback(tmp_path, text):
     assert destination.read_bytes() == text.encode("utf-8")
 
 
-def test_udp_adapters_recover_lost_final_feedback_without_os_sockets(tmp_path, monkeypatch):
+@pytest.mark.parametrize('receipts', [False, True])
+def test_udp_adapters_recover_lost_final_feedback_without_os_sockets(tmp_path, monkeypatch, receipts):
     """Exercise both real adapter loops even when the sandbox forbids sockets."""
     import time
     from types import SimpleNamespace
     import trace_transport.udp as udp
-    from trace_transport.wire import ACK, Packet
+    from trace_transport.wire import ACK, ACK_RECEIPT, Packet
 
     endpoints = {}
     dropped = []
@@ -72,7 +73,7 @@ def test_udp_adapters_recover_lost_final_feedback_without_os_sockets(tmp_path, m
 
         def sendto(self, wire, address):
             packet = Packet.decode(wire)
-            if packet.kind == ACK and packet.metadata["complete"] and not dropped:
+            if packet.kind in (ACK, ACK_RECEIPT) and packet.metadata["complete"] and not dropped:
                 dropped.append(wire)
             else:
                 endpoints[address].inbox.put((wire, self.address))
@@ -105,7 +106,7 @@ def test_udp_adapters_recover_lost_final_feedback_without_os_sockets(tmp_path, m
     text = "lost final feedback 🌐\r\n"
     with ThreadPoolExecutor(max_workers=1) as executor:
         future = executor.submit(udp.receive_udp, "127.0.0.1", 0, output,
-                                 timeout=2, linger=.6, ready=ready.put)
+                                 timeout=2, linger=.6, ready=ready.put, receipt_feedback=receipts)
         port = ready.get(timeout=1)
         result = udp.send_udp(text, "127.0.0.1", port, deadline=1.5)
         receiver_result = future.result(timeout=3)

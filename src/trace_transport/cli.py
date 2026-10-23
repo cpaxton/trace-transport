@@ -114,6 +114,8 @@ def run_simulation(texts, config, controller, *, seed=0, checkpoint=None, device
 def build_parser():
     parser = argparse.ArgumentParser(prog="trace-transport", description=__doc__)
     commands = parser.add_subparsers(dest="command", required=True)
+    commands.add_parser("receiver-experiment", add_help=False,
+                        help="train and evaluate a receiver-only policy (requires learn extra)")
     console = commands.add_parser("console", help="open the local browser test bench with live charts and batch controls")
     console.add_argument("--port", type=int, default=8765)
     console.add_argument("--root", type=Path, default=Path.cwd(), help="project directory containing artifacts/checkpoints")
@@ -195,6 +197,8 @@ def build_parser():
     listen.add_argument("--linger", type=float, default=10,
                         help="seconds to repeat feedback for duplicate packets after receiver completion")
     listen.add_argument("--metadata", default="{}", help="custom JSON feedback metadata within the wire budget")
+    listen.add_argument("--receipt-feedback", action="store_true", help="use cumulative/selective receipt summaries (requires updated sender)")
+    listen.add_argument("--ready-json", action="store_true", help="print a JSON readiness line after binding")
 
     send = commands.add_parser("send", help="send arbitrary text to a UDP listener")
     _text_arguments(send)
@@ -208,8 +212,12 @@ def build_parser():
 
 
 def main(argv=None):
+    arguments = sys.argv[1:] if argv is None else list(argv)
+    if arguments and arguments[0] == "receiver-experiment":
+        from .receiver_experiment import main as receiver_main
+        return receiver_main(arguments[1:])
     parser = build_parser()
-    args = parser.parse_args(argv)
+    args = parser.parse_args(arguments)
     try:
         if args.command == "console":
             from .console import serve_console
@@ -243,7 +251,10 @@ def main(argv=None):
         if args.command == "listen":
             from .udp import receive_udp
             result = receive_udp(args.host, args.port, args.output, timeout=args.timeout,
-                                 linger=args.linger, metadata=json.loads(args.metadata))
+                                 linger=args.linger, metadata=json.loads(args.metadata),
+                                 receipt_feedback=args.receipt_feedback,
+                                 ready=(lambda port: print(json.dumps({"ready": True, "port": port}), flush=True))
+                                 if args.ready_json else None)
             print(json.dumps(result, indent=2))
             return 0 if result["completed"] else 2
         if args.command == "send":

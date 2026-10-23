@@ -32,6 +32,9 @@ class NetworkConfig:
     max_message_bytes: int = MAX_MESSAGE_BYTES
     # (absolute simulation time, new forward-link bits/s).
     capacity_changes: tuple[tuple[float, float], ...] = ()
+    feedback_capacity_changes: tuple[tuple[float, float], ...] = ()
+    loss_changes: tuple[tuple[float, float, float], ...] = ()
+    rtt_changes: tuple[tuple[float, float], ...] = ()
     # Bidirectional periods of no delivery; endpoint state remains intact.
     outages: tuple[tuple[float, float], ...] = ()
 
@@ -52,10 +55,21 @@ class NetworkConfig:
         for name in ("queue_bytes", "feedback_queue_bytes", "max_message_bytes"):
             if type(getattr(self, name)) is not int or getattr(self, name) <= 0:
                 raise ValueError(f"{name} must be a positive integer")
-        last = -1.0
-        for time, rate in self.capacity_changes:
-            if not math.isfinite(time) or time < 0 or time <= last or not math.isfinite(rate) or rate <= 0:
-                raise ValueError("capacity changes require increasing times and positive rates")
+        for changes in (self.capacity_changes, self.feedback_capacity_changes):
+            last = -1.0
+            for time, rate in changes:
+                if not math.isfinite(time) or time < 0 or time <= last or not math.isfinite(rate) or rate <= 0:
+                    raise ValueError("capacity changes require increasing times and positive rates")
+                last = time
+        last = -1.
+        for time, forward_loss, reverse_loss in self.loss_changes:
+            if not math.isfinite(time) or time < 0 or time <= last or not 0 <= forward_loss <= 1 or not 0 <= reverse_loss <= 1:
+                raise ValueError("loss changes require increasing times and valid probabilities")
+            last = time
+        last = -1.
+        for time, rtt in self.rtt_changes:
+            if not math.isfinite(time) or time < 0 or time <= last or not math.isfinite(rtt) or rtt < 0:
+                raise ValueError("RTT changes require increasing times and nonnegative delays")
             last = time
         for start, end in self.outages:
             if not (math.isfinite(start) and math.isfinite(end) and 0 <= start < end):
@@ -157,7 +171,7 @@ class TransferResult:
 class PacketSimulator:
     def __init__(self, texts: list[str], config: NetworkConfig | None = None, *, seed: int = 0,
                  start_times: list[float] | None = None, receiver_metadata: dict | None = None,
-                 receiver_feedback: bool = False):
+                 receiver_feedback: bool = False, receipt_feedback: bool = False):
         if not texts:
             raise ValueError("at least one text transfer is required")
         self.config = config or NetworkConfig()
@@ -174,13 +188,14 @@ class PacketSimulator:
                                payload_size=cfg.payload_size, rate=cfg.initial_rate,
                                cwnd=cfg.initial_cwnd, max_message_bytes=cfg.max_message_bytes)
                         for text in texts]
-        self.receivers = [Receiver(max_message_bytes=cfg.max_message_bytes, metadata=receiver_metadata)
+        self.receivers = [Receiver(max_message_bytes=cfg.max_message_bytes, metadata=receiver_metadata,
+                                   receipt_feedback=receipt_feedback)
                           for _ in texts]
         # Separate streams keep impairment draws independent of message IDs.
         self.forward_random = random.Random(seed * 2 + 1)
         self.feedback_random = random.Random(seed * 2 + 2)
         self.forward = FifoLink(cfg.bandwidth_bps, cfg.queue_bytes, cfg.capacity_changes)
-        self.feedback = FifoLink(cfg.feedback_bandwidth_bps, cfg.feedback_queue_bytes)
+        self.feedback = FifoLink(cfg.feedback_bandwidth_bps, cfg.feedback_queue_bytes, cfg.feedback_capacity_changes)
         self.feedback_bytes = [0] * len(texts)
         self._wake_generation = [0] * len(texts)
         self.processed_events = 0
@@ -238,7 +253,12 @@ class PacketSimulator:
             if self._in_outage(self.now):
                 link.counters.outage_drops += 1
                 continue
-            if rng.random() < (self.config.ack_loss if feedback else self.config.loss):
+            loss = self.config.ack_loss if feedback else self.config.loss
+            for time, data_loss, ack_loss in self.config.loss_changes:
+                if time > self.now:
+                    break
+                loss = ack_loss if feedback else data_loss
+            if rng.random() < loss:
                 link.counters.random_drops += 1
                 continue
             delivered_wire = wire
@@ -248,7 +268,12 @@ class PacketSimulator:
                 damaged[rng.randrange(len(wire))] ^= 1 << rng.randrange(8)
                 delivered_wire = bytes(damaged)
                 link.counters.corrupted_packets += 1
-            delay = max(0.0, self.config.base_rtt / 2 + rng.uniform(-self.config.jitter, self.config.jitter))
+            base_rtt = self.config.base_rtt
+            for time, rtt in self.config.rtt_changes:
+                if time > self.now:
+                    break
+                base_rtt = rtt
+            delay = max(0.0, base_rtt / 2 + rng.uniform(-self.config.jitter, self.config.jitter))
             self._schedule(finish + delay, self._deliver, index, delivered_wire, feedback)
 
     def _deliver(self, index: int, wire: bytes, feedback: bool) -> None:

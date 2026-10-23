@@ -119,7 +119,9 @@ def test_http_routes_serve_the_application_and_block_cross_origin_jobs(tmp_path)
         assert status == 200 and b"Controller comparison" in content
         assert request(bench, "GET", "/app.js")[0] == 200
         status, content = request(bench, "GET", "/api/catalog")
-        assert status == 200 and len(json.loads(content)["scenarios"]) == 4
+        assert status == 200
+        assert {"clean", "lossy", "changing", "stress", "wifi-mobile-fade"} <= {
+            case["name"] for case in json.loads(content)["scenarios"]}
         assert request(bench, "GET", "/../../etc/passwd")[0] == 404
         assert request(bench, "POST", "/api/jobs", origin="https://example.com")[0] == 403
         status, content = request(bench, "POST", "/api/jobs", {"scenario": "clean", "trials": 1,

@@ -8,6 +8,7 @@ import zlib
 DATA = 1
 ACK = 2
 ACK_BATCH = 3
+ACK_RECEIPT = 4
 MAX_METADATA = 512
 MAX_PAYLOAD = 1200
 _HEADER = struct.Struct("!4sBQQQQHI")
@@ -26,7 +27,7 @@ class Packet:
     metadata: dict = field(default_factory=dict)
 
     def encode(self) -> bytes:
-        if self.kind not in (DATA, ACK, ACK_BATCH):
+        if self.kind not in (DATA, ACK, ACK_BATCH, ACK_RECEIPT):
             raise ValueError("unknown packet kind")
         if not isinstance(self.payload, bytes) or len(self.payload) > MAX_PAYLOAD:
             raise ValueError("payload must be bytes within the datagram budget")
@@ -42,7 +43,7 @@ class Packet:
                 raise ValueError("packet integers must be unsigned 64-bit values")
         if self.offset > self.total or self.offset + len(self.payload) > self.total:
             raise ValueError("payload exceeds the declared message")
-        if self.kind in (ACK, ACK_BATCH) and self.payload:
+        if self.kind in (ACK, ACK_BATCH, ACK_RECEIPT) and self.payload:
             raise ValueError("ACK packets cannot contain application payload")
         body = _HEADER.pack(
             MAGIC, self.kind, self.message_id, self.transmission_id,
@@ -58,7 +59,7 @@ class Packet:
         if zlib.crc32(body) != _CRC.unpack(checksum)[0]:
             raise ValueError("packet checksum mismatch")
         magic, kind, message, tx, offset, total, meta_len, data_len = _HEADER.unpack_from(body)
-        if magic != MAGIC or kind not in (DATA, ACK, ACK_BATCH):
+        if magic != MAGIC or kind not in (DATA, ACK, ACK_BATCH, ACK_RECEIPT):
             raise ValueError("unsupported protocol version or packet kind")
         if meta_len > MAX_METADATA or data_len > MAX_PAYLOAD:
             raise ValueError("packet exceeds a wire budget")

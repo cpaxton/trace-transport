@@ -6,7 +6,7 @@ The deterministic reliability kernel still decides which bytes were received.
 from dataclasses import replace
 import math
 
-from .wire import ACK_BATCH, Packet
+from .wire import ACK_BATCH, ACK_RECEIPT, Packet
 
 MAX_ACK_DELAY = .025
 MAX_ACK_BATCH = 8
@@ -18,6 +18,7 @@ class FeedbackScheduler:
         self.pending = {}
         self.batch_size, self.delay = 1, 0.0
         self.generation = 0
+        self.completion_seen = False
         self.emitted = 0
         self.last_emit = 0.0
         self.arrivals = 0
@@ -43,7 +44,9 @@ class FeedbackScheduler:
         self.duplicates += ack.offset in self.pending
         # A new retransmission supersedes older pending feedback for this range.
         self.pending[ack.offset] = (ack, now)
-        if len(self.pending) >= self.batch_size or self.delay == 0 or ack.metadata['complete']:
+        first_completion = ack.metadata['complete'] and (ack.kind != ACK_RECEIPT or not self.completion_seen)
+        self.completion_seen |= ack.metadata['complete']
+        if len(self.pending) >= self.batch_size or self.delay == 0 or first_completion:
             self.flush(now)
         elif len(self.pending) == 1:
             generation = self.generation
@@ -60,6 +63,11 @@ class FeedbackScheduler:
         items = list(self.pending.values())
         self.pending.clear()
         self.generation += 1
+        if items[-1][0].kind == ACK_RECEIPT:
+            # The newest summary repeats the cumulative prefix and selective ranges.
+            # Completion therefore confirms the entire message in one bounded packet.
+            self._send([max(items, key=lambda item: item[1])], now)
+            return
         # Split to respect the actual encoded metadata budget, including user fields.
         group = []
         for item in items:

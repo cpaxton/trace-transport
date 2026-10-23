@@ -20,6 +20,7 @@ from .benchmark import benchmark_text, summarize_runs
 from .cli import run_simulation
 from .simulator import NetworkConfig
 from .suite import load_manifest
+from .network_models import wifi_cases
 
 STATIC = Path(__file__).with_name("web")
 
@@ -28,6 +29,8 @@ def model_catalog(root):
     models = []
     for directory in ("artifacts", "checkpoints"):
         for path in sorted((Path(root) / directory).glob("*.pt")):
+            if path.stem.startswith("receiver-"):
+                continue
             models.append({"id": path.relative_to(root).as_posix(), "label": path.stem,
                            "bytes": path.stat().st_size})
     return models
@@ -35,7 +38,7 @@ def model_catalog(root):
 
 def validated_plan(request, catalog):
     manifest, _ = load_manifest()
-    cases = {case["name"]: case for case in manifest["cases"]}
+    cases = {case["name"]: case for case in [*manifest["cases"], *wifi_cases()]}
     case = cases.get(request.get("scenario", "lossy"))
     if case is None:
         raise ValueError("unknown scenario")
@@ -103,7 +106,7 @@ class TestBench:
                            if job["status"] in ("queued", "running", "stopping")), None)
         return {"models": self.models, "learning_available": importlib.util.find_spec("torch") is not None,
                 "active_job": active, "scenarios": [
-                    {**case, "network": asdict(NetworkConfig(**case["network"]))} for case in manifest["cases"]]}
+                    {**case, "network": asdict(NetworkConfig(**case["network"]))} for case in [*manifest["cases"], *wifi_cases()]]}
 
     def start(self, request):
         plan = validated_plan(request, self.models)

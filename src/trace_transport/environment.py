@@ -58,7 +58,7 @@ class TransportEnv:
 
     def __init__(self, texts: list[str], config: NetworkConfig | None = None, *, action_dimensions: int = 1,
                  start_times: list[float] | None = None, receiver_metadata: dict | None = None,
-                 reward_profile: str = "legacy", receiver_feedback: bool = False):
+                 reward_profile: str = "legacy", receiver_feedback: bool = False, receipt_feedback: bool = False):
         if action_dimensions not in (1, 2):
             raise ValueError("action_dimensions must be one or two")
         self.texts = list(texts)
@@ -67,6 +67,7 @@ class TransportEnv:
         self.start_times = start_times
         self.receiver_metadata = receiver_metadata
         self.receiver_feedback = receiver_feedback
+        self.receipt_feedback = receipt_feedback
         self.reward_spec = reward_spec(reward_profile)
         self.simulator: PacketSimulator
         self._previous = []
@@ -78,7 +79,7 @@ class TransportEnv:
     def reset(self, *, seed: int = 0):
         self.simulator = PacketSimulator(self.texts, self.config, seed=seed,
                                         start_times=self.start_times, receiver_metadata=self.receiver_metadata,
-                                        receiver_feedback=self.receiver_feedback)
+                                        receiver_feedback=self.receiver_feedback, receipt_feedback=self.receipt_feedback)
         self._previous = [self._snapshot(i) for i in range(len(self.texts))]
         self._payload_totals = [0] * len(self.texts)
         return self._observe(self.config.control_interval), self._info()

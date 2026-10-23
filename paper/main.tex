@@ -327,6 +327,44 @@ experiment does not outperform tuned deterministic batching. Simulated elapsed
 time excludes actor inference cost. Configurations, raw paired records, training
 logs, and a separately versioned candidate checkpoint accompany the repository.
 
+\section{Receipt recovery and persistent degradation}
+An opt-in receipt packet repeats the contiguous received prefix and up to eight
+selective byte intervals. A digest-verified full prefix confirms the whole
+message even when previous feedback was lost. Only explicitly echoed
+transmissions yield RTT samples; summaries cannot credit unsent segments.
+The first completion receipt is immediate, while duplicate completion responses
+follow bounded scheduling. The socket adapter supports receipt summaries, but
+learned receiver scheduling remains simulator-only.
+
+We compare preset training with persistent randomized degradation and a
+one-observation ablation, each with three seeds and 80 episodes. Randomized
+episodes contain a gradual decline, a sustained poor interval, and recovery;
+capacity, residual loss, and access delay covary. Queueing remains
+traffic-dependent. Named Wi-Fi cases cover stable service, contention, mobile
+fading, and clustered loss. These are uncalibrated service models above the MAC
+layer, not an implementation of 802.11. Policies never observe hidden schedules.
+Randomization varies one to four flows; equal episode budgets therefore do not
+imply equal transition or compute budgets.
+
+Validation seeds 3000--3004 select candidates. On diagnostic seeds 4000--4019,
+preset/history-8, randomized/history-8, and randomized/history-1 candidates
+complete 239/240, 238/240, and 238/240 transfers; deterministic batch-8/25-ms
+feedback completes 240/240. Holding the original receiver-v1 weights fixed,
+switching only the protocol raises completion from 223/240 to 239/240 on these
+same fresh seeds. This isolates a recovery benefit from retraining.
+
+On a separate 560-transfer generalization suite, selected using no outcomes from
+seeds 5000--5019, the three learned candidates complete 551, 551, and 552
+transfers; the deterministic baseline completes 553. Their Wi-Fi subset results
+are 159/160, 160/160, and 160/160, versus 160/160 for the deterministic baseline.
+No wrong payloads occur. The suite includes longer RTTs, more flows, larger
+messages, smaller queues, stronger bursts, and reverse capacity beyond training
+support. All learned candidates fail the diagnostic win condition. Neither
+longer neural history nor domain randomization shows an overall advantage at
+this budget. The one-observation ablation still receives endpoint counters and
+timers; it is not a host without memory. Real-device traces are needed to
+calibrate persistence and assess transfer beyond these stylized models.
+
 \section{Implementation stages and open questions}
 The sequence is: (1) reliable CPU text transfer, (2) a history-based learned
 sender, (3) a validated GPU backend, (4) joint learned feedback and additional
