@@ -3,7 +3,7 @@ import numpy as np
 
 
 def summarize(records):
-    if not records or records[0].get('profile') not in ('goodput-v2','goodput-v3') or any(r.get('profile')!=records[0]['profile'] for r in records):raise ValueError('expected nonempty records from one goodput profile')
+    if not records or records[0].get('profile') not in ('goodput-v2','goodput-v3','goodput-v4') or any(r.get('profile')!=records[0]['profile'] for r in records):raise ValueError('expected nonempty records from one goodput profile')
     duration=sum(r['measurement_seconds'] for r in records)
     useful=sum(r['verified_bulk_bytes'] for r in records)
     desired=sum(r['desired'].get('interactive',0) for r in records)

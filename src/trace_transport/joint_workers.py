@@ -16,7 +16,9 @@ def _worker(pipe):
             if command=='reset':
                 seed,production,drain,stage,*options=args
                 task=options[3] if len(options)>3 else 'deadline-v1'
-                if task=='goodput-v3':
+                if task=='goodput-v4':
+                    from .goodput_deployment import sample_case as sampler,GoodputDeploymentEnv as GoodputEnv
+                elif task=='goodput-v3':
                     from .goodput_distribution import sample_case as sampler,GoodputDistributionEnv as GoodputEnv
                 elif task=='goodput-v2':
                     from .goodput import sample_case as sampler,GoodputEnv
@@ -43,6 +45,8 @@ def _worker(pipe):
                     obs=env.observe()
                 paired=bool(options[4]) if len(options)>4 else False
                 if paired and not task.startswith('goodput-'):raise ValueError('paired teacher requires fixed-horizon goodput task')
+                # Same starting RNG state does not imply CRN coupling once actions
+                # change packet counts. This is a same-case return baseline only.
                 teacher_env=env.clone() if paired else None;raw_return=teacher_return=0.
                 pipe.send((obs,env.critic_state(obs),label))
             elif command=='finish-baseline':

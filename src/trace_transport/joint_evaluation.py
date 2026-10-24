@@ -13,6 +13,10 @@ from .joint_workers import EnvironmentPool
 from .joint_session import JointTransportEnv
 from .joint_curriculum import sample_case
 
+# Fixed tensor shapes are part of repeatable goodput inference, independent of worker timing.
+MAX_GOODPUT_CLIENTS=4
+MAX_GOODPUT_ENDPOINTS=2*MAX_GOODPUT_CLIENTS
+
 BASELINES=[dict(rate=rate,scheduler=scheduler,feedback=feedback)
     for rate in ('fixed','aimd','bdp','deadline') for scheduler in ('edf','drr') for feedback in ('budgeted','sparse','deadline')]
 
@@ -96,19 +100,19 @@ def evaluate(*,seeds,checkpoint=None,baseline=None,device='cpu',environments=8,p
             # independent of which other CPU workers finish first.
             for i in active:
                 o,h=obs[i],histories[i];h.append(o);n=len(o['sender'])
-                if n>8:raise ValueError('goodput fixed-shape evaluator supports at most four clients')
+                if n>MAX_GOODPUT_ENDPOINTS:raise ValueError(f'goodput fixed-shape evaluator supports at most {MAX_GOODPUT_CLIENTS} clients')
                 sender_action=np.zeros((n,3),np.float32);receiver_action=np.zeros(n,np.int64)
-                valid=np.zeros((8,config.history),bool);valid[:n]=h.valid
+                valid=np.zeros((MAX_GOODPUT_ENDPOINTS,config.history),bool);valid[:n]=h.valid
                 def tensor(x):return torch.as_tensor(x,device=device)
                 with torch.inference_mode():
                     if infer_sender and o['sender_active'].any():
-                        history=np.zeros((8,config.history,h.sender.shape[-1]),np.float32);history[:n]=h.sender
-                        queue=np.zeros((8,*o['queue'].shape[1:]),np.float32);queue[:n]=o['queue']
-                        mask=np.zeros((8,o['queue_mask'].shape[1]),bool);mask[:n]=o['queue_mask']
+                        history=np.zeros((MAX_GOODPUT_ENDPOINTS,config.history,h.sender.shape[-1]),np.float32);history[:n]=h.sender
+                        queue=np.zeros((MAX_GOODPUT_ENDPOINTS,*o['queue'].shape[1:]),np.float32);queue[:n]=o['queue']
+                        mask=np.zeros((MAX_GOODPUT_ENDPOINTS,o['queue_mask'].shape[1]),bool);mask[:n]=o['queue_mask']
                         a=sender.act(tensor(history),tensor(valid),tensor(queue),tensor(mask)).cpu().numpy()
                         sender_action[o['sender_active']]=a[:n][o['sender_active']]
                     if infer_receiver and o['receiver_active'].any():
-                        history=np.zeros((8,config.history,h.receiver.shape[-1]),np.float32);history[:n]=h.receiver
+                        history=np.zeros((MAX_GOODPUT_ENDPOINTS,config.history,h.receiver.shape[-1]),np.float32);history[:n]=h.receiver
                         a=receiver.act(tensor(history),tensor(valid)).cpu().numpy()
                         receiver_action[o['receiver_active']]=a[:n][o['receiver_active']]
                 result.append((sender_action,receiver_action))

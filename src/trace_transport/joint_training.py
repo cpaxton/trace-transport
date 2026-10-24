@@ -53,10 +53,10 @@ class JointTrainConfig:
             raise ValueError('training budgets must be positive')
         if self.teacher_batch not in (1,2,4,8,16,32) or not 0<=self.teacher_delay<=.25:raise ValueError('invalid teacher feedback')
         if not 2000<=self.teacher_initial_rate<=2000000:raise ValueError('invalid initial pacing rate')
-        if self.profile not in ('deadline-v1','goodput-v2','goodput-v3') or self.teacher_rate not in ('fixed','aimd','bdp','delay','delay-fast'):raise ValueError('invalid profile/teacher')
+        if self.profile not in ('deadline-v1','goodput-v2','goodput-v3','goodput-v4') or self.teacher_rate not in ('fixed','aimd','bdp','delay','delay-fast'):raise ValueError('invalid profile/teacher')
         if self.teacher_scheduler not in ('edf','drr'):raise ValueError('invalid teacher scheduler')
         if self.receiver_teacher_prior is not None and not 0<self.receiver_teacher_prior<1:raise ValueError('invalid receiver prior')
-        if self.teacher_rate=='delay-fast' and self.profile!='goodput-v3':raise ValueError('delay-fast requires v3')
+        if self.teacher_rate=='delay-fast' and self.profile not in ('goodput-v3','goodput-v4'):raise ValueError('delay-fast requires v3')
         if not 0<self.teacher_prior<1 or not 0<self.gpu_memory_fraction<=.5 or not 0<=self.gae_lambda<=1:raise ValueError('invalid memory/GAE limits')
         if self.learning_rate<=0 or not 0<=self.easy_fraction<=1:raise ValueError('invalid optimizer/curriculum')
 
@@ -127,7 +127,9 @@ def train(output,cfg=JointTrainConfig(),model_cfg=JointModelConfig(),resume=None
     torch.set_num_threads(1);torch.manual_seed(cfg.seed)
     if cfg.device.startswith('cuda') and not torch.cuda.is_available():raise RuntimeError('requested CUDA is unavailable')
     if cfg.device.startswith('cuda'):torch.cuda.set_per_process_memory_fraction(cfg.gpu_memory_fraction)
-    if cfg.profile=='goodput-v3':
+    if cfg.profile=='goodput-v4':
+        from .goodput_deployment import DOMAIN as domain
+    elif cfg.profile=='goodput-v3':
         from .goodput_distribution import DOMAIN as domain
     elif cfg.profile=='goodput-v2':
         from .goodput import DOMAIN as domain
@@ -148,8 +150,8 @@ def train(output,cfg=JointTrainConfig(),model_cfg=JointModelConfig(),resume=None
     optimizers=[torch.optim.Adam(m.parameters(),lr=cfg.learning_rate) for m in (sender,receiver,critic)]
     obs=[];states=[];histories=[];episodes=list(range(cfg.environments));next_episode=cfg.environments
     decisions=0;world_steps=0;updates=0;last_checkpoint=0;start=time.monotonic();completed=[]
-    source_hashes={name:hashlib.sha256((Path(__file__).parent/name).read_bytes()).hexdigest() for name in ['goodput.py','goodput_distribution.py','joint_session.py','joint_models.py','joint_workers.py','joint_training.py','protocol.py','wire.py','session_receiver.py','learning.py']} if cfg.profile.startswith('goodput-') else {}
-    metadata=dict(training=asdict(cfg),model=asdict(model_cfg),domain=domain,profile=cfg.profile,
+    source_hashes={name:hashlib.sha256((Path(__file__).parent/name).read_bytes()).hexdigest() for name in ['goodput.py','goodput_distribution.py','goodput_deployment.py','joint_session.py','joint_models.py','joint_workers.py','joint_training.py','protocol.py','wire.py','session_receiver.py','learning.py']} if cfg.profile.startswith('goodput-') else {}
+    metadata=dict(teacher_baseline_coupling=('same initial RNG; action-dependent draws can diverge; no guaranteed variance reduction' if cfg.paired_teacher else 'disabled; raw task reward'),training=asdict(cfg),model=asdict(model_cfg),domain=domain,profile=cfg.profile,
         reward=domain['reward'] if cfg.profile.startswith('goodput-') else 'joint-deadline-v1',baseline=baseline,source_sha256=source_hashes)
     if resume is not None:
         resume=Path(resume)

@@ -4,7 +4,7 @@ from dataclasses import replace
 import math
 import random
 
-from .joint_session import JointTransportEnv,WorkloadConfig
+from .joint_session import JointTransportEnv,WorkloadConfig,SENDER_FEATURES
 from .messages import Message
 from .simulator import NetworkConfig
 
@@ -96,8 +96,8 @@ class GoodputEnv(JointTransportEnv):
         self._refill(index)
     def done(self):return self.now>=self.horizon-1e-9
     def observe(self):
-        obs=super().observe();obs['sender'][:,21:23]=0
-        if getattr(self,'mode','mixed')=='bulk':obs['sender'][:,20]=0
+        obs=super().observe();obs['sender'][:,[SENDER_FEATURES.index(name) for name in ('image_hz','map_hz')]]=0
+        if getattr(self,'mode','mixed')=='bulk':obs['sender'][:,SENDER_FEATURES.index('interactive_hz')]=0
         return obs
     def step(self,sender_actions,receiver_actions):
         before=sum(self.verified[c] for c in ('image','map'))

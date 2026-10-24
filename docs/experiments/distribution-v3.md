@@ -197,3 +197,5 @@ long acceptance study.
 [training action telemetry](../../artifacts/goodput-v3-pilot-receiver-telemetry.json),
 [greedy proposal audit](../../artifacts/goodput-v3-pilot-action-audit.json),
 [final actor export](../../artifacts/goodput-v3-pilot-final-actors.pt).
+
+Review correction: same-case shadow-teacher returns do not guarantee common packet impairment draws or variance reduction after actions diverge. See the [v4 review note](caliban-v4.md#review-correction-teacher-return-is-not-a-crn-control-variate); original result values are unchanged.

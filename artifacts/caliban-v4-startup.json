@@ -1,0 +1,96 @@
+{
+  "captured_utc": "2026-10-24T18:05:35.792724+00:00",
+  "status": {
+    "benchmark": {
+      "service": {
+        "MemoryCurrent": "[not set]",
+        "TasksCurrent": "[not set]",
+        "CPUAffinity": "",
+        "ActiveState": "inactive",
+        "SubState": "dead"
+      },
+      "results.json": {
+        "version": "caliban-v4-benchmark-v1",
+        "started_utc": "2026-10-24T17:53:26.524886+00:00",
+        "machine": "aarch64",
+        "python": "3.12.3",
+        "torch": "2.14.1+cpu",
+        "numpy": "2.5.4",
+        "cuda_available": false,
+        "affinity": [
+          6,
+          7,
+          8,
+          9,
+          10,
+          11
+        ],
+        "trials": [
+          {
+            "environments": 1,
+            "decisions": 2001,
+            "seconds": 29.387961506843567,
+            "decisions_per_second": 68.08910510972419
+          },
+          {
+            "environments": 2,
+            "decisions": 2002,
+            "seconds": 27.7382737044245,
+            "decisions_per_second": 72.17464292598221
+          },
+          {
+            "environments": 4,
+            "decisions": 2003,
+            "seconds": 25.949977175332606,
+            "decisions_per_second": 77.18696577136112
+          }
+        ],
+        "eight_endpoint_actor_pair_ms_p50_p95": [
+          18.815504387021065,
+          20.108256163075566
+        ],
+        "completed_utc": "2026-10-24T17:54:54.916570+00:00"
+      }
+    },
+    "study": {
+      "service": {
+        "MemoryCurrent": "1002631168",
+        "TasksCurrent": "7",
+        "CPUAffinity": "6-11",
+        "ActiveState": "active",
+        "SubState": "running"
+      },
+      "plan": {
+        "version": "caliban-v4-study-v1",
+        "started_utc": "2026-10-24T17:58:42.427973+00:00",
+        "training_seeds": [
+          42,
+          43,
+          44
+        ],
+        "decisions_per_seed": 5000000,
+        "environments": 4
+      },
+      "calibration_controls_completed": 4,
+      "reference.json": {
+        "name": "immediate",
+        "baseline": {
+          "rate": "delay-fast",
+          "scheduler": "edf",
+          "feedback": "budgeted",
+          "initial_rate": 512000.0,
+          "batch": 1,
+          "delay": 0.0
+        }
+      },
+      "seed42": {
+        "phase": "training",
+        "decisions": 7843,
+        "decisions_per_second": 79.42032518152999,
+        "elapsed_seconds": 98.753058264032,
+        "heartbeat_age_seconds": 12.434366226196289
+      }
+    }
+  },
+  "scope": "startup engineering snapshot; planned budgets are not completed work"
+}

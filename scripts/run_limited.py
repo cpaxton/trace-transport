@@ -10,8 +10,9 @@ import os
 import subprocess
 
 
-def command(name,argv,log,*,directory,cpu=400,memory_gib=8,tasks=128):
+def command(name,argv,log,*,directory,cpu=400,memory_gib=8,tasks=128,runtime_hours=2):
     if not re.fullmatch(r'trace-[a-z0-9][a-z0-9-]{0,63}',name):raise ValueError('unit name must start trace- and contain lowercase letters, digits or hyphens')
+    if not isinstance(runtime_hours,int) or not 1<=runtime_hours<=72:raise ValueError('runtime must be 1..72 hours')
     if not argv or not 100<=cpu<=800 or cpu%100!=0 or not 1<=memory_gib<=16 or not 16<=tasks<=256:raise ValueError('invalid bounded resources or empty command')
     log=Path(log).resolve();directory=Path(directory).resolve()
     available=sorted(os.sched_getaffinity(0));affinity=available[-min(len(available),cpu//100):]
@@ -19,7 +20,7 @@ def command(name,argv,log,*,directory,cpu=400,memory_gib=8,tasks=128):
         f'--property=CPUQuota={cpu}%',f'--property=CPUAffinity={" ".join(map(str,affinity))}',f'--property=MemoryMax={memory_gib}G',
         f'--property=MemoryHigh={max(1,memory_gib-2)}G',f'--property=TasksMax={tasks}',
         '--property=MemorySwapMax=512M','--property=Nice=10','--property=OOMPolicy=stop','--property=KillMode=control-group',
-        '--property=RuntimeMaxSec=7200','--property=LimitCORE=0',
+        f'--property=RuntimeMaxSec={runtime_hours*3600}','--property=LimitCORE=0',
         f'--property=StandardOutput=append:{log}',f'--property=StandardError=append:{log}',
         '--setenv=OPENBLAS_NUM_THREADS=1','--setenv=OMP_NUM_THREADS=1','--setenv=MKL_NUM_THREADS=1',
         '--setenv=PYTHONFAULTHANDLER=1','--setenv=PYTHONUNBUFFERED=1','--setenv=PYTHONPATH=','--',*argv]
@@ -29,10 +30,11 @@ def main():
     p=argparse.ArgumentParser(description=__doc__)
     p.add_argument('--name',required=True);p.add_argument('--log',type=Path,required=True)
     p.add_argument('--cpu',type=int,default=400);p.add_argument('--memory-gib',type=int,default=8)
+    p.add_argument('--runtime-hours',type=int,default=2)
     p.add_argument('--tasks',type=int,default=128);p.add_argument('--dry-run',action='store_true')
     p.add_argument('argv',nargs=argparse.REMAINDER);args=p.parse_args()
     argv=args.argv[1:] if args.argv[:1]==['--'] else args.argv
-    cmd=command(args.name,argv,args.log,directory=Path.cwd(),cpu=args.cpu,memory_gib=args.memory_gib,tasks=args.tasks)
+    cmd=command(args.name,argv,args.log,directory=Path.cwd(),cpu=args.cpu,memory_gib=args.memory_gib,tasks=args.tasks,runtime_hours=args.runtime_hours)
     if args.dry_run:
         import shlex
         print(shlex.join(cmd));return

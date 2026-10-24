@@ -16,7 +16,7 @@ def main(argv=None):
     commands=p.add_subparsers(dest='command',required=True)
     train=commands.add_parser('joint-train')
     train.add_argument('--paired-teacher',action='store_true')
-    train.add_argument('--profile',choices=['deadline-v1','goodput-v2','goodput-v3'],default='deadline-v1')
+    train.add_argument('--profile',choices=['deadline-v1','goodput-v2','goodput-v3','goodput-v4'],default='deadline-v1')
     train.add_argument('--teacher-scheduler',choices=['edf','drr'],default='edf')
     train.add_argument('--receiver-teacher-prior',type=float)
     train.add_argument('--teacher-batch',type=int,default=8)
@@ -89,13 +89,18 @@ def main(argv=None):
         if args.trials<1 or args.envs<1:p.error('positive trials/envs required')
         names={f"{b['rate']}/{b['scheduler']}/{b['feedback']}":b for b in BASELINES}
         if args.baseline not in names:p.error('unknown baseline combination')
+        profile='deadline-v1'
+        if args.checkpoint:
+            from .joint_models import load_checkpoint
+            _,_,_,metadata=load_checkpoint(args.checkpoint,args.device)
+            profile=metadata.get('profile','deadline-v1')
         trace_network=trace_meta=None
         if args.trace:
             from .joint_traces import load_trace
             trace_network,trace_meta=load_trace(args.trace,required_seconds=40)
         rows=evaluate(seeds=list(range(args.seed,args.seed+args.trials)),checkpoint=args.checkpoint,
-            baseline=names[args.baseline],device=args.device,environments=args.envs,ood=args.ood,trace_network=trace_network)
-        if rows and rows[0].get('profile','').startswith('goodput-'):
+            baseline=names[args.baseline],device=args.device,environments=args.envs,ood=args.ood,trace_network=trace_network,profile=profile)
+        if profile.startswith('goodput-'):
             from .goodput_evaluation import summarize
         result=dict(summary=summarize(rows),records=rows,trace=trace_meta);args.report.parent.mkdir(parents=True,exist_ok=True)
         args.report.write_text(json.dumps(result,indent=2)+'\n');print(json.dumps(result['summary'],indent=2));return 0

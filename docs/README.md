@@ -16,6 +16,7 @@
 | [Learning opportunities](research/learning-opportunities.md) | Literature, history-dependent challenges, stronger baselines and fairness |
 | [Goodput-v2 pilots](experiments/goodput-v2.md) | Calibration, bounded CPU pilot, scoring and resource isolation |
 | [V3 distribution and retraining](experiments/distribution-v3.md) | Coverage matrix, realistic mechanisms and gaps, control-sensitivity audit and receiver diagnosis |
+| [Caliban v4 parallel training](experiments/caliban-v4.md) | Deployment coverage, review corrections, remote limits, scaling and recovery |
 | [Development](development.md) | Implementation map, test coverage, source export, paper build |
 
 Command examples assume the curl installer has added `trace-transport` to PATH.

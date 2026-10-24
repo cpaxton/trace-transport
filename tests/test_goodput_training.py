@@ -35,7 +35,7 @@ def test_fixed_shape_goodput_inference_is_repeatable_across_worker_counts(tmp_pa
     assert evaluate(**kwargs,environments=1)==evaluate(**kwargs,environments=2)
 
 
-def test_shadow_teacher_is_a_zero_control_variate_without_actor_information_leak():
+def test_shadow_teacher_baseline_matches_zero_actions_without_actor_information_leak():
     import numpy as np
     from trace_transport.joint_workers import EnvironmentPool
     pool=EnvironmentPool(1)

@@ -655,6 +655,39 @@ RTT and a reported gigabit interface outside the current sampling scope; PHY
 rates and idle ICMP probes do not establish available capacity or calibrate the
 service model.
 
+\section{Caliban scaling and robustness follow-up}
+A review identifies that cloning initial impairment RNG state does not preserve
+common packet draws after actions change packet counts. The v2.1/v3 subtracted
+teacher return is therefore a same-case baseline without demonstrated variance
+reduction, rather than a guaranteed common-random-number control variate.
+Prior metrics remain unchanged. Longer v4 training disables this subtraction and
+uses raw task rewards with the learned PPO critic. Regression tests demonstrate
+RNG divergence under nonzero actions; evaluation remains paired by case and seed,
+not claimed to replay identical packet impairments.
+
+Version 4 extends wired service to 1 Gbps and RTT to 0.3--4 ms, varies policy
+control intervals across 2--20 ms, exposes those intervals to both actors, and
+uses log-scaled millisecond RTT observations. Feature semantics are versioned;
+legacy checkpoints are incompatible with these observation meanings. Service
+ranges remain deployment-motivated hypotheses, not calibrated distributions.
+
+An ARM CPU benchmark on Caliban measures 68.1, 72.2 and 77.2 endpoint opportunities
+per second with one, two and four workers for a 64-step-history, width-64,
+two-layer model. The matched workstation benchmark reaches 164.9/s. These are
+short engineering trials, not established speedup estimates. Caliban's combined
+eight-endpoint actor inference has median/p95 latency 18.8/20.1 ms, exceeding the
+2-ms simulation tick; this model is not a demonstrated real-time deployment at
+that cadence. GPU acceleration is not enabled. A separate bounded CPU service
+starts a three-seed study with planned five-million-decision budgets, immutable
+source manifests and persistent optimizer snapshots; results remain pending.
+
+A finite-horizon receiver diagnostic attempts eight states and finds pending ACKs
+in seven. Comparing all 22 actions from cloned identical states yields different
+return-maximizing choices across cases. Selection on a single future RNG
+realization can exploit noise; these diagnostics are not expected action values,
+a deployable oracle, or evidence of a learned win. Replicated rollouts and
+observability checks are required before using these as training labels.
+
 \section{Implementation stages and open questions}
 Implemented stages include reliable CPU transfer, history-based sender learning,
 receiver learning, joint sender/receiver training over CPU packet workers, and

@@ -104,3 +104,19 @@ SSH-resolved hostname. No saturation or device changes. The sub-millisecond wire
 RTT and reported gigabit interface expose coverage gaps for a future long study.
 [Results](../../artifacts/device-link-snapshot-v1-results.json),
 [limitations](distribution-v3.md#small-device-inventory-check).
+
+## Caliban v4 parallel study and review corrections
+
+| Actual start | Actual end | Experiment | Status and evidence |
+| --- | --- | --- | --- |
+| 2026-10-24T17:53:26.524886+00:00 | 2026-10-24T17:54:54.916570+00:00 | Caliban v4 worker/model benchmark | Complete, engineering only. 1/2/4 workers: 68.1/72.2/77.2 opportunities/s; actor-pair CPU p50/p95 18.8/20.1 ms. [Results](../../artifacts/caliban-v4-benchmark.json). |
+| 2026-10-24 UTC | 2026-10-24 UTC | Matched workstation v4 benchmark | Complete, engineering only. Best short throughput 164.9/s; CPU inference p50/p95 7.9/8.2 ms. [Results](../../artifacts/v4-local-benchmark.json). |
+| 2026-10-24T17:50:39.893480+00:00 | 2026-10-24T17:51:50.199796+00:00 | Cloned-state receiver action diagnostic | Complete, exploratory. Eight states attempted, seven found pending ACKs; all 22 actions compared over one-second continuations. Different choices maximize return in different cases; selected maxima on one future RNG realization do not establish expected or deployable gains. [Results](../../artifacts/receiver-counterfactual-v4-results.json). |
+| 2026-10-24T17:58:42.427973+00:00 | Pending | Caliban v4 multi-seed study | Running calibration/training pipeline. Seeds 42/43/44, planned five million opportunities each, 64-step history, width 64, two layers; four workers selected by benchmark. Six CPU cores, 8-GiB memory ceiling, 72-hour limit, bounded persistent checkpoint/source mirror. [Plan](../../artifacts/caliban-v4-plan.json), [frozen source](../../artifacts/caliban-v4-source.zip), [operation and limitations](caliban-v4.md). No trained result yet; reserved test/OOD ranges unopened. |
+
+Review correction applies to the completed v2.1/v3 training signals: cloned teacher
+RNGs can diverge under different packet schedules. The subtraction was a same-case
+return baseline, not demonstrated CRN coupling or guaranteed variance reduction.
+Original metrics are unchanged. V4 longer training disables subtraction and uses
+raw task rewards with the learned PPO critic. The review also prompted explicit
+CLI profile selection, named inference bounds, and named observation indices.

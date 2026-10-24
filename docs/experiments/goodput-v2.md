@@ -111,3 +111,5 @@ and repeatability checks before a test win can be claimed.
 - [All pilot validation snapshots](../../artifacts/goodput-v2.0-pilot-validation.json)
 - [Selection](../../artifacts/goodput-v2.0-pilot-selection.json)
 - [Experimental final actor pair, not a better default](../../artifacts/goodput-v2.0-pilot-actors.pt)
+
+Review correction: same-case shadow-teacher returns do not guarantee common packet impairment draws or variance reduction after actions diverge. See the [v4 review note](caliban-v4.md#review-correction-teacher-return-is-not-a-crn-control-variate); original result values are unchanged.

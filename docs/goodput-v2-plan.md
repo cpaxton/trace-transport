@@ -128,3 +128,5 @@ mechanisms, synthetic sampling weights, deployment gaps, a control-sensitivity
 audit, and receiver exploration telemetry. It leaves v2's negative results intact.
 Adaptation is the first target; scheduling and receiver controls are retained and
 audited separately. Real-world coverage remains a measured-path validation task.
+
+The [Caliban v4 follow-up](experiments/caliban-v4.md) closes initial low-RTT/high-rate gaps, exposes control timing, corrects teacher-baseline assumptions, and offloads a larger multi-seed CPU study while local robustness work continues.
