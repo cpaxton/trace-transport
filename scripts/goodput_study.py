@@ -36,14 +36,15 @@ def cases(root,key,seeds,*,baseline,checkpoint=None,device='cpu',ood=False):
 
 def main():
     p=argparse.ArgumentParser(description=__doc__);p.add_argument('stage',choices=['calibrate','validate','test'])
-    p.add_argument('--root',type=Path,default=Path('runs/goodput-v2'));p.add_argument('--checkpoint',type=Path)
+    p.add_argument('--root',type=Path,default=Path('runs/goodput-v21'));p.add_argument('--checkpoint',type=Path)
     p.add_argument('--device',default='cpu');args=p.parse_args();root=args.root
     package=Path(__file__).resolve().parents[1]/'src/trace_transport'
     source_hashes={name:hashlib.sha256((package/name).read_bytes()).hexdigest() for name in ['goodput.py','goodput_evaluation.py','joint_session.py','joint_models.py','joint_workers.py','joint_evaluation.py','wire.py','protocol.py','session_receiver.py']}
-    plan=dict(version='goodput-study-v2.0',domain=DOMAIN,source_sha256=source_hashes,calibration=list(range(71000,71008)),
+    plan=dict(version='goodput-study-v2.1',domain=DOMAIN,source_sha256=source_hashes,calibration=list(range(71000,71008)),
         pilot_validation=list(range(72000,72008)),validation=list(range(73000,73016)),
         test=list(range(74000,74040)),ood=list(range(75000,75040)),
         criteria='10% verified goodput gain and positive paired CI; miss CI upper <=0.005; wire <=1.05; no corruption/starvation; class/confirmation/completion guards',
+        baseline_search='24 initial controls then all 21 receiver actions for three distinct pacing configurations',
         resources='one isolated service, CPU quota 400%, RAM max 8GiB, 2 workers; CPU pilot')
     if (root/'plan.json').exists() and json.loads((root/'plan.json').read_text())!=plan:raise ValueError('study plan changed')
     write(root/'plan.json',plan)
@@ -57,6 +58,21 @@ def main():
                     write(root/'calibration.json',dict(configs=configs,records=records))
         # Prefer latency noninferiority, then the highest useful throughput among
         # eligible controls. This calibration never reads validation/test data.
+        # Hierarchical calibration: retain three distinct pacing configurations,
+        # then test every constant receiver action, including those available to ML.
+        minimum=min(summarize(rows)['interactive_miss_rate'] for rows in records.values())
+        ranked=sorted(records,key=lambda name:(summarize(records[name])['interactive_miss_rate']>minimum+.005,-summarize(records[name])['verified_goodput']))
+        pacing=[]
+        for name in ranked:
+            pair=(configs[name]['rate'],configs[name]['initial_rate'])
+            if pair not in pacing:pacing.append(pair)
+            if len(pacing)==3:break
+        from trace_transport.joint_session import ACK_ACTIONS
+        for rate,start in pacing:
+            for i,(batch,delay) in enumerate(ACK_ACTIONS):
+                name=f'{rate}-{int(start)}-ack{i}';baseline=dict(rate=rate,initial_rate=start,scheduler='edf',feedback='budgeted',batch=batch,delay=delay)
+                configs[name]=baseline;records[name]=cases(root,'cal-'+name,plan['calibration'],baseline=baseline)
+                write(root/'calibration.json',dict(configs=configs,records=records))
         minimum=min(summarize(rows)['interactive_miss_rate'] for rows in records.values())
         feasible=[name for name,rows in records.items() if summarize(rows)['interactive_miss_rate']<=minimum+.005]
         selected=max(feasible,key=lambda name:summarize(records[name])['verified_goodput'])

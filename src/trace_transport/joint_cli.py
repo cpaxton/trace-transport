@@ -15,7 +15,10 @@ def main(argv=None):
     p=argparse.ArgumentParser(prog='trace-transport')
     commands=p.add_subparsers(dest='command',required=True)
     train=commands.add_parser('joint-train')
+    train.add_argument('--paired-teacher',action='store_true')
     train.add_argument('--profile',choices=['deadline-v1','goodput-v2'],default='deadline-v1')
+    train.add_argument('--teacher-batch',type=int,default=8)
+    train.add_argument('--teacher-delay',type=float,default=.025)
     train.add_argument('--teacher-initial-rate',type=float,default=128000.)
     train.add_argument('--teacher-rate',choices=['fixed','aimd','bdp','delay'],default='fixed')
     train.add_argument('--gae-lambda',type=float,default=.95)
@@ -114,7 +117,7 @@ def main(argv=None):
     if args.command=='joint-train':
         from .joint_training import train as run,JointTrainConfig
         from .joint_models import JointModelConfig
-        run(args.output,JointTrainConfig(profile=args.profile,teacher_rate=args.teacher_rate,teacher_initial_rate=args.teacher_initial_rate,gae_lambda=args.gae_lambda,gpu_memory_fraction=args.gpu_memory_fraction,decisions=args.decisions,environments=args.envs,seed=args.seed,device=args.device,
+        run(args.output,JointTrainConfig(paired_teacher=args.paired_teacher,profile=args.profile,teacher_rate=args.teacher_rate,teacher_initial_rate=args.teacher_initial_rate,teacher_batch=args.teacher_batch,teacher_delay=args.teacher_delay,gae_lambda=args.gae_lambda,gpu_memory_fraction=args.gpu_memory_fraction,decisions=args.decisions,environments=args.envs,seed=args.seed,device=args.device,
             rollout=args.rollout,epochs=args.epochs,checkpoint_every=args.checkpoint_every,
             production_seconds=args.production_seconds,drain_seconds=args.drain_seconds,easy_fraction=args.easy_fraction,learn_sender=not args.freeze_sender,learn_receiver=not args.freeze_receiver),
             JointModelConfig(history=args.history,width=args.width,layers=args.layers),resume=args.resume)

@@ -10,7 +10,7 @@ from trace_transport.goodput_evaluation import compare,summarize
 
 def main():
     p=argparse.ArgumentParser(description=__doc__)
-    p.add_argument('--root',type=Path,default=Path('runs/goodput-v2'));p.add_argument('--run',default='pilot42')
+    p.add_argument('--root',type=Path,default=Path('runs/goodput-v21'));p.add_argument('--run',default='pilot42')
     args=p.parse_args();root=args.root;plan=json.loads((root/'plan.json').read_text())
     reference=json.loads((root/'reference.json').read_text());baseline=reference['baseline'];rows={};seen=set()
     for path in [root/args.run/'initial.pt',*sorted((root/args.run).glob('d*.pt')),root/args.run/'final.pt']:

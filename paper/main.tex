@@ -57,6 +57,18 @@ interface~\cite{jay2019aurora}. MVFST-RL integrates asynchronous reinforcement
 learning with QUIC and addresses action and inference delays in an operational
 transport~\cite{sivakumar2019mvfst}.
 
+Hybrid control is also established: Orca combines conventional and learned
+congestion control~\cite{abbasloo2020orca}. Copa motivates a queue-delay-based
+reference, although our implementation omits its full coexistence
+logic~\cite{arun2018copa}. PCC Vivace demonstrates online utility optimization
+without requiring deep RL~\cite{dong2018vivace}. These motivate stronger adaptive
+comparisons rather than fixed-rate comparisons alone. MOCC conditions control on
+application preferences~\cite{ma2022mocc}; Jury addresses fairness
+generalization~\cite{tian2025jury}. Pensieve demonstrates application-aware learned
+video bitrate selection~\cite{mao2017pensieve}, suggesting future robot-image
+quality or freshness objectives. Such objectives would require an explicit new
+contract; the current task always requires exact bytes.
+
 Transformers over network histories also have direct precedent. The Jazz preprint
 uses historical observations for transformer-based multipath congestion
 control~\cite{wang2025jazz}. The TCCO preprint investigates transformer-based
@@ -562,17 +574,43 @@ A CPU pilot completed 300,011 decisions in 251 seconds. A seven-snapshot
 validation sweep selects the initial teacher; no trained snapshot passes the
 deadline guard, and reserved tests remain unopened. Repeated evaluation of the
 final checkpoint differed despite identical checkpoint hashes and network seeds;
-fixed-shape per-world inference is required in the next version. No new learned
+this motivated fixed-shape per-world inference in version 2.1. No new learned
 win is claimed. Its dedicated user service bounds CPU affinity, RAM, swap and tasks and
 avoids terminal output and GPU contention. The terminal-server crash cause remains
 unconfirmed. The register records this experiment separately from joint-v1.
+
+Version 2.1 fixes inference batch shapes and reproduces all 16 diagnostic
+case records with one versus two workers. It expands calibration to 87 named
+settings, selecting delay-target pacing initialized at 512,000 B/s and ACK batch
+16 with a 25-ms timer. A joint CPU run reaches 1,000,006 endpoint decisions;
+training uses paired teacher reward differences and a fixed throughput reward
+scale. Sixteen-case validation again selects the initial teacher (158,379
+verified bulk B/s, 4.29\% interactive misses). The final trained policy has
+3.56\% lower goodput and fails deadline noninferiority. The only trained snapshot
+passing all guards has 2.69\% lower goodput. Reserved acceptance tests remain
+unopened. These are validation findings from one training seed, not a held-out
+learning win.
+
+A separate frozen-final-checkpoint stress comparison evaluates four controller
+modes on two new 16-case banks (128 case/controller evaluations). On coupled
+capacity, RTT, reverse-bottleneck and loss changes with four hosts, the adaptive
+reference achieves 45,227 bulk B/s and 39.30\% interactive misses; joint learning
+achieves 43,349 B/s and 42.24\% misses. The paired goodput-difference interval
+includes zero; the miss increase is 2.94 percentage points (95\% interval
+1.81--4.17). Host-cases without a verified bulk object number one versus four;
+this does not imply permanent starvation. No wrong delivery is observed.
+Receiver-only records equal the reference, and joint records equal sender-only.
+A four-case audit finds all 12,088 valid-history receiver proposals follow the
+teacher, including proposals for inactive rows. Thus gradient updates did not
+produce a distinct greedy receiver on these audited trajectories. These are
+exploratory results from one training seed, not reserved acceptance evidence.
 
 \section{Implementation stages and open questions}
 Implemented stages include reliable CPU transfer, history-based sender learning,
 receiver learning, joint sender/receiver training over CPU packet workers, and
 bounded binary datagram checks on two real devices. A GPU-native packet backend,
-joint learned-receiver hardware deployment, and maximum-goodput training remain
-future work.
+joint learned-receiver hardware deployment, and a demonstrated learned
+maximum-goodput advantage remain future work.
 The full target combines these pieces with reproducible configurations,
 checkpoints, bounded resources, and explicit failure semantics.
 

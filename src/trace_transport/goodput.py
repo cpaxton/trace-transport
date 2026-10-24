@@ -8,10 +8,10 @@ from .joint_session import JointTransportEnv,WorkloadConfig
 from .messages import Message
 from .simulator import NetworkConfig
 
-DOMAIN=dict(version='goodput-domain-v2.0',families=['steady','wireless-loss','contention','ack-bottleneck','handoff','churn','loss-cause-switch'],
+DOMAIN=dict(version='goodput-domain-v2.1',families=['steady','wireless-loss','contention','ack-bottleneck','handoff','churn','loss-cause-switch'],
     clients=[1,3],forward_bps=[500000,8000000],rtt_seconds=[.008,.06],
     rate_limit_bytes_per_second=2000000,window_limit_bytes=262144,
-    reward='verified-goodput-v2.0',measurement='completed object bytes during fixed production window')
+    reward='verified-goodput-v2.1',deadline_penalty=50.,measurement='completed object bytes during fixed production window')
 
 
 def sample_case(seed,*,production=6.,drain=2.,stage='full',ood=False):
@@ -105,11 +105,11 @@ class GoodputEnv(JointTransportEnv):
         misses=self.reward_counts['missed'];wire=self.reward_counts['wire']
         obs,_,done,truncated,info=super().step(sender_actions,receiver_actions)
         useful=sum(self.verified[c] for c in ('image','map'))-before
-        # Training-only scale: initial link service, never an actor observation.
-        scale=max(1.,self.network.bandwidth_bps/8*self.workload.production_seconds)
+        # Fixed task scale aligns reward with useful bytes, not per-case utilization.
+        scale=262144.*self.workload.production_seconds
         expected=max(1,self.count*self.workload.production_seconds*self.workload.interactive_hz)
         reward=(useful+.1*(self.drained_verified-drained))/scale-.02*(self.reward_counts['wire']-wire)/scale
-        reward-=10*(self.reward_counts['missed']-misses)/expected
+        reward-=DOMAIN['deadline_penalty']*(self.reward_counts['missed']-misses)/expected
         return obs,float(reward),done,truncated,info
     def metrics(self):
         out=super().metrics();w=self.workload

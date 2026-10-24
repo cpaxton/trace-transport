@@ -30,6 +30,17 @@ work is listed separately and never presented as a result.
 | 2026-10-23 (run) | device-binary-v1 | Complete, engineering only | Herman Wi-Fi and Caliban Ethernet each recovered 9/9 synthetic text/PNG/map payloads with deterministic control and 9/9 with a trained sender-only actor: 36/36 total. Sequential, not randomized paired performance trials; receiver deterministic. | [Results](../../artifacts/device-binary-v1-results.json), [method](../joint-network-brain.md#device-engineering-checks) |
 | 2026-10-23 (start/end) | goodput-v2.0 calibration + CPU pilot | Pilot complete, negative validation result | 24 deterministic controls calibrated; delay-target/512-kB/s/budgeted reference selected. Validation reference: 157,184 verified bulk B/s and 4.26% interactive misses. Pilot completed 300,011 decisions in 251 s. Seven-snapshot validation selected the initial teacher; all trained candidates fail deadline noninferiority. Repeated final-policy evaluation differed; final tests remain unopened. | [Pilot report](goodput-v2.md), [literature](../research/learning-opportunities.md); [validation artifacts](../../artifacts/goodput-v2.0-pilot-validation.json) |
 
+## Follow-up experiments
+
+| Actual start | End | Experiment | Configuration and evidence | Status |
+| --- | --- | --- | --- | --- |
+| 2026-10-23 UTC | 2026-10-24 UTC | goodput-v2.1 / learn42 | [Launcher/configuration](../../scripts/goodput_learn.py), [domain](../../src/trace_transport/goodput.py), [reference search](../../scripts/goodput_study.py). One million endpoint decisions, joint sender/receiver, paired teacher reward, CPU only. Calibration searched 87 named deterministic settings; selected delay-target pacing at 512,000 B/s with ACK batch 16 / 25 ms. Sixteen-case validation reference: 158,379 verified bulk B/s, 4.29% interactive misses. | Complete, negative validation result. 1,000,006 decisions; initial teacher selected. Final learned goodput −3.56%, deadline guard fails. [Validation](../../artifacts/goodput-v2.1-validation.json), [configuration](../../artifacts/goodput-v2.1-training-config.json). Reserved test and OOD seeds unopened. |
+
+The v2.1 inference diagnostic reproduced all 16 case records exactly with one
+versus two evaluation workers after fixing inference batch shapes. This is an
+engineering repeatability check, not evidence of improved network performance.
+The v2.0 negative result remains recorded separately above.
+
 ## Planned experiments
 
 | Date planned | Experiment | Objective and acceptance | Status |
@@ -48,3 +59,16 @@ criterion starts a new version; it does not rename an old result into a win.
 `trace-transport joint-status` and the console's `/joint` page show live local
 progress; this register records reviewable milestones and conclusions. Raw runs
 and device credentials stay outside Git. Publish updates through feature PRs.
+
+## Changing-network role comparison
+
+Actual start/end 2026-10-24 UTC. Complete, negative exploratory comparison:
+adaptive deterministic, learned sender, learned receiver, and joint learning;
+128 paired case/controller evaluations on two new 16-case banks. Coupled-harsh:
+joint goodput −4.15%, interactive misses 42.24% versus 39.30%; zero-bulk
+host-cases 4 versus 1. Receiver-only matched adaptive; the action audit found
+teacher-following receiver proposals throughout four sampled cases. No wrong
+delivery observed. [Report and limitations](changing-comparison-v1.md),
+[configuration](../../artifacts/changing-comparison-v1-plan.json),
+[results](../../artifacts/changing-comparison-v1-results.json).
+Reserved acceptance seeds remain unopened.

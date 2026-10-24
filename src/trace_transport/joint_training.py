@@ -26,6 +26,9 @@ class JointTrainConfig:
     profile:str="deadline-v1"
     teacher_rate:str="fixed"
     teacher_initial_rate:float=128000.
+    teacher_batch:int=8
+    teacher_delay:float=.025
+    paired_teacher:bool=False
     teacher_prior:float=.9
     gae_lambda:float=.95
     gpu_memory_fraction:float=.15
@@ -46,6 +49,7 @@ class JointTrainConfig:
     def __post_init__(self):
         if min(self.decisions,self.environments,self.rollout,self.epochs,self.minibatch,self.checkpoint_every)<1:
             raise ValueError('training budgets must be positive')
+        if self.teacher_batch not in (1,2,4,8,16,32) or not 0<=self.teacher_delay<=.25:raise ValueError('invalid teacher feedback')
         if not 2000<=self.teacher_initial_rate<=2000000:raise ValueError('invalid initial pacing rate')
         if self.profile not in ('deadline-v1','goodput-v2') or self.teacher_rate not in ('fixed','aimd','bdp','delay'):raise ValueError('invalid profile/teacher')
         if not 0<self.teacher_prior<1 or not 0<self.gpu_memory_fraction<=.5 or not 0<=self.gae_lambda<=1:raise ValueError('invalid memory/GAE limits')
@@ -117,7 +121,7 @@ def train(output,cfg=JointTrainConfig(),model_cfg=JointModelConfig(),resume=None
         from .goodput import DOMAIN as domain
     else:domain=DOMAIN
     baseline=dict(rate=cfg.teacher_rate,scheduler='edf',feedback='budgeted')
-    if cfg.profile=='goodput-v2':baseline['initial_rate']=cfg.teacher_initial_rate
+    if cfg.profile=='goodput-v2':baseline.update(initial_rate=cfg.teacher_initial_rate,batch=cfg.teacher_batch,delay=cfg.teacher_delay)
     sender=SenderActor(model_cfg).to(cfg.device);receiver=ReceiverActor(model_cfg).to(cfg.device);critic=CentralCritic().to(cfg.device)
     if cfg.profile=='goodput-v2':
         # Greedy teacher equivalence is insufficient: sampling must start close
@@ -133,7 +137,7 @@ def train(output,cfg=JointTrainConfig(),model_cfg=JointModelConfig(),resume=None
     decisions=0;world_steps=0;updates=0;last_checkpoint=0;start=time.monotonic();completed=[]
     source_hashes={name:hashlib.sha256((Path(__file__).parent/name).read_bytes()).hexdigest() for name in ['goodput.py','joint_session.py','joint_models.py','joint_workers.py','joint_training.py','protocol.py','wire.py','session_receiver.py','learning.py']} if cfg.profile=='goodput-v2' else {}
     metadata=dict(training=asdict(cfg),model=asdict(model_cfg),domain=domain,profile=cfg.profile,
-        reward='verified-goodput-v2.0' if cfg.profile=='goodput-v2' else 'joint-deadline-v1',baseline=baseline,source_sha256=source_hashes)
+        reward=domain['reward'] if cfg.profile=='goodput-v2' else 'joint-deadline-v1',baseline=baseline,source_sha256=source_hashes)
     if resume is not None:
         resume=Path(resume)
         data=torch.load(resume,map_location='cpu',weights_only=True)
@@ -164,7 +168,7 @@ def train(output,cfg=JointTrainConfig(),model_cfg=JointModelConfig(),resume=None
              'torch_rng':torch.get_rng_state(),'cuda_rng':torch.cuda.get_rng_state_all() if cfg.device.startswith('cuda') else []},optimizers)
     def reset(index,episode):
         stage='easy' if decisions<cfg.decisions*cfg.easy_fraction else 'full'
-        o,state,_=pool.reset(index,_seed(cfg.seed,episode),cfg.production_seconds,cfg.drain_seconds,stage,False,baseline,None,cfg.profile)
+        o,state,_=pool.reset(index,_seed(cfg.seed,episode),cfg.production_seconds,cfg.drain_seconds,stage,False,baseline,None,cfg.profile,cfg.paired_teacher)
         return o,state,Histories(o,model_cfg)
     pool=EnvironmentPool(cfg.environments)
     try:

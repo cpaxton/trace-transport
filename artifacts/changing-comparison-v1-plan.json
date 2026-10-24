@@ -1,0 +1,56 @@
+{
+  "version": "changing-comparison-v1",
+  "started_utc": "2026-10-24T12:43:26.173221+00:00",
+  "checkpoint": "runs/goodput-v21/learn42/final.pt",
+  "checkpoint_sha256": "1c4b9c4289a319326dda767f5a3066a062544ef1474894d95900748bf08b8a8a",
+  "baseline": {
+    "rate": "delay",
+    "initial_rate": 512000.0,
+    "scheduler": "edf",
+    "feedback": "budgeted",
+    "batch": 16,
+    "delay": 0.025
+  },
+  "production": 6.0,
+  "drain": 2.0,
+  "cases": 16,
+  "selection": "final checkpoint fixed before stress evaluation; exploratory, not acceptance",
+  "suites": {
+    "changing": [
+      81000,
+      81001,
+      81002,
+      81003,
+      81004,
+      81005,
+      81006,
+      81007,
+      81008,
+      81009,
+      81010,
+      81011,
+      81012,
+      81013,
+      81014,
+      81015
+    ],
+    "coupled-harsh": [
+      82000,
+      82001,
+      82002,
+      82003,
+      82004,
+      82005,
+      82006,
+      82007,
+      82008,
+      82009,
+      82010,
+      82011,
+      82012,
+      82013,
+      82014,
+      82015
+    ]
+  }
+}

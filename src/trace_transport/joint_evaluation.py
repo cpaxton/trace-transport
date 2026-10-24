@@ -64,7 +64,10 @@ def evaluate(*,seeds,checkpoint=None,baseline=None,device='cpu',environments=8,p
         teacher=dict(baseline)
         if checkpoint and sender_enabled:teacher.update(rate=teacher_config['rate'],scheduler=teacher_config['scheduler'])
         if checkpoint and sender_enabled and 'initial_rate' in teacher_config:teacher['initial_rate']=teacher_config['initial_rate']
-        if checkpoint and receiver_enabled:teacher['feedback']=teacher_config['feedback']
+        if checkpoint and receiver_enabled:
+            teacher['feedback']=teacher_config['feedback']
+            for key in ('batch','delay'):
+                if key in teacher_config:teacher[key]=teacher_config[key]
         o,_,label=pool.reset(i,seed,production,drain,'full',ood,teacher,trace_network,profile)
         assigned[i]=(seed,label)
         return o,Histories(o,config) if infer else None
@@ -87,7 +90,31 @@ def evaluate(*,seeds,checkpoint=None,baseline=None,device='cpu',environments=8,p
                         pool.pipes[i].send(('finish-baseline',None))
                     else:del assigned[i]
             return sorted(records,key=lambda r:r['seed'])
+        def stable_actions(active):
+            result=[]
+            # The same world always gets the same tensor shapes and row positions,
+            # independent of which other CPU workers finish first.
+            for i in active:
+                o,h=obs[i],histories[i];h.append(o);n=len(o['sender'])
+                if n>8:raise ValueError('goodput fixed-shape evaluator supports at most four clients')
+                sender_action=np.zeros((n,3),np.float32);receiver_action=np.zeros(n,np.int64)
+                valid=np.zeros((8,config.history),bool);valid[:n]=h.valid
+                def tensor(x):return torch.as_tensor(x,device=device)
+                with torch.inference_mode():
+                    if infer_sender and o['sender_active'].any():
+                        history=np.zeros((8,config.history,h.sender.shape[-1]),np.float32);history[:n]=h.sender
+                        queue=np.zeros((8,*o['queue'].shape[1:]),np.float32);queue[:n]=o['queue']
+                        mask=np.zeros((8,o['queue_mask'].shape[1]),bool);mask[:n]=o['queue_mask']
+                        a=sender.act(tensor(history),tensor(valid),tensor(queue),tensor(mask)).cpu().numpy()
+                        sender_action[o['sender_active']]=a[:n][o['sender_active']]
+                    if infer_receiver and o['receiver_active'].any():
+                        history=np.zeros((8,config.history,h.receiver.shape[-1]),np.float32);history[:n]=h.receiver
+                        a=receiver.act(tensor(history),tensor(valid)).cpu().numpy()
+                        receiver_action[o['receiver_active']]=a[:n][o['receiver_active']]
+                result.append((sender_action,receiver_action))
+            return result
         def actions_for(active):
+            if profile=='goodput-v2':return stable_actions(active)
             current=[obs[i] for i in active]
             actions=[(np.zeros((len(o['sender']),3),np.float32),np.zeros(len(o['receiver']),np.int64)) for o in current]
             hs=[histories[i] for i in active]

@@ -8,7 +8,7 @@ from .joint_session import JointTransportEnv
 def _worker(pipe):
     import faulthandler
     faulthandler.enable()
-    env=None
+    env=None;teacher_env=None;raw_return=teacher_return=0.
     try:
         while True:
             command,args=pipe.recv()
@@ -35,9 +35,13 @@ def _worker(pipe):
                         s.rate_control=baseline.get('rate','fixed');s.scheduler=baseline.get('scheduler','edf')
                         profile=baseline.get('feedback','budgeted')
                         s.batch,s.delay=(8,.25) if profile=='sparse' else (8,.025)
+                        s.batch=baseline.get('batch',s.batch);s.delay=baseline.get('delay',s.delay)
                         s.ack_mode='deadline' if profile=='deadline' else 'constant'
                         s.baseline_batch,s.baseline_delay,s.baseline_ack_mode=s.batch,s.delay,s.ack_mode
                     obs=env.observe()
+                paired=bool(options[4]) if len(options)>4 else False
+                if paired and task!='goodput-v2':raise ValueError('paired teacher requires fixed-horizon goodput task')
+                teacher_env=env.clone() if paired else None;raw_return=teacher_return=0.
                 pipe.send((obs,env.critic_state(obs),label))
             elif command=='finish-baseline':
                 import numpy as np
@@ -47,9 +51,16 @@ def _worker(pipe):
                 pipe.send(metrics)
             elif command=='step':
                 obs,reward,done,_,info=env.step(*args)
+                raw_return+=reward
+                if teacher_env is not None:
+                    import numpy as np
+                    _,reference_reward,reference_done,_,_=teacher_env.step(np.zeros((env.count,3)),np.zeros(env.count,dtype=int))
+                    if reference_done!=done:raise RuntimeError('teacher/learner horizons diverged')
+                    teacher_return+=reference_reward;reward-=reference_reward
                 metrics=None
                 if done:
                     metrics=env.metrics();metrics.pop('messages_detail',None)
+                    if teacher_env is not None:metrics.update(raw_training_return=raw_return,teacher_training_return=teacher_return)
                 pipe.send((obs,env.critic_state(obs),reward,done,metrics,env.processed_events))
     except EOFError:pass
     except BaseException as exc:
