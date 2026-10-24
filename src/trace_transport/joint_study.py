@@ -32,6 +32,7 @@ def _ready(root,directories,progress,output,wait):
             print('waiting for',directory,flush=True);time.sleep(30)
     for directory in directories:
         _,_,model_cfg,meta=load_checkpoint(root/directory/'final.pt')
+        if meta.get('profile','deadline-v1')!='deadline-v1':raise ValueError('use the goodput study for this checkpoint profile')
         config=meta['training']
         if meta['decisions']<config['decisions']:raise ValueError('incomplete training checkpoint')
         if directory.startswith('seed') and config['seed']!=int(directory[4:]):raise ValueError('seed/directory mismatch')

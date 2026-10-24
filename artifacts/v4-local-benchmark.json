@@ -1,0 +1,42 @@
+{
+  "version": "caliban-v4-benchmark-v1",
+  "started_utc": "2026-10-24T17:56:47.132390+00:00",
+  "machine": "x86_64",
+  "python": "3.12.10",
+  "torch": "2.14.1+cu130",
+  "numpy": "2.5.4",
+  "cuda_available": true,
+  "affinity": [
+    26,
+    27,
+    28,
+    29,
+    30,
+    31
+  ],
+  "trials": [
+    {
+      "environments": 1,
+      "decisions": 2003,
+      "seconds": 13.052130744996248,
+      "decisions_per_second": 153.4615335329738
+    },
+    {
+      "environments": 2,
+      "decisions": 2003,
+      "seconds": 12.292515882989392,
+      "decisions_per_second": 162.94467455370858
+    },
+    {
+      "environments": 4,
+      "decisions": 2003,
+      "seconds": 12.144891411007848,
+      "decisions_per_second": 164.92531157458743
+    }
+  ],
+  "eight_endpoint_actor_pair_ms_p50_p95": [
+    7.908340499852784,
+    8.225501851120498
+  ],
+  "completed_utc": "2026-10-24T17:57:27.683938+00:00"
+}

@@ -5,7 +5,9 @@ The existing joint-v1 experiment prioritizes 100-ms interactive deadlines and
 requires bulk throughput to stay near a reference; that is a different objective.
 Its training, selection and test criteria remain frozen. The machine-readable
 extension is [joint-goodput-v2-plan.json](../experiments/joint-goodput-v2-plan.json).
-This document is a plan, not a claim that the extension is implemented or trained.
+The first [bounded prototype and CPU pilot](experiments/goodput-v2.md) are now
+implemented and completed as negative validation studies. The full acceptance program remains a plan, not a claim of a
+trained throughput win.
 
 ## Two workloads
 
@@ -83,3 +85,48 @@ CPU reference. Real-device tests must measure wall-clock completion and include
 steady-state inference costs, using the same receiver, workload and randomized
 controller order. These extensions need new training and held-out evaluation;
 the completed device smoke transfers do not establish the new objective.
+
+The [literature review and difficulty ladder](research/learning-opportunities.md)
+explains the new loss-cause, feedback-bottleneck and churn cases, stronger
+baselines, and exploration/credit-assignment changes.
+
+## Adaptive-control comparisons and diagnosable headroom
+
+Use the [background review](research/learning-opportunities.md) as design evidence,
+not a claim that the proposed scenarios reproduce published results. Aurora and
+Remy motivate history and assumption-mismatch tests; Orca motivates an adaptive
+teacher; Copa and PCC Vivace motivate stronger references; MOCC motivates explicit
+application preferences; Jury motivates per-host fairness; Pensieve motivates a
+separate future application-quality/freshness task.
+
+The immediate comparison freezes a trained final checkpoint before evaluating new
+paired seeds, and includes adaptive deterministic control, learned sender only,
+learned receiver only, and both learned. Use the same exact-byte kernel, traffic,
+rate/window limits and teacher configuration. Evaluate coupled capacity changes,
+RTT changes, reverse ACK bottlenecks, and loss. Publish negative findings and
+per-suite confidence intervals; stress tests are exploratory and do not replace
+the reserved acceptance bank. See [comparison runner](../scripts/goodput_changing_comparison.py).
+
+Then isolate each suspected weakness: propagation-delay steps versus queue growth,
+reverse-only congestion, short capacity opportunities, fixed ACK overhead versus
+latency, and mixed-class scheduling. First measure whether different legal actions
+produce meaningful improvements. Compare memoryless and shuffled-history actors
+against real history, with multiple training seeds. Audit action distributions,
+observation normalization, credit assignment, and training/evaluation parity before
+increasing model size or training budget. A deterministic adaptive baseline also
+uses historical estimates; changing conditions alone do not guarantee an ML win.
+
+Future utility-optimizing and full transport baselines should be distinguished
+from our simplified delay-target, AIMD and bandwidth-delay-window heuristics.
+Application quality changes and stale-message cancellation remain separate opt-in
+experiments and cannot silently relax exact byte recovery.
+
+## Versioned distribution follow-up
+
+The [v3 coverage contract](experiments/distribution-v3.md) specifies realistic
+mechanisms, synthetic sampling weights, deployment gaps, a control-sensitivity
+audit, and receiver exploration telemetry. It leaves v2's negative results intact.
+Adaptation is the first target; scheduling and receiver controls are retained and
+audited separately. Real-world coverage remains a measured-path validation task.
+
+The [Caliban v4 follow-up](experiments/caliban-v4.md) closes initial low-RTT/high-rate gaps, exposes control timing, corrects teacher-baseline assumptions, and offloads a larger multi-seed CPU study while local robustness work continues.

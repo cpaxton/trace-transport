@@ -8,27 +8,46 @@ from .joint_session import JointTransportEnv
 def _worker(pipe):
     import faulthandler
     faulthandler.enable()
-    env=None
+    env=None;teacher_env=None;raw_return=teacher_return=0.
     try:
         while True:
             command,args=pipe.recv()
             if command=='close':break
             if command=='reset':
                 seed,production,drain,stage,*options=args
-                cfg,workload,label=sample_case(seed,production=production,drain=drain,stage=stage,ood=options[0] if options else False)
+                task=options[3] if len(options)>3 else 'deadline-v1'
+                if task=='goodput-v4':
+                    from .goodput_deployment import sample_case as sampler,GoodputDeploymentEnv as GoodputEnv
+                elif task=='goodput-v3':
+                    from .goodput_distribution import sample_case as sampler,GoodputDistributionEnv as GoodputEnv
+                elif task=='goodput-v2':
+                    from .goodput import sample_case as sampler,GoodputEnv
+                elif task=='deadline-v1':sampler=sample_case
+                else:raise ValueError('unknown experiment profile')
+                cfg,workload,label=sampler(seed,production=production,drain=drain,stage=stage,ood=options[0] if options else False)
                 if len(options)>2 and options[2] is not None:
                     from .simulator import NetworkConfig
                     cfg=NetworkConfig(**options[2]);label={'family':'heldout-recording','trace_replay':True}
-                env=JointTransportEnv(cfg,workload);obs,_=env.reset(seed=seed)
+                if len(options)>1 and 'initial_rate' in options[1]:
+                    from dataclasses import replace
+                    cfg=replace(cfg,initial_rate=options[1]['initial_rate'])
+                env=GoodputEnv(cfg,workload,churn=label.get('churn',False),churn_times=label.get('churn_times')) if task.startswith('goodput-') else JointTransportEnv(cfg,workload)
+                obs,_=env.reset(seed=seed)
                 if len(options)>1:
                     baseline=options[1]
                     for s in env.sessions:
                         s.rate_control=baseline.get('rate','fixed');s.scheduler=baseline.get('scheduler','edf')
                         profile=baseline.get('feedback','budgeted')
                         s.batch,s.delay=(8,.25) if profile=='sparse' else (8,.025)
+                        s.batch=baseline.get('batch',s.batch);s.delay=baseline.get('delay',s.delay)
                         s.ack_mode='deadline' if profile=='deadline' else 'constant'
                         s.baseline_batch,s.baseline_delay,s.baseline_ack_mode=s.batch,s.delay,s.ack_mode
                     obs=env.observe()
+                paired=bool(options[4]) if len(options)>4 else False
+                if paired and not task.startswith('goodput-'):raise ValueError('paired teacher requires fixed-horizon goodput task')
+                # Same starting RNG state does not imply CRN coupling once actions
+                # change packet counts. This is a same-case return baseline only.
+                teacher_env=env.clone() if paired else None;raw_return=teacher_return=0.
                 pipe.send((obs,env.critic_state(obs),label))
             elif command=='finish-baseline':
                 import numpy as np
@@ -38,9 +57,16 @@ def _worker(pipe):
                 pipe.send(metrics)
             elif command=='step':
                 obs,reward,done,_,info=env.step(*args)
+                raw_return+=reward
+                if teacher_env is not None:
+                    import numpy as np
+                    _,reference_reward,reference_done,_,_=teacher_env.step(np.zeros((env.count,3)),np.zeros(env.count,dtype=int))
+                    if reference_done!=done:raise RuntimeError('teacher/learner horizons diverged')
+                    teacher_return+=reference_reward;reward-=reference_reward
                 metrics=None
                 if done:
                     metrics=env.metrics();metrics.pop('messages_detail',None)
+                    if teacher_env is not None:metrics.update(raw_training_return=raw_return,teacher_training_return=teacher_return)
                 pipe.send((obs,env.critic_state(obs),reward,done,metrics,env.processed_events))
     except EOFError:pass
     except BaseException as exc:

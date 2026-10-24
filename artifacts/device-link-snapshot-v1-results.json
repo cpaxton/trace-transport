@@ -1,0 +1,90 @@
+{
+  "purpose": "small idle engineering snapshots; PHY rates are not capacity measurements",
+  "snapshots": [
+    {
+      "started_utc": "2026-10-24T13:17:40.861469+00:00",
+      "purpose": "idle engineering inventory, not capacity or controller performance",
+      "devices": {
+        "herman": {
+          "link": {
+            "medium": "wifi",
+            "wireless_link_summary": [
+              "signal: -62 dBm",
+              "rx bitrate: 585.0 MBit/s VHT-MCS 7 80MHz VHT-NSS 2",
+              "tx bitrate: 234.0 MBit/s VHT-MCS 5 80MHz VHT-NSS 1"
+            ]
+          },
+          "ping": {
+            "packet_loss_percent": 0.0,
+            "rtt_ms": {
+              "min": 0.983,
+              "mean": 11.016,
+              "max": 97.342,
+              "mdev": 28.778
+            },
+            "packets": 10,
+            "exit_code": 0
+          }
+        },
+        "caliban": {
+          "link": {
+            "medium": "ethernet-or-other",
+            "reported_link_speed_mbps": 1000
+          },
+          "ping": {
+            "packet_loss_percent": null,
+            "rtt_ms": null,
+            "packets": 10,
+            "exit_code": 2
+          }
+        }
+      },
+      "completed_utc": "2026-10-24T13:17:43.350049+00:00"
+    },
+    {
+      "started_utc": "2026-10-24T13:18:44.895955+00:00",
+      "purpose": "idle engineering inventory, not capacity or controller performance",
+      "devices": {
+        "herman": {
+          "link": {
+            "medium": "wifi",
+            "wireless_link_summary": [
+              "signal: -62 dBm",
+              "rx bitrate: 526.6 MBit/s VHT-MCS 6 80MHz VHT-NSS 2",
+              "tx bitrate: 175.5 MBit/s VHT-MCS 4 80MHz VHT-NSS 1"
+            ]
+          },
+          "ping": {
+            "packet_loss_percent": 0.0,
+            "rtt_ms": {
+              "min": 1.004,
+              "mean": 2.458,
+              "max": 9.553,
+              "mdev": 2.387
+            },
+            "packets": 10,
+            "exit_code": 0
+          }
+        },
+        "caliban": {
+          "link": {
+            "medium": "ethernet-or-other",
+            "reported_link_speed_mbps": 1000
+          },
+          "ping": {
+            "packet_loss_percent": 0.0,
+            "rtt_ms": {
+              "min": 0.705,
+              "mean": 0.728,
+              "max": 0.772,
+              "mdev": 0.024
+            },
+            "packets": 10,
+            "exit_code": 0
+          }
+        }
+      },
+      "completed_utc": "2026-10-24T13:18:49.236262+00:00"
+    }
+  ]
+}

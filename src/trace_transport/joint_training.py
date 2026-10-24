@@ -6,6 +6,7 @@ no router state enters an actor tensor. Session histories survive message ends.
 from dataclasses import asdict,dataclass
 import json
 import hashlib
+import math
 import os
 from pathlib import Path
 import time
@@ -17,11 +18,23 @@ from .joint_curriculum import DOMAIN
 from .joint_models import JointModelConfig,SenderActor,ReceiverActor,CentralCritic,save_checkpoint
 from .joint_session import SENDER_FEATURES,RECEIVER_FEATURES
 from .joint_workers import EnvironmentPool
-from .learning import generalized_advantages
+from .learning import generalized_advantages,time_generalized_advantages
 
 
 @dataclass(frozen=True)
 class JointTrainConfig:
+    profile:str="deadline-v1"
+    teacher_scheduler:str="edf"
+    teacher_rate:str="fixed"
+    teacher_initial_rate:float=128000.
+    teacher_batch:int=8
+    teacher_delay:float=.025
+    paired_teacher:bool=False
+    receiver_teacher_prior:float|None=None
+    teacher_prior:float=.9
+    time_aware_gae:bool=False
+    gae_lambda:float=.95
+    gpu_memory_fraction:float=.15
     decisions:int=5_000_000
     environments:int=16
     rollout:int=256
@@ -39,6 +52,14 @@ class JointTrainConfig:
     def __post_init__(self):
         if min(self.decisions,self.environments,self.rollout,self.epochs,self.minibatch,self.checkpoint_every)<1:
             raise ValueError('training budgets must be positive')
+        if self.teacher_batch not in (1,2,4,8,16,32) or not 0<=self.teacher_delay<=.25:raise ValueError('invalid teacher feedback')
+        if not 2000<=self.teacher_initial_rate<=2000000:raise ValueError('invalid initial pacing rate')
+        if self.profile not in ('deadline-v1','goodput-v2','goodput-v3','goodput-v4') or self.teacher_rate not in ('fixed','aimd','bdp','delay','delay-fast'):raise ValueError('invalid profile/teacher')
+        if self.time_aware_gae and self.profile!='goodput-v4':raise ValueError('elapsed-time GAE requires v4 transition timing')
+        if self.teacher_scheduler not in ('edf','drr'):raise ValueError('invalid teacher scheduler')
+        if self.receiver_teacher_prior is not None and not 0<self.receiver_teacher_prior<1:raise ValueError('invalid receiver prior')
+        if self.teacher_rate=='delay-fast' and self.profile not in ('goodput-v3','goodput-v4'):raise ValueError('delay-fast requires v3')
+        if not 0<self.teacher_prior<1 or not 0<self.gpu_memory_fraction<=.5 or not 0<=self.gae_lambda<=1:raise ValueError('invalid memory/GAE limits')
         if self.learning_rate<=0 or not 0<=self.easy_fraction<=1:raise ValueError('invalid optimizer/curriculum')
 
 
@@ -94,7 +115,12 @@ def _actor_update(model,optimizer,records,advantages,cfg,device,role):
             norm=torch.nn.utils.clip_grad_norm_(model.parameters(),.5);maximum=max(maximum,float(norm))
             optimizer.step();steps+=1
         if stop:break
-    return dict(gradient_norm=maximum,kl=max_kl,samples=len(adv),steps=steps)
+    diagnostic={}
+    if role=='receiver':
+        choices=fields['choice'].detach().cpu();values=adv.detach().cpu()
+        diagnostic['choice_counts']=torch.bincount(choices,minlength=22).tolist()
+        diagnostic['choice_mean_normalized_advantage']=[float(values[choices==i].mean()) if (choices==i).any() else None for i in range(22)]
+    return dict(gradient_norm=maximum,kl=max_kl,samples=len(adv),steps=steps,**diagnostic)
 
 
 def train(output,cfg=JointTrainConfig(),model_cfg=JointModelConfig(),resume=None):
@@ -102,17 +128,40 @@ def train(output,cfg=JointTrainConfig(),model_cfg=JointModelConfig(),resume=None
     if resume is None and (output/'config.json').exists():raise ValueError('training output already exists; use a new run directory')
     torch.set_num_threads(1);torch.manual_seed(cfg.seed)
     if cfg.device.startswith('cuda') and not torch.cuda.is_available():raise RuntimeError('requested CUDA is unavailable')
+    if cfg.device.startswith('cuda'):torch.cuda.set_per_process_memory_fraction(cfg.gpu_memory_fraction)
+    if cfg.profile=='goodput-v4':
+        from .goodput_deployment import DOMAIN as domain
+    elif cfg.profile=='goodput-v3':
+        from .goodput_distribution import DOMAIN as domain
+    elif cfg.profile=='goodput-v2':
+        from .goodput import DOMAIN as domain
+    else:domain=DOMAIN
+    baseline=dict(rate=cfg.teacher_rate,scheduler=cfg.teacher_scheduler,feedback='budgeted')
+    if cfg.profile.startswith('goodput-'):baseline.update(initial_rate=cfg.teacher_initial_rate,batch=cfg.teacher_batch,delay=cfg.teacher_delay)
     sender=SenderActor(model_cfg).to(cfg.device);receiver=ReceiverActor(model_cfg).to(cfg.device);critic=CentralCritic().to(cfg.device)
+    if cfg.profile.startswith('goodput-'):
+        # Greedy teacher equivalence is insufficient: sampling must start close
+        # to it too, rather than uniformly random scheduling/ACK decisions.
+        from .joint_session import MAX_CANDIDATES,ACK_ACTIONS
+        odds=cfg.teacher_prior/(1-cfg.teacher_prior)
+        with torch.no_grad():
+            sender.follow.bias.fill_(math.log(MAX_CANDIDATES*odds))
+            rx_prior=cfg.receiver_teacher_prior if cfg.receiver_teacher_prior is not None else cfg.teacher_prior
+            receiver.head.bias[0]=math.log(len(ACK_ACTIONS)*rx_prior/(1-rx_prior))
+            sender.log_std.fill_(-3.)
     optimizers=[torch.optim.Adam(m.parameters(),lr=cfg.learning_rate) for m in (sender,receiver,critic)]
     obs=[];states=[];histories=[];episodes=list(range(cfg.environments));next_episode=cfg.environments
     decisions=0;world_steps=0;updates=0;last_checkpoint=0;start=time.monotonic();completed=[]
-    metadata=dict(training=asdict(cfg),model=asdict(model_cfg),domain=DOMAIN,reward='joint-deadline-v1',baseline=dict(rate='fixed',scheduler='edf',feedback='budgeted'))
+    source_hashes={name:hashlib.sha256((Path(__file__).parent/name).read_bytes()).hexdigest() for name in ['goodput.py','goodput_distribution.py','goodput_deployment.py','joint_session.py','joint_models.py','joint_workers.py','joint_training.py','protocol.py','wire.py','session_receiver.py','learning.py']} if cfg.profile.startswith('goodput-') else {}
+    metadata=dict(algorithm='mappo-time-gae-v1' if cfg.time_aware_gae else 'mappo-step-gae-v1',teacher_baseline_coupling=('same initial RNG; action-dependent draws can diverge; no guaranteed variance reduction' if cfg.paired_teacher else 'disabled; raw task reward'),training=asdict(cfg),model=asdict(model_cfg),domain=domain,profile=cfg.profile,
+        reward=domain['reward'] if cfg.profile.startswith('goodput-') else 'joint-deadline-v1',baseline=baseline,source_sha256=source_hashes)
     if resume is not None:
         resume=Path(resume)
         data=torch.load(resume,map_location='cpu',weights_only=True)
         old=data['metadata']
-        if data.get('format_version')!='joint-v1' or old['training']!=asdict(cfg) or old['model']!=asdict(model_cfg) or old['domain']!=DOMAIN or old['reward']!=metadata['reward']:
+        if data.get('format_version')!='joint-v1' or JointTrainConfig(**old['training'])!=cfg or old['model']!=asdict(model_cfg) or old['domain']!=domain or old['reward']!=metadata['reward']:
             raise ValueError('resume requires matching training, model, domain and reward configuration')
+        if cfg.profile.startswith('goodput-') and old.get('source_sha256')!=source_hashes:raise ValueError('goodput resume source changed; version the next experiment')
         sender.load_state_dict(data['sender']);receiver.load_state_dict(data['receiver']);critic.load_state_dict(data['critic'])
         for optimizer,state in zip(optimizers,data['optimizers']):optimizer.load_state_dict(state)
         decisions=old['decisions'];world_steps=old['world_steps'];updates=old['updates'];last_checkpoint=decisions
@@ -136,7 +185,7 @@ def train(output,cfg=JointTrainConfig(),model_cfg=JointModelConfig(),resume=None
              'torch_rng':torch.get_rng_state(),'cuda_rng':torch.cuda.get_rng_state_all() if cfg.device.startswith('cuda') else []},optimizers)
     def reset(index,episode):
         stage='easy' if decisions<cfg.decisions*cfg.easy_fraction else 'full'
-        o,state,_=pool.reset(index,_seed(cfg.seed,episode),cfg.production_seconds,cfg.drain_seconds,stage)
+        o,state,_=pool.reset(index,_seed(cfg.seed,episode),cfg.production_seconds,cfg.drain_seconds,stage,False,baseline,None,cfg.profile,cfg.paired_teacher)
         return o,state,Histories(o,model_cfg)
     pool=EnvironmentPool(cfg.environments)
     try:
@@ -144,7 +193,7 @@ def train(output,cfg=JointTrainConfig(),model_cfg=JointModelConfig(),resume=None
             o,state,h=reset(i,episodes[i]);obs.append(o);states.append(state);histories.append(h)
         if resume is None:checkpoint('initial.pt')
         while decisions<cfg.decisions:
-            sender_records=[];receiver_records=[];rewards=[];values=[];terminals=[];critic_states=[]
+            sender_records=[];receiver_records=[];rewards=[];values=[];terminals=[];critic_states=[];elapsed_transitions=[]
             collection_start=time.monotonic();rollout_decisions=0;events=0
             for step in range(cfg.rollout):
                 for o,h in zip(obs,histories):h.append(o)
@@ -167,6 +216,7 @@ def train(output,cfg=JointTrainConfig(),model_cfg=JointModelConfig(),resume=None
                 critic_states.append(state_tensor.cpu());values.append(value.cpu())
                 pool.send_steps(actions);result=pool.collect()
                 rewards.append(torch.tensor([r[2] for r in result],dtype=torch.float32));terminals.append(torch.tensor([r[3] for r in result]))
+                if cfg.time_aware_gae:elapsed_transitions.append(torch.tensor([r[0]['transition_seconds'] for r in result],dtype=torch.float32))
                 n=len(sm)+len(rm);decisions+=n;rollout_decisions+=n;world_steps+=cfg.environments
                 for i,(o,state,_,done,metrics,event_count) in enumerate(result):
                     events=max(events,event_count)
@@ -176,7 +226,10 @@ def train(output,cfg=JointTrainConfig(),model_cfg=JointModelConfig(),resume=None
                     else:obs[i],states[i]=o,state
                 if decisions>=cfg.decisions:break
             with torch.no_grad():bootstrap=critic(_tensor(np.asarray(states),cfg.device)).cpu()
-            advantages,returns=generalized_advantages(torch.stack(rewards),torch.stack(values),torch.stack(terminals),bootstrap,gamma=.999)
+            if cfg.time_aware_gae:
+                advantages,returns=time_generalized_advantages(torch.stack(rewards),torch.stack(values),torch.stack(terminals),bootstrap,torch.stack(elapsed_transitions),gamma=.999,lam=cfg.gae_lambda)
+            else:
+                advantages,returns=generalized_advantages(torch.stack(rewards),torch.stack(values),torch.stack(terminals),bootstrap,gamma=.999,lam=cfg.gae_lambda)
             collection_seconds=time.monotonic()-collection_start
             s_stats=_actor_update(sender,optimizers[0],sender_records,advantages.to(cfg.device),cfg,cfg.device,'sender')
             r_stats=_actor_update(receiver,optimizers[1],receiver_records,advantages.to(cfg.device),cfg,cfg.device,'receiver')

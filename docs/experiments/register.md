@@ -28,12 +28,24 @@ work is listed separately and never presented as a result.
 | 2026-10-23 (run) | joint-v1 CPU acceptance | Complete, engineering only | Six tiny 200-decision runs exercised training, role/history ablations, selection, export, and paired evaluation. Not a performance experiment. | [Acceptance](../../artifacts/joint-v1-acceptance.json), [scope](../../artifacts/joint-v1-acceptance-note.json) |
 | 2026-10-23 (run) | joint-v1 corrected full study | Complete, negative learning result | Six runs reached ≥5 million endpoint decisions each. All three initial policies tied and outranked the six trained candidates sent to full validation. Selected initial policy: held-out misses 40.00% vs reference 40.71%; 1.74% relative reduction, below the required 20%, interval includes zero, completion-ratio guard fails. All 560 case/mode evaluations finished; OOD relative reduction was 0.76%, also below target. No wrong delivery observed. | [Full report](joint-v1.md), [raw results](../../artifacts/joint-v1-results.json), [runtime notes](../../artifacts/joint-v1-runtime-notes.json) |
 | 2026-10-23 (run) | device-binary-v1 | Complete, engineering only | Herman Wi-Fi and Caliban Ethernet each recovered 9/9 synthetic text/PNG/map payloads with deterministic control and 9/9 with a trained sender-only actor: 36/36 total. Sequential, not randomized paired performance trials; receiver deterministic. | [Results](../../artifacts/device-binary-v1-results.json), [method](../joint-network-brain.md#device-engineering-checks) |
+| 2026-10-23 (start/end) | goodput-v2.0 calibration + CPU pilot | Pilot complete, negative validation result | 24 deterministic controls calibrated; delay-target/512-kB/s/budgeted reference selected. Validation reference: 157,184 verified bulk B/s and 4.26% interactive misses. Pilot completed 300,011 decisions in 251 s. Seven-snapshot validation selected the initial teacher; all trained candidates fail deadline noninferiority. Repeated final-policy evaluation differed; final tests remain unopened. | [Pilot report](goodput-v2.md), [literature](../research/learning-opportunities.md); [validation artifacts](../../artifacts/goodput-v2.0-pilot-validation.json) |
+
+## Follow-up experiments
+
+| Actual start | End | Experiment | Configuration and evidence | Status |
+| --- | --- | --- | --- | --- |
+| 2026-10-23 UTC | 2026-10-24 UTC | goodput-v2.1 / learn42 | [Launcher/configuration](../../scripts/goodput_learn.py), [domain](../../src/trace_transport/goodput.py), [reference search](../../scripts/goodput_study.py). One million endpoint decisions, joint sender/receiver, paired teacher reward, CPU only. Calibration searched 87 named deterministic settings; selected delay-target pacing at 512,000 B/s with ACK batch 16 / 25 ms. Sixteen-case validation reference: 158,379 verified bulk B/s, 4.29% interactive misses. | Complete, negative validation result. 1,000,006 decisions; initial teacher selected. Final learned goodput −3.56%, deadline guard fails. [Validation](../../artifacts/goodput-v2.1-validation.json), [configuration](../../artifacts/goodput-v2.1-training-config.json). Reserved test and OOD seeds unopened. |
+
+The v2.1 inference diagnostic reproduced all 16 case records exactly with one
+versus two evaluation workers after fixing inference batch shapes. This is an
+engineering repeatability check, not evidence of improved network performance.
+The v2.0 negative result remains recorded separately above.
 
 ## Planned experiments
 
 | Date planned | Experiment | Objective and acceptance | Status |
 | --- | --- | --- | --- |
-| 2026-10-23 | goodput-v2 | Maximize verified useful delivery with continuously backlogged bulk traffic; a separate mixed mode preserves the 100-ms target. Proposed target: ≥10% goodput gain with positive paired confidence interval, deadline noninferiority, bounded wire overhead/queues, and zero wrong delivery. | [Plan](../goodput-v2-plan.md), [versioned specification](../../experiments/joint-goodput-v2-plan.json). Not implemented or trained. |
+| 2026-10-23 | goodput-v2 | Maximize verified useful delivery with continuously backlogged bulk traffic; a separate mixed mode preserves the 100-ms target. Proposed target: ≥10% goodput gain with positive paired confidence interval, deadline noninferiority, bounded wire overhead/queues, and zero wrong delivery. | [Plan](../goodput-v2-plan.md), [versioned specification](../../experiments/joint-goodput-v2-plan.json). Prototype implemented; first bounded pilot completed without a validation win under goodput-v2.0 above. Full acceptance evaluation is pending. |
 
 ## Recording the next run
 
@@ -47,3 +59,72 @@ criterion starts a new version; it does not rename an old result into a win.
 `trace-transport joint-status` and the console's `/joint` page show live local
 progress; this register records reviewable milestones and conclusions. Raw runs
 and device credentials stay outside Git. Publish updates through feature PRs.
+
+## Changing-network role comparison
+
+Actual start/end 2026-10-24 UTC. Complete, negative exploratory comparison:
+adaptive deterministic, learned sender, learned receiver, and joint learning;
+128 paired case/controller evaluations on two new 16-case banks. Coupled-harsh:
+joint goodput −4.15%, interactive misses 42.24% versus 39.30%; zero-bulk
+host-cases 4 versus 1. Receiver-only matched adaptive; the action audit found
+teacher-following receiver proposals throughout four sampled cases. No wrong
+delivery observed. [Report and limitations](changing-comparison-v1.md),
+[configuration](../../artifacts/changing-comparison-v1-plan.json),
+[results](../../artifacts/changing-comparison-v1-results.json).
+Reserved acceptance seeds remain unopened.
+
+## Distribution-v3 audit and retraining
+
+Actual start/end: 2026-10-24 UTC. Completed a synthetic distribution and
+legal-control sensitivity audit before retraining. Twelve explicit strata cover
+stable and wired controls, shared-airtime Wi-Fi, fades/interference, short service
+opportunities, propagation-only changes, reverse bottlenecks, loss-cause changes,
+outage recovery, source churn and large queues. [Coverage contract and gaps](distribution-v3.md),
+[sampler](../../src/trace_transport/goodput_distribution.py),
+[audit](../../scripts/goodput_distribution_audit.py). One initial engineering
+attempt stopped because the metrics helper rejected v3 records; that schema
+support was corrected and the attempt preserved locally. No scientific conclusion
+was drawn from the failed attempt. Audit: all twelve strata represented in 1,000 configurations, with 216 legal-control evaluations. The deadline-constrained calibration selects the wider-bandwidth adaptive reference. [Coverage](../../artifacts/distribution-v3-coverage.json), [results](../../artifacts/distribution-v3-audit-results.json).
+
+V3 joint pilot actual start/end: 2026-10-24 UTC. Complete, no established learning
+win. Both actors trained for 300,008 endpoint decisions in 403 s; 120 validation
+case/controller evaluations completed. Joint goodput +1.85% with interval
+including zero; deadline and zero-completed-bulk-host guards fail. Receiver-only
+records match adaptive despite 51.6% nonteacher training samples. A four-case
+audit again finds all greedy receiver proposals teacher-following.
+[Configuration](../../artifacts/goodput-v3-pilot-plan.json). [Results and limitations](distribution-v3.md#completed-v3-pilot-2026-10-24-utc),
+[validation](../../artifacts/goodput-v3-pilot-validation.json). These are one-seed
+pilot validation findings; reserved acceptance seeds remain unopened.
+
+Device-link-snapshot-v1 actual start/end 2026-10-24 UTC: complete, engineering
+inventory only. Two ten-packet idle Herman probes and one successful ten-packet
+Caliban probe; link/PHY rates are not capacity measurements. First Caliban ping
+failed because ping did not resolve its SSH alias; the corrected capture used the
+SSH-resolved hostname. No saturation or device changes. The sub-millisecond wired
+RTT and reported gigabit interface expose coverage gaps for a future long study.
+[Results](../../artifacts/device-link-snapshot-v1-results.json),
+[limitations](distribution-v3.md#small-device-inventory-check).
+
+## Caliban v4 parallel study and review corrections
+
+| Actual start | Actual end | Experiment | Status and evidence |
+| --- | --- | --- | --- |
+| 2026-10-24T17:53:26.524886+00:00 | 2026-10-24T17:54:54.916570+00:00 | Caliban v4 worker/model benchmark | Complete, engineering only. 1/2/4 workers: 68.1/72.2/77.2 opportunities/s; actor-pair CPU p50/p95 18.8/20.1 ms. [Results](../../artifacts/caliban-v4-benchmark.json). |
+| 2026-10-24 UTC | 2026-10-24 UTC | Matched workstation v4 benchmark | Complete, engineering only. Best short throughput 164.9/s; CPU inference p50/p95 7.9/8.2 ms. [Results](../../artifacts/v4-local-benchmark.json). |
+| 2026-10-24T17:50:39.893480+00:00 | 2026-10-24T17:51:50.199796+00:00 | Cloned-state receiver action diagnostic | Complete, exploratory. Eight states attempted, seven found pending ACKs; all 22 actions compared over one-second continuations. Different choices maximize return in different cases; selected maxima on one future RNG realization do not establish expected or deployable gains. [Results](../../artifacts/receiver-counterfactual-v4-results.json). |
+| 2026-10-24T17:58:42.427973+00:00 | Pending | Caliban v4 multi-seed study | Running calibration/training pipeline. Seeds 42/43/44, planned five million opportunities each, 64-step history, width 64, two layers; four workers selected by benchmark. Six CPU cores, 8-GiB memory ceiling, 72-hour limit, bounded persistent checkpoint/source mirror. [Plan](../../artifacts/caliban-v4-plan.json), [frozen source](../../artifacts/caliban-v4-source.zip), [operation and limitations](caliban-v4.md). No trained result yet; reserved test/OOD ranges unopened. |
+
+Review correction applies to the completed v2.1/v3 training signals: cloned teacher
+RNGs can diverge under different packet schedules. The subtraction was a same-case
+return baseline, not demonstrated CRN coupling or guaranteed variance reduction.
+Original metrics are unchanged. V4 longer training disables subtraction and uses
+raw task rewards with the learned PPO critic. The review also prompted explicit
+CLI profile selection, named inference bounds, and named observation indices.
+
+Elapsed-time GAE engineering check, actual start/end 2026-10-24 UTC: implemented
+and unit/integration verified; no performance experiment or learned win claimed.
+Optional `mappo-time-gae-v1` scales discount/trace decay by actual transition time;
+Caliban's frozen study remains on `mappo-step-gae-v1`. Tests cover 2/20-ms prefix
+trace equivalence, terminal masks and tiny v4 training. [Method and planned
+comparison](caliban-v4.md#local-follow-up-elapsed-time-credit-assignment),
+[tests](../../tests/test_time_gae.py). Larger ablation remains planned.
