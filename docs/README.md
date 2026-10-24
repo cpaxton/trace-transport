@@ -14,7 +14,7 @@
 | [Joint network experiment](joint-network-brain.md) | Persistent sessions, mixed workloads, joint training and acceptance criteria |
 | [Maximum throughput plan](goodput-v2-plan.md) | Backlogged bulk traffic, verified goodput, and deadline-constrained optimization |
 | [Learning opportunities](research/learning-opportunities.md) | Literature, history-dependent challenges, stronger baselines and fairness |
-| [Goodput-v2 active experiment](experiments/goodput-v2.md) | Calibration, bounded CPU pilot, scoring and resource isolation |
+| [Goodput-v2 pilots](experiments/goodput-v2.md) | Calibration, bounded CPU pilot, scoring and resource isolation |
 | [V3 distribution and retraining](experiments/distribution-v3.md) | Coverage matrix, realistic mechanisms and gaps, control-sensitivity audit and receiver diagnosis |
 | [Development](development.md) | Implementation map, test coverage, source export, paper build |
 

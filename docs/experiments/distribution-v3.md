@@ -57,7 +57,7 @@ and changes across locations/sessions. ICMP alone is insufficient for capacity.
 Keep entire locations/sessions/days held out; never split adjacent trace windows
 across train and test. Record capture method and workload, not just timestamps.
 Device measurements and credentials remain local unless sanitized for publication.
-No new device measurement has been performed for this version.
+Only the small idle inventory check below has been performed; no loaded-path calibration has been performed.
 
 Important uncovered settings include independent TCP/QUIC competitors, more than
 four clients, gigabit service, ECN/AQM, multi-hop/per-host RTT diversity, true
@@ -131,3 +131,69 @@ selected reference, a 0.5 receiver teacher prior, 32-step histories, and separat
 24-case stratified validation. No reserved acceptance seeds are used.
 [Pilot configuration](../../artifacts/goodput-v3-pilot-plan.json),
 [runner](../../scripts/goodput_v3_pilot.py).
+
+## Small device inventory check
+
+Two ten-packet idle probes on Herman observed 0% loss in each tiny sample, with
+RTT ranges 0.983–97.342 ms and 1.004–9.553 ms. Caliban's successful ten-packet
+probe observed 0% loss and 0.705–0.772 ms; its interface reports 1,000 Mbps.
+Herman's reported PHY rates varied between snapshots; these are not available
+transport bandwidth measurements. The first Caliban ping used an SSH alias that
+ping could not resolve; the second used the SSH-resolved hostname. SSH inventory
+succeeded in both attempts. No saturation traffic or device configuration changes
+were used.
+
+These snapshots expose gaps rather than validating the distribution: the current
+2-ms minimum RTT misses Caliban's sub-millisecond idle path, the 80-Mbps base
+service range does not establish coverage of gigabit throughput, and rare Wi-Fi
+latency spikes need repeated measurements under varied loads. Before a long
+acceptance study, extend low-latency/high-rate strata and profile the 20-ms actor
+control interval versus these RTTs. The bounded v3 pilot is diagnostic retraining,
+not a claim that deployment calibration is complete.
+
+[Sanitized snapshots](../../artifacts/device-link-snapshot-v1-results.json),
+[read-only capture tool](../../scripts/device_link_snapshot.py).
+
+## Completed v3 pilot, 2026-10-24 UTC
+
+The joint CPU pilot reached 300,008 endpoint decisions in 403 s, followed by
+120 case/controller evaluations (24 new stratified cases, five modes). These
+are pilot validation findings from one seed, not reserved acceptance results.
+
+| Mode | Verified bulk B/s | Interactive misses | Confirmed completion fraction |
+| --- | ---: | ---: | ---: |
+| adaptive | 162,588 | 11.95% | 98.02% |
+| initial | 162,588 | 11.95% | 98.02% |
+| sender-only | 165,604 | 11.96% | 98.06% |
+| receiver-only | 162,588 | 11.95% | 98.02% |
+| joint | 165,604 | 11.96% | 98.06% |
+
+Joint and sender-only results match: goodput is 1.85% above adaptive, with paired
+95% difference interval −2,788 to +9,842 B/s. Deadline difference interval is
+−0.488 to +0.503 percentage points, exceeding the fixed +0.5-point guard; do not
+round it into a pass. All modes have four host-cases with no fully verified bulk
+object during measurement, so the host guard also fails. This is not evidence of
+zero packet service or permanent starvation. No wrong delivery was observed.
+
+The initial model reproduces the adaptive reference exactly. Receiver-only
+records also match the reference. During training, 120,663 active receiver actions
+were sampled: 58,403 (48.4%) followed the teacher and all 21 alternatives were
+sampled. Yet all 14,504 valid-history receiver proposals in a separate four-case
+validation-range audit chose the teacher greedily (including inactive rows).
+More exploration alone did not produce useful greedy receiver control. Mean PPO
+advantages grouped by sampled choice are observational diagnostics, not causal
+counterfactual action values, because the sender and world also change.
+
+Next learning work should compare receiver actions from cloned identical states
+over a sufficiently long rollout, establish conditional control headroom and
+observability, then test an auxiliary action-value/imitation objective or a
+structured receiver action representation. Retain strong deterministic ACK
+comparisons. Expand to multiple training seeds and history ablations after this
+diagnosis; a larger model or harder independent noise is not the immediate fix.
+Deployment coverage also needs the measured-path gaps described above before a
+long acceptance study.
+
+[Validation and paired intervals](../../artifacts/goodput-v3-pilot-validation.json),
+[training action telemetry](../../artifacts/goodput-v3-pilot-receiver-telemetry.json),
+[greedy proposal audit](../../artifacts/goodput-v3-pilot-action-audit.json),
+[final actor export](../../artifacts/goodput-v3-pilot-final-actors.pt).

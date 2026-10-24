@@ -86,8 +86,21 @@ attempt stopped because the metrics helper rejected v3 records; that schema
 support was corrected and the attempt preserved locally. No scientific conclusion
 was drawn from the failed attempt. Audit: all twelve strata represented in 1,000 configurations, with 216 legal-control evaluations. The deadline-constrained calibration selects the wider-bandwidth adaptive reference. [Coverage](../../artifacts/distribution-v3-coverage.json), [results](../../artifacts/distribution-v3-audit-results.json).
 
-V3 joint pilot actual start: 2026-10-24 UTC; end pending. Running 300,000 endpoint
-decisions, both actors, separate receiver exploration and action/advantage
-telemetry; 24 fresh stratified validation cases and role ablations follow training.
-[Configuration](../../artifacts/goodput-v3-pilot-plan.json). No v3 held-out
-performance result yet; reserved acceptance seeds remain unopened.
+V3 joint pilot actual start/end: 2026-10-24 UTC. Complete, no established learning
+win. Both actors trained for 300,008 endpoint decisions in 403 s; 120 validation
+case/controller evaluations completed. Joint goodput +1.85% with interval
+including zero; deadline and zero-completed-bulk-host guards fail. Receiver-only
+records match adaptive despite 51.6% nonteacher training samples. A four-case
+audit again finds all greedy receiver proposals teacher-following.
+[Configuration](../../artifacts/goodput-v3-pilot-plan.json). [Results and limitations](distribution-v3.md#completed-v3-pilot-2026-10-24-utc),
+[validation](../../artifacts/goodput-v3-pilot-validation.json). These are one-seed
+pilot validation findings; reserved acceptance seeds remain unopened.
+
+Device-link-snapshot-v1 actual start/end 2026-10-24 UTC: complete, engineering
+inventory only. Two ten-packet idle Herman probes and one successful ten-packet
+Caliban probe; link/PHY rates are not capacity measurements. First Caliban ping
+failed because ping did not resolve its SSH alias; the corrected capture used the
+SSH-resolved hostname. No saturation or device changes. The sub-millisecond wired
+RTT and reported gigabit interface expose coverage gaps for a future long study.
+[Results](../../artifacts/device-link-snapshot-v1-results.json),
+[limitations](distribution-v3.md#small-device-inventory-check).

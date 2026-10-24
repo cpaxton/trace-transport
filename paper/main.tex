@@ -30,7 +30,7 @@ policy is untrained, so this difference is not a learning gain. Thirty-six bound
 real-device transfers recover exact synthetic text, image, and map bytes; the
 learned-sender checks retain deterministic remote feedback and do not establish
 performance superiority. We document negative results, runtime limitations, and a
-separate planned objective for maximum verified goodput with backlogged traffic.
+separate backlogged-goodput pilots that also fail to establish a learning win.
 \end{abstract}
 
 \section{Motivation and scope}
@@ -636,6 +636,24 @@ with ACK batch 16: 186,254 B/s and 27.88\% misses. Immediate ACKs achieve
 These are small calibration findings, not held-out learning evidence. A
 300,000-decision joint pilot uses new stratified validation cases; earlier
 negative studies remain frozen.
+
+The v3 CPU pilot completes 300,008 endpoint decisions in 403 seconds, followed
+by 120 validation case/controller evaluations on 24 new stratified cases.
+Adaptive control achieves 162,588 bulk B/s and 11.95\% interactive misses;
+joint learning achieves 165,604 B/s and 11.96\% misses. The 1.85\% goodput
+increase has a paired difference interval of $[-2788,9842]$ B/s, including zero.
+The deadline-difference upper bound is 0.503 percentage points, outside the fixed
+0.5-point guard. All modes have four host-cases without a verified bulk object;
+no wrong delivery is observed. Receiver-only again equals adaptive control,
+although training samples all alternatives and follows the teacher on only
+48.4\% of 120,663 active receiver decisions. A four-case audit finds all 14,504
+valid-history greedy receiver proposals teacher-following, including inactive
+rows. Thus broader exploration alone does not establish useful receiver learning.
+These are one-seed pilot validation results; reserved acceptance tests remain
+unopened. Small idle device probes additionally expose sub-millisecond wired
+RTT and a reported gigabit interface outside the current sampling scope; PHY
+rates and idle ICMP probes do not establish available capacity or calibrate the
+service model.
 
 \section{Implementation stages and open questions}
 Implemented stages include reliable CPU transfer, history-based sender learning,
