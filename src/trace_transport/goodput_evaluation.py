@@ -3,7 +3,7 @@ import numpy as np
 
 
 def summarize(records):
-    if not records or any(r.get('profile')!='goodput-v2' for r in records):raise ValueError('expected nonempty goodput-v2 records')
+    if not records or records[0].get('profile') not in ('goodput-v2','goodput-v3') or any(r.get('profile')!=records[0]['profile'] for r in records):raise ValueError('expected nonempty records from one goodput profile')
     duration=sum(r['measurement_seconds'] for r in records)
     useful=sum(r['verified_bulk_bytes'] for r in records)
     desired=sum(r['desired'].get('interactive',0) for r in records)
@@ -18,6 +18,7 @@ def summarize(records):
 
 
 def compare(learned,reference):
+    if learned and reference and learned[0].get('profile')!=reference[0].get('profile'):raise ValueError('cannot compare different goodput profiles')
     if [r['seed'] for r in learned]!=[r['seed'] for r in reference]:raise ValueError('paired seeds required')
     a,b=summarize(learned),summarize(reference);rng=np.random.default_rng(72);gains=[];misses=[]
     for _ in range(2000):

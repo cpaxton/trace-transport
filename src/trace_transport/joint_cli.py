@@ -16,11 +16,13 @@ def main(argv=None):
     commands=p.add_subparsers(dest='command',required=True)
     train=commands.add_parser('joint-train')
     train.add_argument('--paired-teacher',action='store_true')
-    train.add_argument('--profile',choices=['deadline-v1','goodput-v2'],default='deadline-v1')
+    train.add_argument('--profile',choices=['deadline-v1','goodput-v2','goodput-v3'],default='deadline-v1')
+    train.add_argument('--teacher-scheduler',choices=['edf','drr'],default='edf')
+    train.add_argument('--receiver-teacher-prior',type=float)
     train.add_argument('--teacher-batch',type=int,default=8)
     train.add_argument('--teacher-delay',type=float,default=.025)
     train.add_argument('--teacher-initial-rate',type=float,default=128000.)
-    train.add_argument('--teacher-rate',choices=['fixed','aimd','bdp','delay'],default='fixed')
+    train.add_argument('--teacher-rate',choices=['fixed','aimd','bdp','delay','delay-fast'],default='fixed')
     train.add_argument('--gae-lambda',type=float,default=.95)
     train.add_argument('--gpu-memory-fraction',type=float,default=.15)
     train.add_argument('--resume',type=Path,help='continue matching optimizer checkpoint; reset collector worlds explicitly')
@@ -93,7 +95,7 @@ def main(argv=None):
             trace_network,trace_meta=load_trace(args.trace,required_seconds=40)
         rows=evaluate(seeds=list(range(args.seed,args.seed+args.trials)),checkpoint=args.checkpoint,
             baseline=names[args.baseline],device=args.device,environments=args.envs,ood=args.ood,trace_network=trace_network)
-        if rows and rows[0].get('profile')=='goodput-v2':
+        if rows and rows[0].get('profile','').startswith('goodput-'):
             from .goodput_evaluation import summarize
         result=dict(summary=summarize(rows),records=rows,trace=trace_meta);args.report.parent.mkdir(parents=True,exist_ok=True)
         args.report.write_text(json.dumps(result,indent=2)+'\n');print(json.dumps(result['summary'],indent=2));return 0
@@ -117,7 +119,7 @@ def main(argv=None):
     if args.command=='joint-train':
         from .joint_training import train as run,JointTrainConfig
         from .joint_models import JointModelConfig
-        run(args.output,JointTrainConfig(paired_teacher=args.paired_teacher,profile=args.profile,teacher_rate=args.teacher_rate,teacher_initial_rate=args.teacher_initial_rate,teacher_batch=args.teacher_batch,teacher_delay=args.teacher_delay,gae_lambda=args.gae_lambda,gpu_memory_fraction=args.gpu_memory_fraction,decisions=args.decisions,environments=args.envs,seed=args.seed,device=args.device,
+        run(args.output,JointTrainConfig(teacher_scheduler=args.teacher_scheduler,receiver_teacher_prior=args.receiver_teacher_prior,paired_teacher=args.paired_teacher,profile=args.profile,teacher_rate=args.teacher_rate,teacher_initial_rate=args.teacher_initial_rate,teacher_batch=args.teacher_batch,teacher_delay=args.teacher_delay,gae_lambda=args.gae_lambda,gpu_memory_fraction=args.gpu_memory_fraction,decisions=args.decisions,environments=args.envs,seed=args.seed,device=args.device,
             rollout=args.rollout,epochs=args.epochs,checkpoint_every=args.checkpoint_every,
             production_seconds=args.production_seconds,drain_seconds=args.drain_seconds,easy_fraction=args.easy_fraction,learn_sender=not args.freeze_sender,learn_receiver=not args.freeze_receiver),
             JointModelConfig(history=args.history,width=args.width,layers=args.layers),resume=args.resume)

@@ -69,6 +69,12 @@ video bitrate selection~\cite{mao2017pensieve}, suggesting future robot-image
 quality or freshness objectives. Such objectives would require an explicit new
 contract; the current task always requires exact bytes.
 
+Pantheon motivates calibrating emulators against real paths and comparing
+multiple controllers~\cite{yan2018pantheon}. CellReplay identifies workload-sensitive
+replay bias in cellular networks~\cite{sentosa2025cellreplay}; we treat this as a
+reason to validate future trace models across loads, not as validation of our
+synthetic Wi-Fi service abstraction.
+
 Transformers over network histories also have direct precedent. The Jazz preprint
 uses historical observations for transformer-based multipath congestion
 control~\cite{wang2025jazz}. The TCCO preprint investigates transformer-based
@@ -604,6 +610,32 @@ A four-case audit finds all 12,088 valid-history receiver proposals follow the
 teacher, including proposals for inactive rows. Thus gradient updates did not
 produce a distinct greedy receiver on these audited trajectories. These are
 exploratory results from one training seed, not reserved acceptance evidence.
+
+\section{Distribution coverage and adaptation diagnostics}
+Version 3 adds twelve explicitly labeled synthetic strata spanning stable and
+wired controls, shared-airtime contention, persistent fades, burst interference,
+short capacity opportunities, propagation-only changes, reverse bottlenecks,
+loss-cause switching, outage recovery, producer churn and large buffers. Actors
+never receive these labels or impairment schedules. Random dwell times span
+80 ms to 2.5 s; payload sizes, source rates, host counts and queue/BDP ratios vary.
+Equal stratum weights provide coverage and are not empirical deployment weights.
+The service model omits RF/MAC dynamics, independent TCP competitors, AQM/ECN,
+gigabit service, inference costs and more than four clients. Coverage of robot
+deployments remains unverified without whole-session measurements under multiple
+loads, locations and days.
+
+A wider-bandwidth delay reference removes the old 1-ms queue-delay floor's
+approximately 8-Mbps target ceiling. This baseline correction is not a learning
+gain. The v3 receiver exploration prior is configurable independently from sender
+scheduling; sampled action counts and normalized advantages are logged by receiver
+choice. The coverage audit generates 1,000 configurations and evaluates nine legal
+controls on two cases per stratum (216 case/controller evaluations). The
+deadline-constrained calibration selects the wider-bandwidth delay reference
+with ACK batch 16: 186,254 B/s and 27.88\% misses. Immediate ACKs achieve
+409,259 B/s but 28.98\% misses, outside the 0.5-point eligibility margin.
+These are small calibration findings, not held-out learning evidence. A
+300,000-decision joint pilot uses new stratified validation cases; earlier
+negative studies remain frozen.
 
 \section{Implementation stages and open questions}
 Implemented stages include reliable CPU transfer, history-based sender learning,

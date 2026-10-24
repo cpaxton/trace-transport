@@ -1,0 +1,121 @@
+{
+  "version": "goodput-v3-pilot-v1",
+  "started_utc": "2026-10-24T13:12:05.647664+00:00",
+  "domain": {
+    "version": "goodput-domain-v3.0",
+    "reward": "verified-goodput-v3.0",
+    "families": [
+      "steady",
+      "wired-lan",
+      "wifi-contention",
+      "mobile-fade",
+      "burst-interference",
+      "capacity-opportunities",
+      "propagation-step",
+      "reverse-congestion",
+      "loss-cause-switch",
+      "outage-recovery",
+      "producer-churn",
+      "bufferbloat"
+    ],
+    "family_weights": "uniform synthetic strata, not deployment prevalence",
+    "clients": [
+      1,
+      4
+    ],
+    "forward_bps": [
+      500000,
+      80000000
+    ],
+    "rtt_seconds": [
+      0.002,
+      0.12
+    ],
+    "rate_limit_bytes_per_second": 16000000,
+    "window_limit_bytes": 2097152,
+    "history_scope": "local endpoint observations only",
+    "limitations": [
+      "not calibrated to devices",
+      "FIFO/drop-tail only",
+      "no independent TCP competitors",
+      "no RF/MAC or OS inference costs"
+    ]
+  },
+  "training": {
+    "profile": "goodput-v3",
+    "teacher_scheduler": "edf",
+    "teacher_rate": "delay-fast",
+    "teacher_initial_rate": 512000.0,
+    "teacher_batch": 16,
+    "teacher_delay": 0.025,
+    "paired_teacher": true,
+    "receiver_teacher_prior": 0.5,
+    "teacher_prior": 0.9,
+    "gae_lambda": 0.98,
+    "gpu_memory_fraction": 0.15,
+    "decisions": 300000,
+    "environments": 2,
+    "rollout": 64,
+    "epochs": 3,
+    "minibatch": 1024,
+    "seed": 42,
+    "device": "cpu",
+    "learning_rate": 0.0001,
+    "checkpoint_every": 100000,
+    "production_seconds": 12.0,
+    "drain_seconds": 3.0,
+    "easy_fraction": 0.1,
+    "learn_sender": true,
+    "learn_receiver": true
+  },
+  "model": {
+    "history": 32,
+    "width": 32,
+    "layers": 1,
+    "heads": 4
+  },
+  "reference": "delay-fast",
+  "baseline": {
+    "rate": "delay-fast",
+    "scheduler": "edf",
+    "feedback": "budgeted",
+    "batch": 16,
+    "delay": 0.025,
+    "initial_rate": 512000.0
+  },
+  "validation_seeds": [
+    93000,
+    93001,
+    93002,
+    93003,
+    93004,
+    93005,
+    93006,
+    93008,
+    93010,
+    93012,
+    93014,
+    93015,
+    93018,
+    93019,
+    93021,
+    93022,
+    93027,
+    93028,
+    93029,
+    93031,
+    93032,
+    93034,
+    93035,
+    93058
+  ],
+  "selection": "initial and final fixed before validation; diagnostic pilot, no reserved test seeds",
+  "reserved_test_seed_range": [
+    95000,
+    95999
+  ],
+  "reserved_ood_seed_range": [
+    96000,
+    96999
+  ]
+}

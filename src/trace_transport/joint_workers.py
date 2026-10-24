@@ -16,7 +16,9 @@ def _worker(pipe):
             if command=='reset':
                 seed,production,drain,stage,*options=args
                 task=options[3] if len(options)>3 else 'deadline-v1'
-                if task=='goodput-v2':
+                if task=='goodput-v3':
+                    from .goodput_distribution import sample_case as sampler,GoodputDistributionEnv as GoodputEnv
+                elif task=='goodput-v2':
                     from .goodput import sample_case as sampler,GoodputEnv
                 elif task=='deadline-v1':sampler=sample_case
                 else:raise ValueError('unknown experiment profile')
@@ -27,7 +29,7 @@ def _worker(pipe):
                 if len(options)>1 and 'initial_rate' in options[1]:
                     from dataclasses import replace
                     cfg=replace(cfg,initial_rate=options[1]['initial_rate'])
-                env=GoodputEnv(cfg,workload,churn=label.get('churn',False),churn_times=label.get('churn_times')) if task=='goodput-v2' else JointTransportEnv(cfg,workload)
+                env=GoodputEnv(cfg,workload,churn=label.get('churn',False),churn_times=label.get('churn_times')) if task.startswith('goodput-') else JointTransportEnv(cfg,workload)
                 obs,_=env.reset(seed=seed)
                 if len(options)>1:
                     baseline=options[1]
@@ -40,7 +42,7 @@ def _worker(pipe):
                         s.baseline_batch,s.baseline_delay,s.baseline_ack_mode=s.batch,s.delay,s.ack_mode
                     obs=env.observe()
                 paired=bool(options[4]) if len(options)>4 else False
-                if paired and task!='goodput-v2':raise ValueError('paired teacher requires fixed-horizon goodput task')
+                if paired and not task.startswith('goodput-'):raise ValueError('paired teacher requires fixed-horizon goodput task')
                 teacher_env=env.clone() if paired else None;raw_return=teacher_return=0.
                 pipe.send((obs,env.critic_state(obs),label))
             elif command=='finish-baseline':

@@ -114,7 +114,7 @@ def evaluate(*,seeds,checkpoint=None,baseline=None,device='cpu',environments=8,p
                 result.append((sender_action,receiver_action))
             return result
         def actions_for(active):
-            if profile=='goodput-v2':return stable_actions(active)
+            if profile.startswith('goodput-'):return stable_actions(active)
             current=[obs[i] for i in active]
             actions=[(np.zeros((len(o['sender']),3),np.float32),np.zeros(len(o['receiver']),np.int64)) for o in current]
             hs=[histories[i] for i in active]

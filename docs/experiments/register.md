@@ -72,3 +72,22 @@ delivery observed. [Report and limitations](changing-comparison-v1.md),
 [configuration](../../artifacts/changing-comparison-v1-plan.json),
 [results](../../artifacts/changing-comparison-v1-results.json).
 Reserved acceptance seeds remain unopened.
+
+## Distribution-v3 audit and retraining
+
+Actual start/end: 2026-10-24 UTC. Completed a synthetic distribution and
+legal-control sensitivity audit before retraining. Twelve explicit strata cover
+stable and wired controls, shared-airtime Wi-Fi, fades/interference, short service
+opportunities, propagation-only changes, reverse bottlenecks, loss-cause changes,
+outage recovery, source churn and large queues. [Coverage contract and gaps](distribution-v3.md),
+[sampler](../../src/trace_transport/goodput_distribution.py),
+[audit](../../scripts/goodput_distribution_audit.py). One initial engineering
+attempt stopped because the metrics helper rejected v3 records; that schema
+support was corrected and the attempt preserved locally. No scientific conclusion
+was drawn from the failed attempt. Audit: all twelve strata represented in 1,000 configurations, with 216 legal-control evaluations. The deadline-constrained calibration selects the wider-bandwidth adaptive reference. [Coverage](../../artifacts/distribution-v3-coverage.json), [results](../../artifacts/distribution-v3-audit-results.json).
+
+V3 joint pilot actual start: 2026-10-24 UTC; end pending. Running 300,000 endpoint
+decisions, both actors, separate receiver exploration and action/advantage
+telemetry; 24 fresh stratified validation cases and role ablations follow training.
+[Configuration](../../artifacts/goodput-v3-pilot-plan.json). No v3 held-out
+performance result yet; reserved acceptance seeds remain unopened.
