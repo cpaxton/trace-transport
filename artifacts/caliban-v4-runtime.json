@@ -20,5 +20,8 @@
     "networkx": "3.6.1",
     "typing_extensions": "4.16.0",
     "MarkupSafe": "3.0.3"
-  }
+  },
+  "captured_utc": "2026-10-24T18:24:18.141423+00:00",
+  "device": "caliban",
+  "execution_device": "cpu"
 }
