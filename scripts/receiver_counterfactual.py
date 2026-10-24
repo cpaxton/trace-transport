@@ -7,7 +7,7 @@ import argparse
 from datetime import datetime,timezone
 from pathlib import Path
 import numpy as np
-from scripts.goodput_study import write
+from trace_transport.experiment_io import write
 from trace_transport.goodput_deployment import sample_case,GoodputDeploymentEnv
 from trace_transport.joint_session import ACK_ACTIONS
 

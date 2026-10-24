@@ -8,7 +8,7 @@ from collections import Counter
 import json
 from pathlib import Path
 import torch
-from scripts.goodput_study import write
+from trace_transport.experiment_io import write
 from trace_transport.joint_models import ReceiverActor, SenderActor, load_checkpoint
 from trace_transport.joint_evaluation import evaluate
 

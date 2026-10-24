@@ -19,7 +19,7 @@ import uuid
 
 import numpy as np
 import torch
-from scripts.goodput_study import write
+from trace_transport.experiment_io import write
 from trace_transport.goodput_deployment import DOMAIN,FAMILIES,sample_case
 from trace_transport.goodput_evaluation import summarize,compare
 from trace_transport.joint_evaluation import evaluate

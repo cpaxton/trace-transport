@@ -9,7 +9,7 @@ import hashlib
 import json
 from pathlib import Path
 
-from scripts.goodput_study import write
+from trace_transport.experiment_io import write
 from trace_transport.goodput_evaluation import summarize, compare
 from trace_transport.joint_evaluation import evaluate
 

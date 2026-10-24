@@ -10,9 +10,7 @@ from trace_transport.joint_evaluation import evaluate
 from trace_transport.joint_models import load_checkpoint,export_actors
 
 
-def write(path,data):
-    path=Path(path);path.parent.mkdir(parents=True,exist_ok=True);temp=path.with_suffix('.tmp')
-    temp.write_text(json.dumps(data,indent=2)+'\n');temp.replace(path)
+from trace_transport.experiment_io import write
 
 
 def cases(root,key,seeds,*,baseline,checkpoint=None,device='cpu',ood=False):

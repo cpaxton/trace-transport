@@ -9,7 +9,7 @@ import sys
 
 from trace_transport.joint_training import JointTrainConfig,train
 from trace_transport.joint_models import JointModelConfig
-from scripts.goodput_study import write
+from trace_transport.experiment_io import write
 
 
 def main():

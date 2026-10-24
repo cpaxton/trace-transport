@@ -5,7 +5,7 @@ from datetime import datetime,timezone
 import json
 from pathlib import Path
 
-from scripts.goodput_study import write
+from trace_transport.experiment_io import write
 from scripts.goodput_distribution_audit import CONTROLS
 from trace_transport.goodput_distribution import DOMAIN,FAMILIES,sample_case
 from trace_transport.goodput_evaluation import summarize,compare
