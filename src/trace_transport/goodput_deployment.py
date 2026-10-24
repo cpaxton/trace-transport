@@ -67,6 +67,11 @@ class GoodputDeploymentEnv(GoodputDistributionEnv):
             target_window=min(self.window_limit,max(2048.,1.5*target*s.min_rtt+2*self.network.payload_size))
             a[1]=np.clip(math.log(target_window/s.window)/.2,-1,1)
         return a
+    def step(self,sender_actions,receiver_actions):
+        before=self.now
+        result=super().step(sender_actions,receiver_actions)
+        result[0]['transition_seconds']=self.now-before
+        return result
     def metrics(self):
         out=super().metrics();out['profile']='goodput-v4';out['control_interval']=self.network.control_interval
         return out

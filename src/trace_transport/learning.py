@@ -243,6 +243,27 @@ def generalized_advantages(rewards, values, terminal, bootstrap, *, gamma=.99, l
     return advantages, advantages + values
 
 
+def time_generalized_advantages(rewards, values, terminal, bootstrap, elapsed, *, gamma=.999, lam=.98, reference_seconds=.02):
+    """GAE with discount/trace decay in physical time, not collector tick count.
+
+    Rewards are event increments, not rates. Each elapsed value describes the
+    transition producing that reward, including a shorter final transition.
+    """
+    if rewards.shape!=values.shape or terminal.shape!=rewards.shape or elapsed.shape!=rewards.shape:
+        raise ValueError('time GAE requires matching [steps, worlds] tensors')
+    if not 0<gamma<=1 or not 0<=lam<=1 or not math.isfinite(reference_seconds) or reference_seconds<=0:
+        raise ValueError('invalid time GAE decay parameters')
+    if not torch.isfinite(elapsed).all() or (elapsed<=0).any():raise ValueError('elapsed transitions must be finite and positive')
+    discounts=gamma**(elapsed/reference_seconds);traces=lam**(elapsed/reference_seconds)
+    advantages=torch.zeros_like(rewards);carry=torch.zeros_like(bootstrap);next_value=bootstrap
+    for step in reversed(range(len(rewards))):
+        continuation=(~terminal[step]).to(rewards.dtype)
+        delta=rewards[step]+discounts[step]*next_value*continuation-values[step]
+        carry=delta+discounts[step]*traces[step]*continuation*carry
+        advantages[step]=carry;next_value=values[step]
+    return advantages,advantages+values
+
+
 @dataclass(frozen=True)
 class TrainConfig:
     updates: int = 20

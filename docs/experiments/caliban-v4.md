@@ -141,3 +141,33 @@ as supervised learning targets.
 The service has started its calibration/training pipeline. The three five-million
 decision budgets are planned work, not completed training; no performance win or
 reserved-test result is reported. Use the status command for actual progress.
+
+## Local follow-up: elapsed-time credit assignment
+
+A fixed per-step `gamma=.999, lambda=.98` has about ten times less physical trace
+horizon at 2-ms control ticks than at 20-ms ticks. This is a plausible learning
+limitation, not an established explanation of the negative results. The local
+opt-in `--time-aware-gae` variant uses `gamma_t = gamma**(dt/.02)` and
+`lambda_t = lambda**(dt/.02)`, with actual transition duration (including a shorter
+terminal step). Rewards remain event increments. Terminal states never bootstrap.
+Metadata records `mappo-time-gae-v1`; the default stays `mappo-step-gae-v1`.
+
+This implementation is tested for equal prefix trace decay across 2/20-ms ticks,
+legacy equivalence at 20 ms, terminal handling and a tiny training integration.
+It has no performance result yet and is not enabled in the frozen Caliban study.
+Action scaling, exploration, rollout span and real inference delays also change
+with control frequency; time-aware GAE alone does not establish discretization
+invariance. [Tallec et al., ICML 2019](https://proceedings.mlr.press/v97/tallec19a.html)
+study the broader problem for Q-learning; this PPO variant is not a reproduction
+of their algorithm or results.
+
+A controlled next comparison should keep the v4 distribution, initial teacher,
+model, rollout span and decision budget fixed, vary only this flag, and use fresh
+validation cases. Use longer rollouts where necessary so a 2-ms tick can cover
+ACK timers up to 250 ms plus path delay. Keep both variants' source frozen while
+continuing development elsewhere.
+
+[Implementation](../../src/trace_transport/learning.py),
+[timing tests](../../tests/test_time_gae.py).
+
+[Exact remote package inventory](../../artifacts/caliban-v4-runtime.json) accompanies the frozen source and checkpoints.

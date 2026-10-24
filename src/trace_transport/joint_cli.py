@@ -15,6 +15,7 @@ def main(argv=None):
     p=argparse.ArgumentParser(prog='trace-transport')
     commands=p.add_subparsers(dest='command',required=True)
     train=commands.add_parser('joint-train')
+    train.add_argument('--time-aware-gae',action='store_true')
     train.add_argument('--paired-teacher',action='store_true')
     train.add_argument('--profile',choices=['deadline-v1','goodput-v2','goodput-v3','goodput-v4'],default='deadline-v1')
     train.add_argument('--teacher-scheduler',choices=['edf','drr'],default='edf')
@@ -124,7 +125,7 @@ def main(argv=None):
     if args.command=='joint-train':
         from .joint_training import train as run,JointTrainConfig
         from .joint_models import JointModelConfig
-        run(args.output,JointTrainConfig(teacher_scheduler=args.teacher_scheduler,receiver_teacher_prior=args.receiver_teacher_prior,paired_teacher=args.paired_teacher,profile=args.profile,teacher_rate=args.teacher_rate,teacher_initial_rate=args.teacher_initial_rate,teacher_batch=args.teacher_batch,teacher_delay=args.teacher_delay,gae_lambda=args.gae_lambda,gpu_memory_fraction=args.gpu_memory_fraction,decisions=args.decisions,environments=args.envs,seed=args.seed,device=args.device,
+        run(args.output,JointTrainConfig(time_aware_gae=args.time_aware_gae,teacher_scheduler=args.teacher_scheduler,receiver_teacher_prior=args.receiver_teacher_prior,paired_teacher=args.paired_teacher,profile=args.profile,teacher_rate=args.teacher_rate,teacher_initial_rate=args.teacher_initial_rate,teacher_batch=args.teacher_batch,teacher_delay=args.teacher_delay,gae_lambda=args.gae_lambda,gpu_memory_fraction=args.gpu_memory_fraction,decisions=args.decisions,environments=args.envs,seed=args.seed,device=args.device,
             rollout=args.rollout,epochs=args.epochs,checkpoint_every=args.checkpoint_every,
             production_seconds=args.production_seconds,drain_seconds=args.drain_seconds,easy_fraction=args.easy_fraction,learn_sender=not args.freeze_sender,learn_receiver=not args.freeze_receiver),
             JointModelConfig(history=args.history,width=args.width,layers=args.layers),resume=args.resume)

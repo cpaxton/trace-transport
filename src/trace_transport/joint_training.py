@@ -18,7 +18,7 @@ from .joint_curriculum import DOMAIN
 from .joint_models import JointModelConfig,SenderActor,ReceiverActor,CentralCritic,save_checkpoint
 from .joint_session import SENDER_FEATURES,RECEIVER_FEATURES
 from .joint_workers import EnvironmentPool
-from .learning import generalized_advantages
+from .learning import generalized_advantages,time_generalized_advantages
 
 
 @dataclass(frozen=True)
@@ -32,6 +32,7 @@ class JointTrainConfig:
     paired_teacher:bool=False
     receiver_teacher_prior:float|None=None
     teacher_prior:float=.9
+    time_aware_gae:bool=False
     gae_lambda:float=.95
     gpu_memory_fraction:float=.15
     decisions:int=5_000_000
@@ -54,6 +55,7 @@ class JointTrainConfig:
         if self.teacher_batch not in (1,2,4,8,16,32) or not 0<=self.teacher_delay<=.25:raise ValueError('invalid teacher feedback')
         if not 2000<=self.teacher_initial_rate<=2000000:raise ValueError('invalid initial pacing rate')
         if self.profile not in ('deadline-v1','goodput-v2','goodput-v3','goodput-v4') or self.teacher_rate not in ('fixed','aimd','bdp','delay','delay-fast'):raise ValueError('invalid profile/teacher')
+        if self.time_aware_gae and self.profile!='goodput-v4':raise ValueError('elapsed-time GAE requires v4 transition timing')
         if self.teacher_scheduler not in ('edf','drr'):raise ValueError('invalid teacher scheduler')
         if self.receiver_teacher_prior is not None and not 0<self.receiver_teacher_prior<1:raise ValueError('invalid receiver prior')
         if self.teacher_rate=='delay-fast' and self.profile not in ('goodput-v3','goodput-v4'):raise ValueError('delay-fast requires v3')
@@ -151,7 +153,7 @@ def train(output,cfg=JointTrainConfig(),model_cfg=JointModelConfig(),resume=None
     obs=[];states=[];histories=[];episodes=list(range(cfg.environments));next_episode=cfg.environments
     decisions=0;world_steps=0;updates=0;last_checkpoint=0;start=time.monotonic();completed=[]
     source_hashes={name:hashlib.sha256((Path(__file__).parent/name).read_bytes()).hexdigest() for name in ['goodput.py','goodput_distribution.py','goodput_deployment.py','joint_session.py','joint_models.py','joint_workers.py','joint_training.py','protocol.py','wire.py','session_receiver.py','learning.py']} if cfg.profile.startswith('goodput-') else {}
-    metadata=dict(teacher_baseline_coupling=('same initial RNG; action-dependent draws can diverge; no guaranteed variance reduction' if cfg.paired_teacher else 'disabled; raw task reward'),training=asdict(cfg),model=asdict(model_cfg),domain=domain,profile=cfg.profile,
+    metadata=dict(algorithm='mappo-time-gae-v1' if cfg.time_aware_gae else 'mappo-step-gae-v1',teacher_baseline_coupling=('same initial RNG; action-dependent draws can diverge; no guaranteed variance reduction' if cfg.paired_teacher else 'disabled; raw task reward'),training=asdict(cfg),model=asdict(model_cfg),domain=domain,profile=cfg.profile,
         reward=domain['reward'] if cfg.profile.startswith('goodput-') else 'joint-deadline-v1',baseline=baseline,source_sha256=source_hashes)
     if resume is not None:
         resume=Path(resume)
@@ -191,7 +193,7 @@ def train(output,cfg=JointTrainConfig(),model_cfg=JointModelConfig(),resume=None
             o,state,h=reset(i,episodes[i]);obs.append(o);states.append(state);histories.append(h)
         if resume is None:checkpoint('initial.pt')
         while decisions<cfg.decisions:
-            sender_records=[];receiver_records=[];rewards=[];values=[];terminals=[];critic_states=[]
+            sender_records=[];receiver_records=[];rewards=[];values=[];terminals=[];critic_states=[];elapsed_transitions=[]
             collection_start=time.monotonic();rollout_decisions=0;events=0
             for step in range(cfg.rollout):
                 for o,h in zip(obs,histories):h.append(o)
@@ -214,6 +216,7 @@ def train(output,cfg=JointTrainConfig(),model_cfg=JointModelConfig(),resume=None
                 critic_states.append(state_tensor.cpu());values.append(value.cpu())
                 pool.send_steps(actions);result=pool.collect()
                 rewards.append(torch.tensor([r[2] for r in result],dtype=torch.float32));terminals.append(torch.tensor([r[3] for r in result]))
+                if cfg.time_aware_gae:elapsed_transitions.append(torch.tensor([r[0]['transition_seconds'] for r in result],dtype=torch.float32))
                 n=len(sm)+len(rm);decisions+=n;rollout_decisions+=n;world_steps+=cfg.environments
                 for i,(o,state,_,done,metrics,event_count) in enumerate(result):
                     events=max(events,event_count)
@@ -223,7 +226,10 @@ def train(output,cfg=JointTrainConfig(),model_cfg=JointModelConfig(),resume=None
                     else:obs[i],states[i]=o,state
                 if decisions>=cfg.decisions:break
             with torch.no_grad():bootstrap=critic(_tensor(np.asarray(states),cfg.device)).cpu()
-            advantages,returns=generalized_advantages(torch.stack(rewards),torch.stack(values),torch.stack(terminals),bootstrap,gamma=.999,lam=cfg.gae_lambda)
+            if cfg.time_aware_gae:
+                advantages,returns=time_generalized_advantages(torch.stack(rewards),torch.stack(values),torch.stack(terminals),bootstrap,torch.stack(elapsed_transitions),gamma=.999,lam=cfg.gae_lambda)
+            else:
+                advantages,returns=generalized_advantages(torch.stack(rewards),torch.stack(values),torch.stack(terminals),bootstrap,gamma=.999,lam=cfg.gae_lambda)
             collection_seconds=time.monotonic()-collection_start
             s_stats=_actor_update(sender,optimizers[0],sender_records,advantages.to(cfg.device),cfg,cfg.device,'sender')
             r_stats=_actor_update(receiver,optimizers[1],receiver_records,advantages.to(cfg.device),cfg,cfg.device,'receiver')

@@ -688,6 +688,18 @@ realization can exploit noise; these diagnostics are not expected action values,
 a deployable oracle, or evidence of a learned win. Replicated rollouts and
 observability checks are required before using these as training labels.
 
+A local opt-in variant additionally scales GAE discount and trace decay by
+actual transition time: $\gamma_t=\gamma^{\Delta t_t/0.02}$ and
+$\lambda_t=\lambda^{\Delta t_t/0.02}$. With fixed per-step parameters, a 2-ms
+controller otherwise has ten times less physical trace horizon than a 20-ms
+controller. Unit tests cover prefix trace decay, reference-tick equivalence and
+terminal bootstrap masking; no performance comparison is reported. The frozen
+Caliban study retains the original step-based estimator. Time discretization is
+a broader RL issue~\cite{tallec2019time}; this limited PPO modification is not a
+reproduction of that Q-learning work or proof of invariance to action frequency.
+Exploration, action scaling, rollout span and inference delays remain separate
+factors requiring controlled evaluation.
+
 \section{Implementation stages and open questions}
 Implemented stages include reliable CPU transfer, history-based sender learning,
 receiver learning, joint sender/receiver training over CPU packet workers, and

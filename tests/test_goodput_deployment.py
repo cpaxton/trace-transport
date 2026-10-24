@@ -33,11 +33,12 @@ def test_v4_training_records_new_profile_and_semantics(tmp_path):
     pytest.importorskip('torch')
     from trace_transport.joint_training import train,JointTrainConfig
     from trace_transport.joint_models import JointModelConfig,load_checkpoint
-    cfg=JointTrainConfig(profile='goodput-v4',teacher_rate='delay-fast',decisions=2,environments=1,
+    cfg=JointTrainConfig(profile='goodput-v4',time_aware_gae=True,teacher_rate='delay-fast',decisions=2,environments=1,
                          rollout=1,epochs=1,production_seconds=.05,drain_seconds=.05)
     train(tmp_path/'run',cfg,JointModelConfig(history=2,width=8,layers=1,heads=2))
     _,_,_,metadata=load_checkpoint(tmp_path/'run/final.pt')
     assert metadata['profile']=='goodput-v4'
+    assert metadata['algorithm']=='mappo-time-gae-v1'
     assert 'observation_overrides' in metadata['domain']
     assert 'goodput_deployment.py' in metadata['source_sha256']
 

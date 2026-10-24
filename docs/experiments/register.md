@@ -120,3 +120,11 @@ return baseline, not demonstrated CRN coupling or guaranteed variance reduction.
 Original metrics are unchanged. V4 longer training disables subtraction and uses
 raw task rewards with the learned PPO critic. The review also prompted explicit
 CLI profile selection, named inference bounds, and named observation indices.
+
+Elapsed-time GAE engineering check, actual start/end 2026-10-24 UTC: implemented
+and unit/integration verified; no performance experiment or learned win claimed.
+Optional `mappo-time-gae-v1` scales discount/trace decay by actual transition time;
+Caliban's frozen study remains on `mappo-step-gae-v1`. Tests cover 2/20-ms prefix
+trace equivalence, terminal masks and tiny v4 training. [Method and planned
+comparison](caliban-v4.md#local-follow-up-elapsed-time-credit-assignment),
+[tests](../../tests/test_time_gae.py). Larger ablation remains planned.
