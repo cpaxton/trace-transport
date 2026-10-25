@@ -171,3 +171,23 @@ continuing development elsewhere.
 [timing tests](../../tests/test_time_gae.py).
 
 [Exact remote package inventory](../../artifacts/caliban-v4-runtime.json) accompanies the frozen source and checkpoints.
+
+## Seed 42 result and checkpoint retention, 2026-10-25 UTC
+
+Training did not improve steadily: the selected 2.51M checkpoint has +2.82%
+goodput (interval includes zero), while the final 5M checkpoint has −2.71%.
+Interactive misses are 21.94% for the reference, 21.87% for the selected checkpoint,
+and 22.52% for the final policy. No trained snapshot passes deadline noninferiority.
+The selected model is a validation candidate, not an accepted/default replacement.
+
+After validation, user-authorized cleanup retained initial, selected-best and final
+seed42 checkpoints, all result summaries, and the active seed43 resume state.
+Nonselected intermediate weights and benchmark weights were deleted; their hashes
+and sizes are recorded. Future ablations cannot use the deleted weights. The
+service was briefly stopped to avoid racing the mirror thread and restarted from
+seed43's optimizer checkpoint with collector reset. This is recorded maintenance,
+not a change to the frozen learning algorithm. New seeds still retain selection
+snapshots until validation completes.
+
+[Complete checkpoint curve](../../artifacts/caliban-v4-seed42-results.json),
+[cleanup audit](../../artifacts/caliban-v4-checkpoint-cleanup.json).

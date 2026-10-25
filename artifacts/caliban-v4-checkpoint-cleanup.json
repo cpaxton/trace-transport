@@ -1,0 +1,179 @@
+{
+  "version": "checkpoint-cleanup-v1",
+  "utc": "2026-10-25T13:12:03.537463+00:00",
+  "reason": "user-authorized cleanup after seed42 selection; service stopped to avoid mirror races",
+  "retained_seed42": [
+    "d002509210.pt",
+    "final.pt",
+    "initial.pt"
+  ],
+  "removed": [
+    {
+      "location": "runtime",
+      "path": "seed42/latest.pt",
+      "bytes": 3043418,
+      "sha256": "a9f2d8da5780dbd780be7cd63eb8b2ea1218239f4375cc46ad3240487a5a9f6e"
+    },
+    {
+      "location": "runtime",
+      "path": "seed42/d004511117.pt",
+      "bytes": 3050118,
+      "sha256": "ec12dd53d8c0e36e4844173e211383676a274afdeab6de62d6a7c053cc4eaead"
+    },
+    {
+      "location": "runtime",
+      "path": "seed42/d004010517.pt",
+      "bytes": 3050118,
+      "sha256": "de7e5fe079f061b2ca6e462a4005449f361928575705285542e95879b009a6fa"
+    },
+    {
+      "location": "runtime",
+      "path": "seed42/d003510105.pt",
+      "bytes": 3050118,
+      "sha256": "b803b21f62833116eb99b4eced90331e0ebd35f9f1872ba5a00f39dce09ab80e"
+    },
+    {
+      "location": "runtime",
+      "path": "seed42/d003009960.pt",
+      "bytes": 3050118,
+      "sha256": "8b502087aed226a901e0af768d8de52f5f2019eb61fed7192b30149980f5cf54"
+    },
+    {
+      "location": "runtime",
+      "path": "seed42/d002008639.pt",
+      "bytes": 3050118,
+      "sha256": "9cceede5b49d13490ff3ac7d087f081798298efa6ed158a68af2b5aee670d16c"
+    },
+    {
+      "location": "runtime",
+      "path": "seed42/d001505674.pt",
+      "bytes": 3050118,
+      "sha256": "d88c54c08ec5726742beb001106f9d6c87472485c84c5d8c3db164041c279e96"
+    },
+    {
+      "location": "runtime",
+      "path": "seed42/d001004289.pt",
+      "bytes": 3050118,
+      "sha256": "7525778151a6b229a0b42a2261817c4b598851b8aec69d80fcbb4e2556ca1373"
+    },
+    {
+      "location": "runtime",
+      "path": "seed42/d000502228.pt",
+      "bytes": 3050118,
+      "sha256": "88bb2ca6c894853a058cdac2bb5cd66b1469b4eb7f48bf3940876edc1c24fd9f"
+    },
+    {
+      "location": "persistent",
+      "path": "seed42/d003510105.pt",
+      "bytes": 3050118,
+      "sha256": "b803b21f62833116eb99b4eced90331e0ebd35f9f1872ba5a00f39dce09ab80e"
+    },
+    {
+      "location": "persistent",
+      "path": "seed42/d004010517.pt",
+      "bytes": 3050118,
+      "sha256": "de7e5fe079f061b2ca6e462a4005449f361928575705285542e95879b009a6fa"
+    },
+    {
+      "location": "persistent",
+      "path": "seed42/d001505674.pt",
+      "bytes": 3050118,
+      "sha256": "d88c54c08ec5726742beb001106f9d6c87472485c84c5d8c3db164041c279e96"
+    },
+    {
+      "location": "persistent",
+      "path": "seed42/d002008639.pt",
+      "bytes": 3050118,
+      "sha256": "9cceede5b49d13490ff3ac7d087f081798298efa6ed158a68af2b5aee670d16c"
+    },
+    {
+      "location": "persistent",
+      "path": "seed42/latest.pt",
+      "bytes": 3043418,
+      "sha256": "a9f2d8da5780dbd780be7cd63eb8b2ea1218239f4375cc46ad3240487a5a9f6e"
+    },
+    {
+      "location": "persistent",
+      "path": "seed42/d003009960.pt",
+      "bytes": 3050118,
+      "sha256": "8b502087aed226a901e0af768d8de52f5f2019eb61fed7192b30149980f5cf54"
+    },
+    {
+      "location": "persistent",
+      "path": "seed42/d000502228.pt",
+      "bytes": 3050118,
+      "sha256": "88bb2ca6c894853a058cdac2bb5cd66b1469b4eb7f48bf3940876edc1c24fd9f"
+    },
+    {
+      "location": "persistent",
+      "path": "seed42/d001004289.pt",
+      "bytes": 3050118,
+      "sha256": "7525778151a6b229a0b42a2261817c4b598851b8aec69d80fcbb4e2556ca1373"
+    },
+    {
+      "location": "persistent",
+      "path": "seed42/d004511117.pt",
+      "bytes": 3050118,
+      "sha256": "ec12dd53d8c0e36e4844173e211383676a274afdeab6de62d6a7c053cc4eaead"
+    },
+    {
+      "location": "benchmark-runtime",
+      "path": "env4/final.pt",
+      "bytes": 3034655,
+      "sha256": "6541ec6cc1350136bb2845f17f5949f911a71a0c5db5037355ba3466a94010cd"
+    },
+    {
+      "location": "benchmark-runtime",
+      "path": "env4/latest.pt",
+      "bytes": 3043418,
+      "sha256": "a52c98088445451d7f3ee8f781e03512222f522790a4af77e625a34c2ee92889"
+    },
+    {
+      "location": "benchmark-runtime",
+      "path": "env4/initial.pt",
+      "bytes": 1020217,
+      "sha256": "5d82fbc5e76c87ad92cfc5b6f6fa8638600e77056144a68a107d0065b659c0bd"
+    },
+    {
+      "location": "benchmark-runtime",
+      "path": "env2/final.pt",
+      "bytes": 3034655,
+      "sha256": "6bb7305c372223d5058f313b222ef8211d2da1cf75d6908f2e6d1a1b15927d00"
+    },
+    {
+      "location": "benchmark-runtime",
+      "path": "env2/latest.pt",
+      "bytes": 3043418,
+      "sha256": "2adb3eaf216a91781f2b787fddadcee5b865c95c9b3f66bbb73f5db25a384b6d"
+    },
+    {
+      "location": "benchmark-runtime",
+      "path": "env2/initial.pt",
+      "bytes": 1020217,
+      "sha256": "02dce6a44de059ca19aadb1edac82fcb225e496ee3c85b732369a76cf9d455cc"
+    },
+    {
+      "location": "benchmark-runtime",
+      "path": "env1/final.pt",
+      "bytes": 3034655,
+      "sha256": "13eac6ae419ae2b7e0d0c5604dc3d8e46bf5cd83454a1c5f56444f377e1e5b67"
+    },
+    {
+      "location": "benchmark-runtime",
+      "path": "env1/latest.pt",
+      "bytes": 3043418,
+      "sha256": "25bd3b1409b2fdd3e59010746a8c0ca85ca46674d48eee92d2dd5cb531aceba5"
+    },
+    {
+      "location": "benchmark-runtime",
+      "path": "env1/initial.pt",
+      "bytes": 1020217,
+      "sha256": "328d61158a2679f79306d8b73b23c1a04a6744e545185aa0b3f1ef0a3f22f1fe"
+    }
+  ],
+  "disk_free_before": 1467965440,
+  "maintenance_resume": "seed43 optimizer/RNG checkpoint restored; collector worlds reset",
+  "files_removed": 27,
+  "bytes_removed": 76183594,
+  "disk_free_after": 1495425024
+}

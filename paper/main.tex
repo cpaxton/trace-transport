@@ -700,12 +700,16 @@ reproduction of that Q-learning work or proof of invariance to action frequency.
 Exploration, action scaling, rollout span and inference delays remain separate
 factors requiring controlled evaluation.
 
-An interim update on 2026-10-25 records completion of seed 42 at 5,000,031
-opportunities in 16.38 hours. Ten snapshot validation summaries are available;
-final-checkpoint validation and selection remain pending, as do the other two
-training seeds. No available trained snapshot passes deadline noninferiority.
-The largest goodput point estimate is 2.82\%, with an interval including zero.
-These are preliminary selection-data observations, not a held-out learning win.
+Seed 42 completes 5,000,031 opportunities in 16.38 hours and validation of
+11 checkpoints. Selection favors the 2.51-million-decision checkpoint, with a
+2.82\% goodput point increase, an interval including zero, and failed deadline
+noninferiority. The final policy has 2.71\% lower goodput and 22.52\% interactive
+misses versus the reference's 21.94\%. Thus the curve does not establish sustained
+learning progress or an accepted win. Other seeds remain unfinished. After
+validation, authorized retention keeps initial, selected and final weights and
+all evaluation summaries; removed intermediate weights cannot support new
+post-hoc ablations. Seed 43 undergoes an optimizer-checkpoint maintenance restart
+with collector reset, recorded separately from the algorithm.
 
 \section{Implementation stages and open questions}
 Implemented stages include reliable CPU transfer, history-based sender learning,
