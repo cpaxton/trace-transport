@@ -34,19 +34,29 @@ def model_config():return JointModelConfig(history=64,width=64,layers=2)
 def config(seed,decisions,envs,baseline=None):
     b=baseline or dict(rate='delay-fast',scheduler='edf',batch=16,delay=.025)
     return JointTrainConfig(profile='goodput-v4',teacher_rate=b['rate'],teacher_scheduler=b['scheduler'],
-        teacher_initial_rate=512000.,teacher_batch=b['batch'],teacher_delay=b['delay'],
+        teacher_initial_rate=b.get('initial_rate',512000.),teacher_batch=b['batch'],teacher_delay=b['delay'],
         receiver_teacher_prior=.5,paired_teacher=False,decisions=decisions,environments=envs,rollout=128,
         epochs=3,checkpoint_every=500000,production_seconds=12.,drain_seconds=3.,
         easy_fraction=.05,gae_lambda=.98,device='cpu',seed=seed)
 
 
 def bank(start,per_family=2):
+    if not isinstance(per_family,int) or per_family<1:raise ValueError('positive cases per family required')
     seeds={f:[] for f in FAMILIES}
     for seed in range(start,start+10000):
         family=sample_case(seed)[2]['family']
         if len(seeds[family])<per_family:seeds[family].append(seed)
         if all(len(s)==per_family for s in seeds.values()):break
+    missing={f:per_family-len(rows) for f,rows in seeds.items() if len(rows)!=per_family}
+    if missing:raise ValueError('seed bank exhausted with uncovered strata: '+str(missing))
     return sorted(s for rows in seeds.values() for s in rows)
+
+
+def validate_resume_plan(prior,plan):
+    keys=['domain','training_seeds','decisions_per_seed','environments','model','source_sha256',
+          'calibration_seeds','validation_seeds','reserved_test','reserved_ood']
+    for key in keys:
+        if prior[key]!=plan[key]:raise ValueError('resume plan/source mismatch: '+key)
 
 
 def benchmark(output,decisions):
@@ -102,8 +112,7 @@ def study(root,persistent,decisions,seed_list,resume=False):
         checkpoint_persistence='full optimizer snapshots and source archive; bounded 256MiB persistent mirror',
         benchmark=bench,source_sha256=json.loads((Path(__file__).resolve().parents[1]/'source-manifest.json').read_text()))
     if prior:
-        for key in ['domain','training_seeds','decisions_per_seed','environments','model','source_sha256']:
-            if prior[key]!=plan[key]:raise ValueError('resume plan/source mismatch: '+key)
+        validate_resume_plan(prior,plan)
         plan=prior
         write(root/'resumption.json',dict(utc=datetime.now(timezone.utc).isoformat(),collector_reset=True))
     write(root/'plan.json',plan)

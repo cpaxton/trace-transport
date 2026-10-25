@@ -178,3 +178,14 @@ the adaptive reference exactly. Four-case audit finds 30,166 valid-history recei
 proposals all teacher-following (including inactive rows). The small shaped-policy
 gain is not evidence of useful receiver learning. [Roles](../../artifacts/progress-ablation-v5-roles.json),
 [proposals](../../artifacts/progress-ablation-v5-final-action-audit.json).
+
+Reactive v6 matched retraining pilot — **running**, actual start 2026-10-25 UTC;
+end pending. [Frozen plan](../../artifacts/reactive-v6-pilot-plan.json),
+[runner](../../scripts/reactive_pilot.py). One seed (42), 200,000 decisions,
+history 64 / width 32 / one transformer layer, two environments; potential shaping,
+time-aware GAE and receiver action alias masking match the completed v5 shaped arm.
+Initial sender/receiver/critic tensors and the 24 validation seed memberships were
+checked identical. Only pending-ACK protocol semantics change. Final-checkpoint
+validation compares against its own v6 adaptive baseline; no reserved tests or
+acceptance claim. CPU-only isolated source/runtime, six-core affinity, 8 GiB limit,
+file logs; the frozen Caliban v4 study remains unchanged. No performance result yet.

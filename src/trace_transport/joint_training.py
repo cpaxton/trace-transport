@@ -16,7 +16,7 @@ import torch
 
 from .joint_curriculum import DOMAIN
 from .joint_models import JointModelConfig,SenderActor,ReceiverActor,CentralCritic,save_checkpoint
-from .joint_session import SENDER_FEATURES,RECEIVER_FEATURES
+from .joint_session import SENDER_FEATURES,RECEIVER_FEATURES,ACK_ACTIONS
 from .joint_workers import EnvironmentPool
 from .learning import generalized_advantages,time_generalized_advantages
 
@@ -100,6 +100,13 @@ def _pack(observations,histories,role,device):
     return data,mapping
 
 
+def receiver_choice_diagnostics(choices,advantages):
+    count=1+len(ACK_ACTIONS)
+    if ((choices<0)|(choices>=count)).any():raise ValueError('receiver choice outside current action table')
+    return dict(choice_counts=torch.bincount(choices,minlength=count).tolist(),
+        choice_mean_normalized_advantage=[float(advantages[choices==i].mean()) if (choices==i).any() else None for i in range(count)])
+
+
 def _actor_update(model,optimizer,records,advantages,cfg,device,role):
     if not records:return dict(gradient_norm=0.,kl=0.,samples=0,steps=0)
     fields={key:torch.cat([row[key] for row in records]).to(device) for key in records[0]}
@@ -119,11 +126,7 @@ def _actor_update(model,optimizer,records,advantages,cfg,device,role):
             norm=torch.nn.utils.clip_grad_norm_(model.parameters(),.5);maximum=max(maximum,float(norm))
             optimizer.step();steps+=1
         if stop:break
-    diagnostic={}
-    if role=='receiver':
-        choices=fields['choice'].detach().cpu();values=adv.detach().cpu()
-        diagnostic['choice_counts']=torch.bincount(choices,minlength=22).tolist()
-        diagnostic['choice_mean_normalized_advantage']=[float(values[choices==i].mean()) if (choices==i).any() else None for i in range(22)]
+    diagnostic=receiver_choice_diagnostics(fields['choice'].detach().cpu(),adv.detach().cpu()) if role=='receiver' else {}
     return dict(gradient_norm=maximum,kl=max_kl,samples=len(adv),steps=steps,**diagnostic)
 
 

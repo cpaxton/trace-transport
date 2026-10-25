@@ -12,6 +12,21 @@ from trace_transport.goodput_evaluation import summarize,compare
 from trace_transport.joint_evaluation import evaluate
 from trace_transport.joint_models import JointModelConfig
 from trace_transport.joint_training import JointTrainConfig,train
+from trace_transport.joint_session import ACK_ACTIONS
+
+
+def aggregate_receiver_telemetry(rows):
+    count=1+len(ACK_ACTIONS);counts=[0]*count;weighted=[0.]*count
+    for row in rows:
+        rx=row['receiver']
+        if 'choice_counts' not in rx:continue
+        n=rx['choice_counts'];values=rx.get('choice_mean_normalized_advantage',[])
+        if len(n)!=count or len(values)!=count:raise ValueError('receiver telemetry action-table mismatch')
+        for i,(amount,value) in enumerate(zip(n,values)):
+            counts[i]+=amount
+            if value is not None:weighted[i]+=amount*value
+    return dict(scope='sampled active receiver training actions, not validation performance',
+        choices=counts,mean_normalized_advantage=[v/n if n else None for v,n in zip(weighted,counts)])
 
 
 def main():
@@ -42,14 +57,8 @@ def main():
         reserved_test_seed_range=[95000,95999],reserved_ood_seed_range=[96000,96999])
     write(out/'plan.json',plan)
     final=train(out/'seed42',cfg,model)
-    counts=[0]*22;weighted=[0.]*22
-    for line in (out/'seed42/training.jsonl').read_text().splitlines():
-        rx=json.loads(line)['receiver']
-        for i,(n,value) in enumerate(zip(rx.get('choice_counts',[]),rx.get('choice_mean_normalized_advantage',[]))):
-            counts[i]+=n
-            if value is not None:weighted[i]+=n*value
-    write(out/'receiver-telemetry.json',dict(scope='sampled active receiver training actions, not validation performance',
-        choices=counts,mean_normalized_advantage=[v/n if n else None for v,n in zip(weighted,counts)]))
+    write(out/'receiver-telemetry.json',aggregate_receiver_telemetry(
+        json.loads(line) for line in (out/'seed42/training.jsonl').read_text().splitlines()))
     result=dict(plan=plan,modes={})
     for mode,sender,receiver,checkpoint in [('adaptive',False,False,None),('initial',True,True,out/'seed42/initial.pt'),
                                           ('sender-only',True,False,final),('receiver-only',False,True,final),('joint',True,True,final)]:
