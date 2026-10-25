@@ -700,6 +700,13 @@ reproduction of that Q-learning work or proof of invariance to action frequency.
 Exploration, action scaling, rollout span and inference delays remain separate
 factors requiring controlled evaluation.
 
+An interim update on 2026-10-25 records completion of seed 42 at 5,000,031
+opportunities in 16.38 hours. Ten snapshot validation summaries are available;
+final-checkpoint validation and selection remain pending, as do the other two
+training seeds. No available trained snapshot passes deadline noninferiority.
+The largest goodput point estimate is 2.82\%, with an interval including zero.
+These are preliminary selection-data observations, not a held-out learning win.
+
 \section{Implementation stages and open questions}
 Implemented stages include reliable CPU transfer, history-based sender learning,
 receiver learning, joint sender/receiver training over CPU packet workers, and

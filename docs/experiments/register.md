@@ -128,3 +128,5 @@ Caliban's frozen study remains on `mappo-step-gae-v1`. Tests cover 2/20-ms prefi
 trace equivalence, terminal masks and tiny v4 training. [Method and planned
 comparison](caliban-v4.md#local-follow-up-elapsed-time-credit-assignment),
 [tests](../../tests/test_time_gae.py). Larger ablation remains planned.
+
+Caliban v4 update, 2026-10-25 UTC: seed 42 completed 5,000,031 opportunities in 58,974 s (16.38 h), then entered snapshot validation. Ten snapshot summaries are available; final-checkpoint validation/selection and seeds 43/44 remain pending. No available trained snapshot passes the deadline guard. The largest goodput point estimate is +2.82%, with difference CI including zero; this is selection data, not held-out evidence. Twelve optimizer checkpoints are persisted; root disk free ~1.37 GiB. [Partial results](../../artifacts/caliban-v4-seed42-validation-partial.json).
