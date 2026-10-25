@@ -73,10 +73,17 @@ class SenderActor(nn.Module):
 class ReceiverActor(nn.Module):
     def __init__(self,config):
         super().__init__();self.encoder=LocalEncoder(len(RECEIVER_FEATURES),config)
+        self.masked_choice=None
         self.head=nn.Linear(config.width,1+len(ACK_ACTIONS));nn.init.zeros_(self.head.weight)
         nn.init.zeros_(self.head.bias)
         with torch.no_grad():self.head.bias[0]=.5
-    def forward(self,h,valid):return self.head(self.encoder(h,valid))
+    def mask_teacher_alias(self,batch,delay):
+        self.masked_choice=next((i+1 for i,pair in enumerate(ACK_ACTIONS) if pair==(batch,delay)),None)
+    def forward(self,h,valid):
+        logits=self.head(self.encoder(h,valid))
+        if self.masked_choice is not None:
+            logits=logits.clone();logits[:,self.masked_choice]=-1e9
+        return logits
     def sample(self,h,valid):
         d=torch.distributions.Categorical(logits=self(h,valid));a=d.sample();return a,d.log_prob(a)
     def evaluate(self,h,valid,a):
@@ -106,6 +113,8 @@ def load_checkpoint(path,device='cpu'):
         raise ValueError('incompatible joint checkpoint')
     config=JointModelConfig(**d['config']);sender=SenderActor(config).to(device);receiver=ReceiverActor(config).to(device)
     sender.load_state_dict(d['sender']);receiver.load_state_dict(d['receiver'])
+    if d['metadata'].get('training',{}).get('mask_receiver_alias',False):
+        teacher=d['metadata']['baseline'];receiver.mask_teacher_alias(teacher['batch'],teacher['delay'])
     return sender.eval(),receiver.eval(),config,d['metadata']
 
 

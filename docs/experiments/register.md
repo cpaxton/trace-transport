@@ -146,3 +146,35 @@ service to avoid mirror races, then restarted the identical frozen source with
 explicit resume. Collector worlds/histories reset; optimizer/RNG restoration is
 not bitwise continuation of in-flight trajectories. Reference checks precede
 continued seed43 training. [Removal hashes and retention](../../artifacts/caliban-v4-checkpoint-cleanup.json).
+
+## V5 measurement and learning-signal follow-up
+
+| Actual start | Actual end | Experiment | Status and evidence |
+| --- | --- | --- | --- |
+| 2026-10-25 UTC | 2026-10-25T16:50:21.769665+00:00 | Seed42 per-family/service-bound audit | Completed, post-hoc diagnosis. Wired cases supply 55.9% of initial bulk bytes; one Wi-Fi case provably cannot complete one smallest object per host in the measurement window even under an optimistic header-aware bound. Old scores/criteria are unchanged. [Results](../../artifacts/learning-diagnostics-v1-results.json). |
+| 2026-10-25 UTC | 2026-10-25T16:57:23.869609+00:00 | V5 baseline progress replay | Completed, metric diagnosis only, two reused Wi-Fi validation cases. Zero completed bulk bytes but nonzero CRC-accepted bulk payload at all five hosts; accepted rate 18,795 B/s is not completed-object goodput. [Results](../../artifacts/progress-baseline-v5-results.json). |
+| 2026-10-25T17:09:06.245621+00:00 | 2026-10-25T17:27:16.473754+00:00 | V5 raw versus potential-shaped pilot | Completed, exploratory; no accepted win. Raw 200,001 and shaped 200,002 opportunities. Shaped +0.66% verified goodput vs adaptive and passes v5 quality guards, below 10% target. Shaped vs raw +1.45%, but fails deadline/per-family progress nonregression. Initial parameters identical. 72 validation case/controller evaluations; reserved tests unopened. [Plan](../../artifacts/progress-ablation-v5-plan.json), [frozen source](../../artifacts/progress-ablation-v5-source.zip), [method/limitations](learning-signal-v5.md). |
+
+V5 changes the service-starvation guard explicitly and adds fairness/per-family
+checks while retaining whole-object goodput and integrity requirements. Prefix
+potential is training-only and cancels at termination. This does not reinterpret
+v4's failed acceptance or prove any new learning gain.
+
+V6 reactive receiver engineering check, actual start/end 2026-10-25 UTC:
+implemented and tested, not a training-performance study. Changed ACK controls now
+act on pending receipts without requiring a later packet arrival; old timers are
+invalidated, pending age retained, and flush bytes charged to raw reward. Tests
+also verify unchanged-setting outcome parity and the serialized protocol contract.
+This is a new simulator profile; the completed v5 pilot and running Caliban v4
+study retain their frozen semantics. [Plan](../../experiments/goodput-v6-plan.json),
+[tests](../../tests/test_reactive_receiver.py). The v4 study remains a diagnostic
+baseline; its old all-host completed-object guard is now known to be infeasible
+in at least one validation case, so it cannot establish an accepted win under
+that frozen criterion.
+
+V5 final role/proposal audits, actual start/end 2026-10-25 UTC: sender-only matches
+joint shaped records exactly across all 24 validation cases; receiver-only matches
+the adaptive reference exactly. Four-case audit finds 30,166 valid-history receiver
+proposals all teacher-following (including inactive rows). The small shaped-policy
+gain is not evidence of useful receiver learning. [Roles](../../artifacts/progress-ablation-v5-roles.json),
+[proposals](../../artifacts/progress-ablation-v5-final-action-audit.json).

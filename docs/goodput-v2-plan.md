@@ -130,3 +130,7 @@ Adaptation is the first target; scheduling and receiver controls are retained an
 audited separately. Real-world coverage remains a measured-path validation task.
 
 The [Caliban v4 follow-up](experiments/caliban-v4.md) closes initial low-RTT/high-rate gaps, exposes control timing, corrects teacher-baseline assumptions, and offloads a larger multi-seed CPU study while local robustness work continues.
+
+The [v5 learning-signal follow-up](experiments/learning-signal-v5.md) separates missing service from incomplete objects, audits feasibility, and tests objective-preserving progress shaping without changing prior results.
+
+The [v6 reactive receiver plan](../experiments/goodput-v6-plan.json) fixes the pending-timer control limitation as a separate protocol version; v5 shaping results do not include this change.

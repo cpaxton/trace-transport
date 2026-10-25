@@ -1,0 +1,18 @@
+{
+  "seeds": [
+    134000,
+    134001,
+    134002,
+    134003
+  ],
+  "scope": "valid-history model proposals, including inactive endpoint rows; not applied-action counts",
+  "receiver_choices": {
+    "0": 30166
+  },
+  "zero_choice": "follow adaptive teacher ACK settings",
+  "sender": {
+    "sender_rows": 30220,
+    "absolute_rate_residual_sum": 621.9209062755108,
+    "absolute_window_residual_sum": 219.3724869064754
+  }
+}

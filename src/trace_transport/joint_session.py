@@ -191,6 +191,8 @@ class JointTransportEnv:
     rate_limit=RATE_MAX
     window_limit=WINDOW_MAX
 
+    def on_receiver_control(self,index):pass
+    def on_accepted_payload(self,index,mid,traffic_class,size):pass
     def on_verified_delivery(self,index,mid,message):pass
     def on_confirmed_delivery(self,index,mid,message):pass
     def _application_event(self,*args):raise ValueError("unsupported application event")
@@ -430,6 +432,7 @@ class JointTransportEnv:
             s.arrivals+=1;s.duplicates+=before==r.received_bytes;s.reordered+=was_reordered
             s.previous_offset=packet.offset;s.last_gap=self.now-s.last_arrival if s.last_arrival is not None else 0.;s.last_arrival=self.now
             delta=r.received_bytes-before;s.unique+=delta
+            if delta:self.on_accepted_payload(index,mid,cls,delta)
             if cls in ('image','map'):self.reward_counts[cls]+=delta
             if r.complete and not was_complete:
                 payload=r.reconstruct()
@@ -527,6 +530,7 @@ class JointTransportEnv:
             s.preferred=candidates[choice-1][0] if choice else None
             if rx[i]:s.batch,s.delay=ACK_ACTIONS[int(rx[i])-1];s.ack_mode='constant'
             else:s.batch,s.delay,s.ack_mode=s.baseline_batch,s.baseline_delay,s.baseline_ack_mode
+            self.on_receiver_control(i)
             s.before=(s.acked,s.wire,s.unique,s.lost);self._wake_at(i)
         self._advance(min(self.horizon,self.now+self.network.control_interval))
         d={k:self.reward_counts[k]-before[k] for k in before};w=self.workload

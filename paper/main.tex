@@ -711,6 +711,63 @@ all evaluation summaries; removed intermediate weights cannot support new
 post-hoc ablations. Seed 43 undergoes an optimizer-checkpoint maintenance restart
 with collector reset, recorded separately from the algorithm.
 
+\section{Measurement and learning-signal diagnosis}
+Post-hoc family analysis finds that the two wired cases supply 55.9\% of the
+initial v4 bulk bytes. Both Wi-Fi contention cases have zero completed bulk
+objects. For one, optimistic forward service is only 1,114,779 wire bytes, below
+the 1,181,696 bytes required for one minimum object per host even with minimum
+headers and no loss, feedback airtime, status traffic or propagation. The prior
+all-host object-completion guard is therefore impossible in at least this case.
+No previous result is rescored or declared a success.
+
+A v5 diagnostic replay distinguishes service from object completion: the five
+Wi-Fi hosts all receive CRC-accepted bulk payload, averaging 18,795 B/s across
+the two cases, despite zero completed-object goodput. V5 reports both metrics and
+per-class completion; its versioned host guard uses zero accepted bulk service,
+with fairness and per-family nonregression checks. Partial data never counts as
+a completed text/image object. This defines a new acceptance version.
+
+An optional training potential is incomplete, uniquely accepted bulk bytes
+divided by the fixed reward scale. With actual-time discount $\gamma_t$, shaping
+adds $\gamma_t\Phi(s_{t+1})-\Phi(s_t)$ and sets terminal potential to zero.
+The terms telescope out of the full discounted return, following potential-based
+shaping~\cite{ng1999shaping}; tests verify cancellation on simulated incomplete
+transfers. This does not make infeasible cases feasible or guarantee improvement
+under approximate PPO training. A learner-only mask removes the ACK action exactly
+equivalent to teacher-following; serialized metadata restores it at inference.
+
+A one-seed local pilot compares raw and shaped training with matched initialization,
+model, teacher, time-aware GAE and alias mask, using 512-step rollouts and planned
+200,000-opportunity budgets per arm. Final-only validation uses new cases; results are reported below. Cloned-state interventions must be replicated before using them
+as receiver action-value labels. COMA motivates agent-specific counterfactual
+credit~\cite{foerster2018coma}; our current shared-advantage PPO and simulator
+interventions are not an implementation or reproduction of COMA.
+
+The v5 pilot completes 200,001 raw and 200,002 shaped opportunities in about
+329 seconds each, with identical initial parameters, 35,472 world steps and
+18 completed episodes per arm. Final-only validation evaluates 72 case/controller
+combinations. Adaptive, raw and shaped verified goodputs are 855,268, 848,555 and
+860,900 B/s; interactive misses are 10.48\%, 9.77\% and 9.80\%. Shaped versus
+adaptive gains 0.66\% (paired difference interval $[228,13312]$ B/s), passing
+v5 quality guards but missing the 10\% target. Versus raw it gains 1.45\%, but
+fails deadline and per-family progress nonregression. This one-seed validation
+pilot does not establish an overall or accepted learning win. Sender-only reproduces
+the joint shaped records exactly on all 24 cases, while receiver-only reproduces
+the adaptive reference; no useful receiver contribution is established. A four-case audit
+still has all 30,166 valid-history receiver proposals following the teacher,
+including inactive rows; the aggregate gain is not evidence of useful receiver
+learning.
+
+A separate v6 control-authority fix applies changed ACK settings to already-pending
+receipts. Earlier settings affect future arrivals while an existing timer can
+remain unchanged, preventing an immediate action from flushing backlog without
+another packet. V6 flushes or reschedules from the oldest pending arrival and
+invalidates the old timer. Tests verify wire-cost accounting, no duplicate flush,
+and unchanged outcomes when settings do not change. Completion ACK protection
+remains. No v6 learning result is reported; earlier experiments use their frozen
+semantics. Caliban v4 remains a diagnostic baseline, with its original all-host
+completion guard now known infeasible in at least one validation case.
+
 \section{Implementation stages and open questions}
 Implemented stages include reliable CPU transfer, history-based sender learning,
 receiver learning, joint sender/receiver training over CPU packet workers, and

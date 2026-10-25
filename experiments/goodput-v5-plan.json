@@ -1,0 +1,34 @@
+{
+  "version": "goodput-progress-v5-plan-v1",
+  "status": "controlled pilot completed; no accepted win; future powered acceptance study remains planned",
+  "domain": "goodput-domain-v5.0; same physical cases as v4",
+  "objective": "unique bytes of fully verified completed bulk objects per second; accepted partial payload never counts as completed goodput",
+  "training": {
+    "comparison": "same initialization, teacher, worlds, model and rollout; time-aware GAE in both arms; only progress potential differs",
+    "potential": "CRC-accepted unique incomplete bulk bytes / (262144 * production_seconds)",
+    "shaping": "r_shaped = r_raw + gamma(dt) * Phi(next) - Phi(current); terminal Phi=0",
+    "discount": "gamma(dt) = 0.999 ** (dt / 0.02)",
+    "no_shadow_teacher_subtraction": true,
+    "both_arms_mask_exact_receiver_teacher_alias": true
+  },
+  "acceptance_for_future_powered_study": {
+    "verified_goodput_relative_gain": 0.1,
+    "paired_goodput_ci95_lower_above_zero": true,
+    "deadline_miss_difference_ci95_upper_max": 0.005,
+    "wire_per_useful_byte_max_relative": 1.05,
+    "wrong_deliveries": 0,
+    "host_guard": "no configured host receives zero CRC-accepted bulk payload during measurement",
+    "mean_progress_jain_margin": 0.05,
+    "per_family_progress_and_verified_bulk_min_relative": 0.95,
+    "legacy_class_confirmation_completion_guards": "retained"
+  },
+  "required_reports": [
+    "whole-object, receiver-confirmed and accepted-prefix throughput separately",
+    "per-family scores and byte shares",
+    "per-class completion counts after drain",
+    "zero-completed-object hosts versus zero-accepted-payload hosts",
+    "optimistic completion feasibility bound, without dropping cases",
+    "unchanged v2-v4 results and acceptance definitions"
+  ],
+  "limitations": "Changing the host guard defines a new acceptance version; partial progress is not exact whole-object success. Prefix potential does not fix infeasible whole-object horizons or guarantee better learning. Calibration and pilot validation are not held-out acceptance."
+}

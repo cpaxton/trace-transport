@@ -32,6 +32,8 @@ class JointTrainConfig:
     paired_teacher:bool=False
     receiver_teacher_prior:float|None=None
     teacher_prior:float=.9
+    mask_receiver_alias:bool=False
+    progress_shaping:bool=False
     time_aware_gae:bool=False
     gae_lambda:float=.95
     gpu_memory_fraction:float=.15
@@ -54,11 +56,13 @@ class JointTrainConfig:
             raise ValueError('training budgets must be positive')
         if self.teacher_batch not in (1,2,4,8,16,32) or not 0<=self.teacher_delay<=.25:raise ValueError('invalid teacher feedback')
         if not 2000<=self.teacher_initial_rate<=2000000:raise ValueError('invalid initial pacing rate')
-        if self.profile not in ('deadline-v1','goodput-v2','goodput-v3','goodput-v4') or self.teacher_rate not in ('fixed','aimd','bdp','delay','delay-fast'):raise ValueError('invalid profile/teacher')
-        if self.time_aware_gae and self.profile!='goodput-v4':raise ValueError('elapsed-time GAE requires v4 transition timing')
+        if self.profile not in ('deadline-v1','goodput-v2','goodput-v3','goodput-v4','goodput-v5','goodput-v6') or self.teacher_rate not in ('fixed','aimd','bdp','delay','delay-fast'):raise ValueError('invalid profile/teacher')
+        if self.mask_receiver_alias and self.profile not in ('goodput-v5','goodput-v6'):raise ValueError('receiver alias masking is versioned for v5')
+        if self.progress_shaping and (self.profile not in ('goodput-v5','goodput-v6') or not self.time_aware_gae or self.paired_teacher):raise ValueError('progress shaping requires v5, time-aware GAE and raw task reward')
+        if self.time_aware_gae and self.profile not in ('goodput-v4','goodput-v5','goodput-v6'):raise ValueError('elapsed-time GAE requires v4 transition timing')
         if self.teacher_scheduler not in ('edf','drr'):raise ValueError('invalid teacher scheduler')
         if self.receiver_teacher_prior is not None and not 0<self.receiver_teacher_prior<1:raise ValueError('invalid receiver prior')
-        if self.teacher_rate=='delay-fast' and self.profile not in ('goodput-v3','goodput-v4'):raise ValueError('delay-fast requires v3')
+        if self.teacher_rate=='delay-fast' and self.profile not in ('goodput-v3','goodput-v4','goodput-v5','goodput-v6'):raise ValueError('delay-fast requires v3')
         if not 0<self.teacher_prior<1 or not 0<self.gpu_memory_fraction<=.5 or not 0<=self.gae_lambda<=1:raise ValueError('invalid memory/GAE limits')
         if self.learning_rate<=0 or not 0<=self.easy_fraction<=1:raise ValueError('invalid optimizer/curriculum')
 
@@ -129,7 +133,11 @@ def train(output,cfg=JointTrainConfig(),model_cfg=JointModelConfig(),resume=None
     torch.set_num_threads(1);torch.manual_seed(cfg.seed)
     if cfg.device.startswith('cuda') and not torch.cuda.is_available():raise RuntimeError('requested CUDA is unavailable')
     if cfg.device.startswith('cuda'):torch.cuda.set_per_process_memory_fraction(cfg.gpu_memory_fraction)
-    if cfg.profile=='goodput-v4':
+    if cfg.profile=='goodput-v6':
+        from .goodput_reactive import DOMAIN as domain
+    elif cfg.profile=='goodput-v5':
+        from .goodput_progress import DOMAIN as domain
+    elif cfg.profile=='goodput-v4':
         from .goodput_deployment import DOMAIN as domain
     elif cfg.profile=='goodput-v3':
         from .goodput_distribution import DOMAIN as domain
@@ -138,7 +146,9 @@ def train(output,cfg=JointTrainConfig(),model_cfg=JointModelConfig(),resume=None
     else:domain=DOMAIN
     baseline=dict(rate=cfg.teacher_rate,scheduler=cfg.teacher_scheduler,feedback='budgeted')
     if cfg.profile.startswith('goodput-'):baseline.update(initial_rate=cfg.teacher_initial_rate,batch=cfg.teacher_batch,delay=cfg.teacher_delay)
+    if cfg.profile in ('goodput-v5','goodput-v6'):baseline['progress_shaping']=cfg.progress_shaping
     sender=SenderActor(model_cfg).to(cfg.device);receiver=ReceiverActor(model_cfg).to(cfg.device);critic=CentralCritic().to(cfg.device)
+    if cfg.mask_receiver_alias:receiver.mask_teacher_alias(cfg.teacher_batch,cfg.teacher_delay)
     if cfg.profile.startswith('goodput-'):
         # Greedy teacher equivalence is insufficient: sampling must start close
         # to it too, rather than uniformly random scheduling/ACK decisions.
@@ -147,13 +157,13 @@ def train(output,cfg=JointTrainConfig(),model_cfg=JointModelConfig(),resume=None
         with torch.no_grad():
             sender.follow.bias.fill_(math.log(MAX_CANDIDATES*odds))
             rx_prior=cfg.receiver_teacher_prior if cfg.receiver_teacher_prior is not None else cfg.teacher_prior
-            receiver.head.bias[0]=math.log(len(ACK_ACTIONS)*rx_prior/(1-rx_prior))
+            receiver.head.bias[0]=math.log((len(ACK_ACTIONS)-int(receiver.masked_choice is not None))*rx_prior/(1-rx_prior))
             sender.log_std.fill_(-3.)
     optimizers=[torch.optim.Adam(m.parameters(),lr=cfg.learning_rate) for m in (sender,receiver,critic)]
     obs=[];states=[];histories=[];episodes=list(range(cfg.environments));next_episode=cfg.environments
     decisions=0;world_steps=0;updates=0;last_checkpoint=0;start=time.monotonic();completed=[]
-    source_hashes={name:hashlib.sha256((Path(__file__).parent/name).read_bytes()).hexdigest() for name in ['goodput.py','goodput_distribution.py','goodput_deployment.py','joint_session.py','joint_models.py','joint_workers.py','joint_training.py','protocol.py','wire.py','session_receiver.py','learning.py']} if cfg.profile.startswith('goodput-') else {}
-    metadata=dict(algorithm='mappo-time-gae-v1' if cfg.time_aware_gae else 'mappo-step-gae-v1',teacher_baseline_coupling=('same initial RNG; action-dependent draws can diverge; no guaranteed variance reduction' if cfg.paired_teacher else 'disabled; raw task reward'),training=asdict(cfg),model=asdict(model_cfg),domain=domain,profile=cfg.profile,
+    source_hashes={name:hashlib.sha256((Path(__file__).parent/name).read_bytes()).hexdigest() for name in ['goodput.py','goodput_distribution.py','goodput_deployment.py','goodput_progress.py','goodput_reactive.py','learning_diagnostics.py','joint_session.py','joint_models.py','joint_workers.py','joint_training.py','protocol.py','wire.py','session_receiver.py','learning.py']} if cfg.profile.startswith('goodput-') else {}
+    metadata=dict(algorithm='mappo-time-gae-progress-v1' if cfg.progress_shaping else ('mappo-time-gae-v1' if cfg.time_aware_gae else 'mappo-step-gae-v1'),teacher_baseline_coupling=('same initial RNG; action-dependent draws can diverge; no guaranteed variance reduction' if cfg.paired_teacher else 'disabled; raw task reward'),training=asdict(cfg),model=asdict(model_cfg),domain=domain,profile=cfg.profile,
         reward=domain['reward'] if cfg.profile.startswith('goodput-') else 'joint-deadline-v1',baseline=baseline,source_sha256=source_hashes)
     if resume is not None:
         resume=Path(resume)

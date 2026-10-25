@@ -1,0 +1,314 @@
+{
+  "version": "progress-baseline-audit-v1",
+  "completed_utc": "2026-10-25T16:57:23.869609+00:00",
+  "scope": "reused v4 validation cases for metric diagnosis only; no selection or performance win",
+  "summary": {
+    "verified_goodput": 0.0,
+    "confirmed_goodput": 0.0,
+    "image_goodput": 0.0,
+    "map_goodput": 0.0,
+    "interactive_miss_rate": 0.8357142857142857,
+    "completion_fraction": 0.8675889328063241,
+    "wire_per_useful_byte": 2130371.0,
+    "wrong": 0,
+    "starved_hosts": 5,
+    "cases": 2,
+    "zero_completed_bulk_hosts": 5,
+    "zero_accepted_bulk_hosts": 0,
+    "accepted_bulk_goodput": 18794.666666666668,
+    "mean_bulk_progress_jain": 0.929651554764379,
+    "provably_infeasible_completion_cases": 1
+  },
+  "strata": {
+    "wifi-contention": {
+      "summary": {
+        "verified_goodput": 0.0,
+        "confirmed_goodput": 0.0,
+        "image_goodput": 0.0,
+        "map_goodput": 0.0,
+        "interactive_miss_rate": 0.8357142857142857,
+        "completion_fraction": 0.8675889328063241,
+        "wire_per_useful_byte": 2130371.0,
+        "wrong": 0,
+        "starved_hosts": 5,
+        "cases": 2,
+        "zero_completed_bulk_hosts": 5,
+        "zero_accepted_bulk_hosts": 0,
+        "accepted_bulk_goodput": 18794.666666666668,
+        "mean_bulk_progress_jain": 0.929651554764379,
+        "provably_infeasible_completion_cases": 1
+      },
+      "bulk_byte_share": null,
+      "seeds": [
+        121007,
+        121017
+      ]
+    }
+  },
+  "records": [
+    {
+      "desired": {
+        "image": 2,
+        "map": 2,
+        "interactive": 240
+      },
+      "blocked": {},
+      "admitted": {
+        "image": 2,
+        "map": 2,
+        "interactive": 240
+      },
+      "messages": 244,
+      "completed": 240,
+      "wrong": 0,
+      "interactive_miss_rate": 0.2791666666666667,
+      "interactive_on_time": 173,
+      "interactive_pending_deadlines": 0,
+      "interactive_unavoidable_bound": 0,
+      "interactive_avoidable_misses": 67,
+      "image_bytes": 0,
+      "map_bytes": 0,
+      "delivered_bytes": 15360,
+      "total_wire_bytes": 1034001,
+      "feedback_bytes": 259809,
+      "elapsed": 14.999999999999725,
+      "actual_image_fps": 0.0,
+      "admitted_image_fps": 0.08333333333333333,
+      "pending_confirmation_bytes": 1509888,
+      "pending_messages": 4,
+      "events": 10375,
+      "network": [
+        {
+          "attempted_packets": 1476,
+          "admitted_packets": 1392,
+          "attempted_bytes": 782472,
+          "admitted_bytes": 732744,
+          "queue_drops": 84,
+          "random_drops": 1,
+          "outage_drops": 0,
+          "delivered_packets": 1389,
+          "corrupted_packets": 0,
+          "corruption_rejections": 0,
+          "generated_duplicates": 0
+        },
+        {
+          "attempted_packets": 1389,
+          "admitted_packets": 1389,
+          "attempted_bytes": 251529,
+          "admitted_bytes": 251529,
+          "queue_drops": 0,
+          "random_drops": 0,
+          "outage_drops": 0,
+          "delivered_packets": 1387,
+          "corrupted_packets": 0,
+          "corruption_rejections": 0,
+          "generated_duplicates": 0
+        }
+      ],
+      "interactive_p95": 0.2624574394632199,
+      "profile": "goodput-v5",
+      "mode": "mixed",
+      "measurement_seconds": 12.0,
+      "drain_verified_bulk_bytes": 0,
+      "verified_bulk_bytes": 0,
+      "confirmed_bulk_bytes": 0,
+      "verified_image_bytes": 0,
+      "verified_map_bytes": 0,
+      "per_host_verified_bytes": [
+        0,
+        0
+      ],
+      "measurement_wire_bytes": 1034001,
+      "control_interval": 0.01,
+      "class_completion_after_drain": {
+        "interactive": {
+          "admitted": 240,
+          "receiver_complete": 240,
+          "confirmed": 240
+        },
+        "image": {
+          "admitted": 2,
+          "receiver_complete": 0,
+          "confirmed": 0
+        },
+        "map": {
+          "admitted": 2,
+          "receiver_complete": 0,
+          "confirmed": 0
+        },
+        "bulk": {
+          "admitted": 0,
+          "receiver_complete": 0,
+          "confirmed": 0
+        }
+      },
+      "accepted_bulk_payload_bytes": 440320,
+      "accepted_bulk_payload_by_host": [
+        216064,
+        224256
+      ],
+      "measurement_incomplete_bulk_payload_bytes": 440320,
+      "completion_headroom": {
+        "optimistic_wire_service_bytes": 1114778.5159541639,
+        "minimum_bulk_object_bytes": 524288,
+        "configured_hosts": 2,
+        "minimum_payload_for_all_hosts": 1048576,
+        "minimum_wire_bytes_per_object": 590848,
+        "minimum_wire_for_all_hosts": 1181696,
+        "all_host_object_completion_provably_infeasible": true,
+        "optimistic_max_hosts_with_bulk_object": 1,
+        "caveat": "necessary service bound only; passing does not establish feasibility"
+      },
+      "seed": 121007,
+      "domain": {
+        "version": "goodput-domain-v5.0",
+        "family": "wifi-contention",
+        "churn": false,
+        "churn_times": [
+          4.393816279626686,
+          7.246230561884839
+        ],
+        "seed": 121007,
+        "synthetic": true,
+        "shared_airtime": true,
+        "distribution_shift": false,
+        "change_count": 12,
+        "control_interval": 0.01
+      }
+    },
+    {
+      "desired": {
+        "image": 6,
+        "map": 3,
+        "interactive": 1440
+      },
+      "blocked": {
+        "interactive": 175
+      },
+      "admitted": {
+        "image": 6,
+        "map": 3,
+        "interactive": 1265
+      },
+      "messages": 1274,
+      "completed": 1077,
+      "wrong": 0,
+      "interactive_miss_rate": 0.9284722222222223,
+      "interactive_on_time": 103,
+      "interactive_pending_deadlines": 0,
+      "interactive_unavoidable_bound": 0,
+      "interactive_avoidable_misses": 1337,
+      "image_bytes": 0,
+      "map_bytes": 0,
+      "delivered_bytes": 554496,
+      "total_wire_bytes": 1096370,
+      "feedback_bytes": 270402,
+      "elapsed": 15.0,
+      "actual_image_fps": 0.0,
+      "admitted_image_fps": 0.16666666666666666,
+      "pending_confirmation_bytes": 7163392,
+      "pending_messages": 197,
+      "events": 26332,
+      "network": [
+        {
+          "attempted_packets": 1317,
+          "admitted_packets": 1114,
+          "attempted_bytes": 603387,
+          "admitted_bytes": 484622,
+          "queue_drops": 203,
+          "random_drops": 1,
+          "outage_drops": 0,
+          "delivered_packets": 1107,
+          "corrupted_packets": 0,
+          "corruption_rejections": 0,
+          "generated_duplicates": 0
+        },
+        {
+          "attempted_packets": 1120,
+          "admitted_packets": 1120,
+          "attempted_bytes": 492983,
+          "admitted_bytes": 492983,
+          "queue_drops": 0,
+          "random_drops": 2,
+          "outage_drops": 0,
+          "delivered_packets": 1112,
+          "corrupted_packets": 0,
+          "corruption_rejections": 0,
+          "generated_duplicates": 0
+        }
+      ],
+      "interactive_p95": 5.664622322072004,
+      "profile": "goodput-v5",
+      "mode": "mixed",
+      "measurement_seconds": 12.0,
+      "drain_verified_bulk_bytes": 0,
+      "verified_bulk_bytes": 0,
+      "confirmed_bulk_bytes": 0,
+      "verified_image_bytes": 0,
+      "verified_map_bytes": 0,
+      "per_host_verified_bytes": [
+        0,
+        0,
+        0
+      ],
+      "measurement_wire_bytes": 1096370,
+      "control_interval": 0.005,
+      "class_completion_after_drain": {
+        "interactive": {
+          "admitted": 1265,
+          "receiver_complete": 1083,
+          "confirmed": 1077
+        },
+        "image": {
+          "admitted": 6,
+          "receiver_complete": 0,
+          "confirmed": 0
+        },
+        "map": {
+          "admitted": 3,
+          "receiver_complete": 0,
+          "confirmed": 0
+        },
+        "bulk": {
+          "admitted": 0,
+          "receiver_complete": 0,
+          "confirmed": 0
+        }
+      },
+      "accepted_bulk_payload_bytes": 10752,
+      "accepted_bulk_payload_by_host": [
+        5632,
+        2560,
+        2560
+      ],
+      "measurement_incomplete_bulk_payload_bytes": 10752,
+      "completion_headroom": {
+        "optimistic_wire_service_bytes": 1721264.6854764903,
+        "minimum_bulk_object_bytes": 131072,
+        "configured_hosts": 3,
+        "minimum_payload_for_all_hosts": 393216,
+        "minimum_wire_bytes_per_object": 147712,
+        "minimum_wire_for_all_hosts": 443136,
+        "all_host_object_completion_provably_infeasible": false,
+        "optimistic_max_hosts_with_bulk_object": 3,
+        "caveat": "necessary service bound only; passing does not establish feasibility"
+      },
+      "seed": 121017,
+      "domain": {
+        "version": "goodput-domain-v5.0",
+        "family": "wifi-contention",
+        "churn": false,
+        "churn_times": [
+          3.175829096436141,
+          9.126285667130649
+        ],
+        "seed": 121017,
+        "synthetic": true,
+        "shared_airtime": true,
+        "distribution_shift": false,
+        "change_count": 17,
+        "control_interval": 0.005
+      }
+    }
+  ]
+}

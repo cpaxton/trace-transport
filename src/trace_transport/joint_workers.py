@@ -16,7 +16,11 @@ def _worker(pipe):
             if command=='reset':
                 seed,production,drain,stage,*options=args
                 task=options[3] if len(options)>3 else 'deadline-v1'
-                if task=='goodput-v4':
+                if task=='goodput-v6':
+                    from .goodput_reactive import sample_case as sampler,GoodputReactiveEnv as GoodputEnv
+                elif task=='goodput-v5':
+                    from .goodput_progress import sample_case as sampler,GoodputProgressEnv as GoodputEnv
+                elif task=='goodput-v4':
                     from .goodput_deployment import sample_case as sampler,GoodputDeploymentEnv as GoodputEnv
                 elif task=='goodput-v3':
                     from .goodput_distribution import sample_case as sampler,GoodputDistributionEnv as GoodputEnv
@@ -32,6 +36,7 @@ def _worker(pipe):
                     from dataclasses import replace
                     cfg=replace(cfg,initial_rate=options[1]['initial_rate'])
                 env=GoodputEnv(cfg,workload,churn=label.get('churn',False),churn_times=label.get('churn_times')) if task.startswith('goodput-') else JointTransportEnv(cfg,workload)
+                if task in ('goodput-v5','goodput-v6'):env.progress_shaping=options[1].get('progress_shaping',False) if len(options)>1 else False
                 obs,_=env.reset(seed=seed)
                 if len(options)>1:
                     baseline=options[1]

@@ -16,12 +16,13 @@ from trace_transport.joint_evaluation import evaluate
 def main():
     p=argparse.ArgumentParser(description=__doc__)
     p.add_argument('--root',type=Path,default=Path('runs/goodput-v21'))
+    p.add_argument('--checkpoint',type=Path)
     p.add_argument('--seed',type=int,default=82000)
     p.add_argument('--output',type=Path,default=Path('runs/changing-comparison-v1/action-audit.json'))
     args=p.parse_args();root=args.root
     reference=root/'reference.json' if (root/'reference.json').exists() else root/'plan.json'
     baseline=json.loads(reference.read_text())['baseline']
-    checkpoint=root/('seed42' if (root/'seed42').exists() else 'learn42')/'final.pt'
+    checkpoint=args.checkpoint or root/('seed42' if (root/'seed42').exists() else 'learn42')/'final.pt'
     _,_,_,metadata=load_checkpoint(checkpoint)
     profile=metadata['profile']
     counts=Counter();stats=dict(sender_rows=0,absolute_rate_residual_sum=0.,absolute_window_residual_sum=0.)
