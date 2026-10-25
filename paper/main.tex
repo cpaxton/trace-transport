@@ -764,8 +764,14 @@ remain unchanged, preventing an immediate action from flushing backlog without
 another packet. V6 flushes or reschedules from the oldest pending arrival and
 invalidates the old timer. Tests verify wire-cost accounting, no duplicate flush,
 and unchanged outcomes when settings do not change. Completion ACK protection
-remains. No v6 learning result is reported; earlier experiments use their frozen
-semantics. Caliban v4 remains a diagnostic baseline, with its original all-host
+remains. A matched one-seed, 200,000-opportunity v6 pilot with identical initial
+actor/critic tensors and 24 validation cases achieves 857,202 versus adaptive
+855,268 B/s ($+0.226\%$), with paired difference 95\% interval
+$[-3{,}868,7{,}625]$ B/s. Interactive misses are 10.08\% versus 10.48\%;
+all quality guards pass and no wrong deliveries occur. The gain is inconclusive
+and below the 10\% target; it does not improve on the v5 shaped pilot.
+Reserved tests remain unopened and receiver contribution is unestablished.
+Earlier experiments use their frozen semantics. Caliban v4 remains a diagnostic baseline, with its original all-host
 completion guard now known infeasible in at least one validation case.
 
 \section{Implementation stages and open questions}

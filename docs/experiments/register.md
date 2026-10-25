@@ -179,8 +179,7 @@ proposals all teacher-following (including inactive rows). The small shaped-poli
 gain is not evidence of useful receiver learning. [Roles](../../artifacts/progress-ablation-v5-roles.json),
 [proposals](../../artifacts/progress-ablation-v5-final-action-audit.json).
 
-Reactive v6 matched retraining pilot — **running**, actual start 2026-10-25 UTC;
-end pending. [Frozen plan](../../artifacts/reactive-v6-pilot-plan.json),
+Reactive v6 matched retraining pilot — **completed, no accepted win**, actual start/end 2026-10-25 UTC. [Frozen plan](../../artifacts/reactive-v6-pilot-plan.json),
 [runner](../../scripts/reactive_pilot.py). One seed (42), 200,000 decisions,
 history 64 / width 32 / one transformer layer, two environments; potential shaping,
 time-aware GAE and receiver action alias masking match the completed v5 shaped arm.
@@ -188,4 +187,4 @@ Initial sender/receiver/critic tensors and the 24 validation seed memberships we
 checked identical. Only pending-ACK protocol semantics change. Final-checkpoint
 validation compares against its own v6 adaptive baseline; no reserved tests or
 acceptance claim. CPU-only isolated source/runtime, six-core affinity, 8 GiB limit,
-file logs; the frozen Caliban v4 study remains unchanged. No performance result yet.
+file logs; the frozen Caliban v4 study remains unchanged. [Results](../../artifacts/reactive-v6-pilot-results.json): verified goodput 857,202 versus adaptive 855,268 B/s (+0.226%); paired difference 95% interval [-3,868, +7,625] B/s. Interactive misses 10.08% versus 10.48%; zero wrong deliveries. All quality guards pass, but the gain is below the 10% target and statistically inconclusive. V5 shaped was +0.659% against the same baseline: this pilot does not show an improvement from reactive ACK semantics. One seed and 24 reused validation cases; no held-out acceptance claim or receiver contribution claim.

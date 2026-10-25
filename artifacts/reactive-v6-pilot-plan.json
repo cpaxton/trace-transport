@@ -278,5 +278,6 @@
   "difference": "v6 pending ACK semantics; configuration matches v5 shaped pilot, no reserved acceptance claim",
   "matched_v5_initial_parameters": true,
   "control_plan": "progress-ablation-v5-plan.json",
-  "status": "running; no performance results yet"
+  "status": "completed; validation only; no accepted win",
+  "completed_utc": "2026-10-25T21:51:29.719560+00:00"
 }
