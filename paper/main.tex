@@ -783,7 +783,28 @@ actor/critic tensors and 24 validation cases achieves 857,202 versus adaptive
 $[-3{,}868,7{,}625]$ B/s. Interactive misses are 10.08\% versus 10.48\%;
 all quality guards pass and no wrong deliveries occur. The gain is inconclusive
 and below the 10\% target; it does not improve on the v5 shaped pilot.
-Reserved tests remain unopened and receiver contribution is unestablished.
+Reserved tests remain unopened. Subsequent v6 role ablations reproduce the joint
+records exactly with sender-only control, and the adaptive reference exactly
+with receiver-only control, on all 24 validation cases. Four-case instrumentation
+finds 14,677 applied receiver decisions, all teacher-following, with no pending-ACK
+control changes or immediate control-triggered flushes. Mean teacher probability
+is 0.506--0.531 across those cases; this is a greedy-deployment result, not evidence
+that the sampled training distribution has collapsed. The pilot's historical plan
+incorrectly recorded shaping disabled before training enabled it; actual training
+configuration and checkpoint confirm shaping enabled. Published artifacts include
+an explicit provenance erratum; measured outcomes are unchanged.
+A separate 12-case development sweep compares three sender controllers and
+three ACK settings. No alternative fixed control passes all quality guards.
+Per-case admissible hindsight selection yields 1,603,015 versus 720,100 B/s
+($+122.6\%$), largely from wired-LAN and bufferbloat cases. This is a biased
+finite-control diagnostic using future outcomes, not a deployable policy, optimal
+bound or held-out learning result. A four-case sampled-receiver audit with three
+fixed sampling seeds yields 128,683, 126,635 and 141,995 B/s versus joint greedy
+138,581 B/s, with interactive misses 10.23\%, 10.10\%, 9.97\% versus 9.80\%.
+All modes have zero wrong deliveries; stochastic deployment shows no consistent
+improvement. A new, bounded Caliban collection covers 48 development and 24
+separate validation cases, nine controls and causal one-second local probes.
+It is running; no selector learning or acceptance result is reported.
 Earlier experiments use their frozen semantics. Caliban v4 remains a diagnostic baseline, with its original all-host
 completion guard now known infeasible in at least one validation case.
 

@@ -1,0 +1,33 @@
+{
+  "version": "caliban-v4-interruption-v1",
+  "observed_utc": "2026-10-26T14:05:18.026457+00:00",
+  "status": "incomplete; stopped after worker timeout; not restarted",
+  "failure": {
+    "error": "TimeoutError('CPU environment worker stalled')",
+    "utc": "2026-10-25T23:15:59.362825+00:00"
+  },
+  "service": {
+    "MemoryCurrent": "[not set]",
+    "TasksCurrent": "[not set]",
+    "CPUAffinity": "6-11",
+    "ActiveState": "failed",
+    "SubState": "failed"
+  },
+  "training": {
+    "seed42": {
+      "phase": "complete",
+      "decisions": 5000031,
+      "decisions_per_second": 84.78402218021581,
+      "elapsed_seconds": 58973.74141288083,
+      "heartbeat_age_seconds": 99444.63031125069
+    },
+    "seed43": {
+      "phase": "stopped; last recorded training",
+      "decisions": 3071329,
+      "decisions_per_second": 85.58186877244658,
+      "elapsed_seconds": 35887.613159819506,
+      "heartbeat_age_seconds": 53588.632434129715
+    }
+  },
+  "interpretation": "seed42 complete, seed43 partial, seed44 not started; no complete three-seed result; frozen v4 diagnostic benchmark retains known infeasible completion guard"
+}

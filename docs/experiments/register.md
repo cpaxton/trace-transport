@@ -196,3 +196,34 @@ Proposes role/action audit, development-only control sweeps, tiny-case learning
 checks, then gated multi-seed curriculum/controller-selection pilots and an opt-in
 robot freshness task. Start/end dates and artifacts will be added when individual
 experiments actually run. No new result or compute launch is claimed by this entry.
+
+
+Reactive v6 contribution/control diagnosis — **completed, diagnostic only**, actual start/end 2026-10-26 UTC (14:03:08–14:14:44). [Method and review correction](reactive-diagnostics-v6.md).
+Fixed final checkpoint; 24 reused validation cases for role ablations, four for
+applied-action instrumentation, and 12 separate development cases for nine
+controls. Sender-only matches joint and receiver-only matches adaptive on all 24 cases. Four-case active audit: all 14,677 actions choose the teacher. Per-case hindsight selection among nine controls gives +122.6% development goodput, but is selection-biased and not deployable; no fixed alternative passes all guards. [Results](../../artifacts/reactive-v6-diagnostics-results.json), [report](../../artifacts/reactive-v6-diagnostics-report.json). No retraining or reserved-test use.
+
+Caliban v4 interruption — observed 2026-10-26, failure recorded 2026-10-25
+23:15:59 UTC: **incomplete, stopped**. Seed 42 complete (5,000,031 decisions),
+seed 43 partial (3,071,329), seed 44 unstarted. Worker timeout; root cause unknown,
+not restarted. [Read-only status](../../artifacts/caliban-v4-interruption-20261026.json).
+
+V6 pilot plan correction — 2026-10-26: the historical runner recorded shaping
+false, then trained with true. Actual config and checkpoint agree on true;
+published plans corrected with [explicit provenance](../../artifacts/reactive-v6-pilot-plan-erratum.json).
+Original frozen source/raw run retained, measured results unchanged.
+
+
+V6 sampled-receiver diagnostic — **completed, no consistent improvement**, actual
+start/end 2026-10-26 14:14:59–14:16:14 UTC. Four reused cases, sampling seeds 1/2/3,
+greedy sender. Verified goodput 128,683 / 126,635 / 141,995 versus greedy 138,581
+B/s; misses 10.23% / 10.10% / 9.97% versus 9.80%. Zero wrong deliveries.
+[Results](../../artifacts/reactive-v6-stochastic-results.json),
+[plan](../../artifacts/reactive-v6-stochastic-plan.json). No selection/acceptance claim.
+
+Selector coverage v1 — **running, data collection only**, actual start 2026-10-26
+UTC; end pending. [Plan](../../artifacts/selector-coverage-v1-plan.json),
+[method](selector-coverage-v1.md). Caliban, frozen separate source: 48 development
+and 24 new validation cases, 648 full control trials plus 72 causal local probes.
+No learned selector or reserved-test result yet. Bounded six-core / 8 GiB service,
+six-hour cap; old v4 study remains stopped.

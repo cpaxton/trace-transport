@@ -79,7 +79,7 @@
       "receiver_teacher_prior": 0.5,
       "teacher_prior": 0.9,
       "mask_receiver_alias": true,
-      "progress_shaping": false,
+      "progress_shaping": true,
       "time_aware_gae": true,
       "gae_lambda": 0.98,
       "gpu_memory_fraction": 0.15,
@@ -276,7 +276,8 @@
       "device": "cpu"
     },
     "scope": "one-seed controlled pilot; final checkpoints fixed, no snapshot selection or reserved acceptance tests",
-    "difference": "v6 pending ACK semantics; configuration matches v5 shaped pilot, no reserved acceptance claim"
+    "difference": "v6 pending ACK semantics; configuration matches v5 shaped pilot, no reserved acceptance claim",
+    "plan_erratum": "reactive-v6-pilot-plan-erratum.json"
   },
   "acceptance_claim": false,
   "modes": {

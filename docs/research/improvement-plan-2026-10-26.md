@@ -165,3 +165,12 @@ study merely because more compute is available.
 4. Run bounded multi-seed pilots; scale only after the stated gates.
 
 All four are **planned** here. No new training or device experiment is claimed.
+
+
+## Execution update, 2026-10-26
+
+The [v6 contribution/control study](../experiments/reactive-diagnostics-v6.md) now
+executes the first diagnostics: full role ablations, instrumented applied actions,
+separate development control sweeps, and a seeded stochastic-receiver audit.
+Planning-time statuses above are retained as the original proposal. Later training
+and robot scheduling stages remain gated; no multi-seed scaling run has started.

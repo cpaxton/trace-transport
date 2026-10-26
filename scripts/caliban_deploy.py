@@ -76,16 +76,20 @@ shutil.copyfile(source/'source-manifest.json',runtime/'runs/source-manifest.json
         code='''import json,sys,subprocess,time
 from pathlib import Path
 root=Path(sys.argv[1]);out={}
-for stage in ['benchmark','study']:
+for stage in ['benchmark','study','selector-coverage']:
  r=root/stage;out[stage]={}
- unit='trace-caliban-v4-'+stage
+ unit='trace-selector-coverage' if stage=='selector-coverage' else 'trace-caliban-v4-'+stage
  state=subprocess.run(['systemctl','--user','show',unit,'--property=ActiveState,SubState,MemoryCurrent,TasksCurrent,CPUAffinity'],capture_output=True,text=True)
  out[stage]['service']=dict(line.split('=',1) for line in state.stdout.splitlines() if '=' in line)
  if (r/'plan.json').exists():
-  data=json.loads((r/'plan.json').read_text());out[stage]['plan']={k:data.get(k) for k in ['version','started_utc','training_seeds','decisions_per_seed','environments']}
+  data=json.loads((r/'plan.json').read_text());keys=['version','started_utc','splits','scope'] if stage=='selector-coverage' else ['version','started_utc','training_seeds','decisions_per_seed','environments'];out[stage]['plan']={k:data.get(k) for k in keys}
  if (r/'calibration.json').exists():out[stage]['calibration_controls_completed']=len(json.loads((r/'calibration.json').read_text()))
- for name in ['results.json','progress.json','study-failure.json','reference.json']:
-  if (r/name).exists():out[stage][name]=json.loads((r/name).read_text())
+ for name in ['results.json','progress.json','study-failure.json','failure.json','reference.json']:
+  if (r/name).exists():
+   data=json.loads((r/name).read_text())
+   if stage=='selector-coverage' and name=='results.json':
+    out[stage]['completed_by_split']={k:dict(probes=len(v.get('probes',[])),controls=len(v.get('controls',{}))) for k,v in data.get('splits',{}).items()}
+   else:out[stage][name]=data
  for path in r.glob('seed*/progress.json'):
   data=json.loads(path.read_text());entry={k:data.get(k) for k in ['phase','decisions','decisions_per_second','elapsed_seconds']}
   entry['heartbeat_age_seconds']=time.time()-path.stat().st_mtime

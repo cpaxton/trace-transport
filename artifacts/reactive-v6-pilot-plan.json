@@ -78,7 +78,7 @@
     "receiver_teacher_prior": 0.5,
     "teacher_prior": 0.9,
     "mask_receiver_alias": true,
-    "progress_shaping": false,
+    "progress_shaping": true,
     "time_aware_gae": true,
     "gae_lambda": 0.98,
     "gpu_memory_fraction": 0.15,
@@ -279,5 +279,6 @@
   "matched_v5_initial_parameters": true,
   "control_plan": "progress-ablation-v5-plan.json",
   "status": "completed; validation only; no accepted win",
-  "completed_utc": "2026-10-25T21:51:29.719560+00:00"
+  "completed_utc": "2026-10-25T21:51:29.719560+00:00",
+  "plan_erratum": "reactive-v6-pilot-plan-erratum.json"
 }
