@@ -816,7 +816,9 @@ of a history/transformer advantage for one-shot prefix classification. Candidate
 lookups do not execute the teacher probe or mixed-endpoint switching trajectory.
 A separate executed probe-then-select evaluation of all twelve models is running;
 the initial completed MLP modes fail deadline noninferiority despite throughput
-near the teacher. These are interim negative observations, not a final ranking
+near the teacher. Training probes cover only bulk endpoint 0, while this exploratory
+execution applies selectors to all roles using weak globally uniform-control
+labels; role-transfer and local-action mismatch confound attribution of regressions. These are interim negative observations, not a final ranking
 of all architectures; no accepted transport win or real-device result is claimed.
 Earlier experiments use their frozen semantics. Caliban v4 remains a diagnostic baseline, with its original all-host
 completion guard now known infeasible in at least one validation case.

@@ -88,6 +88,15 @@ semantics. Other endpoints choose independently using the same weights, without
 family tags, future state or free coordination. BDP starts with the endpoint's
 existing estimator state rather than a shadow trajectory. These local mixed
 choices differ from the globally uniform candidates used for training labels.
+**Role coverage is limited:** training probes observe only endpoint 0 (a bulk
+producer), while this exploratory execution applies the classifier to every
+endpoint, including reverse interactive senders. Those reverse-role feature
+contexts were not represented by separate training probes. Therefore a rollout
+regression can reflect role-transfer and weak global-label mismatch; it is not
+an isolated test of the value of memory or a general failure of RL. A future
+role-matched or sender-only experiment must be registered separately, with local
+action-aligned labels and prospective validation, rather than changing this
+running experiment after seeing outcomes.
 
 The probe consumes actual simulated time and traffic. Model inference wall time
 is measured but is not charged as simulated delay; this remains a simulator

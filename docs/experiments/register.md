@@ -266,3 +266,10 @@ contains completed modes only; initial current-observation MLPs fail deadline
 noninferiority with throughput near the teacher, and the simple rule misses the
 throughput target. Remaining predeclared models are still executing. No accepted
 win, completed-study ranking, or new validation-tuned training is claimed.
+
+
+Execution interpretation note: training probes cover only bulk endpoint 0, but
+the exploratory rollout deploys selectors across all endpoint roles. Reverse-role
+coverage and global-label/local-action mismatch confound the interim regressions;
+they do not isolate memory value or show that RL cannot help. The registered
+running policy is unchanged; any role-matched follow-up needs a separate plan.
