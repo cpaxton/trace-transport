@@ -282,3 +282,11 @@ zero wrong deliveries throughout. [Full results](../../artifacts/selector-execut
 [complete report](../../artifacts/selector-execute-v1-report.json).
 Earlier running/interim notes describe historical stages and are superseded by
 this final entry. Role-transfer and weak-label limitations remain explicit.
+
+
+Reactive sender v7 follow-up — **planned, not started**, registered 2026-10-26
+after PR #4 merged. [Contract and gates](reactive-sender-v7-plan.md). Align producer
+training/deployment roles, use repeated bounded target-rate decisions and causal
+physical-time history, keep receivers/reverse roles deterministic. No pilot starts
+until parity, action sensitivity and role-aligned tiny-fit checks pass. New seed
+banks and configuration must be committed before collection. No new result.
