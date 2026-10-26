@@ -1,0 +1,1368 @@
+{
+  "name": "delay-512000-ack15",
+  "baseline": {
+    "rate": "delay",
+    "initial_rate": 512000.0,
+    "scheduler": "edf",
+    "feedback": "budgeted",
+    "batch": 16,
+    "delay": 0.025
+  },
+  "validation": [
+    {
+      "desired": {
+        "image": 42,
+        "map": 19,
+        "interactive": 220
+      },
+      "blocked": {},
+      "admitted": {
+        "image": 42,
+        "map": 19,
+        "interactive": 220
+      },
+      "messages": 281,
+      "completed": 281,
+      "wrong": 0,
+      "interactive_miss_rate": 0.00909090909090909,
+      "interactive_on_time": 218,
+      "interactive_pending_deadlines": 0,
+      "interactive_unavoidable_bound": 0,
+      "interactive_avoidable_misses": 2,
+      "image_bytes": 688128,
+      "map_bytes": 1245184,
+      "delivered_bytes": 1961472,
+      "total_wire_bytes": 2441162,
+      "feedback_bytes": 143446,
+      "elapsed": 7.999999999999917,
+      "actual_image_fps": 1.7500000000000182,
+      "admitted_image_fps": 2.3333333333333335,
+      "pending_confirmation_bytes": 0,
+      "pending_messages": 0,
+      "events": 11277,
+      "network": [
+        {
+          "attempted_packets": 4020,
+          "admitted_packets": 3996,
+          "attempted_bytes": 2298596,
+          "admitted_bytes": 2284396,
+          "queue_drops": 24,
+          "random_drops": 0,
+          "outage_drops": 0,
+          "delivered_packets": 3996,
+          "corrupted_packets": 0,
+          "corruption_rejections": 0,
+          "generated_duplicates": 0
+        },
+        {
+          "attempted_packets": 673,
+          "admitted_packets": 673,
+          "attempted_bytes": 142566,
+          "admitted_bytes": 142566,
+          "queue_drops": 0,
+          "random_drops": 0,
+          "outage_drops": 0,
+          "delivered_packets": 673,
+          "corrupted_packets": 0,
+          "corruption_rejections": 0,
+          "generated_duplicates": 0
+        }
+      ],
+      "interactive_p95": 0.023642578225108905,
+      "profile": "goodput-v2",
+      "mode": "mixed",
+      "measurement_seconds": 6.0,
+      "drain_verified_bulk_bytes": 294912,
+      "verified_bulk_bytes": 1638400,
+      "confirmed_bulk_bytes": 1638400,
+      "verified_image_bytes": 589824,
+      "verified_map_bytes": 1048576,
+      "per_host_verified_bytes": [
+        622592,
+        425984,
+        589824
+      ],
+      "measurement_wire_bytes": 2441162,
+      "seed": 73000,
+      "domain": {
+        "version": "goodput-domain-v2.1",
+        "family": "churn",
+        "churn": true,
+        "churn_times": [
+          2.1754962207884363,
+          4.487897042655306
+        ],
+        "seed": 73000
+      }
+    },
+    {
+      "desired": {
+        "image": 20,
+        "map": 9,
+        "interactive": 120
+      },
+      "blocked": {},
+      "admitted": {
+        "image": 20,
+        "map": 9,
+        "interactive": 120
+      },
+      "messages": 149,
+      "completed": 149,
+      "wrong": 0,
+      "interactive_miss_rate": 0.0,
+      "interactive_on_time": 120,
+      "interactive_pending_deadlines": 0,
+      "interactive_unavoidable_bound": 0,
+      "interactive_avoidable_misses": 0,
+      "image_bytes": 327680,
+      "map_bytes": 589824,
+      "delivered_bytes": 932864,
+      "total_wire_bytes": 1166259,
+      "feedback_bytes": 78794,
+      "elapsed": 7.999999999999917,
+      "actual_image_fps": 2.5000000000000258,
+      "admitted_image_fps": 3.3333333333333335,
+      "pending_confirmation_bytes": 0,
+      "pending_messages": 0,
+      "events": 5640,
+      "network": [
+        {
+          "attempted_packets": 1912,
+          "admitted_packets": 1912,
+          "attempted_bytes": 1087945,
+          "admitted_bytes": 1087945,
+          "queue_drops": 0,
+          "random_drops": 0,
+          "outage_drops": 0,
+          "delivered_packets": 1912,
+          "corrupted_packets": 0,
+          "corruption_rejections": 0,
+          "generated_duplicates": 0
+        },
+        {
+          "attempted_packets": 376,
+          "admitted_packets": 376,
+          "attempted_bytes": 78314,
+          "admitted_bytes": 78314,
+          "queue_drops": 0,
+          "random_drops": 0,
+          "outage_drops": 0,
+          "delivered_packets": 376,
+          "corrupted_packets": 0,
+          "corruption_rejections": 0,
+          "generated_duplicates": 0
+        }
+      ],
+      "interactive_p95": 0.030920202739651563,
+      "profile": "goodput-v2",
+      "mode": "mixed",
+      "measurement_seconds": 6.0,
+      "drain_verified_bulk_bytes": 98304,
+      "verified_bulk_bytes": 819200,
+      "confirmed_bulk_bytes": 819200,
+      "verified_image_bytes": 294912,
+      "verified_map_bytes": 524288,
+      "per_host_verified_bytes": [
+        819200
+      ],
+      "measurement_wire_bytes": 1166259,
+      "seed": 73001,
+      "domain": {
+        "version": "goodput-domain-v2.1",
+        "family": "ack-bottleneck",
+        "churn": false,
+        "churn_times": [
+          1.9947287969099388,
+          4.3572511255025335
+        ],
+        "seed": 73001
+      }
+    },
+    {
+      "desired": {
+        "image": 19,
+        "map": 6,
+        "interactive": 120
+      },
+      "blocked": {},
+      "admitted": {
+        "image": 19,
+        "map": 6,
+        "interactive": 120
+      },
+      "messages": 145,
+      "completed": 145,
+      "wrong": 0,
+      "interactive_miss_rate": 0.05,
+      "interactive_on_time": 114,
+      "interactive_pending_deadlines": 0,
+      "interactive_unavoidable_bound": 0,
+      "interactive_avoidable_misses": 6,
+      "image_bytes": 311296,
+      "map_bytes": 393216,
+      "delivered_bytes": 719872,
+      "total_wire_bytes": 951511,
+      "feedback_bytes": 78750,
+      "elapsed": 7.999999999999917,
+      "actual_image_fps": 2.3750000000000244,
+      "admitted_image_fps": 3.1666666666666665,
+      "pending_confirmation_bytes": 0,
+      "pending_messages": 0,
+      "events": 4864,
+      "network": [
+        {
+          "attempted_packets": 1550,
+          "admitted_packets": 1525,
+          "attempted_bytes": 873026,
+          "admitted_bytes": 858226,
+          "queue_drops": 25,
+          "random_drops": 29,
+          "outage_drops": 0,
+          "delivered_packets": 1496,
+          "corrupted_packets": 0,
+          "corruption_rejections": 0,
+          "generated_duplicates": 0
+        },
+        {
+          "attempted_packets": 363,
+          "admitted_packets": 363,
+          "attempted_bytes": 78485,
+          "admitted_bytes": 78485,
+          "queue_drops": 0,
+          "random_drops": 8,
+          "outage_drops": 0,
+          "delivered_packets": 355,
+          "corrupted_packets": 0,
+          "corruption_rejections": 0,
+          "generated_duplicates": 0
+        }
+      ],
+      "interactive_p95": 0.04156799729690344,
+      "profile": "goodput-v2",
+      "mode": "mixed",
+      "measurement_seconds": 6.0,
+      "drain_verified_bulk_bytes": 98304,
+      "verified_bulk_bytes": 606208,
+      "confirmed_bulk_bytes": 606208,
+      "verified_image_bytes": 278528,
+      "verified_map_bytes": 327680,
+      "per_host_verified_bytes": [
+        606208
+      ],
+      "measurement_wire_bytes": 951511,
+      "seed": 73002,
+      "domain": {
+        "version": "goodput-domain-v2.1",
+        "family": "wireless-loss",
+        "churn": false,
+        "churn_times": [
+          2.1908933316062713,
+          4.481384811640121
+        ],
+        "seed": 73002
+      }
+    },
+    {
+      "desired": {
+        "image": 36,
+        "map": 14,
+        "interactive": 240
+      },
+      "blocked": {},
+      "admitted": {
+        "image": 36,
+        "map": 14,
+        "interactive": 240
+      },
+      "messages": 290,
+      "completed": 290,
+      "wrong": 0,
+      "interactive_miss_rate": 0.0625,
+      "interactive_on_time": 225,
+      "interactive_pending_deadlines": 0,
+      "interactive_unavoidable_bound": 0,
+      "interactive_avoidable_misses": 15,
+      "image_bytes": 589824,
+      "map_bytes": 917504,
+      "delivered_bytes": 1538048,
+      "total_wire_bytes": 2162872,
+      "feedback_bytes": 153873,
+      "elapsed": 7.999999999999917,
+      "actual_image_fps": 2.250000000000023,
+      "admitted_image_fps": 3.0,
+      "pending_confirmation_bytes": 0,
+      "pending_messages": 0,
+      "events": 10424,
+      "network": [
+        {
+          "attempted_packets": 3547,
+          "admitted_packets": 3316,
+          "attempted_bytes": 2008524,
+          "admitted_bytes": 1872006,
+          "queue_drops": 231,
+          "random_drops": 91,
+          "outage_drops": 0,
+          "delivered_packets": 3225,
+          "corrupted_packets": 0,
+          "corruption_rejections": 0,
+          "generated_duplicates": 0
+        },
+        {
+          "attempted_packets": 670,
+          "admitted_packets": 670,
+          "attempted_bytes": 154348,
+          "admitted_bytes": 154348,
+          "queue_drops": 0,
+          "random_drops": 23,
+          "outage_drops": 0,
+          "delivered_packets": 647,
+          "corrupted_packets": 0,
+          "corruption_rejections": 0,
+          "generated_duplicates": 0
+        }
+      ],
+      "interactive_p95": 0.15354853055206935,
+      "profile": "goodput-v2",
+      "mode": "mixed",
+      "measurement_seconds": 6.0,
+      "drain_verified_bulk_bytes": 196608,
+      "verified_bulk_bytes": 1310720,
+      "confirmed_bulk_bytes": 1310720,
+      "verified_image_bytes": 524288,
+      "verified_map_bytes": 786432,
+      "per_host_verified_bytes": [
+        573440,
+        737280
+      ],
+      "measurement_wire_bytes": 2162872,
+      "seed": 73003,
+      "domain": {
+        "version": "goodput-domain-v2.1",
+        "family": "wireless-loss",
+        "churn": false,
+        "churn_times": [
+          2.193005606055775,
+          4.535508442411589
+        ],
+        "seed": 73003
+      }
+    },
+    {
+      "desired": {
+        "image": 42,
+        "map": 19,
+        "interactive": 240
+      },
+      "blocked": {},
+      "admitted": {
+        "image": 42,
+        "map": 19,
+        "interactive": 240
+      },
+      "messages": 301,
+      "completed": 301,
+      "wrong": 0,
+      "interactive_miss_rate": 0.0125,
+      "interactive_on_time": 237,
+      "interactive_pending_deadlines": 0,
+      "interactive_unavoidable_bound": 0,
+      "interactive_avoidable_misses": 3,
+      "image_bytes": 688128,
+      "map_bytes": 1245184,
+      "delivered_bytes": 1964032,
+      "total_wire_bytes": 2448780,
+      "feedback_bytes": 140921,
+      "elapsed": 7.999999999999917,
+      "actual_image_fps": 2.625000000000027,
+      "admitted_image_fps": 3.5,
+      "pending_confirmation_bytes": 0,
+      "pending_messages": 0,
+      "events": 11468,
+      "network": [
+        {
+          "attempted_packets": 4049,
+          "admitted_packets": 4016,
+          "attempted_bytes": 2308819,
+          "admitted_bytes": 2289287,
+          "queue_drops": 33,
+          "random_drops": 0,
+          "outage_drops": 0,
+          "delivered_packets": 4016,
+          "corrupted_packets": 0,
+          "corruption_rejections": 0,
+          "generated_duplicates": 0
+        },
+        {
+          "attempted_packets": 661,
+          "admitted_packets": 661,
+          "attempted_bytes": 139961,
+          "admitted_bytes": 139961,
+          "queue_drops": 0,
+          "random_drops": 0,
+          "outage_drops": 0,
+          "delivered_packets": 661,
+          "corrupted_packets": 0,
+          "corruption_rejections": 0,
+          "generated_duplicates": 0
+        }
+      ],
+      "interactive_p95": 0.061827401476658,
+      "profile": "goodput-v2",
+      "mode": "mixed",
+      "measurement_seconds": 6.0,
+      "drain_verified_bulk_bytes": 196608,
+      "verified_bulk_bytes": 1736704,
+      "confirmed_bulk_bytes": 1736704,
+      "verified_image_bytes": 622592,
+      "verified_map_bytes": 1114112,
+      "per_host_verified_bytes": [
+        917504,
+        819200
+      ],
+      "measurement_wire_bytes": 2448780,
+      "seed": 73004,
+      "domain": {
+        "version": "goodput-domain-v2.1",
+        "family": "handoff",
+        "churn": false,
+        "churn_times": [
+          2.495233423558993,
+          4.52264832503512
+        ],
+        "seed": 73004
+      }
+    },
+    {
+      "desired": {
+        "image": 35,
+        "map": 14,
+        "interactive": 240
+      },
+      "blocked": {},
+      "admitted": {
+        "image": 35,
+        "map": 14,
+        "interactive": 240
+      },
+      "messages": 289,
+      "completed": 289,
+      "wrong": 0,
+      "interactive_miss_rate": 0.058333333333333334,
+      "interactive_on_time": 226,
+      "interactive_pending_deadlines": 0,
+      "interactive_unavoidable_bound": 0,
+      "interactive_avoidable_misses": 14,
+      "image_bytes": 573440,
+      "map_bytes": 917504,
+      "delivered_bytes": 1521664,
+      "total_wire_bytes": 2045120,
+      "feedback_bytes": 169608,
+      "elapsed": 7.999999999999917,
+      "actual_image_fps": 2.1875000000000226,
+      "admitted_image_fps": 2.9166666666666665,
+      "pending_confirmation_bytes": 0,
+      "pending_messages": 0,
+      "events": 10227,
+      "network": [
+        {
+          "attempted_packets": 3322,
+          "admitted_packets": 3303,
+          "attempted_bytes": 1875027,
+          "admitted_bytes": 1863779,
+          "queue_drops": 19,
+          "random_drops": 140,
+          "outage_drops": 0,
+          "delivered_packets": 3163,
+          "corrupted_packets": 0,
+          "corruption_rejections": 0,
+          "generated_duplicates": 0
+        },
+        {
+          "attempted_packets": 760,
+          "admitted_packets": 760,
+          "attempted_bytes": 170093,
+          "admitted_bytes": 170093,
+          "queue_drops": 0,
+          "random_drops": 32,
+          "outage_drops": 0,
+          "delivered_packets": 728,
+          "corrupted_packets": 0,
+          "corruption_rejections": 0,
+          "generated_duplicates": 0
+        }
+      ],
+      "interactive_p95": 0.1345851191143103,
+      "profile": "goodput-v2",
+      "mode": "mixed",
+      "measurement_seconds": 6.0,
+      "drain_verified_bulk_bytes": 196608,
+      "verified_bulk_bytes": 1294336,
+      "confirmed_bulk_bytes": 1294336,
+      "verified_image_bytes": 507904,
+      "verified_map_bytes": 786432,
+      "per_host_verified_bytes": [
+        589824,
+        704512
+      ],
+      "measurement_wire_bytes": 2045120,
+      "seed": 73005,
+      "domain": {
+        "version": "goodput-domain-v2.1",
+        "family": "wireless-loss",
+        "churn": false,
+        "churn_times": [
+          2.6778311006785036,
+          4.033265949700339
+        ],
+        "seed": 73005
+      }
+    },
+    {
+      "desired": {
+        "image": 6,
+        "map": 3,
+        "interactive": 120
+      },
+      "blocked": {},
+      "admitted": {
+        "image": 6,
+        "map": 3,
+        "interactive": 120
+      },
+      "messages": 129,
+      "completed": 129,
+      "wrong": 0,
+      "interactive_miss_rate": 0.075,
+      "interactive_on_time": 111,
+      "interactive_pending_deadlines": 0,
+      "interactive_unavoidable_bound": 0,
+      "interactive_avoidable_misses": 9,
+      "image_bytes": 98304,
+      "map_bytes": 196608,
+      "delivered_bytes": 310272,
+      "total_wire_bytes": 487143,
+      "feedback_bytes": 75059,
+      "elapsed": 7.999999999999917,
+      "actual_image_fps": 0.7500000000000078,
+      "admitted_image_fps": 1.0,
+      "pending_confirmation_bytes": 0,
+      "pending_messages": 0,
+      "events": 3374,
+      "network": [
+        {
+          "attempted_packets": 770,
+          "admitted_packets": 718,
+          "attempted_bytes": 412315,
+          "admitted_bytes": 381571,
+          "queue_drops": 52,
+          "random_drops": 18,
+          "outage_drops": 0,
+          "delivered_packets": 700,
+          "corrupted_packets": 0,
+          "corruption_rejections": 0,
+          "generated_duplicates": 0
+        },
+        {
+          "attempted_packets": 340,
+          "admitted_packets": 340,
+          "attempted_bytes": 74828,
+          "admitted_bytes": 74828,
+          "queue_drops": 0,
+          "random_drops": 8,
+          "outage_drops": 0,
+          "delivered_packets": 332,
+          "corrupted_packets": 0,
+          "corruption_rejections": 0,
+          "generated_duplicates": 0
+        }
+      ],
+      "interactive_p95": 0.14463503656703336,
+      "profile": "goodput-v2",
+      "mode": "mixed",
+      "measurement_seconds": 6.0,
+      "drain_verified_bulk_bytes": 98304,
+      "verified_bulk_bytes": 196608,
+      "confirmed_bulk_bytes": 196608,
+      "verified_image_bytes": 65536,
+      "verified_map_bytes": 131072,
+      "per_host_verified_bytes": [
+        196608
+      ],
+      "measurement_wire_bytes": 487143,
+      "seed": 73006,
+      "domain": {
+        "version": "goodput-domain-v2.1",
+        "family": "loss-cause-switch",
+        "churn": false,
+        "churn_times": [
+          2.297731637602425,
+          4.296303730262644
+        ],
+        "seed": 73006
+      }
+    },
+    {
+      "desired": {
+        "image": 6,
+        "map": 2,
+        "interactive": 120
+      },
+      "blocked": {},
+      "admitted": {
+        "image": 6,
+        "map": 2,
+        "interactive": 120
+      },
+      "messages": 128,
+      "completed": 128,
+      "wrong": 0,
+      "interactive_miss_rate": 0.058333333333333334,
+      "interactive_on_time": 113,
+      "interactive_pending_deadlines": 0,
+      "interactive_unavoidable_bound": 0,
+      "interactive_avoidable_misses": 7,
+      "image_bytes": 98304,
+      "map_bytes": 131072,
+      "delivered_bytes": 244736,
+      "total_wire_bytes": 377306,
+      "feedback_bytes": 66525,
+      "elapsed": 7.999999999999917,
+      "actual_image_fps": 0.7500000000000078,
+      "admitted_image_fps": 1.0,
+      "pending_confirmation_bytes": 0,
+      "pending_messages": 0,
+      "events": 2961,
+      "network": [
+        {
+          "attempted_packets": 597,
+          "admitted_packets": 568,
+          "attempted_bytes": 311261,
+          "admitted_bytes": 294093,
+          "queue_drops": 29,
+          "random_drops": 0,
+          "outage_drops": 0,
+          "delivered_packets": 568,
+          "corrupted_packets": 0,
+          "corruption_rejections": 0,
+          "generated_duplicates": 0
+        },
+        {
+          "attempted_packets": 314,
+          "admitted_packets": 314,
+          "attempted_bytes": 66045,
+          "admitted_bytes": 66045,
+          "queue_drops": 0,
+          "random_drops": 0,
+          "outage_drops": 0,
+          "delivered_packets": 314,
+          "corrupted_packets": 0,
+          "corruption_rejections": 0,
+          "generated_duplicates": 0
+        }
+      ],
+      "interactive_p95": 0.10627481927063279,
+      "profile": "goodput-v2",
+      "mode": "mixed",
+      "measurement_seconds": 6.0,
+      "drain_verified_bulk_bytes": 98304,
+      "verified_bulk_bytes": 131072,
+      "confirmed_bulk_bytes": 131072,
+      "verified_image_bytes": 65536,
+      "verified_map_bytes": 65536,
+      "per_host_verified_bytes": [
+        131072
+      ],
+      "measurement_wire_bytes": 377306,
+      "seed": 73007,
+      "domain": {
+        "version": "goodput-domain-v2.1",
+        "family": "contention",
+        "churn": false,
+        "churn_times": [
+          2.3479580261375665,
+          4.45982894661791
+        ],
+        "seed": 73007
+      }
+    },
+    {
+      "desired": {
+        "image": 17,
+        "map": 8,
+        "interactive": 120
+      },
+      "blocked": {},
+      "admitted": {
+        "image": 17,
+        "map": 8,
+        "interactive": 120
+      },
+      "messages": 145,
+      "completed": 145,
+      "wrong": 0,
+      "interactive_miss_rate": 0.0,
+      "interactive_on_time": 120,
+      "interactive_pending_deadlines": 0,
+      "interactive_unavoidable_bound": 0,
+      "interactive_avoidable_misses": 0,
+      "image_bytes": 278528,
+      "map_bytes": 524288,
+      "delivered_bytes": 818176,
+      "total_wire_bytes": 1036713,
+      "feedback_bytes": 81603,
+      "elapsed": 7.999999999999917,
+      "actual_image_fps": 2.1250000000000218,
+      "admitted_image_fps": 2.8333333333333335,
+      "pending_confirmation_bytes": 0,
+      "pending_messages": 0,
+      "events": 5259,
+      "network": [
+        {
+          "attempted_packets": 1688,
+          "admitted_packets": 1688,
+          "attempted_bytes": 955590,
+          "admitted_bytes": 955590,
+          "queue_drops": 0,
+          "random_drops": 0,
+          "outage_drops": 0,
+          "delivered_packets": 1688,
+          "corrupted_packets": 0,
+          "corruption_rejections": 0,
+          "generated_duplicates": 0
+        },
+        {
+          "attempted_packets": 391,
+          "admitted_packets": 391,
+          "attempted_bytes": 81123,
+          "admitted_bytes": 81123,
+          "queue_drops": 0,
+          "random_drops": 0,
+          "outage_drops": 0,
+          "delivered_packets": 391,
+          "corrupted_packets": 0,
+          "corruption_rejections": 0,
+          "generated_duplicates": 0
+        }
+      ],
+      "interactive_p95": 0.034762624751901346,
+      "profile": "goodput-v2",
+      "mode": "mixed",
+      "measurement_seconds": 6.0,
+      "drain_verified_bulk_bytes": 98304,
+      "verified_bulk_bytes": 704512,
+      "confirmed_bulk_bytes": 704512,
+      "verified_image_bytes": 245760,
+      "verified_map_bytes": 458752,
+      "per_host_verified_bytes": [
+        704512
+      ],
+      "measurement_wire_bytes": 1036713,
+      "seed": 73008,
+      "domain": {
+        "version": "goodput-domain-v2.1",
+        "family": "ack-bottleneck",
+        "churn": false,
+        "churn_times": [
+          2.2282042320374122,
+          4.5546899147626965
+        ],
+        "seed": 73008
+      }
+    },
+    {
+      "desired": {
+        "image": 18,
+        "map": 6,
+        "interactive": 360
+      },
+      "blocked": {},
+      "admitted": {
+        "image": 18,
+        "map": 6,
+        "interactive": 360
+      },
+      "messages": 384,
+      "completed": 384,
+      "wrong": 0,
+      "interactive_miss_rate": 0.041666666666666664,
+      "interactive_on_time": 345,
+      "interactive_pending_deadlines": 0,
+      "interactive_unavoidable_bound": 0,
+      "interactive_avoidable_misses": 15,
+      "image_bytes": 294912,
+      "map_bytes": 393216,
+      "delivered_bytes": 734208,
+      "total_wire_bytes": 1143556,
+      "feedback_bytes": 206942,
+      "elapsed": 7.999999999999917,
+      "actual_image_fps": 0.7500000000000078,
+      "admitted_image_fps": 1.0,
+      "pending_confirmation_bytes": 0,
+      "pending_messages": 0,
+      "events": 8790,
+      "network": [
+        {
+          "attempted_packets": 1800,
+          "admitted_packets": 1704,
+          "attempted_bytes": 938102,
+          "admitted_bytes": 882325,
+          "queue_drops": 96,
+          "random_drops": 0,
+          "outage_drops": 0,
+          "delivered_packets": 1704,
+          "corrupted_packets": 0,
+          "corruption_rejections": 0,
+          "generated_duplicates": 0
+        },
+        {
+          "attempted_packets": 982,
+          "admitted_packets": 982,
+          "attempted_bytes": 205454,
+          "admitted_bytes": 205454,
+          "queue_drops": 0,
+          "random_drops": 0,
+          "outage_drops": 0,
+          "delivered_packets": 982,
+          "corrupted_packets": 0,
+          "corruption_rejections": 0,
+          "generated_duplicates": 0
+        }
+      ],
+      "interactive_p95": 0.06975037044626273,
+      "profile": "goodput-v2",
+      "mode": "mixed",
+      "measurement_seconds": 6.0,
+      "drain_verified_bulk_bytes": 294912,
+      "verified_bulk_bytes": 393216,
+      "confirmed_bulk_bytes": 393216,
+      "verified_image_bytes": 196608,
+      "verified_map_bytes": 196608,
+      "per_host_verified_bytes": [
+        131072,
+        131072,
+        131072
+      ],
+      "measurement_wire_bytes": 1143556,
+      "seed": 73009,
+      "domain": {
+        "version": "goodput-domain-v2.1",
+        "family": "steady",
+        "churn": false,
+        "churn_times": [
+          1.9089576412391094,
+          4.331696502056768
+        ],
+        "seed": 73009
+      }
+    },
+    {
+      "desired": {
+        "image": 46,
+        "map": 21,
+        "interactive": 240
+      },
+      "blocked": {},
+      "admitted": {
+        "image": 46,
+        "map": 21,
+        "interactive": 240
+      },
+      "messages": 307,
+      "completed": 307,
+      "wrong": 0,
+      "interactive_miss_rate": 0.0,
+      "interactive_on_time": 240,
+      "interactive_pending_deadlines": 0,
+      "interactive_unavoidable_bound": 0,
+      "interactive_avoidable_misses": 0,
+      "image_bytes": 753664,
+      "map_bytes": 1376256,
+      "delivered_bytes": 2160640,
+      "total_wire_bytes": 2684553,
+      "feedback_bytes": 158193,
+      "elapsed": 7.999999999999917,
+      "actual_image_fps": 2.8750000000000298,
+      "admitted_image_fps": 3.8333333333333335,
+      "pending_confirmation_bytes": 0,
+      "pending_messages": 0,
+      "events": 12531,
+      "network": [
+        {
+          "attempted_packets": 4419,
+          "admitted_packets": 4400,
+          "attempted_bytes": 2527320,
+          "admitted_bytes": 2516088,
+          "queue_drops": 19,
+          "random_drops": 0,
+          "outage_drops": 0,
+          "delivered_packets": 4400,
+          "corrupted_packets": 0,
+          "corruption_rejections": 0,
+          "generated_duplicates": 0
+        },
+        {
+          "attempted_packets": 745,
+          "admitted_packets": 745,
+          "attempted_bytes": 157233,
+          "admitted_bytes": 157233,
+          "queue_drops": 0,
+          "random_drops": 0,
+          "outage_drops": 0,
+          "delivered_packets": 745,
+          "corrupted_packets": 0,
+          "corruption_rejections": 0,
+          "generated_duplicates": 0
+        }
+      ],
+      "interactive_p95": 0.038892770241849936,
+      "profile": "goodput-v2",
+      "mode": "mixed",
+      "measurement_seconds": 6.0,
+      "drain_verified_bulk_bytes": 196608,
+      "verified_bulk_bytes": 1933312,
+      "confirmed_bulk_bytes": 1933312,
+      "verified_image_bytes": 688128,
+      "verified_map_bytes": 1245184,
+      "per_host_verified_bytes": [
+        1015808,
+        917504
+      ],
+      "measurement_wire_bytes": 2684553,
+      "seed": 73010,
+      "domain": {
+        "version": "goodput-domain-v2.1",
+        "family": "steady",
+        "churn": false,
+        "churn_times": [
+          2.0736697804455275,
+          4.255087372658478
+        ],
+        "seed": 73010
+      }
+    },
+    {
+      "desired": {
+        "image": 21,
+        "map": 10,
+        "interactive": 120
+      },
+      "blocked": {},
+      "admitted": {
+        "image": 21,
+        "map": 10,
+        "interactive": 120
+      },
+      "messages": 151,
+      "completed": 151,
+      "wrong": 0,
+      "interactive_miss_rate": 0.0,
+      "interactive_on_time": 120,
+      "interactive_pending_deadlines": 0,
+      "interactive_unavoidable_bound": 0,
+      "interactive_avoidable_misses": 0,
+      "image_bytes": 344064,
+      "map_bytes": 655360,
+      "delivered_bytes": 1014784,
+      "total_wire_bytes": 1262318,
+      "feedback_bytes": 80405,
+      "elapsed": 7.999999999999917,
+      "actual_image_fps": 2.625000000000027,
+      "admitted_image_fps": 3.5,
+      "pending_confirmation_bytes": 0,
+      "pending_messages": 0,
+      "events": 6052,
+      "network": [
+        {
+          "attempted_packets": 2072,
+          "admitted_packets": 2072,
+          "attempted_bytes": 1182393,
+          "admitted_bytes": 1182393,
+          "queue_drops": 0,
+          "random_drops": 0,
+          "outage_drops": 0,
+          "delivered_packets": 2072,
+          "corrupted_packets": 0,
+          "corruption_rejections": 0,
+          "generated_duplicates": 0
+        },
+        {
+          "attempted_packets": 383,
+          "admitted_packets": 383,
+          "attempted_bytes": 79925,
+          "admitted_bytes": 79925,
+          "queue_drops": 0,
+          "random_drops": 0,
+          "outage_drops": 0,
+          "delivered_packets": 383,
+          "corrupted_packets": 0,
+          "corruption_rejections": 0,
+          "generated_duplicates": 0
+        }
+      ],
+      "interactive_p95": 0.04481153558189197,
+      "profile": "goodput-v2",
+      "mode": "mixed",
+      "measurement_seconds": 6.0,
+      "drain_verified_bulk_bytes": 98304,
+      "verified_bulk_bytes": 901120,
+      "confirmed_bulk_bytes": 901120,
+      "verified_image_bytes": 311296,
+      "verified_map_bytes": 589824,
+      "per_host_verified_bytes": [
+        901120
+      ],
+      "measurement_wire_bytes": 1262318,
+      "seed": 73011,
+      "domain": {
+        "version": "goodput-domain-v2.1",
+        "family": "ack-bottleneck",
+        "churn": false,
+        "churn_times": [
+          2.0000911583580256,
+          4.790502075271479
+        ],
+        "seed": 73011
+      }
+    },
+    {
+      "desired": {
+        "image": 38,
+        "map": 16,
+        "interactive": 170
+      },
+      "blocked": {},
+      "admitted": {
+        "image": 38,
+        "map": 16,
+        "interactive": 170
+      },
+      "messages": 224,
+      "completed": 224,
+      "wrong": 0,
+      "interactive_miss_rate": 0.0,
+      "interactive_on_time": 170,
+      "interactive_pending_deadlines": 0,
+      "interactive_unavoidable_bound": 0,
+      "interactive_avoidable_misses": 0,
+      "image_bytes": 622592,
+      "map_bytes": 1048576,
+      "delivered_bytes": 1692928,
+      "total_wire_bytes": 2076946,
+      "feedback_bytes": 107819,
+      "elapsed": 7.999999999999917,
+      "actual_image_fps": 2.3750000000000244,
+      "admitted_image_fps": 3.1666666666666665,
+      "pending_confirmation_bytes": 0,
+      "pending_messages": 0,
+      "events": 9256,
+      "network": [
+        {
+          "attempted_packets": 3434,
+          "admitted_packets": 3434,
+          "attempted_bytes": 1969807,
+          "admitted_bytes": 1969807,
+          "queue_drops": 0,
+          "random_drops": 0,
+          "outage_drops": 0,
+          "delivered_packets": 3434,
+          "corrupted_packets": 0,
+          "corruption_rejections": 0,
+          "generated_duplicates": 0
+        },
+        {
+          "attempted_packets": 506,
+          "admitted_packets": 506,
+          "attempted_bytes": 107139,
+          "admitted_bytes": 107139,
+          "queue_drops": 0,
+          "random_drops": 0,
+          "outage_drops": 0,
+          "delivered_packets": 506,
+          "corrupted_packets": 0,
+          "corruption_rejections": 0,
+          "generated_duplicates": 0
+        }
+      ],
+      "interactive_p95": 0.022885785792577273,
+      "profile": "goodput-v2",
+      "mode": "mixed",
+      "measurement_seconds": 6.0,
+      "drain_verified_bulk_bytes": 196608,
+      "verified_bulk_bytes": 1474560,
+      "confirmed_bulk_bytes": 1474560,
+      "verified_image_bytes": 557056,
+      "verified_map_bytes": 917504,
+      "per_host_verified_bytes": [
+        753664,
+        720896
+      ],
+      "measurement_wire_bytes": 2076946,
+      "seed": 73012,
+      "domain": {
+        "version": "goodput-domain-v2.1",
+        "family": "churn",
+        "churn": true,
+        "churn_times": [
+          2.5973681774350346,
+          4.383257870430679
+        ],
+        "seed": 73012
+      }
+    },
+    {
+      "desired": {
+        "image": 20,
+        "map": 8,
+        "interactive": 240
+      },
+      "blocked": {},
+      "admitted": {
+        "image": 20,
+        "map": 8,
+        "interactive": 240
+      },
+      "messages": 268,
+      "completed": 268,
+      "wrong": 0,
+      "interactive_miss_rate": 0.16666666666666666,
+      "interactive_on_time": 200,
+      "interactive_pending_deadlines": 0,
+      "interactive_unavoidable_bound": 0,
+      "interactive_avoidable_misses": 40,
+      "image_bytes": 327680,
+      "map_bytes": 524288,
+      "delivered_bytes": 882688,
+      "total_wire_bytes": 1198110,
+      "feedback_bytes": 134195,
+      "elapsed": 7.999999999999917,
+      "actual_image_fps": 1.2500000000000129,
+      "admitted_image_fps": 1.6666666666666667,
+      "pending_confirmation_bytes": 0,
+      "pending_messages": 0,
+      "events": 7485,
+      "network": [
+        {
+          "attempted_packets": 1943,
+          "admitted_packets": 1904,
+          "attempted_bytes": 1064875,
+          "admitted_bytes": 1041797,
+          "queue_drops": 39,
+          "random_drops": 0,
+          "outage_drops": 0,
+          "delivered_packets": 1904,
+          "corrupted_packets": 0,
+          "corruption_rejections": 0,
+          "generated_duplicates": 0
+        },
+        {
+          "attempted_packets": 628,
+          "admitted_packets": 628,
+          "attempted_bytes": 133235,
+          "admitted_bytes": 133235,
+          "queue_drops": 0,
+          "random_drops": 0,
+          "outage_drops": 0,
+          "delivered_packets": 628,
+          "corrupted_packets": 0,
+          "corruption_rejections": 0,
+          "generated_duplicates": 0
+        }
+      ],
+      "interactive_p95": 0.14117851037895912,
+      "profile": "goodput-v2",
+      "mode": "mixed",
+      "measurement_seconds": 6.0,
+      "drain_verified_bulk_bytes": 196608,
+      "verified_bulk_bytes": 655360,
+      "confirmed_bulk_bytes": 655360,
+      "verified_image_bytes": 262144,
+      "verified_map_bytes": 393216,
+      "per_host_verified_bytes": [
+        327680,
+        327680
+      ],
+      "measurement_wire_bytes": 1198110,
+      "seed": 73013,
+      "domain": {
+        "version": "goodput-domain-v2.1",
+        "family": "ack-bottleneck",
+        "churn": false,
+        "churn_times": [
+          2.3222966000718084,
+          4.132114145409311
+        ],
+        "seed": 73013
+      }
+    },
+    {
+      "desired": {
+        "image": 34,
+        "map": 11,
+        "interactive": 120
+      },
+      "blocked": {},
+      "admitted": {
+        "image": 34,
+        "map": 11,
+        "interactive": 120
+      },
+      "messages": 165,
+      "completed": 165,
+      "wrong": 0,
+      "interactive_miss_rate": 0.016666666666666666,
+      "interactive_on_time": 118,
+      "interactive_pending_deadlines": 0,
+      "interactive_unavoidable_bound": 0,
+      "interactive_avoidable_misses": 2,
+      "image_bytes": 557056,
+      "map_bytes": 720896,
+      "delivered_bytes": 1293312,
+      "total_wire_bytes": 1614611,
+      "feedback_bytes": 81969,
+      "elapsed": 7.999999999999917,
+      "actual_image_fps": 4.2500000000000435,
+      "admitted_image_fps": 5.666666666666667,
+      "pending_confirmation_bytes": 0,
+      "pending_messages": 0,
+      "events": 7139,
+      "network": [
+        {
+          "attempted_packets": 2665,
+          "admitted_packets": 2630,
+          "attempted_bytes": 1533122,
+          "admitted_bytes": 1512464,
+          "queue_drops": 35,
+          "random_drops": 0,
+          "outage_drops": 0,
+          "delivered_packets": 2630,
+          "corrupted_packets": 0,
+          "corruption_rejections": 0,
+          "generated_duplicates": 0
+        },
+        {
+          "attempted_packets": 379,
+          "admitted_packets": 379,
+          "attempted_bytes": 81489,
+          "admitted_bytes": 81489,
+          "queue_drops": 0,
+          "random_drops": 0,
+          "outage_drops": 0,
+          "delivered_packets": 379,
+          "corrupted_packets": 0,
+          "corruption_rejections": 0,
+          "generated_duplicates": 0
+        }
+      ],
+      "interactive_p95": 0.023220717556527652,
+      "profile": "goodput-v2",
+      "mode": "mixed",
+      "measurement_seconds": 6.0,
+      "drain_verified_bulk_bytes": 98304,
+      "verified_bulk_bytes": 1179648,
+      "confirmed_bulk_bytes": 1179648,
+      "verified_image_bytes": 524288,
+      "verified_map_bytes": 655360,
+      "per_host_verified_bytes": [
+        1179648
+      ],
+      "measurement_wire_bytes": 1614611,
+      "seed": 73014,
+      "domain": {
+        "version": "goodput-domain-v2.1",
+        "family": "contention",
+        "churn": false,
+        "churn_times": [
+          2.433172301309597,
+          4.50266663145537
+        ],
+        "seed": 73014
+      }
+    },
+    {
+      "desired": {
+        "image": 10,
+        "map": 4,
+        "interactive": 240
+      },
+      "blocked": {},
+      "admitted": {
+        "image": 10,
+        "map": 4,
+        "interactive": 240
+      },
+      "messages": 254,
+      "completed": 251,
+      "wrong": 0,
+      "interactive_miss_rate": 0.07083333333333333,
+      "interactive_on_time": 223,
+      "interactive_pending_deadlines": 0,
+      "interactive_unavoidable_bound": 0,
+      "interactive_avoidable_misses": 17,
+      "image_bytes": 131072,
+      "map_bytes": 196608,
+      "delivered_bytes": 358400,
+      "total_wire_bytes": 665116,
+      "feedback_bytes": 137734,
+      "elapsed": 7.999999999999917,
+      "actual_image_fps": 0.5000000000000052,
+      "admitted_image_fps": 0.8333333333333334,
+      "pending_confirmation_bytes": 60416,
+      "pending_messages": 3,
+      "events": 5591,
+      "network": [
+        {
+          "attempted_packets": 1039,
+          "admitted_packets": 991,
+          "attempted_bytes": 528153,
+          "admitted_bytes": 500086,
+          "queue_drops": 48,
+          "random_drops": 24,
+          "outage_drops": 0,
+          "delivered_packets": 962,
+          "corrupted_packets": 0,
+          "corruption_rejections": 0,
+          "generated_duplicates": 0
+        },
+        {
+          "attempted_packets": 646,
+          "admitted_packets": 646,
+          "attempted_bytes": 136963,
+          "admitted_bytes": 136963,
+          "queue_drops": 0,
+          "random_drops": 16,
+          "outage_drops": 0,
+          "delivered_packets": 629,
+          "corrupted_packets": 0,
+          "corruption_rejections": 0,
+          "generated_duplicates": 0
+        }
+      ],
+      "interactive_p95": 0.17100232784084546,
+      "profile": "goodput-v2",
+      "mode": "mixed",
+      "measurement_seconds": 6.0,
+      "drain_verified_bulk_bytes": 98304,
+      "verified_bulk_bytes": 229376,
+      "confirmed_bulk_bytes": 229376,
+      "verified_image_bytes": 98304,
+      "verified_map_bytes": 131072,
+      "per_host_verified_bytes": [
+        114688,
+        114688
+      ],
+      "measurement_wire_bytes": 665116,
+      "seed": 73015,
+      "domain": {
+        "version": "goodput-domain-v2.1",
+        "family": "loss-cause-switch",
+        "churn": false,
+        "churn_times": [
+          2.6783574061719646,
+          4.225129017257986
+        ],
+        "seed": 73015
+      }
+    }
+  ]
+}

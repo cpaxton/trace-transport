@@ -1,0 +1,39 @@
+{
+  "checkpoint": "runs/goodput-v21/learn42/initial.pt",
+  "selection": "validation guards then verified goodput",
+  "training_decisions": 0,
+  "summary": {
+    "verified_goodput": 158378.66666666666,
+    "confirmed_goodput": 158378.66666666666,
+    "image_goodput": 60757.333333333336,
+    "map_goodput": 97621.33333333333,
+    "interactive_miss_rate": 0.0429042904290429,
+    "completion_fraction": 0.9991689750692521,
+    "wire_per_useful_byte": 1.562847005909887,
+    "wrong": 0,
+    "starved_hosts": 0,
+    "cases": 16
+  },
+  "comparison": {
+    "relative_goodput_gain": 0.0,
+    "goodput_difference_ci95": [
+      0.0,
+      0.0
+    ],
+    "miss_difference_ci95": [
+      0.0,
+      0.0
+    ],
+    "guards": {
+      "deadline": true,
+      "wire": true,
+      "integrity": true,
+      "hosts": true,
+      "image": true,
+      "map": true,
+      "confirmation": true,
+      "completion": true
+    },
+    "win": false
+  }
+}

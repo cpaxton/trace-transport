@@ -13,6 +13,10 @@ from .joint_workers import EnvironmentPool
 from .joint_session import JointTransportEnv
 from .joint_curriculum import sample_case
 
+# Fixed tensor shapes are part of repeatable goodput inference, independent of worker timing.
+MAX_GOODPUT_CLIENTS=4
+MAX_GOODPUT_ENDPOINTS=2*MAX_GOODPUT_CLIENTS
+
 BASELINES=[dict(rate=rate,scheduler=scheduler,feedback=feedback)
     for rate in ('fixed','aimd','bdp','deadline') for scheduler in ('edf','drr') for feedback in ('budgeted','sparse','deadline')]
 
@@ -45,11 +49,16 @@ def constant_baseline_actor(actor,role):
 
 
 def evaluate(*,seeds,checkpoint=None,baseline=None,device='cpu',environments=8,production=20.,drain=20.,ood=False,
-             sender_enabled=True,receiver_enabled=True,trace_network=None,on_record=None,asynchronous=True):
+             sender_enabled=True,receiver_enabled=True,trace_network=None,on_record=None,asynchronous=True,profile='deadline-v1'):
     baseline=baseline or dict(rate='fixed',scheduler='edf',feedback='budgeted')
     torch.set_num_threads(1)
     sender=receiver=config=None
-    if checkpoint:sender,receiver,config,metadata=load_checkpoint(checkpoint,device)
+    if checkpoint:
+        sender,receiver,config,metadata=load_checkpoint(checkpoint,device)
+        recorded=metadata.get('profile','deadline-v1')
+        if profile!='deadline-v1' and profile!=recorded:raise ValueError('checkpoint/profile mismatch')
+        profile=recorded
+        teacher_config=metadata.get('baseline',dict(rate='fixed',scheduler='edf',feedback='budgeted'))
     infer_sender=checkpoint is not None and sender_enabled and not constant_baseline_actor(sender,'sender')
     infer_receiver=checkpoint is not None and receiver_enabled and not constant_baseline_actor(receiver,'receiver')
     infer=infer_sender or infer_receiver
@@ -57,9 +66,13 @@ def evaluate(*,seeds,checkpoint=None,baseline=None,device='cpu',environments=8,p
     obs=[];histories=[];assigned={};next_index=0;records=[]
     def reset(i,seed):
         teacher=dict(baseline)
-        if checkpoint and sender_enabled:teacher.update(rate='fixed',scheduler='edf')
-        if checkpoint and receiver_enabled:teacher['feedback']='budgeted'
-        o,_,label=pool.reset(i,seed,production,drain,'full',ood,teacher,trace_network)
+        if checkpoint and sender_enabled:teacher.update(rate=teacher_config['rate'],scheduler=teacher_config['scheduler'])
+        if checkpoint and sender_enabled and 'initial_rate' in teacher_config:teacher['initial_rate']=teacher_config['initial_rate']
+        if checkpoint and receiver_enabled:
+            teacher['feedback']=teacher_config['feedback']
+            for key in ('batch','delay'):
+                if key in teacher_config:teacher[key]=teacher_config[key]
+        o,_,label=pool.reset(i,seed,production,drain,'full',ood,teacher,trace_network,profile)
         assigned[i]=(seed,label)
         return o,Histories(o,config) if infer else None
     try:
@@ -81,7 +94,31 @@ def evaluate(*,seeds,checkpoint=None,baseline=None,device='cpu',environments=8,p
                         pool.pipes[i].send(('finish-baseline',None))
                     else:del assigned[i]
             return sorted(records,key=lambda r:r['seed'])
+        def stable_actions(active):
+            result=[]
+            # The same world always gets the same tensor shapes and row positions,
+            # independent of which other CPU workers finish first.
+            for i in active:
+                o,h=obs[i],histories[i];h.append(o);n=len(o['sender'])
+                if n>MAX_GOODPUT_ENDPOINTS:raise ValueError(f'goodput fixed-shape evaluator supports at most {MAX_GOODPUT_CLIENTS} clients')
+                sender_action=np.zeros((n,3),np.float32);receiver_action=np.zeros(n,np.int64)
+                valid=np.zeros((MAX_GOODPUT_ENDPOINTS,config.history),bool);valid[:n]=h.valid
+                def tensor(x):return torch.as_tensor(x,device=device)
+                with torch.inference_mode():
+                    if infer_sender and o['sender_active'].any():
+                        history=np.zeros((MAX_GOODPUT_ENDPOINTS,config.history,h.sender.shape[-1]),np.float32);history[:n]=h.sender
+                        queue=np.zeros((MAX_GOODPUT_ENDPOINTS,*o['queue'].shape[1:]),np.float32);queue[:n]=o['queue']
+                        mask=np.zeros((MAX_GOODPUT_ENDPOINTS,o['queue_mask'].shape[1]),bool);mask[:n]=o['queue_mask']
+                        a=sender.act(tensor(history),tensor(valid),tensor(queue),tensor(mask)).cpu().numpy()
+                        sender_action[o['sender_active']]=a[:n][o['sender_active']]
+                    if infer_receiver and o['receiver_active'].any():
+                        history=np.zeros((MAX_GOODPUT_ENDPOINTS,config.history,h.receiver.shape[-1]),np.float32);history[:n]=h.receiver
+                        a=receiver.act(tensor(history),tensor(valid)).cpu().numpy()
+                        receiver_action[o['receiver_active']]=a[:n][o['receiver_active']]
+                result.append((sender_action,receiver_action))
+            return result
         def actions_for(active):
+            if profile.startswith('goodput-'):return stable_actions(active)
             current=[obs[i] for i in active]
             actions=[(np.zeros((len(o['sender']),3),np.float32),np.zeros(len(o['receiver']),np.int64)) for o in current]
             hs=[histories[i] for i in active]

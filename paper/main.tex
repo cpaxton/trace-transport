@@ -30,7 +30,7 @@ policy is untrained, so this difference is not a learning gain. Thirty-six bound
 real-device transfers recover exact synthetic text, image, and map bytes; the
 learned-sender checks retain deterministic remote feedback and do not establish
 performance superiority. We document negative results, runtime limitations, and a
-separate planned objective for maximum verified goodput with backlogged traffic.
+separate backlogged-goodput pilots that also fail to establish a learning win.
 \end{abstract}
 
 \section{Motivation and scope}
@@ -57,12 +57,43 @@ interface~\cite{jay2019aurora}. MVFST-RL integrates asynchronous reinforcement
 learning with QUIC and addresses action and inference delays in an operational
 transport~\cite{sivakumar2019mvfst}.
 
+Hybrid control is also established: Orca combines conventional and learned
+congestion control~\cite{abbasloo2020orca}. Copa motivates a queue-delay-based
+reference, although our implementation omits its full coexistence
+logic~\cite{arun2018copa}. PCC Vivace demonstrates online utility optimization
+without requiring deep RL~\cite{dong2018vivace}. These motivate stronger adaptive
+comparisons rather than fixed-rate comparisons alone. MOCC conditions control on
+application preferences~\cite{ma2022mocc}; Jury addresses fairness
+generalization~\cite{tian2025jury}. Pensieve demonstrates application-aware learned
+video bitrate selection~\cite{mao2017pensieve}, suggesting future robot-image
+quality or freshness objectives. Such objectives would require an explicit new
+contract; the current task always requires exact bytes.
+
+Pantheon motivates calibrating emulators against real paths and comparing
+multiple controllers~\cite{yan2018pantheon}. CellReplay identifies workload-sensitive
+replay bias in cellular networks~\cite{sentosa2025cellreplay}; we treat this as a
+reason to validate future trace models across loads, not as validation of our
+synthetic Wi-Fi service abstraction.
+
 Transformers over network histories also have direct precedent. The Jazz preprint
 uses historical observations for transformer-based multipath congestion
 control~\cite{wang2025jazz}. The TCCO preprint investigates transformer-based
 control across wireless subflows~\cite{zhang2026tcco}. These works motivate a
 history-based controller but mean that this architectural choice alone is not a
 novel contribution.
+
+A recent experimental study reports weaknesses of evaluated learned controllers
+under changing capacity and latency, as well as fairness generalization
+limitations~\cite{mazilu2026comparison}. Dynamic conditions alone therefore do
+not establish a learning advantage. Genet motivates baseline-relative curriculum
+generation~\cite{xia2022genet}; Mutant and production AliCCS motivate learning
+selection among established controllers~\cite{pappone2025mutant,zeng2025aliccs}.
+SIRD illustrates that receiver scheduling authority differs from reactive control
+of shared links~\cite{prasopoulos2025sird}; our ACK-only receiver has more limited
+authority. For robot image streams, age of information provides a distinct
+application timeliness objective~\cite{yates2020aoi}. These motivate planned
+control-headroom audits, smaller adaptation tasks, and a separately specified
+freshness benchmark; they are not evidence of a win for our implementation.
 
 Trace Transport's intended experimental focus is a compact combination of exact
 application delivery, jointly controlled peers, budgeted custom feedback, and
@@ -529,12 +560,278 @@ not deploy a learned receiver. The sequential, nonrandomized checks establish
 byte-exact recovery, not a learned performance advantage. Eighty ICMP probes per
 recording provide RTT/loss observations, not available-bandwidth estimates.
 
+\section{Harder but learnable follow-up tasks}
+Additional noise does not itself create a learning advantage. Aurora motivates
+using local history to distinguish congestion and non-congestion
+loss~\cite{jay2019aurora}; Remy emphasizes specifying a design range and objective
+and evaluating mismatches~\cite{winstein2013remy}. Our follow-up therefore adds
+switching loss causes, reverse-feedback bottlenecks, randomized handoff timing,
+and source-flow churn, while keeping causes and future schedules out of actor
+inputs. These are proposed synthetic challenges, not reproduced paper results
+or calibrated robot wireless models.
+
+Orca motivates combining learned and conventional control~\cite{abbasloo2020orca}.
+The prototype learns residuals around a tuned adaptive teacher. A delay-target
+reference uses Copa's rate/queue-delay relation as inspiration but omits its full
+coexistence logic~\cite{arun2018copa}; it is not a Copa reproduction. PCC Vivace
+also motivates comparing with online utility optimization rather than treating
+deep RL as the only learning approach~\cite{dong2018vivace}. MOCC makes objective
+preferences explicit inputs~\cite{ma2022mocc}; our initial follow-up has a fixed
+mixed-traffic objective, with preference-conditioned control left for a later
+version. Jury highlights fairness generalization~\cite{tian2025jury}, motivating
+per-host service and starvation checks in addition to aggregate throughput.
+
+A diagnostic of joint-v1 initialization identified an exploration mismatch: a
+baseline receiver logit of 0.5 among 21 alternatives gives only about 7.3\%
+probability of sampling baseline feedback, despite greedy baseline equivalence.
+The follow-up starts with a 90\% receiver teacher prior, at least 90\% scheduling
+teacher probability, smaller continuous noise, and longer GAE credit assignment.
+Verified 16-KiB image and 64-KiB map objects provide more frequent completion
+rewards. Measurement excludes the two-second drain from six-second verified
+throughput; a separately counted auxiliary drain reward supports reliability.
+A CPU pilot completed 300,011 decisions in 251 seconds. A seven-snapshot
+validation sweep selects the initial teacher; no trained snapshot passes the
+deadline guard, and reserved tests remain unopened. Repeated evaluation of the
+final checkpoint differed despite identical checkpoint hashes and network seeds;
+this motivated fixed-shape per-world inference in version 2.1. No new learned
+win is claimed. Its dedicated user service bounds CPU affinity, RAM, swap and tasks and
+avoids terminal output and GPU contention. The terminal-server crash cause remains
+unconfirmed. The register records this experiment separately from joint-v1.
+
+Version 2.1 fixes inference batch shapes and reproduces all 16 diagnostic
+case records with one versus two workers. It expands calibration to 87 named
+settings, selecting delay-target pacing initialized at 512,000 B/s and ACK batch
+16 with a 25-ms timer. A joint CPU run reaches 1,000,006 endpoint decisions;
+training uses paired teacher reward differences and a fixed throughput reward
+scale. Sixteen-case validation again selects the initial teacher (158,379
+verified bulk B/s, 4.29\% interactive misses). The final trained policy has
+3.56\% lower goodput and fails deadline noninferiority. The only trained snapshot
+passing all guards has 2.69\% lower goodput. Reserved acceptance tests remain
+unopened. These are validation findings from one training seed, not a held-out
+learning win.
+
+A separate frozen-final-checkpoint stress comparison evaluates four controller
+modes on two new 16-case banks (128 case/controller evaluations). On coupled
+capacity, RTT, reverse-bottleneck and loss changes with four hosts, the adaptive
+reference achieves 45,227 bulk B/s and 39.30\% interactive misses; joint learning
+achieves 43,349 B/s and 42.24\% misses. The paired goodput-difference interval
+includes zero; the miss increase is 2.94 percentage points (95\% interval
+1.81--4.17). Host-cases without a verified bulk object number one versus four;
+this does not imply permanent starvation. No wrong delivery is observed.
+Receiver-only records equal the reference, and joint records equal sender-only.
+A four-case audit finds all 12,088 valid-history receiver proposals follow the
+teacher, including proposals for inactive rows. Thus gradient updates did not
+produce a distinct greedy receiver on these audited trajectories. These are
+exploratory results from one training seed, not reserved acceptance evidence.
+
+\section{Distribution coverage and adaptation diagnostics}
+Version 3 adds twelve explicitly labeled synthetic strata spanning stable and
+wired controls, shared-airtime contention, persistent fades, burst interference,
+short capacity opportunities, propagation-only changes, reverse bottlenecks,
+loss-cause switching, outage recovery, producer churn and large buffers. Actors
+never receive these labels or impairment schedules. Random dwell times span
+80 ms to 2.5 s; payload sizes, source rates, host counts and queue/BDP ratios vary.
+Equal stratum weights provide coverage and are not empirical deployment weights.
+The service model omits RF/MAC dynamics, independent TCP competitors, AQM/ECN,
+gigabit service, inference costs and more than four clients. Coverage of robot
+deployments remains unverified without whole-session measurements under multiple
+loads, locations and days.
+
+A wider-bandwidth delay reference removes the old 1-ms queue-delay floor's
+approximately 8-Mbps target ceiling. This baseline correction is not a learning
+gain. The v3 receiver exploration prior is configurable independently from sender
+scheduling; sampled action counts and normalized advantages are logged by receiver
+choice. The coverage audit generates 1,000 configurations and evaluates nine legal
+controls on two cases per stratum (216 case/controller evaluations). The
+deadline-constrained calibration selects the wider-bandwidth delay reference
+with ACK batch 16: 186,254 B/s and 27.88\% misses. Immediate ACKs achieve
+409,259 B/s but 28.98\% misses, outside the 0.5-point eligibility margin.
+These are small calibration findings, not held-out learning evidence. A
+300,000-decision joint pilot uses new stratified validation cases; earlier
+negative studies remain frozen.
+
+The v3 CPU pilot completes 300,008 endpoint decisions in 403 seconds, followed
+by 120 validation case/controller evaluations on 24 new stratified cases.
+Adaptive control achieves 162,588 bulk B/s and 11.95\% interactive misses;
+joint learning achieves 165,604 B/s and 11.96\% misses. The 1.85\% goodput
+increase has a paired difference interval of $[-2788,9842]$ B/s, including zero.
+The deadline-difference upper bound is 0.503 percentage points, outside the fixed
+0.5-point guard. All modes have four host-cases without a verified bulk object;
+no wrong delivery is observed. Receiver-only again equals adaptive control,
+although training samples all alternatives and follows the teacher on only
+48.4\% of 120,663 active receiver decisions. A four-case audit finds all 14,504
+valid-history greedy receiver proposals teacher-following, including inactive
+rows. Thus broader exploration alone does not establish useful receiver learning.
+These are one-seed pilot validation results; reserved acceptance tests remain
+unopened. Small idle device probes additionally expose sub-millisecond wired
+RTT and a reported gigabit interface outside the current sampling scope; PHY
+rates and idle ICMP probes do not establish available capacity or calibrate the
+service model.
+
+\section{Caliban scaling and robustness follow-up}
+A review identifies that cloning initial impairment RNG state does not preserve
+common packet draws after actions change packet counts. The v2.1/v3 subtracted
+teacher return is therefore a same-case baseline without demonstrated variance
+reduction, rather than a guaranteed common-random-number control variate.
+Prior metrics remain unchanged. Longer v4 training disables this subtraction and
+uses raw task rewards with the learned PPO critic. Regression tests demonstrate
+RNG divergence under nonzero actions; evaluation remains paired by case and seed,
+not claimed to replay identical packet impairments.
+
+Version 4 extends wired service to 1 Gbps and RTT to 0.3--4 ms, varies policy
+control intervals across 2--20 ms, exposes those intervals to both actors, and
+uses log-scaled millisecond RTT observations. Feature semantics are versioned;
+legacy checkpoints are incompatible with these observation meanings. Service
+ranges remain deployment-motivated hypotheses, not calibrated distributions.
+
+An ARM CPU benchmark on Caliban measures 68.1, 72.2 and 77.2 endpoint opportunities
+per second with one, two and four workers for a 64-step-history, width-64,
+two-layer model. The matched workstation benchmark reaches 164.9/s. These are
+short engineering trials, not established speedup estimates. Caliban's combined
+eight-endpoint actor inference has median/p95 latency 18.8/20.1 ms, exceeding the
+2-ms simulation tick; this model is not a demonstrated real-time deployment at
+that cadence. GPU acceleration is not enabled. A separate bounded CPU service
+starts a three-seed study with planned five-million-decision budgets, immutable
+source manifests and persistent optimizer snapshots; results remain pending.
+
+A finite-horizon receiver diagnostic attempts eight states and finds pending ACKs
+in seven. Comparing all 22 actions from cloned identical states yields different
+return-maximizing choices across cases. Selection on a single future RNG
+realization can exploit noise; these diagnostics are not expected action values,
+a deployable oracle, or evidence of a learned win. Replicated rollouts and
+observability checks are required before using these as training labels.
+
+A local opt-in variant additionally scales GAE discount and trace decay by
+actual transition time: $\gamma_t=\gamma^{\Delta t_t/0.02}$ and
+$\lambda_t=\lambda^{\Delta t_t/0.02}$. With fixed per-step parameters, a 2-ms
+controller otherwise has ten times less physical trace horizon than a 20-ms
+controller. Unit tests cover prefix trace decay, reference-tick equivalence and
+terminal bootstrap masking; no performance comparison is reported. The frozen
+Caliban study retains the original step-based estimator. Time discretization is
+a broader RL issue~\cite{tallec2019time}; this limited PPO modification is not a
+reproduction of that Q-learning work or proof of invariance to action frequency.
+Exploration, action scaling, rollout span and inference delays remain separate
+factors requiring controlled evaluation.
+
+Seed 42 completes 5,000,031 opportunities in 16.38 hours and validation of
+11 checkpoints. Selection favors the 2.51-million-decision checkpoint, with a
+2.82\% goodput point increase, an interval including zero, and failed deadline
+noninferiority. The final policy has 2.71\% lower goodput and 22.52\% interactive
+misses versus the reference's 21.94\%. Thus the curve does not establish sustained
+learning progress or an accepted win. Other seeds remain unfinished. After
+validation, authorized retention keeps initial, selected and final weights and
+all evaluation summaries; removed intermediate weights cannot support new
+post-hoc ablations. Seed 43 undergoes an optimizer-checkpoint maintenance restart
+with collector reset, recorded separately from the algorithm.
+
+\section{Measurement and learning-signal diagnosis}
+Post-hoc family analysis finds that the two wired cases supply 55.9\% of the
+initial v4 bulk bytes. Both Wi-Fi contention cases have zero completed bulk
+objects. For one, optimistic forward service is only 1,114,779 wire bytes, below
+the 1,181,696 bytes required for one minimum object per host even with minimum
+headers and no loss, feedback airtime, status traffic or propagation. The prior
+all-host object-completion guard is therefore impossible in at least this case.
+No previous result is rescored or declared a success.
+
+A v5 diagnostic replay distinguishes service from object completion: the five
+Wi-Fi hosts all receive CRC-accepted bulk payload, averaging 18,795 B/s across
+the two cases, despite zero completed-object goodput. V5 reports both metrics and
+per-class completion; its versioned host guard uses zero accepted bulk service,
+with fairness and per-family nonregression checks. Partial data never counts as
+a completed text/image object. This defines a new acceptance version.
+
+An optional training potential is incomplete, uniquely accepted bulk bytes
+divided by the fixed reward scale. With actual-time discount $\gamma_t$, shaping
+adds $\gamma_t\Phi(s_{t+1})-\Phi(s_t)$ and sets terminal potential to zero.
+The terms telescope out of the full discounted return, following potential-based
+shaping~\cite{ng1999shaping}; tests verify cancellation on simulated incomplete
+transfers. This does not make infeasible cases feasible or guarantee improvement
+under approximate PPO training. A learner-only mask removes the ACK action exactly
+equivalent to teacher-following; serialized metadata restores it at inference.
+
+A one-seed local pilot compares raw and shaped training with matched initialization,
+model, teacher, time-aware GAE and alias mask, using 512-step rollouts and planned
+200,000-opportunity budgets per arm. Final-only validation uses new cases; results are reported below. Cloned-state interventions must be replicated before using them
+as receiver action-value labels. COMA motivates agent-specific counterfactual
+credit~\cite{foerster2018coma}; our current shared-advantage PPO and simulator
+interventions are not an implementation or reproduction of COMA.
+
+The v5 pilot completes 200,001 raw and 200,002 shaped opportunities in about
+329 seconds each, with identical initial parameters, 35,472 world steps and
+18 completed episodes per arm. Final-only validation evaluates 72 case/controller
+combinations. Adaptive, raw and shaped verified goodputs are 855,268, 848,555 and
+860,900 B/s; interactive misses are 10.48\%, 9.77\% and 9.80\%. Shaped versus
+adaptive gains 0.66\% (paired difference interval $[228,13312]$ B/s), passing
+v5 quality guards but missing the 10\% target. Versus raw it gains 1.45\%, but
+fails deadline and per-family progress nonregression. This one-seed validation
+pilot does not establish an overall or accepted learning win. Sender-only reproduces
+the joint shaped records exactly on all 24 cases, while receiver-only reproduces
+the adaptive reference; no useful receiver contribution is established. A four-case audit
+still has all 30,166 valid-history receiver proposals following the teacher,
+including inactive rows; the aggregate gain is not evidence of useful receiver
+learning.
+
+A separate v6 control-authority fix applies changed ACK settings to already-pending
+receipts. Earlier settings affect future arrivals while an existing timer can
+remain unchanged, preventing an immediate action from flushing backlog without
+another packet. V6 flushes or reschedules from the oldest pending arrival and
+invalidates the old timer. Tests verify wire-cost accounting, no duplicate flush,
+and unchanged outcomes when settings do not change. Completion ACK protection
+remains. A matched one-seed, 200,000-opportunity v6 pilot with identical initial
+actor/critic tensors and 24 validation cases achieves 857,202 versus adaptive
+855,268 B/s ($+0.226\%$), with paired difference 95\% interval
+$[-3{,}868,7{,}625]$ B/s. Interactive misses are 10.08\% versus 10.48\%;
+all quality guards pass and no wrong deliveries occur. The gain is inconclusive
+and below the 10\% target; it does not improve on the v5 shaped pilot.
+Reserved tests remain unopened. Subsequent v6 role ablations reproduce the joint
+records exactly with sender-only control, and the adaptive reference exactly
+with receiver-only control, on all 24 validation cases. Four-case instrumentation
+finds 14,677 applied receiver decisions, all teacher-following, with no pending-ACK
+control changes or immediate control-triggered flushes. Mean teacher probability
+is 0.506--0.531 across those cases; this is a greedy-deployment result, not evidence
+that the sampled training distribution has collapsed. The pilot's historical plan
+incorrectly recorded shaping disabled before training enabled it; actual training
+configuration and checkpoint confirm shaping enabled. Published artifacts include
+an explicit provenance erratum; measured outcomes are unchanged.
+A separate 12-case development sweep compares three sender controllers and
+three ACK settings. No alternative fixed control passes all quality guards.
+Per-case admissible hindsight selection yields 1,603,015 versus 720,100 B/s
+($+122.6\%$), largely from wired-LAN and bufferbloat cases. This is a biased
+finite-control diagnostic using future outcomes, not a deployable policy, optimal
+bound or held-out learning result. A four-case sampled-receiver audit with three
+fixed sampling seeds yields 128,683, 126,635 and 141,995 B/s versus joint greedy
+138,581 B/s, with interactive misses 10.23\%, 10.10\%, 9.97\% versus 9.80\%.
+All modes have zero wrong deliveries; stochastic deployment shows no consistent
+improvement. A new, bounded Caliban collection covers 48 development and 24
+separate validation cases, nine controls and causal one-second local probes.
+The collection completed 648 trials and 72 probes. Strict finite-control
+hindsight headroom is 47.2\% on development but only 4.08\% on validation,
+limiting generalization of the earlier 12-case estimate. A fixed supervised
+comparison fits four development examples with all architectures, then trains
+current-observation MLP, history MLP, GRU and transformer selectors for 400
+full-batch updates each at three seeds. All reach 100\% development accuracy;
+validation target accuracy is 45.8--58.3\% versus constant-teacher 75\%, with
+4--8 inadmissible choices per learned model on 24 cases. This provides no evidence
+of a history/transformer advantage for one-shot prefix classification. Candidate
+lookups do not execute the teacher probe or mixed-endpoint switching trajectory.
+Executed probe-then-select validation completes all twelve models on 24 cases.
+None passes every quality guard. Current MLP goodput gains range $-0.37$ to
+$+1.66\%$, history MLP $-3.33$ to $+0.81\%$, GRU $-2.91$ to $+6.59\%$, and
+transformer $-13.10$ to $-12.19\%$ across the three fixed seeds. Every learned
+model worsens interactive misses relative to teacher 17.56\%; all modes retain
+zero wrong deliveries. Training probes cover only bulk endpoint 0, while this
+exploratory execution applies selectors to all roles using weak globally uniform
+labels, confounding attribution. No accepted transport win or real-device result
+is claimed. A role-aligned reactive follow-up needs new prospective validation.
+Earlier experiments use their frozen semantics. Caliban v4 remains a diagnostic baseline, with its original all-host
+completion guard now known infeasible in at least one validation case.
+
 \section{Implementation stages and open questions}
 Implemented stages include reliable CPU transfer, history-based sender learning,
 receiver learning, joint sender/receiver training over CPU packet workers, and
 bounded binary datagram checks on two real devices. A GPU-native packet backend,
-joint learned-receiver hardware deployment, and maximum-goodput training remain
-future work.
+joint learned-receiver hardware deployment, and a demonstrated learned
+maximum-goodput advantage remain future work.
 The full target combines these pieces with reproducible configurations,
 checkpoints, bounded resources, and explicit failure semantics.
 

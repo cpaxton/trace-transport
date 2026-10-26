@@ -1,0 +1,70 @@
+{
+  "configurations": 1000,
+  "families": {
+    "burst-interference": 67,
+    "producer-churn": 75,
+    "propagation-step": 73,
+    "bufferbloat": 85,
+    "reverse-congestion": 89,
+    "wired-lan": 101,
+    "steady": 96,
+    "outage-recovery": 91,
+    "mobile-fade": 86,
+    "capacity-opportunities": 90,
+    "loss-cause-switch": 65,
+    "wifi-contention": 82
+  },
+  "shared_airtime_configurations": 326,
+  "actual_network_range": {
+    "bandwidth_bps": [
+      500377.4729183684,
+      79328706.21987651
+    ],
+    "feedback_bandwidth_bps": [
+      128000,
+      76564352.6256066
+    ],
+    "base_rtt": [
+      0.002000691136833288,
+      0.11999129224329752
+    ],
+    "queue_bytes": [
+      4096,
+      2097152
+    ]
+  },
+  "workload_values": {
+    "clients": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "interactive_bytes": [
+      64,
+      128,
+      512
+    ],
+    "interactive_hz": [
+      5.0,
+      10.0,
+      20.0
+    ],
+    "image_bytes": [
+      16384,
+      65536,
+      131072
+    ],
+    "map_bytes": [
+      65536,
+      262144,
+      524288
+    ],
+    "image_slots": [
+      1,
+      2,
+      4
+    ]
+  },
+  "caveat": "synthetic strata coverage, not measured prevalence or calibrated realism"
+}

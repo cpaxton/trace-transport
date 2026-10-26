@@ -1,0 +1,2253 @@
+{
+  "version": "receiver-counterfactual-v4-v1",
+  "started_utc": "2026-10-24T17:50:39.893480+00:00",
+  "caveat": "finite-horizon simulator counterfactual; cloned RNG streams, action-dependent packet draws; not causal real-path evidence or deployable oracle",
+  "cases": [
+    {
+      "seed": 131000,
+      "family": "reverse-congestion",
+      "status": "complete",
+      "time": 0.5000000000000002,
+      "index": 2,
+      "control_interval": 0.01,
+      "receiver_observation": [
+        1.9503644704818726,
+        0.0,
+        0.0,
+        0.40546509623527527,
+        0.31845372915267944,
+        0.06787654012441635,
+        0.10298407822847366,
+        0.12637300789356232,
+        0.2719337046146393,
+        0.0606246218085289,
+        0.0606246218085289,
+        0.0,
+        0.31845372915267944,
+        0.5773153901100159,
+        0.20600642263889313,
+        0.5,
+        0.10000000149011612,
+        0.9056878685951233,
+        0.11778303235769272,
+        1.7917594909667969,
+        10.0,
+        0.015504186972975731,
+        1.0
+      ],
+      "actions": [
+        {
+          "choice": 0,
+          "ack": "teacher",
+          "reward": 0.32395184834798163,
+          "verified_bytes": 262144,
+          "on_time": 40,
+          "missed": 0,
+          "wire": 368895,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 1,
+          "ack": [
+            1,
+            0.0
+          ],
+          "reward": 0.44904899597167935,
+          "verified_bytes": 1376256,
+          "on_time": 37,
+          "missed": 3,
+          "wire": 2003475,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 2,
+          "ack": [
+            2,
+            0.001
+          ],
+          "reward": 1.7043445332845055,
+          "verified_bytes": 1376256,
+          "on_time": 40,
+          "missed": 0,
+          "wire": 1795246,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 3,
+          "ack": [
+            2,
+            0.005
+          ],
+          "reward": 1.5414951578776044,
+          "verified_bytes": 1245184,
+          "on_time": 40,
+          "missed": 0,
+          "wire": 1645144,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 4,
+          "ack": [
+            2,
+            0.01
+          ],
+          "reward": 1.5414662424723304,
+          "verified_bytes": 1245184,
+          "on_time": 40,
+          "missed": 0,
+          "wire": 1646281,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 5,
+          "ack": [
+            2,
+            0.025
+          ],
+          "reward": 1.5414318847656248,
+          "verified_bytes": 1245184,
+          "on_time": 40,
+          "missed": 0,
+          "wire": 1647632,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 6,
+          "ack": [
+            4,
+            0.001
+          ],
+          "reward": 1.4612546539306632,
+          "verified_bytes": 1179648,
+          "on_time": 40,
+          "missed": 0,
+          "wire": 1523529,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 7,
+          "ack": [
+            4,
+            0.005
+          ],
+          "reward": 1.4610853322347,
+          "verified_bytes": 1179648,
+          "on_time": 40,
+          "missed": 0,
+          "wire": 1530187,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 8,
+          "ack": [
+            4,
+            0.01
+          ],
+          "reward": 1.7069577026367189,
+          "verified_bytes": 1376256,
+          "on_time": 40,
+          "missed": 0,
+          "wire": 1692492,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 9,
+          "ack": [
+            4,
+            0.025
+          ],
+          "reward": 1.4612300364176434,
+          "verified_bytes": 1179648,
+          "on_time": 40,
+          "missed": 0,
+          "wire": 1524497,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 10,
+          "ack": [
+            8,
+            0.001
+          ],
+          "reward": 1.5413472747802728,
+          "verified_bytes": 1245184,
+          "on_time": 40,
+          "missed": 0,
+          "wire": 1650959,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 11,
+          "ack": [
+            8,
+            0.005
+          ],
+          "reward": 0.893160909016927,
+          "verified_bytes": 720896,
+          "on_time": 40,
+          "missed": 0,
+          "wire": 924284,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 12,
+          "ack": [
+            8,
+            0.01
+          ],
+          "reward": 1.3816306050618494,
+          "verified_bytes": 1114112,
+          "on_time": 40,
+          "missed": 0,
+          "wire": 1377674,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 13,
+          "ack": [
+            8,
+            0.025
+          ],
+          "reward": 0.9752022806803384,
+          "verified_bytes": 786432,
+          "on_time": 40,
+          "missed": 0,
+          "wire": 975086,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 14,
+          "ack": [
+            8,
+            0.1
+          ],
+          "reward": 0.40481615702311174,
+          "verified_bytes": 327680,
+          "on_time": 40,
+          "missed": 0,
+          "wire": 465981,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 15,
+          "ack": [
+            8,
+            0.25
+          ],
+          "reward": -1.9228636423746752,
+          "verified_bytes": 131072,
+          "on_time": 35,
+          "missed": 5,
+          "wire": 243675,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 16,
+          "ack": [
+            16,
+            0.025
+          ],
+          "reward": 0.32395184834798163,
+          "verified_bytes": 262144,
+          "on_time": 40,
+          "missed": 0,
+          "wire": 368895,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 17,
+          "ack": [
+            16,
+            0.1
+          ],
+          "reward": 0.15968694051106772,
+          "verified_bytes": 131072,
+          "on_time": 40,
+          "missed": 0,
+          "wire": 274454,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 18,
+          "ack": [
+            16,
+            0.25
+          ],
+          "reward": -2.3391470082600914,
+          "verified_bytes": 131072,
+          "on_time": 34,
+          "missed": 6,
+          "wire": 228603,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 19,
+          "ack": [
+            32,
+            0.025
+          ],
+          "reward": 0.32395184834798163,
+          "verified_bytes": 262144,
+          "on_time": 40,
+          "missed": 0,
+          "wire": 368895,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 20,
+          "ack": [
+            32,
+            0.1
+          ],
+          "reward": 0.15968694051106772,
+          "verified_bytes": 131072,
+          "on_time": 40,
+          "missed": 0,
+          "wire": 274454,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 21,
+          "ack": [
+            32,
+            0.25
+          ],
+          "reward": -2.3391470082600914,
+          "verified_bytes": 131072,
+          "on_time": 34,
+          "missed": 6,
+          "wire": 228603,
+          "elapsed": 1.0000000000000009
+        }
+      ],
+      "best_choice": 8,
+      "best_reward_gain": 1.3830058542887373
+    },
+    {
+      "seed": 131001,
+      "family": "reverse-congestion",
+      "status": "no pending ACK state found"
+    },
+    {
+      "seed": 131000,
+      "family": "capacity-opportunities",
+      "status": "complete",
+      "time": 0.5000000000000002,
+      "index": 0,
+      "control_interval": 0.01,
+      "receiver_observation": [
+        3.4983997344970703,
+        0.3364722430706024,
+        0.0,
+        3.345508575439453,
+        0.6286086440086365,
+        0.06409158557653427,
+        0.21990619599819183,
+        0.07708690315485,
+        0.2719337046146393,
+        0.31845372915267944,
+        0.11778303235769272,
+        0.0,
+        0.5596157908439636,
+        1.1592369079589844,
+        0.19958610832691193,
+        0.5,
+        0.10000000149011612,
+        2.1951608657836914,
+        0.11778303235769272,
+        1.7917594909667969,
+        10.0,
+        0.015504186972975731,
+        1.0
+      ],
+      "actions": [
+        {
+          "choice": 0,
+          "ack": "teacher",
+          "reward": 0.4061383819580077,
+          "verified_bytes": 327680,
+          "on_time": 40,
+          "missed": 0,
+          "wire": 413989,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 1,
+          "ack": [
+            1,
+            0.0
+          ],
+          "reward": 1.2950307973225912,
+          "verified_bytes": 1048576,
+          "on_time": 40,
+          "missed": 0,
+          "wire": 1506117,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 2,
+          "ack": [
+            2,
+            0.001
+          ],
+          "reward": 1.2166187540690103,
+          "verified_bytes": 983040,
+          "on_time": 40,
+          "missed": 0,
+          "wire": 1312604,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 3,
+          "ack": [
+            2,
+            0.005
+          ],
+          "reward": 1.2160227457682287,
+          "verified_bytes": 983040,
+          "on_time": 40,
+          "missed": 0,
+          "wire": 1336040,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 4,
+          "ack": [
+            2,
+            0.01
+          ],
+          "reward": 1.2160227457682287,
+          "verified_bytes": 983040,
+          "on_time": 40,
+          "missed": 0,
+          "wire": 1336040,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 5,
+          "ack": [
+            2,
+            0.025
+          ],
+          "reward": 1.2160227457682287,
+          "verified_bytes": 983040,
+          "on_time": 40,
+          "missed": 0,
+          "wire": 1336040,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 6,
+          "ack": [
+            4,
+            0.001
+          ],
+          "reward": 1.217264277140299,
+          "verified_bytes": 983040,
+          "on_time": 40,
+          "missed": 0,
+          "wire": 1287221,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 7,
+          "ack": [
+            4,
+            0.005
+          ],
+          "reward": 1.220930684407552,
+          "verified_bytes": 983040,
+          "on_time": 40,
+          "missed": 0,
+          "wire": 1143052,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 8,
+          "ack": [
+            4,
+            0.01
+          ],
+          "reward": 1.220930684407552,
+          "verified_bytes": 983040,
+          "on_time": 40,
+          "missed": 0,
+          "wire": 1143052,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 9,
+          "ack": [
+            4,
+            0.025
+          ],
+          "reward": 1.220930684407552,
+          "verified_bytes": 983040,
+          "on_time": 40,
+          "missed": 0,
+          "wire": 1143052,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 10,
+          "ack": [
+            8,
+            0.001
+          ],
+          "reward": 1.2174558766682944,
+          "verified_bytes": 983040,
+          "on_time": 40,
+          "missed": 0,
+          "wire": 1279687,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 11,
+          "ack": [
+            8,
+            0.005
+          ],
+          "reward": 1.0594384256998697,
+          "verified_bytes": 851968,
+          "on_time": 40,
+          "missed": 0,
+          "wire": 939586,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 12,
+          "ack": [
+            8,
+            0.01
+          ],
+          "reward": 0.8950971730550129,
+          "verified_bytes": 720896,
+          "on_time": 40,
+          "missed": 0,
+          "wire": 848147,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 13,
+          "ack": [
+            8,
+            0.025
+          ],
+          "reward": 0.8141073862711586,
+          "verified_bytes": 655360,
+          "on_time": 40,
+          "missed": 0,
+          "wire": 755995,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 14,
+          "ack": [
+            8,
+            0.1
+          ],
+          "reward": 0.650651372273763,
+          "verified_bytes": 524288,
+          "on_time": 40,
+          "missed": 0,
+          "wire": 629747,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 15,
+          "ack": [
+            8,
+            0.25
+          ],
+          "reward": -2.17450813293457,
+          "verified_bytes": 262144,
+          "on_time": 34,
+          "missed": 6,
+          "wire": 308339,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 16,
+          "ack": [
+            16,
+            0.025
+          ],
+          "reward": 0.4061383819580077,
+          "verified_bytes": 327680,
+          "on_time": 40,
+          "missed": 0,
+          "wire": 413989,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 17,
+          "ack": [
+            16,
+            0.1
+          ],
+          "reward": 0.24405415852864598,
+          "verified_bytes": 196608,
+          "on_time": 40,
+          "missed": 0,
+          "wire": 233800,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 18,
+          "ack": [
+            16,
+            0.25
+          ],
+          "reward": -2.2555973561604814,
+          "verified_bytes": 196608,
+          "on_time": 34,
+          "missed": 6,
+          "wire": 220097,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 19,
+          "ack": [
+            32,
+            0.025
+          ],
+          "reward": 0.4061383819580077,
+          "verified_bytes": 327680,
+          "on_time": 40,
+          "missed": 0,
+          "wire": 413989,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 20,
+          "ack": [
+            32,
+            0.1
+          ],
+          "reward": 0.24405415852864598,
+          "verified_bytes": 196608,
+          "on_time": 40,
+          "missed": 0,
+          "wire": 233800,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 21,
+          "ack": [
+            32,
+            0.25
+          ],
+          "reward": -2.2555973561604814,
+          "verified_bytes": 196608,
+          "on_time": 34,
+          "missed": 6,
+          "wire": 220097,
+          "elapsed": 1.0000000000000009
+        }
+      ],
+      "best_choice": 1,
+      "best_reward_gain": 0.8888924153645834
+    },
+    {
+      "seed": 131001,
+      "family": "capacity-opportunities",
+      "status": "complete",
+      "time": 0.5000000000000002,
+      "index": 0,
+      "control_interval": 0.01,
+      "receiver_observation": [
+        3.372669219970703,
+        0.0,
+        0.0,
+        2.7803709506988525,
+        1.0116009712219238,
+        0.07030806690454483,
+        0.008012178353965282,
+        0.14271840453147888,
+        0.4855078160762787,
+        0.2231435477733612,
+        0.0,
+        0.0,
+        0.5947071313858032,
+        1.12938392162323,
+        0.19998718798160553,
+        0.5,
+        0.10000000149011612,
+        2.075772762298584,
+        0.11778303235769272,
+        1.7917594909667969,
+        10.0,
+        0.015504186972975731,
+        1.0
+      ],
+      "actions": [
+        {
+          "choice": 0,
+          "ack": "teacher",
+          "reward": 0.6425210316975909,
+          "verified_bytes": 524288,
+          "on_time": 120,
+          "missed": 0,
+          "wire": 949445,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 1,
+          "ack": [
+            1,
+            0.0
+          ],
+          "reward": 3.067993901570639,
+          "verified_bytes": 2490368,
+          "on_time": 120,
+          "missed": 0,
+          "wire": 3879971,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 2,
+          "ack": [
+            2,
+            0.001
+          ],
+          "reward": 3.244545618693033,
+          "verified_bytes": 2621440,
+          "on_time": 120,
+          "missed": 0,
+          "wire": 3491275,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 3,
+          "ack": [
+            2,
+            0.005
+          ],
+          "reward": 3.244545618693033,
+          "verified_bytes": 2621440,
+          "on_time": 120,
+          "missed": 0,
+          "wire": 3491275,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 4,
+          "ack": [
+            2,
+            0.01
+          ],
+          "reward": 3.244545618693033,
+          "verified_bytes": 2621440,
+          "on_time": 120,
+          "missed": 0,
+          "wire": 3491275,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 5,
+          "ack": [
+            2,
+            0.025
+          ],
+          "reward": 3.244545618693033,
+          "verified_bytes": 2621440,
+          "on_time": 120,
+          "missed": 0,
+          "wire": 3491275,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 6,
+          "ack": [
+            4,
+            0.001
+          ],
+          "reward": 3.078956400553384,
+          "verified_bytes": 2490368,
+          "on_time": 120,
+          "missed": 0,
+          "wire": 3448908,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 7,
+          "ack": [
+            4,
+            0.005
+          ],
+          "reward": 2.5944027455647785,
+          "verified_bytes": 2097152,
+          "on_time": 120,
+          "missed": 0,
+          "wire": 2841533,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 8,
+          "ack": [
+            4,
+            0.01
+          ],
+          "reward": 2.5944027455647785,
+          "verified_bytes": 2097152,
+          "on_time": 120,
+          "missed": 0,
+          "wire": 2841533,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 9,
+          "ack": [
+            4,
+            0.025
+          ],
+          "reward": 2.5944027455647785,
+          "verified_bytes": 2097152,
+          "on_time": 120,
+          "missed": 0,
+          "wire": 2841533,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 10,
+          "ack": [
+            8,
+            0.001
+          ],
+          "reward": 2.5908805338541665,
+          "verified_bytes": 2097152,
+          "on_time": 120,
+          "missed": 0,
+          "wire": 2980032,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 11,
+          "ack": [
+            8,
+            0.005
+          ],
+          "reward": 2.1054717508951817,
+          "verified_bytes": 1703936,
+          "on_time": 120,
+          "missed": 0,
+          "wire": 2406282,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 12,
+          "ack": [
+            8,
+            0.01
+          ],
+          "reward": 2.1054717508951817,
+          "verified_bytes": 1703936,
+          "on_time": 120,
+          "missed": 0,
+          "wire": 2406282,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 13,
+          "ack": [
+            8,
+            0.025
+          ],
+          "reward": 2.1054717508951817,
+          "verified_bytes": 1703936,
+          "on_time": 120,
+          "missed": 0,
+          "wire": 2406282,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 14,
+          "ack": [
+            8,
+            0.1
+          ],
+          "reward": 2.1054717508951817,
+          "verified_bytes": 1703936,
+          "on_time": 120,
+          "missed": 0,
+          "wire": 2406282,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 15,
+          "ack": [
+            8,
+            0.25
+          ],
+          "reward": 2.1054717508951817,
+          "verified_bytes": 1703936,
+          "on_time": 120,
+          "missed": 0,
+          "wire": 2406282,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 16,
+          "ack": [
+            16,
+            0.025
+          ],
+          "reward": 0.6425210316975909,
+          "verified_bytes": 524288,
+          "on_time": 120,
+          "missed": 0,
+          "wire": 949445,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 17,
+          "ack": [
+            16,
+            0.1
+          ],
+          "reward": 0.5095771196153429,
+          "verified_bytes": 524288,
+          "on_time": 119,
+          "missed": 1,
+          "wire": 715679,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 18,
+          "ack": [
+            16,
+            0.25
+          ],
+          "reward": -1.182727584838867,
+          "verified_bytes": 393216,
+          "on_time": 107,
+          "missed": 12,
+          "wire": 631541,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 19,
+          "ack": [
+            32,
+            0.025
+          ],
+          "reward": 0.6425210316975909,
+          "verified_bytes": 524288,
+          "on_time": 120,
+          "missed": 0,
+          "wire": 949445,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 20,
+          "ack": [
+            32,
+            0.1
+          ],
+          "reward": 0.6455870310465495,
+          "verified_bytes": 524288,
+          "on_time": 119,
+          "missed": 0,
+          "wire": 828885,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 21,
+          "ack": [
+            32,
+            0.25
+          ],
+          "reward": -1.182727584838867,
+          "verified_bytes": 393216,
+          "on_time": 107,
+          "missed": 12,
+          "wire": 631541,
+          "elapsed": 1.0000000000000009
+        }
+      ],
+      "best_choice": 2,
+      "best_reward_gain": 2.6020245869954417
+    },
+    {
+      "seed": 131000,
+      "family": "wifi-contention",
+      "status": "complete",
+      "time": 0.5000000000000002,
+      "index": 0,
+      "control_interval": 0.01,
+      "receiver_observation": [
+        2.825833320617676,
+        0.3364722430706024,
+        0.0,
+        2.125251054763794,
+        0.8649974465370178,
+        0.058628033846616745,
+        0.16134703159332275,
+        0.07857217639684677,
+        0.2719337046146393,
+        0.1718502640724182,
+        0.0606246218085289,
+        0.0,
+        0.40546509623527527,
+        0.7969439625740051,
+        0.18449796736240387,
+        0.5,
+        0.10000000149011612,
+        1.5962655544281006,
+        0.11778303235769272,
+        1.7917594909667969,
+        10.0,
+        0.015504186972975731,
+        1.0
+      ],
+      "actions": [
+        {
+          "choice": 0,
+          "ack": "teacher",
+          "reward": -0.4271481831868486,
+          "verified_bytes": 327680,
+          "on_time": 38,
+          "missed": 2,
+          "wire": 412150,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 1,
+          "ack": [
+            1,
+            0.0
+          ],
+          "reward": 1.1325511678059899,
+          "verified_bytes": 917504,
+          "on_time": 40,
+          "missed": 0,
+          "wire": 1341476,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 2,
+          "ack": [
+            2,
+            0.001
+          ],
+          "reward": 1.134394048055013,
+          "verified_bytes": 917504,
+          "on_time": 40,
+          "missed": 0,
+          "wire": 1269011,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 3,
+          "ack": [
+            2,
+            0.005
+          ],
+          "reward": 1.4600134023030604,
+          "verified_bytes": 1179648,
+          "on_time": 40,
+          "missed": 0,
+          "wire": 1572337,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 4,
+          "ack": [
+            2,
+            0.01
+          ],
+          "reward": 1.4603604634602871,
+          "verified_bytes": 1179648,
+          "on_time": 40,
+          "missed": 0,
+          "wire": 1558690,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 5,
+          "ack": [
+            2,
+            0.025
+          ],
+          "reward": 1.4605932617187498,
+          "verified_bytes": 1179648,
+          "on_time": 40,
+          "missed": 0,
+          "wire": 1549536,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 6,
+          "ack": [
+            4,
+            0.001
+          ],
+          "reward": 1.3793198903401693,
+          "verified_bytes": 1114112,
+          "on_time": 40,
+          "missed": 0,
+          "wire": 1468535,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 7,
+          "ack": [
+            4,
+            0.005
+          ],
+          "reward": 1.3001700083414711,
+          "verified_bytes": 1048576,
+          "on_time": 40,
+          "missed": 0,
+          "wire": 1304035,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 8,
+          "ack": [
+            4,
+            0.01
+          ],
+          "reward": 1.2993598937988278,
+          "verified_bytes": 1048576,
+          "on_time": 40,
+          "missed": 0,
+          "wire": 1335890,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 9,
+          "ack": [
+            4,
+            0.025
+          ],
+          "reward": 1.217314071655273,
+          "verified_bytes": 983040,
+          "on_time": 40,
+          "missed": 0,
+          "wire": 1285263,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 10,
+          "ack": [
+            8,
+            0.001
+          ],
+          "reward": 1.1362870534261065,
+          "verified_bytes": 917504,
+          "on_time": 40,
+          "missed": 0,
+          "wire": 1194575,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 11,
+          "ack": [
+            8,
+            0.005
+          ],
+          "reward": -0.10604726155598972,
+          "verified_bytes": 589824,
+          "on_time": 38,
+          "missed": 2,
+          "wire": 893148,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 12,
+          "ack": [
+            8,
+            0.01
+          ],
+          "reward": -0.022821375528971163,
+          "verified_bytes": 655360,
+          "on_time": 38,
+          "missed": 2,
+          "wire": 897373,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 13,
+          "ack": [
+            8,
+            0.025
+          ],
+          "reward": -0.10485270182291666,
+          "verified_bytes": 589824,
+          "on_time": 38,
+          "missed": 2,
+          "wire": 846176,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 14,
+          "ack": [
+            8,
+            0.1
+          ],
+          "reward": -0.18508944193522112,
+          "verified_bytes": 524288,
+          "on_time": 38,
+          "missed": 2,
+          "wire": 724413,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 15,
+          "ack": [
+            8,
+            0.25
+          ],
+          "reward": -0.6820969390869139,
+          "verified_bytes": 458752,
+          "on_time": 37,
+          "missed": 3,
+          "wire": 606743,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 16,
+          "ack": [
+            16,
+            0.025
+          ],
+          "reward": -0.4271481831868486,
+          "verified_bytes": 327680,
+          "on_time": 38,
+          "missed": 2,
+          "wire": 412150,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 17,
+          "ack": [
+            16,
+            0.1
+          ],
+          "reward": 0.24296877543131526,
+          "verified_bytes": 196608,
+          "on_time": 40,
+          "missed": 0,
+          "wire": 276479,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 18,
+          "ack": [
+            16,
+            0.25
+          ],
+          "reward": -2.2561613718668623,
+          "verified_bytes": 196608,
+          "on_time": 34,
+          "missed": 6,
+          "wire": 242275,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 19,
+          "ack": [
+            32,
+            0.025
+          ],
+          "reward": -0.4271481831868486,
+          "verified_bytes": 327680,
+          "on_time": 38,
+          "missed": 2,
+          "wire": 412150,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 20,
+          "ack": [
+            32,
+            0.1
+          ],
+          "reward": 0.24296877543131526,
+          "verified_bytes": 196608,
+          "on_time": 40,
+          "missed": 0,
+          "wire": 276479,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 21,
+          "ack": [
+            32,
+            0.25
+          ],
+          "reward": -2.2561613718668623,
+          "verified_bytes": 196608,
+          "on_time": 34,
+          "missed": 6,
+          "wire": 242275,
+          "elapsed": 1.0000000000000009
+        }
+      ],
+      "best_choice": 5,
+      "best_reward_gain": 1.8877414449055985
+    },
+    {
+      "seed": 131001,
+      "family": "wifi-contention",
+      "status": "complete",
+      "time": 0.5000000000000002,
+      "index": 0,
+      "control_interval": 0.01,
+      "receiver_observation": [
+        2.2578492164611816,
+        1.8870697021484375,
+        0.0,
+        1.6817585229873657,
+        1.0116009712219238,
+        0.015110227279365063,
+        0.004292210564017296,
+        0.01026882790029049,
+        0.2719337046146393,
+        0.0606246218085289,
+        0.0606246218085289,
+        0.0,
+        0.2719337046146393,
+        0.5596157908439636,
+        0.06668127328157425,
+        0.5,
+        0.10000000149011612,
+        1.1444218158721924,
+        0.2231435477733612,
+        1.7917594909667969,
+        10.0,
+        0.11778303235769272,
+        1.0
+      ],
+      "actions": [
+        {
+          "choice": 0,
+          "ack": "teacher",
+          "reward": 1.1430836995442704,
+          "verified_bytes": 917504,
+          "on_time": 60,
+          "missed": 0,
+          "wire": 927320,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 1,
+          "ack": [
+            1,
+            0.0
+          ],
+          "reward": 1.6186076100667313,
+          "verified_bytes": 1310720,
+          "on_time": 60,
+          "missed": 0,
+          "wire": 1889759,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 2,
+          "ack": [
+            2,
+            0.001
+          ],
+          "reward": 1.7889580027262373,
+          "verified_bytes": 1441792,
+          "on_time": 60,
+          "missed": 0,
+          "wire": 1744909,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 3,
+          "ack": [
+            2,
+            0.005
+          ],
+          "reward": 1.7888171895345055,
+          "verified_bytes": 1441792,
+          "on_time": 60,
+          "missed": 0,
+          "wire": 1750446,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 4,
+          "ack": [
+            2,
+            0.01
+          ],
+          "reward": 1.7888712056477867,
+          "verified_bytes": 1441792,
+          "on_time": 60,
+          "missed": 0,
+          "wire": 1748322,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 5,
+          "ack": [
+            2,
+            0.025
+          ],
+          "reward": 1.450931065877278,
+          "verified_bytes": 1179648,
+          "on_time": 60,
+          "missed": 0,
+          "wire": 1929469,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 6,
+          "ack": [
+            4,
+            0.001
+          ],
+          "reward": 1.0100545332166884,
+          "verified_bytes": 1048576,
+          "on_time": 59,
+          "missed": 1,
+          "wire": 1789173,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 7,
+          "ack": [
+            4,
+            0.005
+          ],
+          "reward": 1.791114679972331,
+          "verified_bytes": 1441792,
+          "on_time": 60,
+          "missed": 0,
+          "wire": 1660105,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 8,
+          "ack": [
+            4,
+            0.01
+          ],
+          "reward": 1.7904141743977866,
+          "verified_bytes": 1441792,
+          "on_time": 60,
+          "missed": 0,
+          "wire": 1687650,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 9,
+          "ack": [
+            4,
+            0.025
+          ],
+          "reward": 1.6241927337646485,
+          "verified_bytes": 1310720,
+          "on_time": 60,
+          "missed": 0,
+          "wire": 1670143,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 10,
+          "ack": [
+            8,
+            0.001
+          ],
+          "reward": 1.3482002597384979,
+          "verified_bytes": 1310720,
+          "on_time": 59,
+          "missed": 1,
+          "wire": 1599942,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 11,
+          "ack": [
+            8,
+            0.005
+          ],
+          "reward": 1.6295342000325517,
+          "verified_bytes": 1310720,
+          "on_time": 60,
+          "missed": 0,
+          "wire": 1460108,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 12,
+          "ack": [
+            8,
+            0.01
+          ],
+          "reward": 1.2994693756103517,
+          "verified_bytes": 1048576,
+          "on_time": 60,
+          "missed": 0,
+          "wire": 1331585,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 13,
+          "ack": [
+            8,
+            0.025
+          ],
+          "reward": 1.3000859324137362,
+          "verified_bytes": 1048576,
+          "on_time": 60,
+          "missed": 0,
+          "wire": 1307341,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 14,
+          "ack": [
+            8,
+            0.1
+          ],
+          "reward": 1.0229055107964407,
+          "verified_bytes": 1048576,
+          "on_time": 59,
+          "missed": 1,
+          "wire": 1283852,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 15,
+          "ack": [
+            8,
+            0.25
+          ],
+          "reward": 0.7491503058539495,
+          "verified_bytes": 1048576,
+          "on_time": 58,
+          "missed": 2,
+          "wire": 1125678,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 16,
+          "ack": [
+            16,
+            0.025
+          ],
+          "reward": 1.1430836995442704,
+          "verified_bytes": 917504,
+          "on_time": 60,
+          "missed": 0,
+          "wire": 927320,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 17,
+          "ack": [
+            16,
+            0.1
+          ],
+          "reward": 0.48418500264485687,
+          "verified_bytes": 393216,
+          "on_time": 60,
+          "missed": 0,
+          "wire": 621871,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 18,
+          "ack": [
+            16,
+            0.25
+          ],
+          "reward": -0.5738083224826394,
+          "verified_bytes": 655360,
+          "on_time": 55,
+          "missed": 5,
+          "wire": 717728,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 19,
+          "ack": [
+            32,
+            0.025
+          ],
+          "reward": 0.8130640920003255,
+          "verified_bytes": 655360,
+          "on_time": 60,
+          "missed": 0,
+          "wire": 797019,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 20,
+          "ack": [
+            32,
+            0.1
+          ],
+          "reward": 0.8177892557779949,
+          "verified_bytes": 655360,
+          "on_time": 60,
+          "missed": 0,
+          "wire": 611218,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 21,
+          "ack": [
+            32,
+            0.25
+          ],
+          "reward": -0.8480826822916666,
+          "verified_bytes": 655360,
+          "on_time": 54,
+          "missed": 6,
+          "wire": 579968,
+          "elapsed": 1.0000000000000009
+        }
+      ],
+      "best_choice": 7,
+      "best_reward_gain": 0.6480309804280606
+    },
+    {
+      "seed": 131000,
+      "family": "propagation-step",
+      "status": "complete",
+      "time": 0.5000000000000002,
+      "index": 0,
+      "control_interval": 0.01,
+      "receiver_observation": [
+        1.8621402978897095,
+        0.0,
+        0.0,
+        0.8649974465370178,
+        0.11778303235769272,
+        0.07268063724040985,
+        1.2653586864471436,
+        0.18170160055160522,
+        0.2719337046146393,
+        0.0606246218085289,
+        0.0606246218085289,
+        0.0,
+        0.31845372915267944,
+        0.4855078160762787,
+        0.4132305979728699,
+        0.5,
+        0.10000000149011612,
+        0.8438040614128113,
+        0.11778303235769272,
+        1.7917594909667969,
+        10.0,
+        0.015504186972975731,
+        1.0
+      ],
+      "actions": [
+        {
+          "choice": 0,
+          "ack": "teacher",
+          "reward": 0.1625241851806641,
+          "verified_bytes": 131072,
+          "on_time": 40,
+          "missed": 0,
+          "wire": 162889,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 1,
+          "ack": [
+            1,
+            0.0
+          ],
+          "reward": 1.2134933471679685,
+          "verified_bytes": 983040,
+          "on_time": 40,
+          "missed": 0,
+          "wire": 1435500,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 2,
+          "ack": [
+            2,
+            0.001
+          ],
+          "reward": 1.1353996531168615,
+          "verified_bytes": 917504,
+          "on_time": 40,
+          "missed": 0,
+          "wire": 1229469,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 3,
+          "ack": [
+            2,
+            0.005
+          ],
+          "reward": 1.1348170979817709,
+          "verified_bytes": 917504,
+          "on_time": 40,
+          "missed": 0,
+          "wire": 1252376,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 4,
+          "ack": [
+            2,
+            0.01
+          ],
+          "reward": 1.0537164560953776,
+          "verified_bytes": 851968,
+          "on_time": 40,
+          "missed": 0,
+          "wire": 1164583,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 5,
+          "ack": [
+            2,
+            0.025
+          ],
+          "reward": 0.9724036153157553,
+          "verified_bytes": 786432,
+          "on_time": 40,
+          "missed": 0,
+          "wire": 1085134,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 6,
+          "ack": [
+            4,
+            0.001
+          ],
+          "reward": 1.1363553619384765,
+          "verified_bytes": 917504,
+          "on_time": 40,
+          "missed": 0,
+          "wire": 1191889,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 7,
+          "ack": [
+            4,
+            0.005
+          ],
+          "reward": 0.9735268910725916,
+          "verified_bytes": 786432,
+          "on_time": 40,
+          "missed": 0,
+          "wire": 1040965,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 8,
+          "ack": [
+            4,
+            0.01
+          ],
+          "reward": 0.8922760518391927,
+          "verified_bytes": 720896,
+          "on_time": 40,
+          "missed": 0,
+          "wire": 959078,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 9,
+          "ack": [
+            4,
+            0.025
+          ],
+          "reward": 0.4864006551106771,
+          "verified_bytes": 393216,
+          "on_time": 40,
+          "missed": 0,
+          "wire": 534748,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 10,
+          "ack": [
+            8,
+            0.001
+          ],
+          "reward": 1.054287109375,
+          "verified_bytes": 851968,
+          "on_time": 40,
+          "missed": 0,
+          "wire": 1142144,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 11,
+          "ack": [
+            8,
+            0.005
+          ],
+          "reward": 0.8127885691324872,
+          "verified_bytes": 655360,
+          "on_time": 40,
+          "missed": 0,
+          "wire": 807853,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 12,
+          "ack": [
+            8,
+            0.01
+          ],
+          "reward": 0.64939821879069,
+          "verified_bytes": 524288,
+          "on_time": 40,
+          "missed": 0,
+          "wire": 679023,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 13,
+          "ack": [
+            8,
+            0.025
+          ],
+          "reward": 0.16121760050455727,
+          "verified_bytes": 131072,
+          "on_time": 40,
+          "missed": 0,
+          "wire": 214266,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 14,
+          "ack": [
+            8,
+            0.1
+          ],
+          "reward": -0.7526220448811849,
+          "verified_bytes": 65536,
+          "on_time": 38,
+          "missed": 2,
+          "wire": 103103,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 15,
+          "ack": [
+            8,
+            0.25
+          ],
+          "reward": -2.0024332682291672,
+          "verified_bytes": 65536,
+          "on_time": 35,
+          "missed": 5,
+          "wire": 95680,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 16,
+          "ack": [
+            16,
+            0.025
+          ],
+          "reward": 0.1625241851806641,
+          "verified_bytes": 131072,
+          "on_time": 40,
+          "missed": 0,
+          "wire": 162889,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 17,
+          "ack": [
+            16,
+            0.1
+          ],
+          "reward": -0.7526220448811849,
+          "verified_bytes": 65536,
+          "on_time": 38,
+          "missed": 2,
+          "wire": 103103,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 18,
+          "ack": [
+            16,
+            0.25
+          ],
+          "reward": -2.0024332682291672,
+          "verified_bytes": 65536,
+          "on_time": 35,
+          "missed": 5,
+          "wire": 95680,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 19,
+          "ack": [
+            32,
+            0.025
+          ],
+          "reward": 0.1625241851806641,
+          "verified_bytes": 131072,
+          "on_time": 40,
+          "missed": 0,
+          "wire": 162889,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 20,
+          "ack": [
+            32,
+            0.1
+          ],
+          "reward": -0.7526220448811849,
+          "verified_bytes": 65536,
+          "on_time": 38,
+          "missed": 2,
+          "wire": 103103,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 21,
+          "ack": [
+            32,
+            0.25
+          ],
+          "reward": -2.0024332682291672,
+          "verified_bytes": 65536,
+          "on_time": 35,
+          "missed": 5,
+          "wire": 95680,
+          "elapsed": 1.0000000000000009
+        }
+      ],
+      "best_choice": 1,
+      "best_reward_gain": 1.0509691619873045
+    },
+    {
+      "seed": 131001,
+      "family": "propagation-step",
+      "status": "complete",
+      "time": 0.5000000000000002,
+      "index": 2,
+      "control_interval": 0.01,
+      "receiver_observation": [
+        2.680593252182007,
+        0.5877866744995117,
+        0.0,
+        1.8325815200805664,
+        0.11778303235769272,
+        0.007754905615001917,
+        0.28252699971199036,
+        0.01938726380467415,
+        0.4855078160762787,
+        0.11778303235769272,
+        0.0,
+        0.0,
+        0.5232481360435486,
+        0.7827593684196472,
+        0.07589266449213028,
+        0.5,
+        0.10000000149011612,
+        1.4812493324279785,
+        0.11778303235769272,
+        1.7917594909667969,
+        10.0,
+        0.2231435477733612,
+        0.5
+      ],
+      "actions": [
+        {
+          "choice": 0,
+          "ack": "teacher",
+          "reward": -0.003050791422526043,
+          "verified_bytes": 0,
+          "on_time": 120,
+          "missed": 0,
+          "wire": 119962,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 1,
+          "ack": [
+            1,
+            0.0
+          ],
+          "reward": -0.003126093546549482,
+          "verified_bytes": 0,
+          "on_time": 120,
+          "missed": 0,
+          "wire": 122923,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 2,
+          "ack": [
+            2,
+            0.001
+          ],
+          "reward": -0.003130594889322919,
+          "verified_bytes": 0,
+          "on_time": 120,
+          "missed": 0,
+          "wire": 123100,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 3,
+          "ack": [
+            2,
+            0.005
+          ],
+          "reward": -0.0031092580159505227,
+          "verified_bytes": 0,
+          "on_time": 119,
+          "missed": 0,
+          "wire": 122261,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 4,
+          "ack": [
+            2,
+            0.01
+          ],
+          "reward": -0.0030891164143880216,
+          "verified_bytes": 0,
+          "on_time": 119,
+          "missed": 0,
+          "wire": 121469,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 5,
+          "ack": [
+            2,
+            0.025
+          ],
+          "reward": -0.003050791422526043,
+          "verified_bytes": 0,
+          "on_time": 120,
+          "missed": 0,
+          "wire": 119962,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 6,
+          "ack": [
+            4,
+            0.001
+          ],
+          "reward": -0.003130594889322919,
+          "verified_bytes": 0,
+          "on_time": 120,
+          "missed": 0,
+          "wire": 123100,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 7,
+          "ack": [
+            4,
+            0.005
+          ],
+          "reward": -0.0031092580159505227,
+          "verified_bytes": 0,
+          "on_time": 119,
+          "missed": 0,
+          "wire": 122261,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 8,
+          "ack": [
+            4,
+            0.01
+          ],
+          "reward": -0.0030891164143880216,
+          "verified_bytes": 0,
+          "on_time": 119,
+          "missed": 0,
+          "wire": 121469,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 9,
+          "ack": [
+            4,
+            0.025
+          ],
+          "reward": -0.003050791422526043,
+          "verified_bytes": 0,
+          "on_time": 120,
+          "missed": 0,
+          "wire": 119962,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 10,
+          "ack": [
+            8,
+            0.001
+          ],
+          "reward": -0.003130594889322919,
+          "verified_bytes": 0,
+          "on_time": 120,
+          "missed": 0,
+          "wire": 123100,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 11,
+          "ack": [
+            8,
+            0.005
+          ],
+          "reward": -0.0031092580159505227,
+          "verified_bytes": 0,
+          "on_time": 119,
+          "missed": 0,
+          "wire": 122261,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 12,
+          "ack": [
+            8,
+            0.01
+          ],
+          "reward": -0.0030891164143880216,
+          "verified_bytes": 0,
+          "on_time": 119,
+          "missed": 0,
+          "wire": 121469,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 13,
+          "ack": [
+            8,
+            0.025
+          ],
+          "reward": -0.003050791422526043,
+          "verified_bytes": 0,
+          "on_time": 120,
+          "missed": 0,
+          "wire": 119962,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 14,
+          "ack": [
+            8,
+            0.1
+          ],
+          "reward": -0.0029898834228515637,
+          "verified_bytes": 0,
+          "on_time": 119,
+          "missed": 0,
+          "wire": 117567,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 15,
+          "ack": [
+            8,
+            0.25
+          ],
+          "reward": -0.0029646555582682308,
+          "verified_bytes": 0,
+          "on_time": 119,
+          "missed": 0,
+          "wire": 116575,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 16,
+          "ack": [
+            16,
+            0.025
+          ],
+          "reward": -0.003050791422526043,
+          "verified_bytes": 0,
+          "on_time": 120,
+          "missed": 0,
+          "wire": 119962,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 17,
+          "ack": [
+            16,
+            0.1
+          ],
+          "reward": -0.0029898834228515637,
+          "verified_bytes": 0,
+          "on_time": 119,
+          "missed": 0,
+          "wire": 117567,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 18,
+          "ack": [
+            16,
+            0.25
+          ],
+          "reward": -0.0029646555582682308,
+          "verified_bytes": 0,
+          "on_time": 119,
+          "missed": 0,
+          "wire": 116575,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 19,
+          "ack": [
+            32,
+            0.025
+          ],
+          "reward": -0.003050791422526043,
+          "verified_bytes": 0,
+          "on_time": 120,
+          "missed": 0,
+          "wire": 119962,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 20,
+          "ack": [
+            32,
+            0.1
+          ],
+          "reward": -0.0029898834228515637,
+          "verified_bytes": 0,
+          "on_time": 119,
+          "missed": 0,
+          "wire": 117567,
+          "elapsed": 1.0000000000000009
+        },
+        {
+          "choice": 21,
+          "ack": [
+            32,
+            0.25
+          ],
+          "reward": -0.0029646555582682308,
+          "verified_bytes": 0,
+          "on_time": 119,
+          "missed": 0,
+          "wire": 116575,
+          "elapsed": 1.0000000000000009
+        }
+      ],
+      "best_choice": 15,
+      "best_reward_gain": 8.613586425781222e-05
+    }
+  ],
+  "completed_utc": "2026-10-24T17:51:50.199796+00:00"
+}

@@ -1,0 +1,817 @@
+{
+  "version": "reactive-development-headroom-v1",
+  "reference": "delay-fast-b1-d0.0",
+  "scope": "optimistic same-development-case hindsight selection among finite controls; not an optimal upper bound, online policy, unbiased effect estimate or held-out result; per-case guard checks are descriptive without inference",
+  "baseline_summary": {
+    "verified_goodput": 720099.5555555555,
+    "confirmed_goodput": 718279.1111111111,
+    "image_goodput": 208099.55555555556,
+    "map_goodput": 512000.0,
+    "interactive_miss_rate": 0.1484473352916492,
+    "completion_fraction": 0.9929182649749189,
+    "wire_per_useful_byte": 1.7933707681005837,
+    "wrong": 0,
+    "starved_hosts": 0,
+    "cases": 12,
+    "zero_completed_bulk_hosts": 0,
+    "zero_accepted_bulk_hosts": 0,
+    "accepted_bulk_goodput": 776768.0,
+    "mean_bulk_progress_jain": 0.9931755797675489,
+    "provably_infeasible_completion_cases": 0
+  },
+  "hindsight_summary": {
+    "verified_goodput": 1603015.111111111,
+    "confirmed_goodput": 1603015.111111111,
+    "image_goodput": 477525.3333333333,
+    "map_goodput": 1125489.7777777778,
+    "interactive_miss_rate": 0.14708350818296265,
+    "completion_fraction": 0.994429758308157,
+    "wire_per_useful_byte": 1.668953084312784,
+    "wrong": 0,
+    "starved_hosts": 0,
+    "cases": 12,
+    "zero_completed_bulk_hosts": 0,
+    "zero_accepted_bulk_hosts": 0,
+    "accepted_bulk_goodput": 1668903.111111111,
+    "mean_bulk_progress_jain": 0.9946462574915357,
+    "provably_infeasible_completion_cases": 0
+  },
+  "hindsight_relative_gain": 1.226102069837257,
+  "hindsight_selection": [
+    {
+      "seed": 150000,
+      "family": "loss-cause-switch",
+      "control": "delay-fast-b1-d0.0",
+      "admissible_controls": [
+        "delay-fast-b1-d0.0"
+      ]
+    },
+    {
+      "seed": 150002,
+      "family": "mobile-fade",
+      "control": "aimd-b1-d0.0",
+      "admissible_controls": [
+        "delay-fast-b1-d0.0",
+        "aimd-b1-d0.0",
+        "aimd-b32-d0.025",
+        "bdp-b8-d0.005",
+        "bdp-b32-d0.025"
+      ]
+    },
+    {
+      "seed": 150004,
+      "family": "capacity-opportunities",
+      "control": "delay-fast-b8-d0.005",
+      "admissible_controls": [
+        "delay-fast-b1-d0.0",
+        "delay-fast-b8-d0.005"
+      ]
+    },
+    {
+      "seed": 150005,
+      "family": "steady",
+      "control": "delay-fast-b8-d0.005",
+      "admissible_controls": [
+        "delay-fast-b1-d0.0",
+        "delay-fast-b8-d0.005"
+      ]
+    },
+    {
+      "seed": 150006,
+      "family": "propagation-step",
+      "control": "delay-fast-b1-d0.0",
+      "admissible_controls": [
+        "delay-fast-b1-d0.0"
+      ]
+    },
+    {
+      "seed": 150007,
+      "family": "burst-interference",
+      "control": "delay-fast-b1-d0.0",
+      "admissible_controls": [
+        "delay-fast-b1-d0.0",
+        "delay-fast-b8-d0.005"
+      ]
+    },
+    {
+      "seed": 150010,
+      "family": "wifi-contention",
+      "control": "delay-fast-b1-d0.0",
+      "admissible_controls": [
+        "delay-fast-b1-d0.0"
+      ]
+    },
+    {
+      "seed": 150012,
+      "family": "producer-churn",
+      "control": "delay-fast-b1-d0.0",
+      "admissible_controls": [
+        "delay-fast-b1-d0.0",
+        "delay-fast-b8-d0.005",
+        "delay-fast-b32-d0.025"
+      ]
+    },
+    {
+      "seed": 150013,
+      "family": "wired-lan",
+      "control": "bdp-b1-d0.0",
+      "admissible_controls": [
+        "delay-fast-b1-d0.0",
+        "aimd-b1-d0.0",
+        "aimd-b8-d0.005",
+        "bdp-b1-d0.0",
+        "bdp-b8-d0.005"
+      ]
+    },
+    {
+      "seed": 150022,
+      "family": "outage-recovery",
+      "control": "aimd-b32-d0.025",
+      "admissible_controls": [
+        "delay-fast-b1-d0.0",
+        "delay-fast-b32-d0.025",
+        "aimd-b32-d0.025",
+        "bdp-b32-d0.025"
+      ]
+    },
+    {
+      "seed": 150023,
+      "family": "bufferbloat",
+      "control": "bdp-b1-d0.0",
+      "admissible_controls": [
+        "delay-fast-b1-d0.0",
+        "delay-fast-b8-d0.005",
+        "aimd-b8-d0.005",
+        "aimd-b32-d0.025",
+        "bdp-b1-d0.0",
+        "bdp-b8-d0.005",
+        "bdp-b32-d0.025"
+      ]
+    },
+    {
+      "seed": 150027,
+      "family": "reverse-congestion",
+      "control": "delay-fast-b1-d0.0",
+      "admissible_controls": [
+        "delay-fast-b1-d0.0"
+      ]
+    }
+  ],
+  "controls": {
+    "delay-fast-b1-d0.0": {
+      "summary": {
+        "verified_goodput": 720099.5555555555,
+        "confirmed_goodput": 718279.1111111111,
+        "image_goodput": 208099.55555555556,
+        "map_goodput": 512000.0,
+        "interactive_miss_rate": 0.1484473352916492,
+        "completion_fraction": 0.9929182649749189,
+        "wire_per_useful_byte": 1.7933707681005837,
+        "wrong": 0,
+        "starved_hosts": 0,
+        "cases": 12,
+        "zero_completed_bulk_hosts": 0,
+        "zero_accepted_bulk_hosts": 0,
+        "accepted_bulk_goodput": 776768.0,
+        "mean_bulk_progress_jain": 0.9931755797675489,
+        "provably_infeasible_completion_cases": 0
+      },
+      "comparison": {
+        "relative_goodput_gain": 0.0,
+        "goodput_difference_ci95": [
+          0.0,
+          0.0
+        ],
+        "miss_difference_ci95": [
+          0.0,
+          0.0
+        ],
+        "guards": {
+          "deadline": true,
+          "wire": true,
+          "integrity": true,
+          "hosts": true,
+          "image": true,
+          "map": true,
+          "confirmation": true,
+          "completion": true,
+          "fairness": true,
+          "strata_progress": true,
+          "strata_verified": true
+        },
+        "win": false,
+        "host_guard_basis": "accepted bulk payload progress; completed-object counts reported separately"
+      }
+    },
+    "delay-fast-b8-d0.005": {
+      "summary": {
+        "verified_goodput": 615537.7777777778,
+        "confirmed_goodput": 615537.7777777778,
+        "image_goodput": 196380.44444444444,
+        "map_goodput": 419157.3333333333,
+        "interactive_miss_rate": 0.1383759966428871,
+        "completion_fraction": 0.9923830250272034,
+        "wire_per_useful_byte": 1.5222535533517214,
+        "wrong": 0,
+        "starved_hosts": 0,
+        "cases": 12,
+        "zero_completed_bulk_hosts": 0,
+        "zero_accepted_bulk_hosts": 0,
+        "accepted_bulk_goodput": 654997.3333333334,
+        "mean_bulk_progress_jain": 0.9974114968123752,
+        "provably_infeasible_completion_cases": 0
+      },
+      "comparison": {
+        "relative_goodput_gain": -0.14520461368304627,
+        "goodput_difference_ci95": [
+          -378550.04444444453,
+          86829.51111111102
+        ],
+        "miss_difference_ci95": [
+          -0.023016653752345795,
+          -0.0009599895805325048
+        ],
+        "guards": {
+          "deadline": true,
+          "wire": true,
+          "integrity": true,
+          "hosts": true,
+          "image": false,
+          "map": false,
+          "confirmation": false,
+          "completion": true,
+          "fairness": true,
+          "strata_progress": false,
+          "strata_verified": false
+        },
+        "win": false,
+        "host_guard_basis": "accepted bulk payload progress; completed-object counts reported separately"
+      }
+    },
+    "delay-fast-b32-d0.025": {
+      "summary": {
+        "verified_goodput": 208213.33333333334,
+        "confirmed_goodput": 208213.33333333334,
+        "image_goodput": 88974.22222222222,
+        "map_goodput": 119239.11111111111,
+        "interactive_miss_rate": 0.14383130507763323,
+        "completion_fraction": 0.9923710711016174,
+        "wire_per_useful_byte": 2.0878754495922984,
+        "wrong": 0,
+        "starved_hosts": 0,
+        "cases": 12,
+        "zero_completed_bulk_hosts": 0,
+        "zero_accepted_bulk_hosts": 0,
+        "accepted_bulk_goodput": 269379.55555555556,
+        "mean_bulk_progress_jain": 0.9960854830181239,
+        "provably_infeasible_completion_cases": 0
+      },
+      "comparison": {
+        "relative_goodput_gain": -0.7108547953863169,
+        "goodput_difference_ci95": [
+          -1040435.2,
+          -140711.8222222224
+        ],
+        "miss_difference_ci95": [
+          -0.014875145496871788,
+          0.00615432098765432
+        ],
+        "guards": {
+          "deadline": false,
+          "wire": false,
+          "integrity": true,
+          "hosts": true,
+          "image": false,
+          "map": false,
+          "confirmation": false,
+          "completion": true,
+          "fairness": true,
+          "strata_progress": false,
+          "strata_verified": false
+        },
+        "win": false,
+        "host_guard_basis": "accepted bulk payload progress; completed-object counts reported separately"
+      }
+    },
+    "aimd-b1-d0.0": {
+      "summary": {
+        "verified_goodput": 910449.7777777778,
+        "confirmed_goodput": 906808.8888888889,
+        "image_goodput": 189553.77777777778,
+        "map_goodput": 720896.0,
+        "interactive_miss_rate": 0.18726395300041965,
+        "completion_fraction": 0.9804897471630499,
+        "wire_per_useful_byte": 1.8387153318481904,
+        "wrong": 0,
+        "starved_hosts": 4,
+        "cases": 12,
+        "zero_completed_bulk_hosts": 4,
+        "zero_accepted_bulk_hosts": 0,
+        "accepted_bulk_goodput": 1010791.1111111111,
+        "mean_bulk_progress_jain": 0.9792442852498892,
+        "provably_infeasible_completion_cases": 0
+      },
+      "comparison": {
+        "relative_goodput_gain": 0.26433875809764573,
+        "goodput_difference_ci95": [
+          -313119.2888888889,
+          985799.111111111
+        ],
+        "miss_difference_ci95": [
+          0.008004398654151115,
+          0.08242552285014766
+        ],
+        "guards": {
+          "deadline": false,
+          "wire": true,
+          "integrity": true,
+          "hosts": true,
+          "image": false,
+          "map": true,
+          "confirmation": true,
+          "completion": false,
+          "fairness": true,
+          "strata_progress": false,
+          "strata_verified": false
+        },
+        "win": false,
+        "host_guard_basis": "accepted bulk payload progress; completed-object counts reported separately"
+      }
+    },
+    "aimd-b8-d0.005": {
+      "summary": {
+        "verified_goodput": 751616.0,
+        "confirmed_goodput": 751502.2222222222,
+        "image_goodput": 175900.44444444444,
+        "map_goodput": 575715.5555555555,
+        "interactive_miss_rate": 0.1844313890054553,
+        "completion_fraction": 0.9753036843690392,
+        "wire_per_useful_byte": 1.5558872944724729,
+        "wrong": 0,
+        "starved_hosts": 3,
+        "cases": 12,
+        "zero_completed_bulk_hosts": 3,
+        "zero_accepted_bulk_hosts": 0,
+        "accepted_bulk_goodput": 832117.3333333334,
+        "mean_bulk_progress_jain": 0.9581753359808819,
+        "provably_infeasible_completion_cases": 0
+      },
+      "comparison": {
+        "relative_goodput_gain": 0.04376678780218057,
+        "goodput_difference_ci95": [
+          -299044.9777777778,
+          497655.4666666661
+        ],
+        "miss_difference_ci95": [
+          0.011054310103154861,
+          0.06976287358690082
+        ],
+        "guards": {
+          "deadline": false,
+          "wire": true,
+          "integrity": true,
+          "hosts": true,
+          "image": false,
+          "map": true,
+          "confirmation": true,
+          "completion": false,
+          "fairness": true,
+          "strata_progress": false,
+          "strata_verified": false
+        },
+        "win": false,
+        "host_guard_basis": "accepted bulk payload progress; completed-object counts reported separately"
+      }
+    },
+    "aimd-b32-d0.025": {
+      "summary": {
+        "verified_goodput": 304014.22222222225,
+        "confirmed_goodput": 304014.22222222225,
+        "image_goodput": 118328.88888888889,
+        "map_goodput": 185685.33333333334,
+        "interactive_miss_rate": 0.19460763743180864,
+        "completion_fraction": 0.976489829295717,
+        "wire_per_useful_byte": 1.8951871723472,
+        "wrong": 0,
+        "starved_hosts": 4,
+        "cases": 12,
+        "zero_completed_bulk_hosts": 4,
+        "zero_accepted_bulk_hosts": 0,
+        "accepted_bulk_goodput": 385713.77777777775,
+        "mean_bulk_progress_jain": 0.9876043958503806,
+        "provably_infeasible_completion_cases": 0
+      },
+      "comparison": {
+        "relative_goodput_gain": -0.5778164006952125,
+        "goodput_difference_ci95": [
+          -861070.2222222222,
+          -101583.64444444457
+        ],
+        "miss_difference_ci95": [
+          0.010018662177985941,
+          0.08625228493448173
+        ],
+        "guards": {
+          "deadline": false,
+          "wire": false,
+          "integrity": true,
+          "hosts": true,
+          "image": false,
+          "map": false,
+          "confirmation": false,
+          "completion": false,
+          "fairness": true,
+          "strata_progress": false,
+          "strata_verified": false
+        },
+        "win": false,
+        "host_guard_basis": "accepted bulk payload progress; completed-object counts reported separately"
+      }
+    },
+    "bdp-b1-d0.0": {
+      "summary": {
+        "verified_goodput": 1348721.7777777778,
+        "confirmed_goodput": 1345080.888888889,
+        "image_goodput": 382065.77777777775,
+        "map_goodput": 966656.0,
+        "interactive_miss_rate": 0.21233738984473352,
+        "completion_fraction": 0.9790483649892304,
+        "wire_per_useful_byte": 1.7739962492058323,
+        "wrong": 0,
+        "starved_hosts": 5,
+        "cases": 12,
+        "zero_completed_bulk_hosts": 5,
+        "zero_accepted_bulk_hosts": 0,
+        "accepted_bulk_goodput": 1440490.6666666667,
+        "mean_bulk_progress_jain": 0.9526124995389368,
+        "provably_infeasible_completion_cases": 0
+      },
+      "comparison": {
+        "relative_goodput_gain": 0.872965713382841,
+        "goodput_difference_ci95": [
+          -313838.93333333335,
+          2045573.6888888867
+        ],
+        "miss_difference_ci95": [
+          0.013690476190476192,
+          0.14248340006345145
+        ],
+        "guards": {
+          "deadline": false,
+          "wire": true,
+          "integrity": true,
+          "hosts": true,
+          "image": true,
+          "map": true,
+          "confirmation": true,
+          "completion": false,
+          "fairness": true,
+          "strata_progress": false,
+          "strata_verified": false
+        },
+        "win": false,
+        "host_guard_basis": "accepted bulk payload progress; completed-object counts reported separately"
+      }
+    },
+    "bdp-b8-d0.005": {
+      "summary": {
+        "verified_goodput": 1193301.3333333333,
+        "confirmed_goodput": 1193301.3333333333,
+        "image_goodput": 368184.8888888889,
+        "map_goodput": 825116.4444444445,
+        "interactive_miss_rate": 0.21286193873268988,
+        "completion_fraction": 0.972501478415139,
+        "wire_per_useful_byte": 1.4515754996502699,
+        "wrong": 0,
+        "starved_hosts": 3,
+        "cases": 12,
+        "zero_completed_bulk_hosts": 3,
+        "zero_accepted_bulk_hosts": 0,
+        "accepted_bulk_goodput": 1276540.4444444445,
+        "mean_bulk_progress_jain": 0.9646767564898905,
+        "provably_infeasible_completion_cases": 0
+      },
+      "comparison": {
+        "relative_goodput_gain": 0.6571338284089114,
+        "goodput_difference_ci95": [
+          -281275.7333333333,
+          1551021.511111108
+        ],
+        "miss_difference_ci95": [
+          0.006817300916138128,
+          0.15602194990508927
+        ],
+        "guards": {
+          "deadline": false,
+          "wire": true,
+          "integrity": true,
+          "hosts": true,
+          "image": true,
+          "map": true,
+          "confirmation": true,
+          "completion": false,
+          "fairness": true,
+          "strata_progress": false,
+          "strata_verified": false
+        },
+        "win": false,
+        "host_guard_basis": "accepted bulk payload progress; completed-object counts reported separately"
+      }
+    },
+    "bdp-b32-d0.025": {
+      "summary": {
+        "verified_goodput": 597333.3333333334,
+        "confirmed_goodput": 597333.3333333334,
+        "image_goodput": 289678.22222222225,
+        "map_goodput": 307655.1111111111,
+        "interactive_miss_rate": 0.20898027696181284,
+        "completion_fraction": 0.9797775530839231,
+        "wire_per_useful_byte": 1.5985130208333334,
+        "wrong": 0,
+        "starved_hosts": 4,
+        "cases": 12,
+        "zero_completed_bulk_hosts": 4,
+        "zero_accepted_bulk_hosts": 0,
+        "accepted_bulk_goodput": 685038.2222222222,
+        "mean_bulk_progress_jain": 0.9782678707882061,
+        "provably_infeasible_completion_cases": 0
+      },
+      "comparison": {
+        "relative_goodput_gain": -0.17048506873123703,
+        "goodput_difference_ci95": [
+          -518724.26666666666,
+          396640.7111111111
+        ],
+        "miss_difference_ci95": [
+          0.009787124689233125,
+          0.12840908122142677
+        ],
+        "guards": {
+          "deadline": false,
+          "wire": true,
+          "integrity": true,
+          "hosts": true,
+          "image": true,
+          "map": false,
+          "confirmation": false,
+          "completion": false,
+          "fairness": true,
+          "strata_progress": false,
+          "strata_verified": false
+        },
+        "win": false,
+        "host_guard_basis": "accepted bulk payload progress; completed-object counts reported separately"
+      }
+    }
+  },
+  "role_summary": {
+    "sender-only": {
+      "summary": {
+        "verified_goodput": 857201.7777777778,
+        "confirmed_goodput": 856974.2222222222,
+        "image_goodput": 481735.1111111111,
+        "map_goodput": 375466.6666666667,
+        "interactive_miss_rate": 0.10078553431154587,
+        "completion_fraction": 0.9902391410444119,
+        "wire_per_useful_byte": 1.727434997315555,
+        "wrong": 0,
+        "starved_hosts": 8,
+        "cases": 24,
+        "zero_completed_bulk_hosts": 8,
+        "zero_accepted_bulk_hosts": 0,
+        "accepted_bulk_goodput": 913404.4444444445,
+        "mean_bulk_progress_jain": 0.9915028764914747,
+        "provably_infeasible_completion_cases": 1
+      },
+      "comparison": {
+        "relative_goodput_gain": 0.002261540508181392,
+        "goodput_difference_ci95": [
+          -3868.4444444443825,
+          7624.533333333452
+        ],
+        "miss_difference_ci95": [
+          -0.010891310483759397,
+          0.0012923899614304436
+        ],
+        "guards": {
+          "deadline": true,
+          "wire": true,
+          "integrity": true,
+          "hosts": true,
+          "image": true,
+          "map": true,
+          "confirmation": true,
+          "completion": true,
+          "fairness": true,
+          "strata_progress": true,
+          "strata_verified": true
+        },
+        "win": false,
+        "host_guard_basis": "accepted bulk payload progress; completed-object counts reported separately"
+      },
+      "exactly_matches_reference_records": false,
+      "exactly_matches_joint_records": true
+    },
+    "receiver-only": {
+      "summary": {
+        "verified_goodput": 855267.5555555555,
+        "confirmed_goodput": 855267.5555555555,
+        "image_goodput": 477980.44444444444,
+        "map_goodput": 377287.1111111111,
+        "interactive_miss_rate": 0.10478731287979842,
+        "completion_fraction": 0.9904645476772617,
+        "wire_per_useful_byte": 1.728445187327994,
+        "wrong": 0,
+        "starved_hosts": 8,
+        "cases": 24,
+        "zero_completed_bulk_hosts": 8,
+        "zero_accepted_bulk_hosts": 0,
+        "accepted_bulk_goodput": 910952.8888888889,
+        "mean_bulk_progress_jain": 0.9867429052284938,
+        "provably_infeasible_completion_cases": 1
+      },
+      "comparison": {
+        "relative_goodput_gain": 0.0,
+        "goodput_difference_ci95": [
+          0.0,
+          0.0
+        ],
+        "miss_difference_ci95": [
+          0.0,
+          0.0
+        ],
+        "guards": {
+          "deadline": true,
+          "wire": true,
+          "integrity": true,
+          "hosts": true,
+          "image": true,
+          "map": true,
+          "confirmation": true,
+          "completion": true,
+          "fairness": true,
+          "strata_progress": true,
+          "strata_verified": true
+        },
+        "win": false,
+        "host_guard_basis": "accepted bulk payload progress; completed-object counts reported separately"
+      },
+      "exactly_matches_reference_records": true,
+      "exactly_matches_joint_records": false
+    }
+  },
+  "action_summary": [
+    {
+      "seed": 134000,
+      "active_receiver_decisions": 747,
+      "applied_receiver_choices": {
+        "0": 747
+      },
+      "mean_receiver_probabilities": [
+        0.5314740538597107,
+        0.0,
+        0.02118462696671486,
+        0.021952327340841293,
+        0.022343657910823822,
+        0.02204045094549656,
+        0.021365026012063026,
+        0.023238392546772957,
+        0.024409538134932518,
+        0.023859789595007896,
+        0.02393055334687233,
+        0.0236915685236454,
+        0.024873772636055946,
+        0.02544626034796238,
+        0.022370798513293266,
+        0.024349162355065346,
+        0.02276654914021492,
+        0.023429693654179573,
+        0.024530326947569847,
+        0.025126123800873756,
+        0.024614591151475906,
+        0.02300269901752472
+      ],
+      "mean_receiver_entropy": 2.093763222496513,
+      "control_effects": {
+        "setting_changes": 2,
+        "changes_with_pending": 0,
+        "pending_timer_replacements": 0
+      },
+      "exactly_matches_standard_joint_record": true
+    },
+    {
+      "seed": 134001,
+      "active_receiver_decisions": 5992,
+      "applied_receiver_choices": {
+        "0": 5992
+      },
+      "mean_receiver_probabilities": [
+        0.5312129259109497,
+        0.0,
+        0.021215947344899178,
+        0.021892257034778595,
+        0.0223012063652277,
+        0.021841390058398247,
+        0.021331824362277985,
+        0.023202084004878998,
+        0.024550283327698708,
+        0.023887142539024353,
+        0.02385927550494671,
+        0.023705391213297844,
+        0.024941690266132355,
+        0.025591790676116943,
+        0.022541657090187073,
+        0.024417169392108917,
+        0.022662408649921417,
+        0.02333211526274681,
+        0.024487687274813652,
+        0.02514665015041828,
+        0.02482079155743122,
+        0.023058783262968063
+      ],
+      "mean_receiver_entropy": 2.0947158583334198,
+      "control_effects": {
+        "setting_changes": 8,
+        "changes_with_pending": 0,
+        "pending_timer_replacements": 0
+      },
+      "exactly_matches_standard_joint_record": true
+    },
+    {
+      "seed": 134002,
+      "active_receiver_decisions": 2765,
+      "applied_receiver_choices": {
+        "0": 2765
+      },
+      "mean_receiver_probabilities": [
+        0.5190224647521973,
+        0.0,
+        0.022597920149564743,
+        0.022754352539777756,
+        0.023190133273601532,
+        0.022418223321437836,
+        0.022542178630828857,
+        0.023802468553185463,
+        0.025101933628320694,
+        0.02430986426770687,
+        0.024117225781083107,
+        0.02423245832324028,
+        0.025201957672834396,
+        0.025954140350222588,
+        0.02373557537794113,
+        0.024777259677648544,
+        0.023153526708483696,
+        0.02382849156856537,
+        0.02455553412437439,
+        0.025161266326904297,
+        0.025519894436001778,
+        0.02402307838201523
+      ],
+      "mean_receiver_entropy": 2.1317079411277287,
+      "control_effects": {
+        "setting_changes": 8,
+        "changes_with_pending": 0,
+        "pending_timer_replacements": 0
+      },
+      "exactly_matches_standard_joint_record": true
+    },
+    {
+      "seed": 134003,
+      "active_receiver_decisions": 5173,
+      "applied_receiver_choices": {
+        "0": 5173
+      },
+      "mean_receiver_probabilities": [
+        0.5061544179916382,
+        0.0,
+        0.024025285616517067,
+        0.023623280227184296,
+        0.02409856952726841,
+        0.02288217842578888,
+        0.023758281022310257,
+        0.024340849369764328,
+        0.025778518989682198,
+        0.02481876313686371,
+        0.02439047209918499,
+        0.02475707419216633,
+        0.02550552971661091,
+        0.026475824415683746,
+        0.025082973763346672,
+        0.02520705573260784,
+        0.023590002208948135,
+        0.02424340881407261,
+        0.024619709700345993,
+        0.025218486785888672,
+        0.026359084993600845,
+        0.02506992779672146
+      ],
+      "mean_receiver_entropy": 2.1708210838295012,
+      "control_effects": {
+        "setting_changes": 8,
+        "changes_with_pending": 0,
+        "pending_timer_replacements": 0
+      },
+      "exactly_matches_standard_joint_record": true
+    }
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "started_utc": "2026-10-23T23:51:28.792089+00:00",
+  "kind": "joint learning and validation only",
+  "training": {
+    "profile": "goodput-v2",
+    "teacher_rate": "delay",
+    "teacher_initial_rate": 512000.0,
+    "teacher_batch": 16,
+    "teacher_delay": 0.025,
+    "paired_teacher": true,
+    "teacher_prior": 0.9,
+    "gae_lambda": 0.98,
+    "gpu_memory_fraction": 0.15,
+    "decisions": 1000000,
+    "environments": 2,
+    "rollout": 64,
+    "epochs": 3,
+    "minibatch": 1024,
+    "seed": 42,
+    "device": "cpu",
+    "learning_rate": 0.0001,
+    "checkpoint_every": 100000,
+    "production_seconds": 6,
+    "drain_seconds": 2,
+    "easy_fraction": 0.1,
+    "learn_sender": true,
+    "learn_receiver": true
+  },
+  "model": {
+    "history": 16,
+    "width": 32,
+    "layers": 1,
+    "heads": 4
+  },
+  "reference": "delay-512000-ack15"
+}

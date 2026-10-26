@@ -188,6 +188,15 @@ class JointTransportEnv:
         self.horizon=self.workload.production_seconds+self.workload.drain_seconds
         self.count=2*self.workload.clients
 
+    rate_limit=RATE_MAX
+    window_limit=WINDOW_MAX
+
+    def on_receiver_control(self,index):pass
+    def on_accepted_payload(self,index,mid,traffic_class,size):pass
+    def on_verified_delivery(self,index,mid,message):pass
+    def on_confirmed_delivery(self,index,mid,message):pass
+    def _application_event(self,*args):raise ValueError("unsupported application event")
+
     def reset(self,*,seed=0):
         self.seed=seed;self.now=0.;self.sequence=0;self.events=[];self.next_message=1
         self.identity_rng=random.Random(seed);self.streams=[random.Random(seed*2+1),random.Random(seed*2+2)]
@@ -402,7 +411,8 @@ class JointTransportEnv:
                         peer=s.messages[other].sender
                         peer.srtt,peer.rttvar,peer.min_rtt=s.srtt,s.rttvar,s.min_rtt
             self._release(s,mid)
-            if m.sender.complete:s.live.discard(mid)
+            if m.sender.complete and mid in s.live:
+                s.live.discard(mid);self.on_confirmed_delivery(index,mid,m)
             self._wake_at(index)
         else:
             if packet.kind!=DATA:return
@@ -422,6 +432,7 @@ class JointTransportEnv:
             s.arrivals+=1;s.duplicates+=before==r.received_bytes;s.reordered+=was_reordered
             s.previous_offset=packet.offset;s.last_gap=self.now-s.last_arrival if s.last_arrival is not None else 0.;s.last_arrival=self.now
             delta=r.received_bytes-before;s.unique+=delta
+            if delta:self.on_accepted_payload(index,mid,cls,delta)
             if cls in ('image','map'):self.reward_counts[cls]+=delta
             if r.complete and not was_complete:
                 payload=r.reconstruct()
@@ -429,6 +440,7 @@ class JointTransportEnv:
                 expected=s.messages[mid].message.payload
                 if payload!=expected:raise AssertionError('corrupt application delivery')
                 m=s.messages[mid];m.delivered=self.now
+                self.on_verified_delivery(index,mid,m)
                 if m.message.deadline_ms is not None and self.now-m.offered<=m.message.deadline_ms/1000+1e-9:
                     if m.deadline_counted:self.reward_counts['missed']-=1;m.deadline_counted=False
                     self.reward_counts['on_time']+=1
@@ -457,7 +469,7 @@ class JointTransportEnv:
     def _advance(self,target):
         while self.events and self.events[0][0]<=target+1e-10:
             time,_,kind,args=heapq.heappop(self.events);self.now=time
-            {'offer':self._offer,'wake':self._wake,'deliver':self._deliver,'flush':self._flush,'deadline':self._deadline}[kind](*args)
+            {'offer':self._offer,'wake':self._wake,'deliver':self._deliver,'flush':self._flush,'deadline':self._deadline,'application':self._application_event}[kind](*args)
             self.processed_events+=1
         self.now=target
 
@@ -483,6 +495,14 @@ class JointTransportEnv:
             if s.last_feedback is not None:
                 target=min(WINDOW_MAX,max(16384,2*s.peak_ack_rate*s.min_rtt+8192))
                 a[1]=np.clip(math.log(target/s.window)/.2,-1,1)
+        if rate_control=='delay' and s.last_feedback is not None:
+            # Delay-target baseline inspired by Copa's rate/queue-delay relation;
+            # not a reproduction of Copa's complete Internet coexistence logic.
+            qdelay=max(.001,s.srtt-s.min_rtt)
+            target=min(self.rate_limit,max(RATE_MIN,self.network.payload_size/(.5*qdelay)))
+            a[0]=np.clip(math.log(target/s.rate)/.2,-1,1)
+            window=min(self.window_limit,max(WINDOW_MIN,1.5*target*s.min_rtt+2*self.network.payload_size))
+            a[1]=np.clip(math.log(window/s.window)/.2,-1,1)
         if rate_control=='deadline':
             # Endpoint-local arrival-rate estimate; no router or link capacity.
             measured=s.acked/max(self.now,max(s.min_rtt,.02))
@@ -501,8 +521,8 @@ class JointTransportEnv:
         for i,s in enumerate(self.sessions):
             base=self.baseline(i,s.rate_control)
             delta=np.clip(base+2*np.clip(actions[i,:2],-1,1),-1,1)
-            s.rate=float(np.clip(s.rate*math.exp(.2*delta[0]),RATE_MIN,RATE_MAX))
-            s.window=float(np.clip(s.window*math.exp(.2*delta[1]),WINDOW_MIN,WINDOW_MAX))
+            s.rate=float(np.clip(s.rate*math.exp(.2*delta[0]),RATE_MIN,self.rate_limit))
+            s.window=float(np.clip(s.window*math.exp(.2*delta[1]),WINDOW_MIN,self.window_limit))
             s.previous_action=tuple(delta)
             if actions[i,2]!=int(actions[i,2]):raise ValueError("scheduling choice must be an integer")
             choice=int(actions[i,2]);candidates=self.candidates(s)
@@ -510,6 +530,7 @@ class JointTransportEnv:
             s.preferred=candidates[choice-1][0] if choice else None
             if rx[i]:s.batch,s.delay=ACK_ACTIONS[int(rx[i])-1];s.ack_mode='constant'
             else:s.batch,s.delay,s.ack_mode=s.baseline_batch,s.baseline_delay,s.baseline_ack_mode
+            self.on_receiver_control(i)
             s.before=(s.acked,s.wire,s.unique,s.lost);self._wake_at(i)
         self._advance(min(self.horizon,self.now+self.network.control_interval))
         d={k:self.reward_counts[k]-before[k] for k in before};w=self.workload

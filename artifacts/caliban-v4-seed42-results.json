@@ -1,0 +1,414 @@
+{
+  "status": "seed42 validation complete; seeds43/44 unfinished",
+  "checkpoints": {
+    "initial.pt": {
+      "decisions": 0,
+      "summary": {
+        "verified_goodput": 721294.2222222222,
+        "confirmed_goodput": 721294.2222222222,
+        "image_goodput": 418417.77777777775,
+        "map_goodput": 302876.44444444444,
+        "interactive_miss_rate": 0.21940191141712054,
+        "completion_fraction": 0.9857018068134799,
+        "wire_per_useful_byte": 1.7878992264368,
+        "wrong": 0,
+        "starved_hosts": 9,
+        "cases": 24
+      },
+      "comparison": {
+        "relative_goodput_gain": 0.0,
+        "goodput_difference_ci95": [
+          0.0,
+          0.0
+        ],
+        "miss_difference_ci95": [
+          0.0,
+          0.0
+        ],
+        "guards": {
+          "deadline": true,
+          "wire": true,
+          "integrity": true,
+          "hosts": false,
+          "image": true,
+          "map": true,
+          "confirmation": true,
+          "completion": true
+        },
+        "win": false
+      }
+    },
+    "d000502228.pt": {
+      "decisions": 502228,
+      "summary": {
+        "verified_goodput": 713955.5555555555,
+        "confirmed_goodput": 713500.4444444445,
+        "image_goodput": 421774.22222222225,
+        "map_goodput": 292181.3333333333,
+        "interactive_miss_rate": 0.2241290720378173,
+        "completion_fraction": 0.9838946499036432,
+        "wire_per_useful_byte": 1.784841614985371,
+        "wrong": 0,
+        "starved_hosts": 9,
+        "cases": 24
+      },
+      "comparison": {
+        "relative_goodput_gain": -0.01017430396718999,
+        "goodput_difference_ci95": [
+          -14563.555555555504,
+          -795.0222222220522
+        ],
+        "miss_difference_ci95": [
+          -0.01374452655720126,
+          0.01941555258251786
+        ],
+        "guards": {
+          "deadline": false,
+          "wire": true,
+          "integrity": true,
+          "hosts": false,
+          "image": true,
+          "map": true,
+          "confirmation": true,
+          "completion": true
+        },
+        "win": false
+      }
+    },
+    "d001004289.pt": {
+      "decisions": 1004289,
+      "summary": {
+        "verified_goodput": 718336.0,
+        "confirmed_goodput": 718336.0,
+        "image_goodput": 421148.44444444444,
+        "map_goodput": 297187.55555555556,
+        "interactive_miss_rate": 0.22176549172746893,
+        "completion_fraction": 0.9855946244477173,
+        "wire_per_useful_byte": 1.791012275244454,
+        "wrong": 0,
+        "starved_hosts": 9,
+        "cases": 24
+      },
+      "comparison": {
+        "relative_goodput_gain": -0.004101269816231601,
+        "goodput_difference_ci95": [
+          -12060.444444444383,
+          6144.0
+        ],
+        "miss_difference_ci95": [
+          -0.009401482227569152,
+          0.01235734301274234
+        ],
+        "guards": {
+          "deadline": false,
+          "wire": true,
+          "integrity": true,
+          "hosts": false,
+          "image": true,
+          "map": true,
+          "confirmation": true,
+          "completion": true
+        },
+        "win": false
+      }
+    },
+    "d001505674.pt": {
+      "decisions": 1505674,
+      "summary": {
+        "verified_goodput": 715832.8888888889,
+        "confirmed_goodput": 715832.8888888889,
+        "image_goodput": 426154.6666666667,
+        "map_goodput": 289678.22222222225,
+        "interactive_miss_rate": 0.23378892200184975,
+        "completion_fraction": 0.9855152181884855,
+        "wire_per_useful_byte": 1.7891062136476297,
+        "wrong": 0,
+        "starved_hosts": 9,
+        "cases": 24
+      },
+      "comparison": {
+        "relative_goodput_gain": -0.007571575045350665,
+        "goodput_difference_ci95": [
+          -13084.444444444496,
+          1763.5555555555634
+        ],
+        "miss_difference_ci95": [
+          0.0002475395619546156,
+          0.033007714874538144
+        ],
+        "guards": {
+          "deadline": false,
+          "wire": true,
+          "integrity": true,
+          "hosts": false,
+          "image": true,
+          "map": true,
+          "confirmation": true,
+          "completion": true
+        },
+        "win": false
+      }
+    },
+    "d002008639.pt": {
+      "decisions": 2008639,
+      "summary": {
+        "verified_goodput": 734321.7777777778,
+        "confirmed_goodput": 733411.5555555555,
+        "image_goodput": 427349.3333333333,
+        "map_goodput": 306972.44444444444,
+        "interactive_miss_rate": 0.2282910286712568,
+        "completion_fraction": 0.9858175622783995,
+        "wire_per_useful_byte": 1.7795653152584032,
+        "wrong": 0,
+        "starved_hosts": 9,
+        "cases": 24
+      },
+      "comparison": {
+        "relative_goodput_gain": 0.0180613613060967,
+        "goodput_difference_ci95": [
+          1079.4666666666542,
+          26852.97777777794
+        ],
+        "miss_difference_ci95": [
+          -0.0016278478908212377,
+          0.020520829235928226
+        ],
+        "guards": {
+          "deadline": false,
+          "wire": true,
+          "integrity": true,
+          "hosts": false,
+          "image": true,
+          "map": true,
+          "confirmation": true,
+          "completion": true
+        },
+        "win": false
+      }
+    },
+    "d002509210.pt": {
+      "decisions": 2509210,
+      "summary": {
+        "verified_goodput": 741660.4444444445,
+        "confirmed_goodput": 739612.4444444445,
+        "image_goodput": 429454.22222222225,
+        "map_goodput": 312206.22222222225,
+        "interactive_miss_rate": 0.21868256088788407,
+        "completion_fraction": 0.9859896524884392,
+        "wire_per_useful_byte": 1.7726718662358816,
+        "wrong": 0,
+        "starved_hosts": 9,
+        "cases": 24
+      },
+      "comparison": {
+        "relative_goodput_gain": 0.02823566527328647,
+        "goodput_difference_ci95": [
+          -913.0666666666917,
+          47786.666666666744
+        ],
+        "miss_difference_ci95": [
+          -0.012342344212899382,
+          0.009968898406448084
+        ],
+        "guards": {
+          "deadline": false,
+          "wire": true,
+          "integrity": true,
+          "hosts": false,
+          "image": true,
+          "map": true,
+          "confirmation": true,
+          "completion": true
+        },
+        "win": false
+      }
+    },
+    "d003009960.pt": {
+      "decisions": 3009960,
+      "summary": {
+        "verified_goodput": 710940.4444444445,
+        "confirmed_goodput": 708664.8888888889,
+        "image_goodput": 418986.6666666667,
+        "map_goodput": 291953.77777777775,
+        "interactive_miss_rate": 0.22782858904531908,
+        "completion_fraction": 0.9856263776634827,
+        "wire_per_useful_byte": 1.7861949172488898,
+        "wrong": 0,
+        "starved_hosts": 9,
+        "cases": 24
+      },
+      "comparison": {
+        "relative_goodput_gain": -0.014354444356810436,
+        "goodput_difference_ci95": [
+          -25144.888888888763,
+          1251.5555555555038
+        ],
+        "miss_difference_ci95": [
+          -0.0013647350854269196,
+          0.019450758180650323
+        ],
+        "guards": {
+          "deadline": false,
+          "wire": true,
+          "integrity": true,
+          "hosts": false,
+          "image": true,
+          "map": true,
+          "confirmation": true,
+          "completion": true
+        },
+        "win": false
+      }
+    },
+    "d003510105.pt": {
+      "decisions": 3510105,
+      "summary": {
+        "verified_goodput": 690744.8888888889,
+        "confirmed_goodput": 690744.8888888889,
+        "image_goodput": 410168.8888888889,
+        "map_goodput": 280576.0,
+        "interactive_miss_rate": 0.22551639091563047,
+        "completion_fraction": 0.9861213574326817,
+        "wire_per_useful_byte": 1.8084693321814904,
+        "wrong": 0,
+        "starved_hosts": 9,
+        "cases": 24
+      },
+      "comparison": {
+        "relative_goodput_gain": -0.042353497909929816,
+        "goodput_difference_ci95": [
+          -54788.26666666666,
+          -10350.933333333352
+        ],
+        "miss_difference_ci95": [
+          -0.0033552728786315476,
+          0.01612588494534221
+        ],
+        "guards": {
+          "deadline": false,
+          "wire": true,
+          "integrity": true,
+          "hosts": false,
+          "image": true,
+          "map": false,
+          "confirmation": true,
+          "completion": true
+        },
+        "win": false
+      }
+    },
+    "d004010517.pt": {
+      "decisions": 4010517,
+      "summary": {
+        "verified_goodput": 697400.8888888889,
+        "confirmed_goodput": 697400.8888888889,
+        "image_goodput": 524003.55555555556,
+        "map_goodput": 173397.33333333334,
+        "interactive_miss_rate": 0.22438598294111603,
+        "completion_fraction": 0.9863770083729351,
+        "wire_per_useful_byte": 1.8071093893389552,
+        "wrong": 0,
+        "starved_hosts": 9,
+        "cases": 24
+      },
+      "comparison": {
+        "relative_goodput_gain": -0.03312564082340885,
+        "goodput_difference_ci95": [
+          -47503.64444444447,
+          -4549.68888888891
+        ],
+        "miss_difference_ci95": [
+          -0.006774266105846957,
+          0.01694383531678851
+        ],
+        "guards": {
+          "deadline": false,
+          "wire": true,
+          "integrity": true,
+          "hosts": false,
+          "image": true,
+          "map": false,
+          "confirmation": true,
+          "completion": true
+        },
+        "win": false
+      }
+    },
+    "d004511117.pt": {
+      "decisions": 4511117,
+      "summary": {
+        "verified_goodput": 696263.1111111111,
+        "confirmed_goodput": 696263.1111111111,
+        "image_goodput": 529692.4444444445,
+        "map_goodput": 166570.66666666666,
+        "interactive_miss_rate": 0.21991573322371802,
+        "completion_fraction": 0.9862414290869722,
+        "wire_per_useful_byte": 1.7985651337425443,
+        "wrong": 0,
+        "starved_hosts": 9,
+        "cases": 24
+      },
+      "comparison": {
+        "relative_goodput_gain": -0.034703052291190195,
+        "goodput_difference_ci95": [
+          -47731.200000000084,
+          -5118.577777777786
+        ],
+        "miss_difference_ci95": [
+          -0.013816185515863515,
+          0.012422217204498587
+        ],
+        "guards": {
+          "deadline": false,
+          "wire": true,
+          "integrity": true,
+          "hosts": false,
+          "image": true,
+          "map": false,
+          "confirmation": true,
+          "completion": true
+        },
+        "win": false
+      }
+    },
+    "final.pt": {
+      "decisions": 5000031,
+      "summary": {
+        "verified_goodput": 701724.4444444445,
+        "confirmed_goodput": 701667.5555555555,
+        "image_goodput": 485546.6666666667,
+        "map_goodput": 216177.77777777778,
+        "interactive_miss_rate": 0.22520809783167198,
+        "completion_fraction": 0.9856922238372093,
+        "wire_per_useful_byte": 1.8025170532276045,
+        "wrong": 0,
+        "starved_hosts": 10,
+        "cases": 24
+      },
+      "comparison": {
+        "relative_goodput_gain": -0.02713147724583953,
+        "goodput_difference_ci95": [
+          -40732.444444444496,
+          -2672.3555555555954
+        ],
+        "miss_difference_ci95": [
+          -0.006072781924464385,
+          0.01817967127490014
+        ],
+        "guards": {
+          "deadline": false,
+          "wire": true,
+          "integrity": true,
+          "hosts": false,
+          "image": true,
+          "map": false,
+          "confirmation": true,
+          "completion": true
+        },
+        "win": false
+      }
+    }
+  },
+  "selection": "d002509210.pt",
+  "reserved_tests": "unopened"
+}

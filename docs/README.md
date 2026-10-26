@@ -13,6 +13,15 @@
 | [Joint-v1 results](experiments/joint-v1.md) | Completed held-out/OOD comparisons, negative learning result, checkpoints and limitations |
 | [Joint network experiment](joint-network-brain.md) | Persistent sessions, mixed workloads, joint training and acceptance criteria |
 | [Maximum throughput plan](goodput-v2-plan.md) | Backlogged bulk traffic, verified goodput, and deadline-constrained optimization |
+| [Improvement plan, October 26](research/improvement-plan-2026-10-26.md) | Literature update, diagnostic gates, controller selection and robot freshness tasks |
+| [Learning opportunities](research/learning-opportunities.md) | Literature, history-dependent challenges, stronger baselines and fairness |
+| [Goodput-v2 pilots](experiments/goodput-v2.md) | Calibration, bounded CPU pilot, scoring and resource isolation |
+| [V3 distribution and retraining](experiments/distribution-v3.md) | Coverage matrix, realistic mechanisms and gaps, control-sensitivity audit and receiver diagnosis |
+| [Caliban v4 parallel training](experiments/caliban-v4.md) | Deployment coverage, review corrections, remote limits, scaling and recovery |
+| [Selector learnability](experiments/selector-learning-v1.md) | Completed tiny fits, offline comparison and negative executed validation |
+| [Selector coverage](experiments/selector-coverage-v1.md) | Independent cases and causal probes on Caliban; data collection, not a learned win |
+| [V6 control diagnosis](experiments/reactive-diagnostics-v6.md) | Role ablations, applied actions, separate-development control headroom and configuration erratum |
+| [V5 learning-signal diagnosis](experiments/learning-signal-v5.md) | Per-family failures, infeasible completion guard, progress shaping and controlled pilot |
 | [Development](development.md) | Implementation map, test coverage, source export, paper build |
 
 Command examples assume the curl installer has added `trace-transport` to PATH.

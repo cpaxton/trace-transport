@@ -1,0 +1,168 @@
+{
+  "version": "distribution-v3-audit-v1",
+  "started_utc": "2026-10-24T13:06:39.132053+00:00",
+  "domain": {
+    "version": "goodput-domain-v3.0",
+    "reward": "verified-goodput-v3.0",
+    "families": [
+      "steady",
+      "wired-lan",
+      "wifi-contention",
+      "mobile-fade",
+      "burst-interference",
+      "capacity-opportunities",
+      "propagation-step",
+      "reverse-congestion",
+      "loss-cause-switch",
+      "outage-recovery",
+      "producer-churn",
+      "bufferbloat"
+    ],
+    "family_weights": "uniform synthetic strata, not deployment prevalence",
+    "clients": [
+      1,
+      4
+    ],
+    "forward_bps": [
+      500000,
+      80000000
+    ],
+    "rtt_seconds": [
+      0.002,
+      0.12
+    ],
+    "rate_limit_bytes_per_second": 16000000,
+    "window_limit_bytes": 2097152,
+    "history_scope": "local endpoint observations only",
+    "limitations": [
+      "not calibrated to devices",
+      "FIFO/drop-tail only",
+      "no independent TCP competitors",
+      "no RF/MAC or OS inference costs"
+    ]
+  },
+  "seeds": {
+    "steady": [
+      90012,
+      90019
+    ],
+    "wired-lan": [
+      90009,
+      90027
+    ],
+    "wifi-contention": [
+      90074,
+      90087
+    ],
+    "mobile-fade": [
+      90026,
+      90035
+    ],
+    "burst-interference": [
+      90000,
+      90038
+    ],
+    "capacity-opportunities": [
+      90032,
+      90033
+    ],
+    "propagation-step": [
+      90003,
+      90006
+    ],
+    "reverse-congestion": [
+      90007,
+      90008
+    ],
+    "loss-cause-switch": [
+      90041,
+      90062
+    ],
+    "outage-recovery": [
+      90014,
+      90023
+    ],
+    "producer-churn": [
+      90001,
+      90002
+    ],
+    "bufferbloat": [
+      90004,
+      90011
+    ]
+  },
+  "controls": {
+    "delay-fast": {
+      "rate": "delay-fast",
+      "scheduler": "edf",
+      "feedback": "budgeted",
+      "batch": 16,
+      "delay": 0.025
+    },
+    "delay-ack1": {
+      "rate": "delay",
+      "scheduler": "edf",
+      "feedback": "budgeted",
+      "batch": 1,
+      "delay": 0.0
+    },
+    "delay-ack4": {
+      "rate": "delay",
+      "scheduler": "edf",
+      "feedback": "budgeted",
+      "batch": 4,
+      "delay": 0.005
+    },
+    "delay-ack16": {
+      "rate": "delay",
+      "scheduler": "edf",
+      "feedback": "budgeted",
+      "batch": 16,
+      "delay": 0.025
+    },
+    "delay-ack32": {
+      "rate": "delay",
+      "scheduler": "edf",
+      "feedback": "budgeted",
+      "batch": 32,
+      "delay": 0.1
+    },
+    "delay-drr": {
+      "rate": "delay",
+      "scheduler": "drr",
+      "feedback": "budgeted",
+      "batch": 16,
+      "delay": 0.025
+    },
+    "aimd": {
+      "rate": "aimd",
+      "scheduler": "edf",
+      "feedback": "budgeted",
+      "batch": 16,
+      "delay": 0.025
+    },
+    "bdp": {
+      "rate": "bdp",
+      "scheduler": "edf",
+      "feedback": "budgeted",
+      "batch": 16,
+      "delay": 0.025
+    },
+    "fixed": {
+      "rate": "fixed",
+      "scheduler": "edf",
+      "feedback": "budgeted",
+      "batch": 16,
+      "delay": 0.025
+    }
+  },
+  "production": 6.0,
+  "drain": 2.0,
+  "source_sha256": {
+    "goodput_distribution.py": "dd8342c862b5c1a9b1ac1ec6d3cc6670c714414ebb2dff0162d193e3a0bb1c50",
+    "goodput.py": "b1c18f9088abd3ce2ee9ef16c3b5571948c657dff1e435d90d87e091989edd9c",
+    "joint_session.py": "06419aa3ed80b6ff970c728489a5a91cc2d46ef4b004214f710fa26e0595d20d",
+    "joint_workers.py": "5a2be87d79ffcd5b32eea45a874a8c05404bb2ae103c2e790d307dfb8cf73ab6"
+  },
+  "purpose": "synthetic coverage and legal-control sensitivity, not training or reserved tests"
+}
