@@ -221,9 +221,48 @@ B/s; misses 10.23% / 10.10% / 9.97% versus 9.80%. Zero wrong deliveries.
 [Results](../../artifacts/reactive-v6-stochastic-results.json),
 [plan](../../artifacts/reactive-v6-stochastic-plan.json). No selection/acceptance claim.
 
-Selector coverage v1 — **running, data collection only**, actual start 2026-10-26
-UTC; end pending. [Plan](../../artifacts/selector-coverage-v1-plan.json),
+Selector coverage v1 — **completed, data collection only**, actual start/end 2026-10-26 UTC; end 14:49:22. [Plan](../../artifacts/selector-coverage-v1-plan.json),
 [method](selector-coverage-v1.md). Caliban, frozen separate source: 48 development
 and 24 new validation cases, 648 full control trials plus 72 causal local probes.
-No learned selector or reserved-test result yet. Bounded six-core / 8 GiB service,
+Collection complete; [outcomes](../../artifacts/selector-coverage-v1-results.json) and [curated synthetic dataset](../../artifacts/selector-coverage-v1-data.zip) published. No learned transport or reserved-test result. Bounded six-core / 8 GiB service,
 six-hour cap; old v4 study remains stopped.
+
+
+Selector tiny fit v1 — **completed, training-only sanity check**, actual start/end
+2026-10-26 14:48:46–14:48:54 UTC. Four distinct development targets, 400 updates:
+all four architectures fit all four examples. Not an RL or generalization result.
+[Results](../../artifacts/selector-tiny-fit-v1-results.json).
+
+Selector offline comparison v1 — **completed, negative generalization result**,
+actual start/end 2026-10-26 14:52:28–14:53:29 UTC. Four model types x three seeds,
+400 fixed full-batch updates each; all fit development labels at 100%, validation
+target accuracy 45.8–58.3% versus constant-teacher 75%. No history/transformer
+advantage established; 4–8 inadmissible choices per model on 24 cases.
+[Method](selector-learning-v1.md), [results](../../artifacts/selector-learning-v1-results.json),
+[plan](../../artifacts/selector-learning-v1-plan.json). Candidate lookups are not
+executed policy results. Strict finite-control hindsight gain is 47.2% development
+versus 4.08% validation, limiting the earlier 12-case headroom claim.
+
+Selector executed validation v1 — **running**, actual start 2026-10-26 UTC; end
+pending. [Plan](../../artifacts/selector-execute-v1-plan.json),
+[method](selector-learning-v1.md#executed-validation-running). All 12 fixed models
+and a simple rule; endpoint-local probe-then-select decisions, retained network
+state, probe traffic charged. Inference wall time measured but not simulated.
+Reserved tests unopened; no acceptance claim. Serial/bootstrap engineering retries
+are documented separately and do not change the fixed model/case list.
+
+
+Selector execution engineering correction — 2026-10-26: strict loading rejected
+nonprimitive Torch version metadata after completing only teacher/rule trials.
+Portable model exports preserve every tensor, with [old/new hashes](../../artifacts/selector-learning-v1-portability.json).
+Current executed-validation service is `trace-selector-execute-portable`; it
+reuses only source/case-verified baseline trials, not learned outcomes. Study
+remains running; these launch corrections are not model-performance results.
+
+
+Selector executed validation interim snapshot — **running, partial negative
+results**, observed 2026-10-26 UTC. [Timestamped snapshot](../../artifacts/selector-execute-v1-partial-results.json)
+contains completed modes only; initial current-observation MLPs fail deadline
+noninferiority with throughput near the teacher, and the simple rule misses the
+throughput target. Remaining predeclared models are still executing. No accepted
+win, completed-study ranking, or new validation-tuned training is claimed.

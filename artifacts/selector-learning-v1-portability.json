@@ -1,0 +1,66 @@
+{
+  "version": "selector-checkpoint-portability-v1",
+  "scope": "Only plan metadata normalized through JSON to eliminate TorchVersion class; original files unchanged; all tensors verified identical",
+  "files": {
+    "current-mlp-1.pt": {
+      "original_sha256": "e086424b070a67cd0c12c96351c53d46b04912e496367f9e4d813c8ccd4635a8",
+      "portable_sha256": "f1df4252630ea7dad6a5afe8ab41c9bffbfa601c4122f70dffac8f1aa46ee620",
+      "all_tensors_identical": true
+    },
+    "current-mlp-2.pt": {
+      "original_sha256": "a0e1bdfe4186adfdee564e2d3df1c5917a5c6aacd340b3b571dd4130e50eac4d",
+      "portable_sha256": "f0752f6364edce11bf49bb3bc8a7dbf45c7d6b83d2b242ae1dd97447012492d8",
+      "all_tensors_identical": true
+    },
+    "current-mlp-3.pt": {
+      "original_sha256": "dca93869bd3d0402fc00701d4917ad39b03aaf2172739ad75a7e89fcc2a59c55",
+      "portable_sha256": "0fdc771eec561336cf3c36c74ba09e807a4e1c79763ab81061918f851204cc49",
+      "all_tensors_identical": true
+    },
+    "gru-1.pt": {
+      "original_sha256": "3aaba57c97d072172e24127d783096ff590f85d53cfa3bf6aeaf492add824143",
+      "portable_sha256": "444343989a86ed3c0c8ddd35854987d4107ff53af3b67c33ec0147dc4901eeaa",
+      "all_tensors_identical": true
+    },
+    "gru-2.pt": {
+      "original_sha256": "9fec52096aa9b1d605981e0836a16c90a2a6e5a1dcf87de106a64a0110095136",
+      "portable_sha256": "395e1b8c4dfde374550f26a066cfdfb86e747ddfaf1961ff815657755b3dcad9",
+      "all_tensors_identical": true
+    },
+    "gru-3.pt": {
+      "original_sha256": "ad2494c667e6519025ac42e00cc7173897c8b562cad424e836d238a1980be9d9",
+      "portable_sha256": "61ee90c1e8a06764f08c94d01fa34615057a9f3e331f746db314ea65625f5b34",
+      "all_tensors_identical": true
+    },
+    "history-mlp-1.pt": {
+      "original_sha256": "e80e5061309356f8f0ca5fd3bbf5b191a7deec5727422f9665120146e3b18439",
+      "portable_sha256": "efd6cffb8fc1fa2694c1ec5faa59e174588f875bed97133ca5f40b333b20009e",
+      "all_tensors_identical": true
+    },
+    "history-mlp-2.pt": {
+      "original_sha256": "dcba4e9a3bd0b1561d9e65dfbbd5ae17dd27f3c2182d391b1bfbf7f36499617a",
+      "portable_sha256": "81d387b6f41fa3e7bfa82876d9cb0ceec3a7b437f7d3311357a73a7ae774a319",
+      "all_tensors_identical": true
+    },
+    "history-mlp-3.pt": {
+      "original_sha256": "f906100d30257ef4b99aee706b94f5955a8ece97c8aa9cb87d71054cc8375512",
+      "portable_sha256": "e0edacd1938d43496061c0d31a6a7546a4cdb5e12e8be62d1f1ca01cd0ba2d53",
+      "all_tensors_identical": true
+    },
+    "transformer-1.pt": {
+      "original_sha256": "9f70537ac87f93b670b4b3c649af9dcd9b375f08aa1e0762714ae3a87311b438",
+      "portable_sha256": "85eacef9880c8ac343063c4401330d8d1951c57a0d51f88fb89e307206b4418b",
+      "all_tensors_identical": true
+    },
+    "transformer-2.pt": {
+      "original_sha256": "3e9d1cef43ae00b481b7f63d2804263550af8393c058f63843a196eae67c0d3d",
+      "portable_sha256": "e40dae2fee832a412b2ce1cf764bd8d4db4e797823744b85474718080bc0dafd",
+      "all_tensors_identical": true
+    },
+    "transformer-3.pt": {
+      "original_sha256": "665cef2c70a08a05141ac4093bca0966f34e5dcccf4b2764481c15cf131aff95",
+      "portable_sha256": "d1feca3649ccdfa1b1bd0047fa454725f8f3840f085cad94c9078fb51b2aa408",
+      "all_tensors_identical": true
+    }
+  }
+}

@@ -804,7 +804,20 @@ fixed sampling seeds yields 128,683, 126,635 and 141,995 B/s versus joint greedy
 All modes have zero wrong deliveries; stochastic deployment shows no consistent
 improvement. A new, bounded Caliban collection covers 48 development and 24
 separate validation cases, nine controls and causal one-second local probes.
-It is running; no selector learning or acceptance result is reported.
+The collection completed 648 trials and 72 probes. Strict finite-control
+hindsight headroom is 47.2\% on development but only 4.08\% on validation,
+limiting generalization of the earlier 12-case estimate. A fixed supervised
+comparison fits four development examples with all architectures, then trains
+current-observation MLP, history MLP, GRU and transformer selectors for 400
+full-batch updates each at three seeds. All reach 100\% development accuracy;
+validation target accuracy is 45.8--58.3\% versus constant-teacher 75\%, with
+4--8 inadmissible choices per learned model on 24 cases. This provides no evidence
+of a history/transformer advantage for one-shot prefix classification. Candidate
+lookups do not execute the teacher probe or mixed-endpoint switching trajectory.
+A separate executed probe-then-select evaluation of all twelve models is running;
+the initial completed MLP modes fail deadline noninferiority despite throughput
+near the teacher. These are interim negative observations, not a final ranking
+of all architectures; no accepted transport win or real-device result is claimed.
 Earlier experiments use their frozen semantics. Caliban v4 remains a diagnostic baseline, with its original all-host
 completion guard now known infeasible in at least one validation case.
 

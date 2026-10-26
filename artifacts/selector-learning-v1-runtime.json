@@ -1,0 +1,9 @@
+{
+  "observed_utc": "2026-10-26T15:12:41.188367+00:00",
+  "python": "3.12.10",
+  "machine": "x86_64",
+  "torch": "2.14.1+cpu",
+  "numpy": "2.5.4",
+  "device": "cpu",
+  "scope": "unchanged pinned runtime used for fitting and executed validation; observed after fitting"
+}

@@ -1,6 +1,6 @@
 # Can local history identify the right controller?
 
-Actual start: 2026-10-26 UTC. **Running: data collection only.**
+Actual start/end: 2026-10-26 UTC; completed at 14:49:22. **Completed: data collection only.**
 [Plan](../../artifacts/selector-coverage-v1-plan.json),
 [frozen source](../../artifacts/selector-coverage-v1-source.zip),
 [runner](../../scripts/selector_coverage.py).
@@ -24,7 +24,7 @@ Whole-run candidate outcomes are stored separately as future diagnostic labels.
 These labels cannot be actor inputs. A prefix cannot predict arbitrary future
 shocks, so labels may be intrinsically ambiguous given the probe.
 
-No model is trained yet. The next gate is tiny-data fitting and comparisons of
+Subsequent [selector fitting](selector-learning-v1.md) completes tiny-data fitting and comparisons of
 simple heuristics, MLP, GRU and transformer selection using the same local probes.
 Report validation regret and guard violations, not just class accuracy. An offline
 selection label is not proof that per-endpoint online switching works: mixed
@@ -49,3 +49,9 @@ Check all Caliban studies with:
 
 The status output summarizes probe/control completion without dumping the dataset.
 The failed v4 study remains incomplete and is not silently resumed.
+
+The completed collection contains every declared probe and control. See the
+[compact outcome report](../../artifacts/selector-coverage-v1-results.json) and
+[curated dataset](../../artifacts/selector-coverage-v1-data.zip). No selector win
+is established by the collection; fitting and executed evaluation have separate
+states in the experiment register.
