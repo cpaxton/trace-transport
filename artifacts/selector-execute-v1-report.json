@@ -1,0 +1,834 @@
+{
+  "version": "selector-executed-report-v1",
+  "started_utc": "2026-10-26T15:11:24.745790+00:00",
+  "completed_utc": "2026-10-26T15:26:41.883507+00:00",
+  "accepted_win": false,
+  "scope": "exploratory validation; all fixed models reported; reserved tests unopened; endpoint-0 training versus all-role deployment confounds attribution; inference cost measured but not simulated",
+  "modes": {
+    "adaptive": {
+      "summary": {
+        "verified_goodput": 1149952.0,
+        "confirmed_goodput": 1149952.0,
+        "image_goodput": 668672.0,
+        "map_goodput": 481280.0,
+        "interactive_miss_rate": 0.17563352826510722,
+        "completion_fraction": 0.9799682215412553,
+        "wire_per_useful_byte": 1.7131239258005744,
+        "wrong": 0,
+        "starved_hosts": 9,
+        "cases": 24,
+        "zero_completed_bulk_hosts": 9,
+        "zero_accepted_bulk_hosts": 0,
+        "accepted_bulk_goodput": 1208513.7777777778,
+        "mean_bulk_progress_jain": 0.9958276296252871,
+        "provably_infeasible_completion_cases": 0
+      },
+      "relative_goodput_gain": 0.0,
+      "miss_difference": 0.0,
+      "failed_guards": [],
+      "comparison": null,
+      "inference_ms_p50_p95": null
+    },
+    "low-rtt-bdp-rule": {
+      "summary": {
+        "verified_goodput": 1026958.2222222222,
+        "confirmed_goodput": 1026958.2222222222,
+        "image_goodput": 606208.0,
+        "map_goodput": 420750.22222222225,
+        "interactive_miss_rate": 0.17030539311241066,
+        "completion_fraction": 0.9797324685853263,
+        "wire_per_useful_byte": 1.7483237478068998,
+        "wrong": 0,
+        "starved_hosts": 9,
+        "cases": 24,
+        "zero_completed_bulk_hosts": 9,
+        "zero_accepted_bulk_hosts": 0,
+        "accepted_bulk_goodput": 1093624.888888889,
+        "mean_bulk_progress_jain": 0.9935834567755432,
+        "provably_infeasible_completion_cases": 0
+      },
+      "relative_goodput_gain": -0.10695557534382105,
+      "miss_difference": -0.0053281351526965615,
+      "failed_guards": [
+        "image",
+        "map",
+        "confirmation",
+        "strata_progress",
+        "strata_verified"
+      ],
+      "comparison": {
+        "relative_goodput_gain": -0.10695557534382105,
+        "goodput_difference_ci95": [
+          -316313.60000000003,
+          11491.555555555737
+        ],
+        "miss_difference_ci95": [
+          -0.014664212405899286,
+          0.00014569242755782945
+        ],
+        "guards": {
+          "deadline": true,
+          "wire": true,
+          "integrity": true,
+          "hosts": true,
+          "image": false,
+          "map": false,
+          "confirmation": false,
+          "completion": true,
+          "fairness": true,
+          "strata_progress": false,
+          "strata_verified": false
+        },
+        "win": false,
+        "host_guard_basis": "accepted bulk payload progress; completed-object counts reported separately"
+      },
+      "inference_ms_p50_p95": null
+    },
+    "current-mlp-1": {
+      "summary": {
+        "verified_goodput": 1145742.2222222222,
+        "confirmed_goodput": 1145287.111111111,
+        "image_goodput": 659456.0,
+        "map_goodput": 486286.22222222225,
+        "interactive_miss_rate": 0.23788174139051332,
+        "completion_fraction": 0.9678236343751799,
+        "wire_per_useful_byte": 1.6879657491553268,
+        "wrong": 0,
+        "starved_hosts": 11,
+        "cases": 24,
+        "zero_completed_bulk_hosts": 11,
+        "zero_accepted_bulk_hosts": 0,
+        "accepted_bulk_goodput": 1209447.111111111,
+        "mean_bulk_progress_jain": 0.9607751834394721,
+        "provably_infeasible_completion_cases": 0
+      },
+      "relative_goodput_gain": -0.0036608291283268812,
+      "miss_difference": 0.0622482131254061,
+      "failed_guards": [
+        "deadline",
+        "completion",
+        "strata_progress",
+        "strata_verified"
+      ],
+      "comparison": {
+        "relative_goodput_gain": -0.0036608291283268812,
+        "goodput_difference_ci95": [
+          -74642.48888888891,
+          64630.0444444444
+        ],
+        "miss_difference_ci95": [
+          0.008585003540665414,
+          0.1306358899089855
+        ],
+        "guards": {
+          "deadline": false,
+          "wire": true,
+          "integrity": true,
+          "hosts": true,
+          "image": true,
+          "map": true,
+          "confirmation": true,
+          "completion": false,
+          "fairness": true,
+          "strata_progress": false,
+          "strata_verified": false
+        },
+        "win": false,
+        "host_guard_basis": "accepted bulk payload progress; completed-object counts reported separately"
+      },
+      "inference_ms_p50_p95": [
+        0.3546104999259114,
+        0.7791845797328278
+      ]
+    },
+    "current-mlp-2": {
+      "summary": {
+        "verified_goodput": 1169009.7777777778,
+        "confirmed_goodput": 1169009.7777777778,
+        "image_goodput": 674076.4444444445,
+        "map_goodput": 494933.3333333333,
+        "interactive_miss_rate": 0.23950617283950618,
+        "completion_fraction": 0.9681376725166128,
+        "wire_per_useful_byte": 1.6917169979235989,
+        "wrong": 0,
+        "starved_hosts": 10,
+        "cases": 24,
+        "zero_completed_bulk_hosts": 10,
+        "zero_accepted_bulk_hosts": 0,
+        "accepted_bulk_goodput": 1230876.4444444445,
+        "mean_bulk_progress_jain": 0.9565841065885747,
+        "provably_infeasible_completion_cases": 0
+      },
+      "relative_goodput_gain": 0.016572672405263722,
+      "miss_difference": 0.06387264457439895,
+      "failed_guards": [
+        "deadline",
+        "completion",
+        "strata_progress",
+        "strata_verified"
+      ],
+      "comparison": {
+        "relative_goodput_gain": 0.016572672405263722,
+        "goodput_difference_ci95": [
+          -22189.511111111184,
+          78906.31111111109
+        ],
+        "miss_difference_ci95": [
+          0.010064405017393264,
+          0.13166737555135474
+        ],
+        "guards": {
+          "deadline": false,
+          "wire": true,
+          "integrity": true,
+          "hosts": true,
+          "image": true,
+          "map": true,
+          "confirmation": true,
+          "completion": false,
+          "fairness": true,
+          "strata_progress": false,
+          "strata_verified": false
+        },
+        "win": false,
+        "host_guard_basis": "accepted bulk payload progress; completed-object counts reported separately"
+      },
+      "inference_ms_p50_p95": [
+        0.2993895031977445,
+        0.40119632903952146
+      ]
+    },
+    "current-mlp-3": {
+      "summary": {
+        "verified_goodput": 1153479.111111111,
+        "confirmed_goodput": 1153024.0,
+        "image_goodput": 664007.1111111111,
+        "map_goodput": 489472.0,
+        "interactive_miss_rate": 0.2341130604288499,
+        "completion_fraction": 0.9684301322599195,
+        "wire_per_useful_byte": 1.6887797876607504,
+        "wrong": 0,
+        "starved_hosts": 9,
+        "cases": 24,
+        "zero_completed_bulk_hosts": 9,
+        "zero_accepted_bulk_hosts": 0,
+        "accepted_bulk_goodput": 1215009.7777777778,
+        "mean_bulk_progress_jain": 0.9704166503347867,
+        "provably_infeasible_completion_cases": 0
+      },
+      "relative_goodput_gain": 0.0030671811615710087,
+      "miss_difference": 0.05847953216374269,
+      "failed_guards": [
+        "deadline",
+        "completion",
+        "strata_progress",
+        "strata_verified"
+      ],
+      "comparison": {
+        "relative_goodput_gain": 0.0030671811615710087,
+        "goodput_difference_ci95": [
+          -65080.888888888876,
+          72362.66666666651
+        ],
+        "miss_difference_ci95": [
+          0.012036681388167627,
+          0.11621754606365152
+        ],
+        "guards": {
+          "deadline": false,
+          "wire": true,
+          "integrity": true,
+          "hosts": true,
+          "image": true,
+          "map": true,
+          "confirmation": true,
+          "completion": false,
+          "fairness": true,
+          "strata_progress": false,
+          "strata_verified": false
+        },
+        "win": false,
+        "host_guard_basis": "accepted bulk payload progress; completed-object counts reported separately"
+      },
+      "inference_ms_p50_p95": [
+        0.2928574976976961,
+        0.3114916238700971
+      ]
+    },
+    "history-mlp-1": {
+      "summary": {
+        "verified_goodput": 1159281.7777777778,
+        "confirmed_goodput": 1159168.0,
+        "image_goodput": 666396.4444444445,
+        "map_goodput": 492885.3333333333,
+        "interactive_miss_rate": 0.21143599740090968,
+        "completion_fraction": 0.9749356223175966,
+        "wire_per_useful_byte": 1.6763229197896092,
+        "wrong": 0,
+        "starved_hosts": 10,
+        "cases": 24,
+        "zero_completed_bulk_hosts": 10,
+        "zero_accepted_bulk_hosts": 0,
+        "accepted_bulk_goodput": 1219607.111111111,
+        "mean_bulk_progress_jain": 0.9712278331251927,
+        "provably_infeasible_completion_cases": 0
+      },
+      "relative_goodput_gain": 0.008113188878994704,
+      "miss_difference": 0.035802469135802456,
+      "failed_guards": [
+        "deadline",
+        "completion",
+        "strata_progress",
+        "strata_verified"
+      ],
+      "comparison": {
+        "relative_goodput_gain": 0.008113188878994704,
+        "goodput_difference_ci95": [
+          -64739.55555555551,
+          105193.24444444441
+        ],
+        "miss_difference_ci95": [
+          -0.0033751497267146754,
+          0.08113249405350365
+        ],
+        "guards": {
+          "deadline": false,
+          "wire": true,
+          "integrity": true,
+          "hosts": true,
+          "image": true,
+          "map": true,
+          "confirmation": true,
+          "completion": false,
+          "fairness": true,
+          "strata_progress": false,
+          "strata_verified": false
+        },
+        "win": false,
+        "host_guard_basis": "accepted bulk payload progress; completed-object counts reported separately"
+      },
+      "inference_ms_p50_p95": [
+        0.35681601730175316,
+        0.5337536073056981
+      ]
+    },
+    "history-mlp-2": {
+      "summary": {
+        "verified_goodput": 1111665.7777777778,
+        "confirmed_goodput": 1111608.888888889,
+        "image_goodput": 649728.0,
+        "map_goodput": 461937.77777777775,
+        "interactive_miss_rate": 0.2202729044834308,
+        "completion_fraction": 0.9774461979913917,
+        "wire_per_useful_byte": 1.6749036818320295,
+        "wrong": 0,
+        "starved_hosts": 12,
+        "cases": 24,
+        "zero_completed_bulk_hosts": 12,
+        "zero_accepted_bulk_hosts": 0,
+        "accepted_bulk_goodput": 1173992.888888889,
+        "mean_bulk_progress_jain": 0.9499461463279486,
+        "provably_infeasible_completion_cases": 0
+      },
+      "relative_goodput_gain": -0.03329375680221636,
+      "miss_difference": 0.04463937621832356,
+      "failed_guards": [
+        "deadline",
+        "strata_progress",
+        "strata_verified"
+      ],
+      "comparison": {
+        "relative_goodput_gain": -0.03329375680221636,
+        "goodput_difference_ci95": [
+          -91932.44444444438,
+          -2843.022222222282
+        ],
+        "miss_difference_ci95": [
+          -0.002900348799077827,
+          0.1322822307403805
+        ],
+        "guards": {
+          "deadline": false,
+          "wire": true,
+          "integrity": true,
+          "hosts": true,
+          "image": true,
+          "map": true,
+          "confirmation": true,
+          "completion": true,
+          "fairness": true,
+          "strata_progress": false,
+          "strata_verified": false
+        },
+        "win": false,
+        "host_guard_basis": "accepted bulk payload progress; completed-object counts reported separately"
+      },
+      "inference_ms_p50_p95": [
+        0.3193805168848485,
+        0.4676858719903976
+      ]
+    },
+    "history-mlp-3": {
+      "summary": {
+        "verified_goodput": 1146481.7777777778,
+        "confirmed_goodput": 1146481.7777777778,
+        "image_goodput": 672028.4444444445,
+        "map_goodput": 474453.3333333333,
+        "interactive_miss_rate": 0.2510721247563353,
+        "completion_fraction": 0.9749138369399402,
+        "wire_per_useful_byte": 1.6961929108530678,
+        "wrong": 0,
+        "starved_hosts": 10,
+        "cases": 24,
+        "zero_completed_bulk_hosts": 10,
+        "zero_accepted_bulk_hosts": 0,
+        "accepted_bulk_goodput": 1212474.6666666667,
+        "mean_bulk_progress_jain": 0.9339919587517151,
+        "provably_infeasible_completion_cases": 0
+      },
+      "relative_goodput_gain": -0.0030177104976748526,
+      "miss_difference": 0.07543859649122805,
+      "failed_guards": [
+        "deadline",
+        "completion",
+        "fairness",
+        "strata_progress",
+        "strata_verified"
+      ],
+      "comparison": {
+        "relative_goodput_gain": -0.0030177104976748526,
+        "goodput_difference_ci95": [
+          -44098.844444444316,
+          29185.422222222216
+        ],
+        "miss_difference_ci95": [
+          0.011369365981391717,
+          0.16648107866266587
+        ],
+        "guards": {
+          "deadline": false,
+          "wire": true,
+          "integrity": true,
+          "hosts": true,
+          "image": true,
+          "map": true,
+          "confirmation": true,
+          "completion": false,
+          "fairness": false,
+          "strata_progress": false,
+          "strata_verified": false
+        },
+        "win": false,
+        "host_guard_basis": "accepted bulk payload progress; completed-object counts reported separately"
+      },
+      "inference_ms_p50_p95": [
+        0.32316852593794465,
+        0.3505466505885124
+      ]
+    },
+    "gru-1": {
+      "summary": {
+        "verified_goodput": 1225728.0,
+        "confirmed_goodput": 1225728.0,
+        "image_goodput": 731249.7777777778,
+        "map_goodput": 494478.22222222225,
+        "interactive_miss_rate": 0.200909681611436,
+        "completion_fraction": 0.9743604517169855,
+        "wire_per_useful_byte": 1.6283758339261782,
+        "wrong": 0,
+        "starved_hosts": 9,
+        "cases": 24,
+        "zero_completed_bulk_hosts": 9,
+        "zero_accepted_bulk_hosts": 0,
+        "accepted_bulk_goodput": 1283971.5555555555,
+        "mean_bulk_progress_jain": 0.9628107353769563,
+        "provably_infeasible_completion_cases": 0
+      },
+      "relative_goodput_gain": 0.0658949243098843,
+      "miss_difference": 0.025276153346328767,
+      "failed_guards": [
+        "deadline",
+        "completion",
+        "strata_progress",
+        "strata_verified"
+      ],
+      "comparison": {
+        "relative_goodput_gain": 0.0658949243098843,
+        "goodput_difference_ci95": [
+          -74241.42222222222,
+          312265.95555555547
+        ],
+        "miss_difference_ci95": [
+          -0.011374826049536624,
+          0.06893277391975307
+        ],
+        "guards": {
+          "deadline": false,
+          "wire": true,
+          "integrity": true,
+          "hosts": true,
+          "image": true,
+          "map": true,
+          "confirmation": true,
+          "completion": false,
+          "fairness": true,
+          "strata_progress": false,
+          "strata_verified": false
+        },
+        "win": false,
+        "host_guard_basis": "accepted bulk payload progress; completed-object counts reported separately"
+      },
+      "inference_ms_p50_p95": [
+        1.883807999547571,
+        2.437111953622661
+      ]
+    },
+    "gru-2": {
+      "summary": {
+        "verified_goodput": 1116444.4444444445,
+        "confirmed_goodput": 1116444.4444444445,
+        "image_goodput": 652913.7777777778,
+        "map_goodput": 463530.6666666667,
+        "interactive_miss_rate": 0.22501624431448994,
+        "completion_fraction": 0.9708395888670747,
+        "wire_per_useful_byte": 1.664616366441083,
+        "wrong": 0,
+        "starved_hosts": 9,
+        "cases": 24,
+        "zero_completed_bulk_hosts": 9,
+        "zero_accepted_bulk_hosts": 0,
+        "accepted_bulk_goodput": 1179653.3333333333,
+        "mean_bulk_progress_jain": 0.9628235237151147,
+        "provably_infeasible_completion_cases": 0
+      },
+      "relative_goodput_gain": -0.029138221034926248,
+      "miss_difference": 0.04938271604938271,
+      "failed_guards": [
+        "deadline",
+        "completion",
+        "strata_progress",
+        "strata_verified"
+      ],
+      "comparison": {
+        "relative_goodput_gain": -0.029138221034926248,
+        "goodput_difference_ci95": [
+          -90083.55555555546,
+          8078.222222222248
+        ],
+        "miss_difference_ci95": [
+          0.010600077839896391,
+          0.09850687239278769
+        ],
+        "guards": {
+          "deadline": false,
+          "wire": true,
+          "integrity": true,
+          "hosts": true,
+          "image": true,
+          "map": true,
+          "confirmation": true,
+          "completion": false,
+          "fairness": true,
+          "strata_progress": false,
+          "strata_verified": false
+        },
+        "win": false,
+        "host_guard_basis": "accepted bulk payload progress; completed-object counts reported separately"
+      },
+      "inference_ms_p50_p95": [
+        1.8473929667379707,
+        2.2053343360312283
+      ]
+    },
+    "gru-3": {
+      "summary": {
+        "verified_goodput": 1140224.0,
+        "confirmed_goodput": 1140224.0,
+        "image_goodput": 626403.5555555555,
+        "map_goodput": 513820.44444444444,
+        "interactive_miss_rate": 0.2322936972059779,
+        "completion_fraction": 0.9714252860346116,
+        "wire_per_useful_byte": 1.5425136798169092,
+        "wrong": 0,
+        "starved_hosts": 9,
+        "cases": 24,
+        "zero_completed_bulk_hosts": 9,
+        "zero_accepted_bulk_hosts": 0,
+        "accepted_bulk_goodput": 1202963.5555555555,
+        "mean_bulk_progress_jain": 0.9606803129280665,
+        "provably_infeasible_completion_cases": 0
+      },
+      "relative_goodput_gain": -0.008459483526268907,
+      "miss_difference": 0.05666016894087067,
+      "failed_guards": [
+        "deadline",
+        "image",
+        "completion",
+        "strata_progress",
+        "strata_verified"
+      ],
+      "comparison": {
+        "relative_goodput_gain": -0.008459483526268907,
+        "goodput_difference_ci95": [
+          -61899.3777777779,
+          25315.555555555504
+        ],
+        "miss_difference_ci95": [
+          0.016576812226109905,
+          0.10519117576955547
+        ],
+        "guards": {
+          "deadline": false,
+          "wire": true,
+          "integrity": true,
+          "hosts": true,
+          "image": false,
+          "map": true,
+          "confirmation": true,
+          "completion": false,
+          "fairness": true,
+          "strata_progress": false,
+          "strata_verified": false
+        },
+        "win": false,
+        "host_guard_basis": "accepted bulk payload progress; completed-object counts reported separately"
+      },
+      "inference_ms_p50_p95": [
+        1.8834079965017736,
+        2.226945958682336
+      ]
+    },
+    "transformer-1": {
+      "summary": {
+        "verified_goodput": 1009720.8888888889,
+        "confirmed_goodput": 1009664.0,
+        "image_goodput": 580096.0,
+        "map_goodput": 429624.8888888889,
+        "interactive_miss_rate": 0.24691358024691357,
+        "completion_fraction": 0.9714928732183046,
+        "wire_per_useful_byte": 1.6107915974689595,
+        "wrong": 0,
+        "starved_hosts": 11,
+        "cases": 24,
+        "zero_completed_bulk_hosts": 11,
+        "zero_accepted_bulk_hosts": 0,
+        "accepted_bulk_goodput": 1069502.2222222222,
+        "mean_bulk_progress_jain": 0.9491335675472831,
+        "provably_infeasible_completion_cases": 0
+      },
+      "relative_goodput_gain": -0.12194518650440289,
+      "miss_difference": 0.07128005198180634,
+      "failed_guards": [
+        "deadline",
+        "image",
+        "map",
+        "confirmation",
+        "completion",
+        "strata_progress",
+        "strata_verified"
+      ],
+      "comparison": {
+        "relative_goodput_gain": -0.12194518650440289,
+        "goodput_difference_ci95": [
+          -404330.66666666657,
+          5518.222222222248
+        ],
+        "miss_difference_ci95": [
+          0.0047850272943783904,
+          0.16606987748476115
+        ],
+        "guards": {
+          "deadline": false,
+          "wire": true,
+          "integrity": true,
+          "hosts": true,
+          "image": false,
+          "map": false,
+          "confirmation": false,
+          "completion": false,
+          "fairness": true,
+          "strata_progress": false,
+          "strata_verified": false
+        },
+        "win": false,
+        "host_guard_basis": "accepted bulk payload progress; completed-object counts reported separately"
+      },
+      "inference_ms_p50_p95": [
+        1.3342925230972469,
+        1.6353371494915334
+      ]
+    },
+    "transformer-2": {
+      "summary": {
+        "verified_goodput": 1007160.8888888889,
+        "confirmed_goodput": 1007104.0,
+        "image_goodput": 577536.0,
+        "map_goodput": 429624.8888888889,
+        "interactive_miss_rate": 0.2041585445094217,
+        "completion_fraction": 0.9737444228349159,
+        "wire_per_useful_byte": 1.6022079750471292,
+        "wrong": 0,
+        "starved_hosts": 9,
+        "cases": 24,
+        "zero_completed_bulk_hosts": 9,
+        "zero_accepted_bulk_hosts": 0,
+        "accepted_bulk_goodput": 1071989.3333333333,
+        "mean_bulk_progress_jain": 0.9611202321298373,
+        "provably_infeasible_completion_cases": 0
+      },
+      "relative_goodput_gain": -0.1241713663797368,
+      "miss_difference": 0.02852501624431447,
+      "failed_guards": [
+        "deadline",
+        "image",
+        "map",
+        "confirmation",
+        "completion",
+        "strata_progress",
+        "strata_verified"
+      ],
+      "comparison": {
+        "relative_goodput_gain": -0.1241713663797368,
+        "goodput_difference_ci95": [
+          -399081.2444444446,
+          -7051.37777777782
+        ],
+        "miss_difference_ci95": [
+          -0.004064027972471421,
+          0.06584945662861118
+        ],
+        "guards": {
+          "deadline": false,
+          "wire": true,
+          "integrity": true,
+          "hosts": true,
+          "image": false,
+          "map": false,
+          "confirmation": false,
+          "completion": false,
+          "fairness": true,
+          "strata_progress": false,
+          "strata_verified": false
+        },
+        "win": false,
+        "host_guard_basis": "accepted bulk payload progress; completed-object counts reported separately"
+      },
+      "inference_ms_p50_p95": [
+        1.2225440004840493,
+        1.4387656527105719
+      ]
+    },
+    "transformer-3": {
+      "summary": {
+        "verified_goodput": 999253.3333333334,
+        "confirmed_goodput": 999253.3333333334,
+        "image_goodput": 581688.8888888889,
+        "map_goodput": 417564.44444444444,
+        "interactive_miss_rate": 0.2064327485380117,
+        "completion_fraction": 0.9740289721244301,
+        "wire_per_useful_byte": 1.6215498891950435,
+        "wrong": 0,
+        "starved_hosts": 9,
+        "cases": 24,
+        "zero_completed_bulk_hosts": 9,
+        "zero_accepted_bulk_hosts": 0,
+        "accepted_bulk_goodput": 1058504.888888889,
+        "mean_bulk_progress_jain": 0.9723188464103636,
+        "provably_infeasible_completion_cases": 0
+      },
+      "relative_goodput_gain": -0.13104778866132383,
+      "miss_difference": 0.030799220272904465,
+      "failed_guards": [
+        "deadline",
+        "image",
+        "map",
+        "confirmation",
+        "completion",
+        "strata_progress",
+        "strata_verified"
+      ],
+      "comparison": {
+        "relative_goodput_gain": -0.13104778866132383,
+        "goodput_difference_ci95": [
+          -421030.39999999973,
+          2730.6666666666874
+        ],
+        "miss_difference_ci95": [
+          -0.002193491854464717,
+          0.06977117760602108
+        ],
+        "guards": {
+          "deadline": false,
+          "wire": true,
+          "integrity": true,
+          "hosts": true,
+          "image": false,
+          "map": false,
+          "confirmation": false,
+          "completion": false,
+          "fairness": true,
+          "strata_progress": false,
+          "strata_verified": false
+        },
+        "win": false,
+        "host_guard_basis": "accepted bulk payload progress; completed-object counts reported separately"
+      },
+      "inference_ms_p50_p95": [
+        1.2067905336152762,
+        1.4518672338454053
+      ]
+    }
+  },
+  "groups": {
+    "current-mlp": {
+      "goodput_gain_range": [
+        -0.0036608291283268812,
+        0.016572672405263722
+      ],
+      "miss_rate_range": [
+        0.2341130604288499,
+        0.23950617283950618
+      ],
+      "all_quality_guards_pass_count": 0,
+      "scope": "three fixed training seeds; ranges are descriptive, not confidence intervals"
+    },
+    "history-mlp": {
+      "goodput_gain_range": [
+        -0.03329375680221636,
+        0.008113188878994704
+      ],
+      "miss_rate_range": [
+        0.21143599740090968,
+        0.2510721247563353
+      ],
+      "all_quality_guards_pass_count": 0,
+      "scope": "three fixed training seeds; ranges are descriptive, not confidence intervals"
+    },
+    "gru": {
+      "goodput_gain_range": [
+        -0.029138221034926248,
+        0.0658949243098843
+      ],
+      "miss_rate_range": [
+        0.200909681611436,
+        0.2322936972059779
+      ],
+      "all_quality_guards_pass_count": 0,
+      "scope": "three fixed training seeds; ranges are descriptive, not confidence intervals"
+    },
+    "transformer": {
+      "goodput_gain_range": [
+        -0.13104778866132383,
+        -0.12194518650440289
+      ],
+      "miss_rate_range": [
+        0.2041585445094217,
+        0.24691358024691357
+      ],
+      "all_quality_guards_pass_count": 0,
+      "scope": "three fixed training seeds; ranges are descriptive, not confidence intervals"
+    }
+  },
+  "input_sha256": "a9eed1c0d7fda8f2adc85edffb75cdd53104d9df5b185ee5da7569cbf9b54d83",
+  "report_source_sha256": "799994e6f98b42808318c7fda19b8f638465a2efe19d1d6183f04c72c9382cca"
+}

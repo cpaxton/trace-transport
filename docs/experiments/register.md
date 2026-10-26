@@ -243,9 +243,8 @@ advantage established; 4–8 inadmissible choices per model on 24 cases.
 executed policy results. Strict finite-control hindsight gain is 47.2% development
 versus 4.08% validation, limiting the earlier 12-case headroom claim.
 
-Selector executed validation v1 — **running**, actual start 2026-10-26 UTC; end
-pending. [Plan](../../artifacts/selector-execute-v1-plan.json),
-[method](selector-learning-v1.md#executed-validation-running). All 12 fixed models
+Selector executed validation v1 — **completed, negative**, actual start/end 2026-10-26 15:11:24–15:26:41 UTC. [Plan](../../artifacts/selector-execute-v1-plan.json),
+[method](selector-learning-v1.md#executed-validation-completed). All 12 fixed models
 and a simple rule; endpoint-local probe-then-select decisions, retained network
 state, probe traffic charged. Inference wall time measured but not simulated.
 Reserved tests unopened; no acceptance claim. Serial/bootstrap engineering retries
@@ -273,3 +272,13 @@ the exploratory rollout deploys selectors across all endpoint roles. Reverse-rol
 coverage and global-label/local-action mismatch confound the interim regressions;
 they do not isolate memory value or show that RL cannot help. The registered
 running policy is unchanged; any role-matched follow-up needs a separate plan.
+
+
+Selector executed validation final — **completed, negative**, actual end
+2026-10-26 15:26:41 UTC. All 12 fixed models plus teacher/rule finish 24 cases.
+No learned model passes all quality guards. Goodput gains range -13.10% to +6.59%
+across models/seeds, with all learned models worsening misses versus teacher;
+zero wrong deliveries throughout. [Full results](../../artifacts/selector-execute-v1-results.json),
+[complete report](../../artifacts/selector-execute-v1-report.json).
+Earlier running/interim notes describe historical stages and are superseded by
+this final entry. Role-transfer and weak-label limitations remain explicit.

@@ -1,7 +1,7 @@
 # Selector learnability: fitting is not generalization
 
 Actual date: 2026-10-26 UTC. Coverage collection and offline fitting are complete;
-executed probe-then-select validation is **running**. No held-out acceptance or
+executed probe-then-select validation is **complete, negative**. No held-out acceptance or
 learned transport win is claimed. This is supervised controller selection, not
 another joint PPO run.
 
@@ -73,7 +73,7 @@ throughput rises. A byte gap can be negative for an unsafe high-throughput choic
 it is not a constrained-utility regret metric. There is no demonstrated advantage
 for history or the transformer in this small one-shot classification study.
 
-## Executed validation, running
+## Executed validation, completed
 
 [Execution plan](../../artifacts/selector-execute-v1-plan.json),
 [frozen source](../../artifacts/selector-execute-v1-source.zip),
@@ -122,7 +122,7 @@ identical. The [portability record](../../artifacts/selector-learning-v1-portabi
 links old/new hashes, and regression tests require safe `weights_only=True`
 roundtrips. The published model archive contains the portable exports.
 
-Current service: `trace-selector-execute-portable`. It reuses only those
+Completed service: `trace-selector-execute-portable` (15:11:24–15:26:41 UTC). It reuses only those
 [completed baseline trials](../../artifacts/selector-execute-v1-baselines.json),
 with their [frozen source](../../artifacts/selector-execute-v1-baseline-source.zip).
 Resume checks exact policy AST, baseline constant, simulator source hashes and
@@ -137,8 +137,8 @@ Memorizing 48 contexts is easy; safe validation choices are not. A one-second
 prefix also cannot predict independently randomized future changes. Classification
 accuracy ignores whether a tiny apparent advantage justifies switching risk.
 The current findings argue against enlarging this transformer or increasing the
-same training budget. Executed validation remains necessary before any stronger
-conclusion about these policies.
+same training budget. Executed validation confirms that none of these policies passes the full guards;
+role-transfer and weak-label limitations prevent broader conclusions about RL.
 
 Future proposals, not launched here: collect decisions at multiple times during
 persistent regimes; test short-horizon reactive choices with training-only
@@ -158,3 +158,30 @@ throughput near the teacher. This is a partial negative result, not a final rank
 of all architectures. The simple low-RTT rule also fails the throughput target.
 No reported completed mode establishes an accepted win. The same fixed list of
 models/cases continues; no validation-driven retraining is launched here.
+
+
+## Complete executed result
+
+Actual end 2026-10-26 15:26:41 UTC. All 14 modes (12 learned models, teacher,
+simple rule) finish all 24 cases. [Full results](../../artifacts/selector-execute-v1-results.json),
+[compact report](../../artifacts/selector-execute-v1-report.json). The earlier
+partial snapshot is retained as a historical record; it is superseded by these
+complete results.
+
+| Model | Goodput gain range, three seeds | Interactive miss-rate range | Seeds passing all quality guards |
+| --- | ---: | ---: | ---: |
+| Current MLP | -0.37% to +1.66% | 23.41–23.95% | 0/3 |
+| History MLP | -3.33% to +0.81% | 21.14–25.11% | 0/3 |
+| GRU | -2.91% to +6.59% | 20.09–23.23% | 0/3 |
+| Transformer | -13.10% to -12.19% | 20.42–24.69% | 0/3 |
+
+Teacher: 1,149,952 B/s, 17.56% misses. The simple rule loses 10.70% goodput.
+All modes have zero wrong deliveries. Ranges describe the three fixed training
+seeds, not confidence intervals. No learned mode passes every guard, reaches the
+accepted-win criterion, or establishes a memory advantage. No weights or guards
+were changed in response to these validation results.
+
+The next proposed study should isolate role-aligned repeated decisions and
+short-horizon utility, with conservative teacher fallback calibrated only on
+new development data. It needs a new prospective validation bank; reusing this
+bank for more tuning would not provide fresh evidence.
