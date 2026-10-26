@@ -188,3 +188,11 @@ checked identical. Only pending-ACK protocol semantics change. Final-checkpoint
 validation compares against its own v6 adaptive baseline; no reserved tests or
 acceptance claim. CPU-only isolated source/runtime, six-core affinity, 8 GiB limit,
 file logs; the frozen Caliban v4 study remains unchanged. [Results](../../artifacts/reactive-v6-pilot-results.json): verified goodput 857,202 versus adaptive 855,268 B/s (+0.226%); paired difference 95% interval [-3,868, +7,625] B/s. Interactive misses 10.08% versus 10.48%; zero wrong deliveries. All quality guards pass, but the gain is below the 10% target and statistically inconclusive. V5 shaped was +0.659% against the same baseline: this pilot does not show an improvement from reactive ACK semantics. One seed and 24 reused validation cases; no held-out acceptance claim or receiver contribution claim.
+
+
+Research roadmap registered 2026-10-26 — **planned, not started**:
+[v6 diagnosis and application plan](../research/improvement-plan-2026-10-26.md).
+Proposes role/action audit, development-only control sweeps, tiny-case learning
+checks, then gated multi-seed curriculum/controller-selection pilots and an opt-in
+robot freshness task. Start/end dates and artifacts will be added when individual
+experiments actually run. No new result or compute launch is claimed by this entry.

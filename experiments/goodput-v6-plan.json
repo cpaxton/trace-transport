@@ -1,10 +1,25 @@
 {
   "version": "reactive-feedback-v6-plan-v1",
-  "status": "engineering tested; no learning performance experiment yet",
+  "status": "engineering tested; matched one-seed pilot completed without accepted win",
   "inherits": "goodput-progress-v5-plan-v1 physical distribution, metrics and acceptance",
   "new_control_contract": "When ACK batch/wait settings change, apply them to already-pending receipts at the control tick. Flush if eligible, otherwise invalidate the previous timer and schedule relative to the oldest pending arrival.",
-  "unchanged": ["wire format", "mandatory first completion ACK", "exact payload recovery", "whole-object goodput", "network distribution", "behavior for unchanged ACK settings"],
-  "required_tests": ["flush without new arrivals", "old-timer invalidation", "pending age not restarted", "wire cost inside raw reward accounting", "unchanged-action transport parity", "checkpoint profile/control contract"],
+  "unchanged": [
+    "wire format",
+    "mandatory first completion ACK",
+    "exact payload recovery",
+    "whole-object goodput",
+    "network distribution",
+    "behavior for unchanged ACK settings"
+  ],
+  "required_tests": [
+    "flush without new arrivals",
+    "old-timer invalidation",
+    "pending age not restarted",
+    "wire cost inside raw reward accounting",
+    "unchanged-action transport parity",
+    "checkpoint profile/control contract"
+  ],
   "next_comparison": "same model, physical cases, time-aware GAE, reward treatment and receiver action mask; vary only reactive pending-ACK semantics; separate validation and reserved acceptance",
-  "scope": "simulator protocol variant only; not deployed on robot networking or silently applied to v4/v5 checkpoints"
+  "scope": "simulator protocol variant only; not deployed on robot networking or silently applied to v4/v5 checkpoints",
+  "pilot_results": "../artifacts/reactive-v6-pilot-results.json"
 }

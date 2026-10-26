@@ -47,3 +47,8 @@ Use a finite-candidate privileged lookahead only as a diagnostic for remaining
 headroom, never as a deployable baseline or a proven optimum. If useful decisions
 are indistinguishable from endpoint history, adding a transformer cannot supply
 missing information. Keep hypothesis changes and failed runs in the register.
+
+## October 26 follow-up
+
+See the [staged improvement plan](improvement-plan-2026-10-26.md) for the 2025–2026
+literature update and decision gates after the completed v5/v6 pilots.

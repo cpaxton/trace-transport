@@ -158,8 +158,11 @@ still enforced. This does not give the policy control over every feedback event.
 
 Tests verify immediate action without a new arrival, extension beyond the old
 timer without restarting pending age, no duplicate valid flush, exact parity for
-unchanged settings, and the serialized v6 contract. No v6 training-performance
-result is claimed. The completed v5 experiment used its frozen earlier semantics,
+unchanged settings, and the serialized v6 contract. The subsequent matched v6 pilot gives
++0.226% verified goodput versus adaptive with an interval including zero; all
+quality guards pass but there is no accepted win. See the
+[results](../../artifacts/reactive-v6-pilot-results.json) and
+[next diagnostic plan](../research/improvement-plan-2026-10-26.md). The completed v5 experiment used its frozen earlier semantics,
 and Caliban's v4 source is unchanged.
 
 [Reactive-control plan](../../experiments/goodput-v6-plan.json),

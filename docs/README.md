@@ -13,6 +13,7 @@
 | [Joint-v1 results](experiments/joint-v1.md) | Completed held-out/OOD comparisons, negative learning result, checkpoints and limitations |
 | [Joint network experiment](joint-network-brain.md) | Persistent sessions, mixed workloads, joint training and acceptance criteria |
 | [Maximum throughput plan](goodput-v2-plan.md) | Backlogged bulk traffic, verified goodput, and deadline-constrained optimization |
+| [Improvement plan, October 26](research/improvement-plan-2026-10-26.md) | Literature update, diagnostic gates, controller selection and robot freshness tasks |
 | [Learning opportunities](research/learning-opportunities.md) | Literature, history-dependent challenges, stronger baselines and fairness |
 | [Goodput-v2 pilots](experiments/goodput-v2.md) | Calibration, bounded CPU pilot, scoring and resource isolation |
 | [V3 distribution and retraining](experiments/distribution-v3.md) | Coverage matrix, realistic mechanisms and gaps, control-sensitivity audit and receiver diagnosis |

@@ -82,6 +82,19 @@ control across wireless subflows~\cite{zhang2026tcco}. These works motivate a
 history-based controller but mean that this architectural choice alone is not a
 novel contribution.
 
+A recent experimental study reports weaknesses of evaluated learned controllers
+under changing capacity and latency, as well as fairness generalization
+limitations~\cite{mazilu2026comparison}. Dynamic conditions alone therefore do
+not establish a learning advantage. Genet motivates baseline-relative curriculum
+generation~\cite{xia2022genet}; Mutant and production AliCCS motivate learning
+selection among established controllers~\cite{pappone2025mutant,zeng2025aliccs}.
+SIRD illustrates that receiver scheduling authority differs from reactive control
+of shared links~\cite{prasopoulos2025sird}; our ACK-only receiver has more limited
+authority. For robot image streams, age of information provides a distinct
+application timeliness objective~\cite{yates2020aoi}. These motivate planned
+control-headroom audits, smaller adaptation tasks, and a separately specified
+freshness benchmark; they are not evidence of a win for our implementation.
+
 Trace Transport's intended experimental focus is a compact combination of exact
 application delivery, jointly controlled peers, budgeted custom feedback, and
 scalable packet simulation. Whether this constitutes a useful contribution
