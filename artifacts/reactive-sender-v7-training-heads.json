@@ -1,0 +1,61 @@
+{
+  "version": "reactive-sender-final-head-audit-v1",
+  "observed_utc": "2026-10-27T06:16:18.622062+00:00",
+  "scope": "sufficient bound for bounded finite Tanh activations; negative bound does not prove adaptation; no validation outcomes used",
+  "runs": {
+    "seed42-current-mlp": {
+      "macro_decisions": 50001,
+      "teacher_logit_lower_margins": [
+        -0.5469900369644165,
+        0.6563971638679504
+      ],
+      "guaranteed_greedy_teacher": false,
+      "caveat": "sufficient bound over bounded hidden activations; negative/zero does not prove adaptive behavior; margin tolerance protects floating-point comparisons"
+    },
+    "seed42-history-mlp": {
+      "macro_decisions": 50003,
+      "teacher_logit_lower_margins": [
+        0.6645263433456421,
+        0.6297319531440735
+      ],
+      "guaranteed_greedy_teacher": true,
+      "caveat": "sufficient bound over bounded hidden activations; negative/zero does not prove adaptive behavior; margin tolerance protects floating-point comparisons"
+    },
+    "seed43-current-mlp": {
+      "macro_decisions": 50000,
+      "teacher_logit_lower_margins": [
+        0.8445568680763245,
+        0.8329874277114868
+      ],
+      "guaranteed_greedy_teacher": true,
+      "caveat": "sufficient bound over bounded hidden activations; negative/zero does not prove adaptive behavior; margin tolerance protects floating-point comparisons"
+    },
+    "seed43-history-mlp": {
+      "macro_decisions": 50003,
+      "teacher_logit_lower_margins": [
+        0.6554985642433167,
+        0.19951385259628296
+      ],
+      "guaranteed_greedy_teacher": true,
+      "caveat": "sufficient bound over bounded hidden activations; negative/zero does not prove adaptive behavior; margin tolerance protects floating-point comparisons"
+    },
+    "seed44-current-mlp": {
+      "macro_decisions": 50004,
+      "teacher_logit_lower_margins": [
+        0.6359795331954956,
+        0.7745156288146973
+      ],
+      "guaranteed_greedy_teacher": true,
+      "caveat": "sufficient bound over bounded hidden activations; negative/zero does not prove adaptive behavior; margin tolerance protects floating-point comparisons"
+    },
+    "seed44-history-mlp": {
+      "macro_decisions": 50000,
+      "teacher_logit_lower_margins": [
+        0.38293159008026123,
+        0.7482514381408691
+      ],
+      "guaranteed_greedy_teacher": true,
+      "caveat": "sufficient bound over bounded hidden activations; negative/zero does not prove adaptive behavior; margin tolerance protects floating-point comparisons"
+    }
+  }
+}

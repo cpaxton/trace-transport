@@ -18,6 +18,9 @@
 | [Goodput-v2 pilots](experiments/goodput-v2.md) | Calibration, bounded CPU pilot, scoring and resource isolation |
 | [V3 distribution and retraining](experiments/distribution-v3.md) | Coverage matrix, realistic mechanisms and gaps, control-sensitivity audit and receiver diagnosis |
 | [Caliban v4 parallel training](experiments/caliban-v4.md) | Deployment coverage, review corrections, remote limits, scaling and recovery |
+| [V7 50k training](experiments/reactive-sender-v7-training.md) | Completed six-run Caliban study, no gain, final actors and head diagnostics |
+| [V7 Caliban pilot](experiments/reactive-sender-v7.md) | Producer-only macro training, source-bound gates, actual budgets and monitoring |
+| [Reactive sender follow-up](experiments/reactive-sender-v7-plan.md) | Planned role-aligned, repeated decisions; fixed receiver and prospective evaluation |
 | [Selector learnability](experiments/selector-learning-v1.md) | Completed tiny fits, offline comparison and negative executed validation |
 | [Selector coverage](experiments/selector-coverage-v1.md) | Independent cases and causal probes on Caliban; data collection, not a learned win |
 | [V6 control diagnosis](experiments/reactive-diagnostics-v6.md) | Role ablations, applied actions, separate-development control headroom and configuration erratum |

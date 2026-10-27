@@ -282,3 +282,86 @@ zero wrong deliveries throughout. [Full results](../../artifacts/selector-execut
 [complete report](../../artifacts/selector-execute-v1-report.json).
 Earlier running/interim notes describe historical stages and are superseded by
 this final entry. Role-transfer and weak-label limitations remain explicit.
+
+
+Reactive sender v7 follow-up — **planned, not started**, registered 2026-10-26
+after PR #4 merged. [Contract and gates](reactive-sender-v7-plan.md). Align producer
+training/deployment roles, use repeated bounded target-rate decisions and causal
+physical-time history, keep receivers/reverse roles deterministic. No pilot starts
+until parity, action sensitivity and role-aligned tiny-fit checks pass. New seed
+banks and configuration must be committed before collection. No new result.
+
+
+Reactive sender v7 implementation — **registered**, 2026-10-27 UTC; gates subsequently passed.
+[Configuration](../../experiments/reactive-sender-v7-pilot.json) and
+[contract](reactive-sender-v7-plan.md#initial-caliban-implementation). Role-aligned
+macro MAPPO, bounded target bias, fixed receiver/reverse roles and 20-ms modeled
+inference delay. Prospective seed banks allocated before intervention collection.
+Six runs are capped at 2,000 decisions each if gates pass, otherwise 512 each for
+engineering only. No training performance or accepted-win claim.
+
+
+Reactive sender v7 development gate — **complete, engineering diagnostic only**,
+actual start/end 2026-10-27 UTC. Six producer states from four training families,
+two packet-stream replicas/action, two small positive signals; both tiny fits 100%.
+Not optimal action values, CRN evidence, held-out performance or a qualified win.
+[Gate](../../artifacts/reactive-sender-v7-gate.json). Source-bound replay follows
+collector-only changes; it is not independent replication.
+
+Reactive sender v7 Caliban pilot — **completed engineering smoke**, actual start/end 2026-10-27 00:59:44–01:19:47 UTC. [Actual plan](../../artifacts/reactive-sender-v7-plan.json),
+[method](reactive-sender-v7.md), [operational snapshot](../../artifacts/reactive-sender-v7-status.json).
+Six runs (two MLP variants x seeds 42/43/44), 2,000 producer macro decisions/run;
+fixed receiver/reverse roles and fresh case banks. Training reward is not validation
+performance. First seed is checkpointed; no completed study or accepted win yet.
+CPU-only, 6 cores / 8 GiB / 12-hour cap; source frozen and checkpoints mirrored.
+
+
+Reactive sender v7 50k extension — **completed, no learned gain**, actual start/end 2026-10-27 01:31:44–04:44:41 UTC.
+[Config](../../experiments/reactive-sender-v7-training.json),
+[budget rationale](reactive-sender-v7-plan.md#training-budget-extension-after-the-engineering-pilot).
+Same actor/optimizer/reward/guards; training-weight-only sufficient bounds show
+the 2k smoke remains greedy-teacher, so it cannot assess adaptation. Planned six
+50k runs, 48 training cases, 24 prospective validation cases; resource/pilot
+promotion is not based on validation score or model selection. No new win claim.
+
+
+Reactive sender v7 small pilot final — **complete, not an adaptive-policy test**,
+actual end 2026-10-27 01:19:47 UTC. All six 2k-decision runs match the teacher
+exactly. Training-weight bounds certify an always-teacher greedy head for every
+finite input, so equal validation metrics do not establish absence of useful
+control. [Full results](../../artifacts/reactive-sender-v7-pilot-results.json),
+[bound audit](../../artifacts/reactive-sender-v7-initial-head-audit.json).
+The separate 50k plan uses prospective validation and unchanged quality criteria.
+
+
+Reactive sender v7 50k operational launch — **running**, actual start
+2026-10-27 01:31:44 UTC. [Method](reactive-sender-v7-training.md),
+[actual plan](../../artifacts/reactive-sender-v7-training-plan.json),
+[snapshot](../../artifacts/reactive-sender-v7-training-status.json).
+Six from-scratch runs x 50k producer macro decisions; 48 training / 24 prospective
+validation cases. Earlier small validation not reused. Hardware/source gates pass,
+actual policy gradients/episodes recorded. Training reward is not held-out
+performance; no completed study, accepted win or model selection. Same 6-core,
+8-GiB, 12-hour limits. Old small source/job remain unchanged.
+
+
+V7 50k interim update — **running**, observed 2026-10-27 UTC. Four of six
+models have completed training and validation, each matching the reference metrics
+exactly (0% verified-goodput gain, zero wrong deliveries; all quality guards pass).
+Fifth run is at 35,650/50,000 decisions; sixth queued. No failure reported.
+[Timestamped interim snapshot](../../artifacts/reactive-sender-v7-training-interim.json).
+This is not a completed-study result or evidence that all actions match the teacher.
+
+
+V7 50k final — **completed, no learned advantage**, actual start/end
+2026-10-27 01:31:44–04:44:41 UTC. Six runs total 300,011 producer decisions; all
+six match reference validation metrics (701,212 B/s, 24.25% interactive misses,
+zero wrong deliveries, all relative quality guards pass). 0% gain; no accepted win.
+[Full results](../../artifacts/reactive-sender-v7-training-results.json),
+[reference](../../artifacts/reactive-sender-v7-training-reference.json),
+[actor exports](../../artifacts/reactive-sender-v7-training-actors.zip),
+[head audit](../../artifacts/reactive-sender-v7-training-heads.json).
+Five policies are certified greedy-teacher over bounded hidden states; the sixth
+has equal validation metrics but is not certified. No action identity is inferred
+from metrics alone. Earlier running/interim notes are historical and superseded.
+No failure or new unchanged larger job; original reserved tests remain unopened.

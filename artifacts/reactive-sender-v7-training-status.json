@@ -1,0 +1,39 @@
+{
+  "observed_utc": "2026-10-27T01:34:38.316186+00:00",
+  "progress.json": {
+    "phase": "training",
+    "run": "seed42-current-mlp"
+  },
+  "runs": {
+    "seed42-current-mlp": {
+      "phase": "training",
+      "pid": 1265800,
+      "macro_decisions": 4616,
+      "world_macro_steps": 2688,
+      "kernel_steps": 39540,
+      "updates": 42,
+      "elapsed_seconds": 156.56823547184467,
+      "macro_decisions_per_second": 29.482353084512376,
+      "completed_episodes": 16,
+      "distinct_training_worlds": 16,
+      "mean_raw_macro_reward": 0.025289749999841057,
+      "actor": {
+        "samples": 116,
+        "gradient_norm": 0.2561427652835846,
+        "kl": 3.4529585946074803e-07,
+        "choices": [
+          26,
+          62,
+          28
+        ]
+      },
+      "actor_batch_ms_p50_p95": [
+        1.3746730983257294,
+        1.4538581017404795
+      ],
+      "note": "training reward, not validation performance; all actor samples are eligible bulk producers"
+    }
+  },
+  "service": "RuntimeMaxUSec=12h\nMemoryCurrent=1146306560\nCPUAffinity=6-11\nActiveState=active\n",
+  "scope": "operational snapshot, training reward is not validation performance"
+}

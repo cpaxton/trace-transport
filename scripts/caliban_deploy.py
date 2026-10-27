@@ -23,7 +23,7 @@ def remote(ssh,argv,*,cwd=None):
 
 def package(root,archive):
     paths=[root/p for p in ['pyproject.toml','uv.lock','README.md']]
-    for pattern in ['src/**/*.py','scripts/*.py','tests/*.py']:paths.extend(root.glob(pattern))
+    for pattern in ['src/**/*.py','scripts/*.py','tests/*.py','experiments/*.json']:paths.extend(root.glob(pattern))
     hashes={}
     with zipfile.ZipFile(archive,'w',zipfile.ZIP_DEFLATED) as z:
         for path in sorted(set(paths)):
@@ -76,22 +76,24 @@ shutil.copyfile(source/'source-manifest.json',runtime/'runs/source-manifest.json
         code='''import json,sys,subprocess,time
 from pathlib import Path
 root=Path(sys.argv[1]);out={}
-for stage in ['benchmark','study','selector-coverage']:
+for stage in ['benchmark','study','selector-coverage','reactive-sender-v7','reactive-sender-v7-training']:
  r=root/stage;out[stage]={}
- unit='trace-selector-coverage' if stage=='selector-coverage' else 'trace-caliban-v4-'+stage
+ unit=('trace-selector-coverage' if stage=='selector-coverage' else 'trace-'+stage if stage.startswith('reactive-sender-v7') else 'trace-caliban-v4-'+stage)
  state=subprocess.run(['systemctl','--user','show',unit,'--property=ActiveState,SubState,MemoryCurrent,TasksCurrent,CPUAffinity'],capture_output=True,text=True)
  out[stage]['service']=dict(line.split('=',1) for line in state.stdout.splitlines() if '=' in line)
  if (r/'plan.json').exists():
-  data=json.loads((r/'plan.json').read_text());keys=['version','started_utc','splits','scope'] if stage=='selector-coverage' else ['version','started_utc','training_seeds','decisions_per_seed','environments'];out[stage]['plan']={k:data.get(k) for k in keys}
+  data=json.loads((r/'plan.json').read_text());keys=['version','started_utc','actual_training','scope'] if stage.startswith('reactive-sender-v7') else ['version','started_utc','splits','scope'] if stage=='selector-coverage' else ['version','started_utc','training_seeds','decisions_per_seed','environments'];out[stage]['plan']={k:data.get(k) for k in keys}
  if (r/'calibration.json').exists():out[stage]['calibration_controls_completed']=len(json.loads((r/'calibration.json').read_text()))
  for name in ['results.json','progress.json','study-failure.json','failure.json','reference.json']:
   if (r/name).exists():
    data=json.loads((r/name).read_text())
-   if stage=='selector-coverage' and name=='results.json':
+   if stage.startswith('reactive-sender-v7') and name=='results.json':
+    out[stage]['completed_validation']={k:dict(summary=v['summary'],comparison=v['comparison']) for k,v in data.get('modes',{}).items()}
+   elif stage=='selector-coverage' and name=='results.json':
     out[stage]['completed_by_split']={k:dict(probes=len(v.get('probes',[])),controls=len(v.get('controls',{}))) for k,v in data.get('splits',{}).items()}
    else:out[stage][name]=data
  for path in r.glob('seed*/progress.json'):
-  data=json.loads(path.read_text());entry={k:data.get(k) for k in ['phase','decisions','decisions_per_second','elapsed_seconds']}
+  data=json.loads(path.read_text());entry={k:data.get(k) for k in ['phase','decisions','decisions_per_second','elapsed_seconds','macro_decisions','macro_decisions_per_second','kernel_steps','completed_episodes','distinct_training_worlds','mean_raw_macro_reward','actor_batch_ms_p50_p95'] if k in data}
   entry['heartbeat_age_seconds']=time.time()-path.stat().st_mtime
   if entry['phase']=='training' and out[stage]['service'].get('ActiveState')!='active':entry['phase']='stopped; last recorded training'
   out[stage][path.parent.name]=entry

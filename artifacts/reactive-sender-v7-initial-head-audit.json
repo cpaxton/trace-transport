@@ -1,0 +1,55 @@
+{
+  "version": "reactive-sender-head-bound-v1",
+  "observed_utc": "2026-10-27T01:23:35.959769+00:00",
+  "scope": "training weights only; Tanh outputs bounded by 1; sufficient greedy-teacher bound, not performance score",
+  "runs": {
+    "seed44-history-mlp": {
+      "macro_decisions": 2002,
+      "teacher_logit_lower_margins": [
+        1.0372858047485352,
+        1.0249429941177368
+      ],
+      "guaranteed_greedy_teacher": true
+    },
+    "seed43-history-mlp": {
+      "macro_decisions": 2003,
+      "teacher_logit_lower_margins": [
+        1.0171186923980713,
+        1.0113356113433838
+      ],
+      "guaranteed_greedy_teacher": true
+    },
+    "seed42-history-mlp": {
+      "macro_decisions": 2007,
+      "teacher_logit_lower_margins": [
+        0.9549713134765625,
+        0.8851985335350037
+      ],
+      "guaranteed_greedy_teacher": true
+    },
+    "seed44-current-mlp": {
+      "macro_decisions": 2001,
+      "teacher_logit_lower_margins": [
+        1.00928795337677,
+        0.9711170196533203
+      ],
+      "guaranteed_greedy_teacher": true
+    },
+    "seed43-current-mlp": {
+      "macro_decisions": 2004,
+      "teacher_logit_lower_margins": [
+        1.0352102518081665,
+        0.9685333371162415
+      ],
+      "guaranteed_greedy_teacher": true
+    },
+    "seed42-current-mlp": {
+      "macro_decisions": 2005,
+      "teacher_logit_lower_margins": [
+        0.9646717309951782,
+        0.9735013842582703
+      ],
+      "guaranteed_greedy_teacher": true
+    }
+  }
+}
