@@ -76,18 +76,18 @@ shutil.copyfile(source/'source-manifest.json',runtime/'runs/source-manifest.json
         code='''import json,sys,subprocess,time
 from pathlib import Path
 root=Path(sys.argv[1]);out={}
-for stage in ['benchmark','study','selector-coverage','reactive-sender-v7']:
+for stage in ['benchmark','study','selector-coverage','reactive-sender-v7','reactive-sender-v7-training']:
  r=root/stage;out[stage]={}
- unit=('trace-selector-coverage' if stage=='selector-coverage' else 'trace-reactive-sender-v7' if stage=='reactive-sender-v7' else 'trace-caliban-v4-'+stage)
+ unit=('trace-selector-coverage' if stage=='selector-coverage' else 'trace-'+stage if stage.startswith('reactive-sender-v7') else 'trace-caliban-v4-'+stage)
  state=subprocess.run(['systemctl','--user','show',unit,'--property=ActiveState,SubState,MemoryCurrent,TasksCurrent,CPUAffinity'],capture_output=True,text=True)
  out[stage]['service']=dict(line.split('=',1) for line in state.stdout.splitlines() if '=' in line)
  if (r/'plan.json').exists():
-  data=json.loads((r/'plan.json').read_text());keys=['version','started_utc','actual_training','scope'] if stage=='reactive-sender-v7' else ['version','started_utc','splits','scope'] if stage=='selector-coverage' else ['version','started_utc','training_seeds','decisions_per_seed','environments'];out[stage]['plan']={k:data.get(k) for k in keys}
+  data=json.loads((r/'plan.json').read_text());keys=['version','started_utc','actual_training','scope'] if stage.startswith('reactive-sender-v7') else ['version','started_utc','splits','scope'] if stage=='selector-coverage' else ['version','started_utc','training_seeds','decisions_per_seed','environments'];out[stage]['plan']={k:data.get(k) for k in keys}
  if (r/'calibration.json').exists():out[stage]['calibration_controls_completed']=len(json.loads((r/'calibration.json').read_text()))
  for name in ['results.json','progress.json','study-failure.json','failure.json','reference.json']:
   if (r/name).exists():
    data=json.loads((r/name).read_text())
-   if stage=='reactive-sender-v7' and name=='results.json':
+   if stage.startswith('reactive-sender-v7') and name=='results.json':
     out[stage]['completed_validation']={k:dict(summary=v['summary'],comparison=v['comparison']) for k,v in data.get('modes',{}).items()}
    elif stage=='selector-coverage' and name=='results.json':
     out[stage]['completed_by_split']={k:dict(probes=len(v.get('probes',[])),controls=len(v.get('controls',{}))) for k,v in data.get('splits',{}).items()}

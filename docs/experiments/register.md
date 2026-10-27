@@ -292,10 +292,43 @@ until parity, action sensitivity and role-aligned tiny-fit checks pass. New seed
 banks and configuration must be committed before collection. No new result.
 
 
-Reactive sender v7 implementation — **registered, gates pending**, 2026-10-26.
+Reactive sender v7 implementation — **registered**, 2026-10-27 UTC; gates subsequently passed.
 [Configuration](../../experiments/reactive-sender-v7-pilot.json) and
 [contract](reactive-sender-v7-plan.md#initial-caliban-implementation). Role-aligned
 macro MAPPO, bounded target bias, fixed receiver/reverse roles and 20-ms modeled
 inference delay. Prospective seed banks allocated before intervention collection.
 Six runs are capped at 2,000 decisions each if gates pass, otherwise 512 each for
 engineering only. No training performance or accepted-win claim.
+
+
+Reactive sender v7 development gate — **complete, engineering diagnostic only**,
+actual start/end 2026-10-27 UTC. Six producer states from four training families,
+two packet-stream replicas/action, two small positive signals; both tiny fits 100%.
+Not optimal action values, CRN evidence, held-out performance or a qualified win.
+[Gate](../../artifacts/reactive-sender-v7-gate.json). Source-bound replay follows
+collector-only changes; it is not independent replication.
+
+Reactive sender v7 Caliban pilot — **completed engineering smoke**, actual start/end 2026-10-27 00:59:44–01:19:47 UTC. [Actual plan](../../artifacts/reactive-sender-v7-plan.json),
+[method](reactive-sender-v7.md), [operational snapshot](../../artifacts/reactive-sender-v7-status.json).
+Six runs (two MLP variants x seeds 42/43/44), 2,000 producer macro decisions/run;
+fixed receiver/reverse roles and fresh case banks. Training reward is not validation
+performance. First seed is checkpointed; no completed study or accepted win yet.
+CPU-only, 6 cores / 8 GiB / 12-hour cap; source frozen and checkpoints mirrored.
+
+
+Reactive sender v7 50k extension — **registered, not started**, 2026-10-27 UTC.
+[Config](../../experiments/reactive-sender-v7-training.json),
+[budget rationale](reactive-sender-v7-plan.md#training-budget-extension-after-the-engineering-pilot).
+Same actor/optimizer/reward/guards; training-weight-only sufficient bounds show
+the 2k smoke remains greedy-teacher, so it cannot assess adaptation. Planned six
+50k runs, 48 training cases, 24 prospective validation cases; resource/pilot
+promotion is not based on validation score or model selection. No new win claim.
+
+
+Reactive sender v7 small pilot final — **complete, not an adaptive-policy test**,
+actual end 2026-10-27 01:19:47 UTC. All six 2k-decision runs match the teacher
+exactly. Training-weight bounds certify an always-teacher greedy head for every
+finite input, so equal validation metrics do not establish absence of useful
+control. [Full results](../../artifacts/reactive-sender-v7-pilot-results.json),
+[bound audit](../../artifacts/reactive-sender-v7-initial-head-audit.json).
+The separate 50k plan uses prospective validation and unchanged quality criteria.

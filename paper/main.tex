@@ -826,6 +826,20 @@ is claimed. A role-aligned reactive follow-up needs new prospective validation.
 Earlier experiments use their frozen semantics. Caliban v4 remains a diagnostic baseline, with its original all-host
 completion guard now known infeasible in at least one validation case.
 
+A subsequent engineering v7 pilot isolates bulk-producer roles with a fixed
+receiver and reverse-role teacher. Local MLPs select bounded teacher-target rate
+biases, use one-second physical histories, and incur a modeled 20-ms inference
+cost. Teacher parity and role masking pass local and Caliban integration checks;
+a two-replica finite-horizon development audit and tiny fits are engineering gates,
+not evidence of a qualified advantage. CPU training began on Caliban on
+2026-10-27 UTC: two MLP variants, three seeds, 2,000 macro decisions per run.
+Source, actual budgets and timing gates are frozen. The six small runs finish and match the teacher exactly. A training-weight bound
+using the Tanh activation range certifies always-teacher greedy heads for every
+finite input; this smoke therefore does not test adaptive-policy potential.
+A separate 50k-decision configuration uses the same architecture/reward/guards,
+expanded training coverage and prospective validation. No longer-run improvement
+or accepted win is claimed.
+
 \section{Implementation stages and open questions}
 Implemented stages include reliable CPU transfer, history-based sender learning,
 receiver learning, joint sender/receiver training over CPU packet workers, and

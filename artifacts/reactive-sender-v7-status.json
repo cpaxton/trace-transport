@@ -1,0 +1,95 @@
+{
+  "observed_utc": "2026-10-27T01:07:41.331107+00:00",
+  "scope": "operational training snapshot; reward is not held-out performance",
+  "progress": {
+    "phase": "training",
+    "run": "seed44-current-mlp"
+  },
+  "runs": {
+    "seed44-current-mlp": {
+      "phase": "training",
+      "pid": 1264678,
+      "macro_decisions": 748,
+      "world_macro_steps": 256,
+      "kernel_steps": 3520,
+      "updates": 4,
+      "elapsed_seconds": 73.97038075327873,
+      "macro_decisions_per_second": 10.1121556004272,
+      "completed_episodes": 0,
+      "distinct_training_worlds": 4,
+      "mean_raw_macro_reward": 0.12234641154607137,
+      "actor": {
+        "samples": 174,
+        "gradient_norm": 0.14462625980377197,
+        "kl": 8.765993584347598e-07,
+        "choices": [
+          33,
+          105,
+          36
+        ]
+      },
+      "actor_batch_ms_p50_p95": [
+        1.4723660424351692,
+        1.6020068433135748
+      ],
+      "note": "training reward, not validation performance; all actor samples are eligible bulk producers"
+    },
+    "seed43-current-mlp": {
+      "phase": "complete",
+      "pid": 1264678,
+      "macro_decisions": 2004,
+      "world_macro_steps": 956,
+      "kernel_steps": 17480,
+      "updates": 15,
+      "elapsed_seconds": 124.0072815073654,
+      "macro_decisions_per_second": 16.16034135770465,
+      "completed_episodes": 4,
+      "distinct_training_worlds": 8,
+      "mean_raw_macro_reward": 0.10873667310785365,
+      "actor": {
+        "samples": 160,
+        "gradient_norm": 0.0798814669251442,
+        "kl": 2.2612512395880913e-07,
+        "choices": [
+          34,
+          99,
+          27
+        ]
+      },
+      "actor_batch_ms_p50_p95": [
+        1.3895644806325436,
+        1.49791669100523
+      ],
+      "note": "training reward, not validation performance; all actor samples are eligible bulk producers"
+    },
+    "seed42-current-mlp": {
+      "phase": "complete",
+      "pid": 1264678,
+      "macro_decisions": 2005,
+      "world_macro_steps": 1128,
+      "kernel_steps": 10440,
+      "updates": 18,
+      "elapsed_seconds": 29.170217657461762,
+      "macro_decisions_per_second": 68.73448883872554,
+      "completed_episodes": 4,
+      "distinct_training_worlds": 6,
+      "mean_raw_macro_reward": 0.0004420326550801596,
+      "actor": {
+        "samples": 85,
+        "gradient_norm": 0.20403160154819489,
+        "kl": 1.2061175880262454e-07,
+        "choices": [
+          17,
+          54,
+          14
+        ]
+      },
+      "actor_batch_ms_p50_p95": [
+        1.3730828650295734,
+        1.5009690076112747
+      ],
+      "note": "training reward, not validation performance; all actor samples are eligible bulk producers"
+    }
+  },
+  "service": "MemoryCurrent=995627008\nCPUAffinity=6-11\nActiveState=active\n"
+}

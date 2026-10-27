@@ -94,3 +94,13 @@ def test_run_plan_matches_effective_training_budget(tmp_path,monkeypatch,advance
     monkeypatch.setattr(runner,'inference_benchmark',lambda kinds:{k:{'warm_ms_p50_p95':[.1,latency]} for k in kinds})
     monkeypatch.setattr(runner,'train',capture)
     with pytest.raises(Done):runner.main()
+
+
+def test_head_bound_certifies_teacher_without_using_validation():
+    torch=pytest.importorskip('torch')
+    from trace_transport.reactive_sender_training import Policy
+    from scripts.reactive_sender_head_audit import bounds
+    actor=Policy('current-mlp')
+    assert bounds(actor)['guaranteed_greedy_teacher']
+    with torch.no_grad():actor.head.weight[0].fill_(2.)
+    assert not bounds(actor)['guaranteed_greedy_teacher']

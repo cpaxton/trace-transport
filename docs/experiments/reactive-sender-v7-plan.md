@@ -1,7 +1,9 @@
 # Next experiment: role-aligned reactive sender control
 
-Status: **planned, not started**. Written 2026-10-26 after PR #4 merged. No new
-training result or compute launch is claimed. This follows the completed
+Status: **initial Caliban pilot running; larger study still planned**. The proposal
+was written 2026-10-26 after PR #4 merged. The separately registered
+[initial pilot](reactive-sender-v7.md) launched 2026-10-27 UTC; no accepted learning
+result is claimed. This follows the completed
 [selector study](selector-learning-v1.md), rather than tuning its validation bank.
 
 ## Question
@@ -139,3 +141,24 @@ steps, distinct training cases, completed episodes, reward and actor latency.
 Training reward is separate from final-checkpoint validation. Frozen source,
 configuration, exact actual budgets and gate outcomes are recorded before remote
 training. No v7 training has started at the time this implementation is registered.
+
+
+## Training-budget extension after the engineering pilot
+
+The 2k-decision smoke is too short to test greedy adaptation: a training-weight-only
+bound proves its completed heads still select the teacher over bounded finite hidden states.
+This is not evidence against reactive control. The pre-existing 50k cap will be
+used in a separate frozen run, with the same models, optimizer, reward and quality
+guards. This explicitly amends the resource gate: numerical/role/timing checks,
+small development intervention signals and the training-head bound justify a
+meaningful exposure budget; pilot validation scores do not select a model or tune
+parameters. No validation improvement is asserted to justify scaling.
+
+[Extended config](../../experiments/reactive-sender-v7-training.json) fixes six
+runs at 50k producer decisions each if the source-bound development/timing checks
+pass, otherwise the engineering fallback. Training coverage expands from 24 to 48
+cases (including the original 24); 24 prospective validation cases are allocated
+before launch, and the earlier pilot validation is not reused. This is not an
+isolated budget-only causal comparison because coverage also expands. The same
+development sensitivity states are replayed to bind new configuration/source;
+this is not independent replication. The old small job and source stay unchanged.
