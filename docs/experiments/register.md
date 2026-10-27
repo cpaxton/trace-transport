@@ -290,3 +290,12 @@ training/deployment roles, use repeated bounded target-rate decisions and causal
 physical-time history, keep receivers/reverse roles deterministic. No pilot starts
 until parity, action sensitivity and role-aligned tiny-fit checks pass. New seed
 banks and configuration must be committed before collection. No new result.
+
+
+Reactive sender v7 implementation — **registered, gates pending**, 2026-10-26.
+[Configuration](../../experiments/reactive-sender-v7-pilot.json) and
+[contract](reactive-sender-v7-plan.md#initial-caliban-implementation). Role-aligned
+macro MAPPO, bounded target bias, fixed receiver/reverse roles and 20-ms modeled
+inference delay. Prospective seed banks allocated before intervention collection.
+Six runs are capped at 2,000 decisions each if gates pass, otherwise 512 each for
+engineering only. No training performance or accepted-win claim.

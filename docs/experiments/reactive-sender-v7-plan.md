@@ -97,3 +97,41 @@ and dependency-aware map scheduling: opt-in stale-image replacement with exact
 recovery of accepted objects, compared with latest-only/EDF/fair-queue baselines.
 That requires its own objective and prospective evaluation, not relabeling this
 throughput experiment as a success.
+
+
+## Initial Caliban implementation
+
+The first registered implementation is a bounded engineering/pilot job, not the
+long 50k-decision study. [Configuration](../../experiments/reactive-sender-v7-pilot.json)
+allocates 24 training, 12 unused calibration, and 12 new validation cases, checked
+against prior public seed allocations. All six final policies (two MLP variants x
+three optimizer seeds) are reported without validation-based selection.
+
+Fixed physical-time bins integrate decoded ACK/wire/loss rates and retain only
+past instantaneous state at each bin boundary. Interval rates are retrospectively
+spread uniformly over their measurement intervals; this is an approximation, not
+packet-timestamp recovery. Actors never consume data later than their decision.
+The critic additionally summarizes applied bias, hold and pending control state;
+those centralized fields never enter actors.
+
+The adapter changes only rate targets, with the teacher window unchanged. Choices
+are reconsidered every 100 ms or twice the endpoint's measured RTT (bounded at
+500 ms). An explicit 20-ms inference/dispatch delay is charged at the next kernel
+boundary. On-device warm p95 actor timing must fit that budget to advance; timing
+is descriptive, not a real-time deployment certification. Initialization samples
+the teacher with probability 0.6 and each bounded alternative with 0.2; greedy
+initialization is exactly the teacher.
+
+A development-only two-replica intervention audit and role-aligned tiny fits gate
+the budget. A positive signal plus exact tiny fits and on-device timing allows
+2,000 producer macro decisions per run. Otherwise each run is limited to 512
+engineering decisions, with no scaling justification. These are deliberately small
+smokes/pilots; two replicas do not establish a reliable causal advantage. Longer
+training still requires the stronger gates above. Raw task reward, physical-time
+GAE, no progress shaping and no paired-teacher subtraction are used.
+
+Runs retain initial/latest/final checkpoints and report macro decisions, kernel
+steps, distinct training cases, completed episodes, reward and actor latency.
+Training reward is separate from final-checkpoint validation. Frozen source,
+configuration, exact actual budgets and gate outcomes are recorded before remote
+training. No v7 training has started at the time this implementation is registered.

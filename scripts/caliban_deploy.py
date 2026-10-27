@@ -23,7 +23,7 @@ def remote(ssh,argv,*,cwd=None):
 
 def package(root,archive):
     paths=[root/p for p in ['pyproject.toml','uv.lock','README.md']]
-    for pattern in ['src/**/*.py','scripts/*.py','tests/*.py']:paths.extend(root.glob(pattern))
+    for pattern in ['src/**/*.py','scripts/*.py','tests/*.py','experiments/*.json']:paths.extend(root.glob(pattern))
     hashes={}
     with zipfile.ZipFile(archive,'w',zipfile.ZIP_DEFLATED) as z:
         for path in sorted(set(paths)):
