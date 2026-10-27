@@ -130,6 +130,10 @@ smokes/pilots; two replicas do not establish a reliable causal advantage. Longer
 training still requires the stronger gates above. Raw task reward, physical-time
 GAE, no progress shaping and no paired-teacher subtraction are used.
 
+The initial collector uses 16 macro steps per rollout to checkpoint promptly.
+Policy, critic and sampling use separate recorded seeds; critic initialization is
+identical across model kinds at the same optimizer seed.
+
 Runs retain initial/latest/final checkpoints and report macro decisions, kernel
 steps, distinct training cases, completed episodes, reward and actor latency.
 Training reward is separate from final-checkpoint validation. Frozen source,

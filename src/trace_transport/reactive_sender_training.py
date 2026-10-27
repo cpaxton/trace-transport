@@ -18,7 +18,7 @@ from .reactive_sender import BIASES,CONTRACT,FEATURES,KEEP,MacroPool,CRITIC_EXTR
 class Config:
     decisions:int=2000
     environments:int=4
-    rollout:int=64
+    rollout:int=16
     epochs:int=3
     minibatch:int=256
     learning_rate:float=.0001
@@ -70,9 +70,12 @@ def train(output,config,seeds,source,*,on_update=None):
     if (output/'config.json').exists():raise ValueError('fresh output required; no silent resume')
     if not seeds or len(seeds)!=len(set(seeds)):raise ValueError('nonempty unique training seeds required')
     torch.set_num_threads(1);torch.manual_seed(config.seed);rng=np.random.default_rng(config.seed)
-    policy=Policy(config.kind);critic=Critic()
+    policy=Policy(config.kind)
+    torch.manual_seed(config.seed+10000);critic=Critic()
+    torch.manual_seed(config.seed+20000)
     optimizers=[torch.optim.Adam(policy.parameters(),lr=config.learning_rate),torch.optim.Adam(critic.parameters(),lr=config.learning_rate)]
     metadata=dict(training=asdict(config),contract=CONTRACT,training_seeds=seeds,source=source,
+        initialization=dict(policy_seed=config.seed,critic_seed=config.seed+10000,sampling_seed=config.seed+20000),
         reward='raw goodput-v6, micro rewards discounted in physical time within macro transitions; no shaping/subtracted teacher',
         runtime=dict(torch=str(torch.__version__),numpy=str(np.__version__)),accepted_win=False)
     write(output/'config.json',metadata);save(output/'initial.pt',policy,critic,optimizers,metadata)

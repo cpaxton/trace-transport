@@ -68,6 +68,10 @@ def test_tiny_training_checkpoint_is_role_aligned_and_safely_loadable(tmp_path):
     train(tmp_path/'run',Config(decisions=4,environments=1,rollout=2,epochs=1),[700000],{})
     actor,meta=load(tmp_path/'run/latest.pt')
     assert meta['macro_decisions']>=4 and meta['training']['decisions']==4
+    train(tmp_path/'history',Config(decisions=1,environments=1,rollout=1,epochs=1,kind='history-mlp'),[700000],{})
+    a=torch.load(tmp_path/'run/initial.pt',weights_only=True);b=torch.load(tmp_path/'history/initial.pt',weights_only=True)
+    assert all(torch.equal(a['critic'][k],b['critic'][k]) for k in a['critic'])
+    assert torch.equal(a['torch_rng'],b['torch_rng'])
     assert meta['actor']['samples']>0
     assert torch.isfinite(torch.cat([p.flatten() for p in actor.parameters()])).all()
 
