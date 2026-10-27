@@ -83,7 +83,7 @@ ssh caliban systemctl --user status trace-reactive-sender-v7 --no-pager
 
 Raw runs/checkpoints stay local to the devices. Public artifacts contain frozen
 source, exact configuration, small gate results and labeled operational snapshots.
-No v7 win or new scientific performance result is available yet.
+No v7 advantage is claimed; the completed engineering outcome is recorded below.
 
 
 ## Completed small pilot and meaningful training budget
