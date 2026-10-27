@@ -838,8 +838,10 @@ using the Tanh activation range certifies always-teacher greedy heads for every
 finite input; this smoke therefore does not test adaptive-policy potential.
 A separate 50k-decision configuration uses the same architecture/reward/guards,
 expanded training coverage and prospective validation. The separate 50k runs launched on Caliban at 2026-10-27 01:31:44 UTC,
-with 48 training and 24 prospective validation cases. No longer-run improvement
-or accepted win is claimed.
+with 48 training and 24 prospective validation cases. An interim snapshot finds the first four completed 50k models match reference
+validation metrics exactly, with zero wrong deliveries and all quality guards
+passing; two runs remain unfinished. No longer-run improvement or accepted win
+is claimed, and equal metrics alone do not establish identical actions.
 
 \section{Implementation stages and open questions}
 Implemented stages include reliable CPU transfer, history-based sender learning,

@@ -343,3 +343,11 @@ validation cases. Earlier small validation not reused. Hardware/source gates pas
 actual policy gradients/episodes recorded. Training reward is not held-out
 performance; no completed study, accepted win or model selection. Same 6-core,
 8-GiB, 12-hour limits. Old small source/job remain unchanged.
+
+
+V7 50k interim update — **running**, observed 2026-10-27 UTC. Four of six
+models have completed training and validation, each matching the reference metrics
+exactly (0% verified-goodput gain, zero wrong deliveries; all quality guards pass).
+Fifth run is at 35,650/50,000 decisions; sixth queued. No failure reported.
+[Timestamped interim snapshot](../../artifacts/reactive-sender-v7-training-interim.json).
+This is not a completed-study result or evidence that all actions match the teacher.

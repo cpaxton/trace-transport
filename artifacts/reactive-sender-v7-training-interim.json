@@ -1,0 +1,275 @@
+{
+  "observed_utc": "2026-10-27T04:07:43.526910+00:00",
+  "status": "running; interim only",
+  "service": {
+    "MemoryCurrent": "2679791616",
+    "TasksCurrent": "6",
+    "CPUAffinity": "6-11",
+    "ActiveState": "active",
+    "SubState": "running"
+  },
+  "progress": {
+    "phase": "training",
+    "run": "seed43-history-mlp"
+  },
+  "completed_validation": {
+    "seed42-current-mlp": {
+      "summary": {
+        "verified_goodput": 701212.4444444445,
+        "confirmed_goodput": 701212.4444444445,
+        "image_goodput": 502101.3333333333,
+        "map_goodput": 199111.11111111112,
+        "interactive_miss_rate": 0.2424697121262643,
+        "completion_fraction": 0.9607114831284331,
+        "wire_per_useful_byte": 1.88297521420042,
+        "wrong": 0,
+        "starved_hosts": 21,
+        "cases": 24,
+        "zero_completed_bulk_hosts": 21,
+        "zero_accepted_bulk_hosts": 0,
+        "accepted_bulk_goodput": 756280.8888888889,
+        "mean_bulk_progress_jain": 0.9598816259868482,
+        "provably_infeasible_completion_cases": 3
+      },
+      "comparison": {
+        "relative_goodput_gain": 0.0,
+        "goodput_difference_ci95": [
+          0.0,
+          0.0
+        ],
+        "miss_difference_ci95": [
+          0.0,
+          0.0
+        ],
+        "guards": {
+          "deadline": true,
+          "wire": true,
+          "integrity": true,
+          "hosts": true,
+          "image": true,
+          "map": true,
+          "confirmation": true,
+          "completion": true,
+          "fairness": true,
+          "strata_progress": true,
+          "strata_verified": true
+        },
+        "win": false,
+        "host_guard_basis": "accepted bulk payload progress; completed-object counts reported separately"
+      }
+    },
+    "seed43-current-mlp": {
+      "summary": {
+        "verified_goodput": 701212.4444444445,
+        "confirmed_goodput": 701212.4444444445,
+        "image_goodput": 502101.3333333333,
+        "map_goodput": 199111.11111111112,
+        "interactive_miss_rate": 0.2424697121262643,
+        "completion_fraction": 0.9607114831284331,
+        "wire_per_useful_byte": 1.88297521420042,
+        "wrong": 0,
+        "starved_hosts": 21,
+        "cases": 24,
+        "zero_completed_bulk_hosts": 21,
+        "zero_accepted_bulk_hosts": 0,
+        "accepted_bulk_goodput": 756280.8888888889,
+        "mean_bulk_progress_jain": 0.9598816259868482,
+        "provably_infeasible_completion_cases": 3
+      },
+      "comparison": {
+        "relative_goodput_gain": 0.0,
+        "goodput_difference_ci95": [
+          0.0,
+          0.0
+        ],
+        "miss_difference_ci95": [
+          0.0,
+          0.0
+        ],
+        "guards": {
+          "deadline": true,
+          "wire": true,
+          "integrity": true,
+          "hosts": true,
+          "image": true,
+          "map": true,
+          "confirmation": true,
+          "completion": true,
+          "fairness": true,
+          "strata_progress": true,
+          "strata_verified": true
+        },
+        "win": false,
+        "host_guard_basis": "accepted bulk payload progress; completed-object counts reported separately"
+      }
+    },
+    "seed44-current-mlp": {
+      "summary": {
+        "verified_goodput": 701212.4444444445,
+        "confirmed_goodput": 701212.4444444445,
+        "image_goodput": 502101.3333333333,
+        "map_goodput": 199111.11111111112,
+        "interactive_miss_rate": 0.2424697121262643,
+        "completion_fraction": 0.9607114831284331,
+        "wire_per_useful_byte": 1.88297521420042,
+        "wrong": 0,
+        "starved_hosts": 21,
+        "cases": 24,
+        "zero_completed_bulk_hosts": 21,
+        "zero_accepted_bulk_hosts": 0,
+        "accepted_bulk_goodput": 756280.8888888889,
+        "mean_bulk_progress_jain": 0.9598816259868482,
+        "provably_infeasible_completion_cases": 3
+      },
+      "comparison": {
+        "relative_goodput_gain": 0.0,
+        "goodput_difference_ci95": [
+          0.0,
+          0.0
+        ],
+        "miss_difference_ci95": [
+          0.0,
+          0.0
+        ],
+        "guards": {
+          "deadline": true,
+          "wire": true,
+          "integrity": true,
+          "hosts": true,
+          "image": true,
+          "map": true,
+          "confirmation": true,
+          "completion": true,
+          "fairness": true,
+          "strata_progress": true,
+          "strata_verified": true
+        },
+        "win": false,
+        "host_guard_basis": "accepted bulk payload progress; completed-object counts reported separately"
+      }
+    },
+    "seed42-history-mlp": {
+      "summary": {
+        "verified_goodput": 701212.4444444445,
+        "confirmed_goodput": 701212.4444444445,
+        "image_goodput": 502101.3333333333,
+        "map_goodput": 199111.11111111112,
+        "interactive_miss_rate": 0.2424697121262643,
+        "completion_fraction": 0.9607114831284331,
+        "wire_per_useful_byte": 1.88297521420042,
+        "wrong": 0,
+        "starved_hosts": 21,
+        "cases": 24,
+        "zero_completed_bulk_hosts": 21,
+        "zero_accepted_bulk_hosts": 0,
+        "accepted_bulk_goodput": 756280.8888888889,
+        "mean_bulk_progress_jain": 0.9598816259868482,
+        "provably_infeasible_completion_cases": 3
+      },
+      "comparison": {
+        "relative_goodput_gain": 0.0,
+        "goodput_difference_ci95": [
+          0.0,
+          0.0
+        ],
+        "miss_difference_ci95": [
+          0.0,
+          0.0
+        ],
+        "guards": {
+          "deadline": true,
+          "wire": true,
+          "integrity": true,
+          "hosts": true,
+          "image": true,
+          "map": true,
+          "confirmation": true,
+          "completion": true,
+          "fairness": true,
+          "strata_progress": true,
+          "strata_verified": true
+        },
+        "win": false,
+        "host_guard_basis": "accepted bulk payload progress; completed-object counts reported separately"
+      }
+    }
+  },
+  "training_runs": {
+    "seed43-history-mlp": {
+      "phase": "training",
+      "elapsed_seconds": 1448.3191390354186,
+      "macro_decisions": 35650,
+      "macro_decisions_per_second": 24.61474065981267,
+      "kernel_steps": 266290,
+      "completed_episodes": 124,
+      "distinct_training_worlds": 44,
+      "mean_raw_macro_reward": -0.01153150286939409,
+      "actor_batch_ms_p50_p95": [
+        1.4422880485653877,
+        1.5520031098276377
+      ],
+      "heartbeat_age_seconds": 2.259751319885254
+    },
+    "seed42-history-mlp": {
+      "phase": "complete",
+      "elapsed_seconds": 1691.449735864997,
+      "macro_decisions": 50003,
+      "macro_decisions_per_second": 29.562214554622148,
+      "kernel_steps": 386610,
+      "completed_episodes": 192,
+      "distinct_training_worlds": 47,
+      "mean_raw_macro_reward": 0.020478855371475223,
+      "actor_batch_ms_p50_p95": [
+        1.379871740937233,
+        1.4557054731994867
+      ],
+      "heartbeat_age_seconds": 1697.2028424739838
+    },
+    "seed44-current-mlp": {
+      "phase": "complete",
+      "elapsed_seconds": 1361.188682035543,
+      "macro_decisions": 50004,
+      "macro_decisions_per_second": 36.73553906224318,
+      "kernel_steps": 437250,
+      "completed_episodes": 200,
+      "distinct_training_worlds": 47,
+      "mean_raw_macro_reward": 0.003826003074645995,
+      "actor_batch_ms_p50_p95": [
+        1.2834384106099606,
+        1.3437271118164062
+      ],
+      "heartbeat_age_seconds": 3630.2645931243896
+    },
+    "seed43-current-mlp": {
+      "phase": "complete",
+      "elapsed_seconds": 1852.2452920060605,
+      "macro_decisions": 50000,
+      "macro_decisions_per_second": 26.99426486102598,
+      "kernel_steps": 363820,
+      "completed_episodes": 180,
+      "distinct_training_worlds": 46,
+      "mean_raw_macro_reward": -0.09147753106223211,
+      "actor_batch_ms_p50_p95": [
+        1.2903669849038124,
+        1.377702597528696
+      ],
+      "heartbeat_age_seconds": 5238.158731937408
+    },
+    "seed42-current-mlp": {
+      "phase": "complete",
+      "elapsed_seconds": 1715.244876104407,
+      "macro_decisions": 50001,
+      "macro_decisions_per_second": 29.150939726787115,
+      "kernel_steps": 387010,
+      "completed_episodes": 192,
+      "distinct_training_worlds": 47,
+      "mean_raw_macro_reward": 0.008680059682755243,
+      "actor_batch_ms_p50_p95": [
+        1.3075503520667553,
+        1.357339322566986
+      ],
+      "heartbeat_age_seconds": 7578.695442914963
+    }
+  },
+  "scope": "all four completed modes reported; remaining models in progress; metrics match reference but action identity not inferred; reserved acceptance cases unopened"
+}

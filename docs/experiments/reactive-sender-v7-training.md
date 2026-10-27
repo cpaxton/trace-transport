@@ -59,3 +59,12 @@ training episodes and nonzero policy gradients. Counts/rewards in that snapshot
 are training statistics, not validation performance. Network conditions are
 simulated on Caliban; inference timing does not establish live protocol quality.
 No final or accepted improvement is available yet.
+
+
+## Interim update, 2026-10-27 UTC
+
+Four completed models (all current MLP seeds and history MLP seed 42) match the
+reference validation metrics exactly: 0% verified-goodput gain, all quality guards
+pass, zero wrong deliveries. History seed 43 is training; seed 44 is queued.
+[Snapshot](../../artifacts/reactive-sender-v7-training-interim.json). This does not
+establish action identity or a final ranking; remaining runs continue unchanged.
