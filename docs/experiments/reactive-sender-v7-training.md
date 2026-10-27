@@ -1,6 +1,7 @@
 # Caliban: 50k-decision reactive sender training
 
-**Running**, actual start 2026-10-27 01:31:44 UTC (October 26 local evening).
+**Completed, no learned advantage.** Actual start/end: 2026-10-27
+01:31:44–04:44:41 UTC (October 26 evening to October 27 local midnight).
 This follows the completed [2k engineering pilot](reactive-sender-v7.md).
 
 [Registered configuration](../../experiments/reactive-sender-v7-training.json),
@@ -58,7 +59,7 @@ The recorded snapshot verifies 50k actual budgets, an active service, completed
 training episodes and nonzero policy gradients. Counts/rewards in that snapshot
 are training statistics, not validation performance. Network conditions are
 simulated on Caliban; inference timing does not establish live protocol quality.
-No final or accepted improvement is available yet.
+The completed study and final diagnostics are reported below.
 
 
 ## Interim update, 2026-10-27 UTC
@@ -68,3 +69,33 @@ reference validation metrics exactly: 0% verified-goodput gain, all quality guar
 pass, zero wrong deliveries. History seed 43 is training; seed 44 is queued.
 [Snapshot](../../artifacts/reactive-sender-v7-training-interim.json). This does not
 establish action identity or a final ranking; remaining runs continue unchanged.
+
+
+## Complete result, 2026-10-27 UTC
+
+All six runs finish, totaling **300,011 producer macro decisions**. All six match
+the deterministic reference validation metrics exactly: 701,212 verified B/s,
+24.25% interactive misses, zero wrong deliveries, and all relative quality guards
+passing. This is **0% gain**, not an accepted win. Passing nonregression guards
+does not imply good absolute latency or complete bulk delivery in every case.
+
+[Full results](../../artifacts/reactive-sender-v7-training-results.json),
+[reference records](../../artifacts/reactive-sender-v7-training-reference.json),
+[final head audit](../../artifacts/reactive-sender-v7-training-heads.json),
+[curated final actors](../../artifacts/reactive-sender-v7-training-actors.zip).
+Actor exports exclude critic/optimizer/RNG; the archive manifest records original
+checkpoint hashes and verifies every policy tensor unchanged. Raw checkpoints and
+training logs remain on Caliban. Last-update metadata in the exports is preserved;
+it is not the current service state.
+
+Five heads have a strictly positive sufficient teacher-logit lower bound over
+bounded Tanh activations, so their greedy deployment remains the teacher for all
+supported histories. Seed-42 current MLP does not satisfy that bound; its identical
+validation metrics do not establish action identity. Negative bounds do not prove
+adaptive behavior. Parameters/gradients can change without changing greedy choice.
+
+The job completed without a reported failure and is inactive. No unchanged larger
+run is launched. The next useful diagnosis is a repeated-case RL credit/signal
+check and sampled-versus-greedy evaluation, with explicit action-value uncertainty
+and fresh prospective testing before another performance claim. More compute alone
+is not supported by this result. Receiver learning remains a separate later task.

@@ -316,7 +316,7 @@ performance. First seed is checkpointed; no completed study or accepted win yet.
 CPU-only, 6 cores / 8 GiB / 12-hour cap; source frozen and checkpoints mirrored.
 
 
-Reactive sender v7 50k extension — **running**, actual start 2026-10-27 01:31:44 UTC; end pending.
+Reactive sender v7 50k extension — **completed, no learned gain**, actual start/end 2026-10-27 01:31:44–04:44:41 UTC.
 [Config](../../experiments/reactive-sender-v7-training.json),
 [budget rationale](reactive-sender-v7-plan.md#training-budget-extension-after-the-engineering-pilot).
 Same actor/optimizer/reward/guards; training-weight-only sufficient bounds show
@@ -351,3 +351,17 @@ exactly (0% verified-goodput gain, zero wrong deliveries; all quality guards pas
 Fifth run is at 35,650/50,000 decisions; sixth queued. No failure reported.
 [Timestamped interim snapshot](../../artifacts/reactive-sender-v7-training-interim.json).
 This is not a completed-study result or evidence that all actions match the teacher.
+
+
+V7 50k final — **completed, no learned advantage**, actual start/end
+2026-10-27 01:31:44–04:44:41 UTC. Six runs total 300,011 producer decisions; all
+six match reference validation metrics (701,212 B/s, 24.25% interactive misses,
+zero wrong deliveries, all relative quality guards pass). 0% gain; no accepted win.
+[Full results](../../artifacts/reactive-sender-v7-training-results.json),
+[reference](../../artifacts/reactive-sender-v7-training-reference.json),
+[actor exports](../../artifacts/reactive-sender-v7-training-actors.zip),
+[head audit](../../artifacts/reactive-sender-v7-training-heads.json).
+Five policies are certified greedy-teacher over bounded hidden states; the sixth
+has equal validation metrics but is not certified. No action identity is inferred
+from metrics alone. Earlier running/interim notes are historical and superseded.
+No failure or new unchanged larger job; original reserved tests remain unopened.
