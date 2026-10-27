@@ -1,6 +1,7 @@
 # V7 frozen-policy and credit diagnostics
 
-Registered 2026-10-27. Status: **planned; no diagnostic results collected**.
+Registered 2026-10-27. Smoke status: **running**, actual start 2026-10-27T23:26:56.437497+00:00; no results yet.
+[Recorded run plan](../../artifacts/v7-policy-diagnostics-smoke-plan.json). Full profile remains planned.
 This follow-up is stacked on PR #5 and does not train or select another model.
 The completed 50k-decision study still has no demonstrated learning win.
 

@@ -370,4 +370,4 @@ No failure or new unchanged larger job; original reserved tests remain unopened.
 
 | Actual start | Actual end | Experiment | Status | Configuration and evidence |
 | --- | --- | --- | --- | --- |
-| Not started | — | v7 sampled deployment and conditional credit | Planned; no results, no new training or acceptance claim | [Plan](v7-policy-diagnostics.md), [fixed configuration](../../experiments/v7-policy-diagnostics-v1.json) |
+| 2026-10-27T23:26:56.437497+00:00 | — | v7 sampled deployment and conditional credit | Smoke running; full planned; no results, no new training or acceptance claim | [Plan](v7-policy-diagnostics.md), [fixed configuration](../../experiments/v7-policy-diagnostics-v1.json), [actual smoke plan](../../artifacts/v7-policy-diagnostics-smoke-plan.json) |
