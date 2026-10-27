@@ -1,0 +1,329 @@
+{
+  "version": "reactive-sender-v7-development-gate-v1",
+  "completed_utc": "2026-10-27T01:29:13.497516+00:00",
+  "scope": "small finite-horizon development sensitivity gate; independent post-state packet-stream replicas, not CRN; teacher continuation, noisy labels, not optimal action values or held-out performance",
+  "cases": [
+    {
+      "seed": 700006,
+      "family": "wired-lan",
+      "producer_index": 0,
+      "actions": [
+        {
+          "choice": 0,
+          "bias": 0.8,
+          "raw_returns": [
+            3.9890176010131833,
+            4.029963493347167
+          ],
+          "mean_return": 4.009490547180175,
+          "replica_std": 0.020472946166991912,
+          "mean_misses": 0.0,
+          "mean_verified": 13041664.0
+        },
+        {
+          "choice": 1,
+          "bias": 1.0,
+          "raw_returns": [
+            4.03101972579956,
+            3.989780470530192
+          ],
+          "mean_return": 4.010400098164876,
+          "replica_std": 0.020619627634683946,
+          "mean_misses": 0.0,
+          "mean_verified": 13041664.0
+        },
+        {
+          "choice": 2,
+          "bias": 1.2,
+          "raw_returns": [
+            3.947143154144287,
+            3.989382019042968
+          ],
+          "mean_return": 3.9682625865936276,
+          "replica_std": 0.021119432449340447,
+          "mean_misses": 0.0,
+          "mean_verified": 12910592.0
+        }
+      ],
+      "guarded_positive_signal": false
+    },
+    {
+      "seed": 700006,
+      "family": "wired-lan",
+      "producer_index": 2,
+      "actions": [
+        {
+          "choice": 0,
+          "bias": 0.8,
+          "raw_returns": [
+            3.9893130938212074,
+            4.654340235392253
+          ],
+          "mean_return": 4.32182666460673,
+          "replica_std": 0.3325135707855227,
+          "mean_misses": 0.0,
+          "mean_verified": 14024704.0
+        },
+        {
+          "choice": 1,
+          "bias": 1.0,
+          "raw_returns": [
+            4.031105950673421,
+            4.655048217773437
+          ],
+          "mean_return": 4.343077084223429,
+          "replica_std": 0.31197113355000816,
+          "mean_misses": 0.0,
+          "mean_verified": 14090240.0
+        },
+        {
+          "choice": 2,
+          "bias": 1.2,
+          "raw_returns": [
+            4.030799204508463,
+            3.989584140777588
+          ],
+          "mean_return": 4.010191672643026,
+          "replica_std": 0.02060753186543729,
+          "mean_misses": 0.0,
+          "mean_verified": 13041664.0
+        }
+      ],
+      "guarded_positive_signal": false
+    },
+    {
+      "seed": 700015,
+      "family": "capacity-opportunities",
+      "producer_index": 0,
+      "actions": [
+        {
+          "choice": 0,
+          "bias": 0.8,
+          "raw_returns": [
+            0.019748713175455727,
+            0.019757493336995436
+          ],
+          "mean_return": 0.019753103256225583,
+          "replica_std": 4.390080769854296e-06,
+          "mean_misses": 0.0,
+          "mean_verified": 65536.0
+        },
+        {
+          "choice": 1,
+          "bias": 1.0,
+          "raw_returns": [
+            0.019740289052327473,
+            0.019725379943847654
+          ],
+          "mean_return": 0.019732834498087562,
+          "replica_std": 7.454554239909664e-06,
+          "mean_misses": 0.0,
+          "mean_verified": 65536.0
+        },
+        {
+          "choice": 2,
+          "bias": 1.2,
+          "raw_returns": [
+            0.01975722630818685,
+            0.0197718620300293
+          ],
+          "mean_return": 0.019764544169108077,
+          "replica_std": 7.317860921224675e-06,
+          "mean_misses": 0.0,
+          "mean_verified": 65536.0
+        }
+      ],
+      "guarded_positive_signal": true
+    },
+    {
+      "seed": 700004,
+      "family": "wifi-contention",
+      "producer_index": 0,
+      "actions": [
+        {
+          "choice": 0,
+          "bias": 0.8,
+          "raw_returns": [
+            -0.0020101229349772137,
+            -0.0019904073079427083
+          ],
+          "mean_return": -0.002000265121459961,
+          "replica_std": 9.857813517252746e-06,
+          "mean_misses": 0.0,
+          "mean_verified": 0.0
+        },
+        {
+          "choice": 1,
+          "bias": 1.0,
+          "raw_returns": [
+            -0.001978556315104167,
+            -0.10630949656168621
+          ],
+          "mean_return": -0.05414402643839519,
+          "replica_std": 0.05216547012329103,
+          "mean_misses": 0.5,
+          "mean_verified": 0.0
+        },
+        {
+          "choice": 2,
+          "bias": 1.2,
+          "raw_returns": [
+            -0.0020354970296223955,
+            -0.0020558865865071617
+          ],
+          "mean_return": -0.002045691808064779,
+          "replica_std": 1.0194778442383081e-05,
+          "mean_misses": 0.0,
+          "mean_verified": 0.0
+        }
+      ],
+      "guarded_positive_signal": false
+    },
+    {
+      "seed": 700004,
+      "family": "wifi-contention",
+      "producer_index": 2,
+      "actions": [
+        {
+          "choice": 0,
+          "bias": 0.8,
+          "raw_returns": [
+            -0.10611842473347981,
+            -0.001963793436686198
+          ],
+          "mean_return": -0.054041109085083,
+          "replica_std": 0.0520773156483968,
+          "mean_misses": 0.5,
+          "mean_verified": 0.0
+        },
+        {
+          "choice": 1,
+          "bias": 1.0,
+          "raw_returns": [
+            -0.0019594701131184895,
+            -0.001955095926920573
+          ],
+          "mean_return": -0.001957283020019531,
+          "replica_std": 2.1870930989582957e-06,
+          "mean_misses": 0.0,
+          "mean_verified": 0.0
+        },
+        {
+          "choice": 2,
+          "bias": 1.2,
+          "raw_returns": [
+            -0.001975561777750651,
+            -0.001968097686767578
+          ],
+          "mean_return": -0.0019718297322591145,
+          "replica_std": 3.7320454915365335e-06,
+          "mean_misses": 0.0,
+          "mean_verified": 0.0
+        }
+      ],
+      "guarded_positive_signal": false
+    },
+    {
+      "seed": 700021,
+      "family": "bufferbloat",
+      "producer_index": 0,
+      "actions": [
+        {
+          "choice": 0,
+          "bias": 0.8,
+          "raw_returns": [
+            0.6458204142252605,
+            0.6458517011006674
+          ],
+          "mean_return": 0.6458360576629639,
+          "replica_std": 1.564343770343868e-05,
+          "mean_misses": 0.0,
+          "mean_verified": 2097152.0
+        },
+        {
+          "choice": 1,
+          "bias": 1.0,
+          "raw_returns": [
+            0.6451867039998374,
+            0.6452945327758788
+          ],
+          "mean_return": 0.6452406183878581,
+          "replica_std": 5.391438802071491e-05,
+          "mean_misses": 0.0,
+          "mean_verified": 2097152.0
+        },
+        {
+          "choice": 2,
+          "bias": 1.2,
+          "raw_returns": [
+            0.6452507909138997,
+            0.6457343165079752
+          ],
+          "mean_return": 0.6454925537109375,
+          "replica_std": 0.00024176279703774783,
+          "mean_misses": 0.0,
+          "mean_verified": 2097152.0
+        }
+      ],
+      "guarded_positive_signal": true
+    }
+  ],
+  "tiny_fit_accuracy": {
+    "current-mlp": 1.0,
+    "history-mlp": 1.0
+  },
+  "positive_states": 2,
+  "advance": true,
+  "source_sha256": {
+    "src/trace_transport/goodput.py": "6ce12b094fa6875d197a6f1208600b44aebfcc0bc8a8b5161d6aeccfa7059a2d",
+    "src/trace_transport/protocol.py": "b4d9b2fb6a7ac6758015333b097675e1aacfe71d4192b5e9c6464e75f5b20a58",
+    "src/trace_transport/joint_traces.py": "22dfe3b1df4cc857192951c666a4c7db4ec97daeeaa1f0d8d2f55156d135aabf",
+    "src/trace_transport/reactive_sender.py": "0eab3c56bbdc45ddf8c065154a68e18c58f900610a48649626bc5e6b6f64d3d2",
+    "src/trace_transport/curriculum.py": "3705e891bd43903a7a2580eb3f7e38881319b337af12de4a58e1b78186761dfa",
+    "src/trace_transport/rewards.py": "b25d6af09f38a5f78a73afdf415843f3386ffa77007d4845485e319c447e93ba",
+    "src/trace_transport/benchmark.py": "092108ebfe2b1be4053e1096e9a1c02c53d684da92c5e379e7d51bb6803d2ba8",
+    "src/trace_transport/goodput_reactive.py": "b8a9c3e86abe39a4a5598e19787abf90818163310e634c9034411d67e71ed045",
+    "src/trace_transport/joint_evaluation.py": "64b1534b136b84135e9848d41fdd390837a908584e4f94ccbbb401b1d88e816f",
+    "src/trace_transport/goodput_progress.py": "7879187cb1e22f5c22ed223e2e7f2b2c97a3b370cb8f4cf0b15a10372c8ff25c",
+    "src/trace_transport/joint_models.py": "389ab6b212208643d5eea0ac65d160b145a78e9cba0fabbd9b24e318e8e5c3ac",
+    "src/trace_transport/udp.py": "b680f9aa7b058b50d9dcf1ae6a59d931c316dc347f92c47b0b5311a4e13404ec",
+    "src/trace_transport/__main__.py": "307299fda7b77d22c64cb51430ec75e5f59d78e9c948786afb3b2544fe45e4b7",
+    "src/trace_transport/joint_study.py": "72a0e17231e47b579576d4f9fd658df76cf755636d6788f83e267f2fc28f28b9",
+    "src/trace_transport/sender_residual.py": "6dfc633ad3ade6d9bc6d10b69e5d250c2e4f3676de51d2a8961fe7116fa996e5",
+    "src/trace_transport/wire.py": "f72ed90a551ebf00dd725d05f3a432d1ee1643327038238bf1cc002f985e8bb8",
+    "src/trace_transport/receiver_experiment.py": "e0cdf4c82cf2ca9543837b6d38b4e28935600e94277fd0e7999b988800e90ddd",
+    "src/trace_transport/session_receiver.py": "2ff31bd39f36e0144d9799d7b8b34ed978365c2b367ad31fb9e0a89760fc76a9",
+    "src/trace_transport/receiver_discrete.py": "9e36cbefa4bb94a88cac5d01e2d384ca136dc9fa338b549085b97288706525b3",
+    "src/trace_transport/joint_training.py": "6d7f205686c65fb8b1ec3b78752a541b3689c416a308ca0d21dec99e465e84a3",
+    "src/trace_transport/console.py": "2cf449c2baefe02d385f91f42ee3b8f0b5cdfbdc74ad374f5fd80a80a7e4da72",
+    "src/trace_transport/goodput_deployment.py": "9a985127ebe0dbf35adf6233470043e8cd990173599eb45a13b6a6c58091070e",
+    "src/trace_transport/cli.py": "d3fdd0c0a006d6dbe69953bf9492456252a3fd33c63a9519c8d13be73f04f0c5",
+    "src/trace_transport/sender_experiment.py": "2a19a39640c0e6c3d8e6340aba98385ac938fcf802bea896576c44051e7f0c65",
+    "src/trace_transport/experiment_io.py": "8d35df59b483e90cf4e86af20d4abe4520ea3a3fca8d47c4d14b67938f3d866e",
+    "src/trace_transport/feedback.py": "3b2c247f84a9a58d6d881702c2412c06c732e1e38e05bce3936705969b9d438a",
+    "src/trace_transport/receiver_curriculum.py": "0d9eebc47eeec606815c916e1812b8aab8619e81382a99281e8fce271cce349f",
+    "src/trace_transport/environment.py": "374d5ebd8affa384148376e939b0835723cc81fc8c232920368a516d9365a303",
+    "src/trace_transport/__init__.py": "3f6e56c4bdc9e02dac983b290cd6610150f1cb3ebf49b0a79d081e1c2b1fa168",
+    "src/trace_transport/learning.py": "1eaf67ee8a6c6982c7b3fb0123d9611677eef6d3f6b462c82fc73d357639a73f",
+    "src/trace_transport/learning_diagnostics.py": "55df48f3c962a23a1f9124d6c9c7caef6c84366015b332d5fdcc70d40bd8d2df",
+    "src/trace_transport/joint_session.py": "b36901de59e6499873d4323fa1c158f9cdee71981294a2df0fe749ca10862c8f",
+    "src/trace_transport/simulator.py": "c517bee8f4ad8f9935862170f084407f12a74fa2a6dfbff0b04d3a08d9a02ee7",
+    "src/trace_transport/suite.py": "b454b9d60b699d580896c3328c8d1ac41f1a17a72727d6d915d5e1dc9d28dca8",
+    "src/trace_transport/joint_curriculum.py": "3aa0f7bd3ee90e9eb4f514e8c78c1c5ef0e63e8230bdb0fdded30442a8eb8f33",
+    "src/trace_transport/network_models.py": "4edad98e93825c811777dcf4359e9eddb9cc3dc2b93f66365882f488835dc303",
+    "src/trace_transport/joint_workers.py": "7703a6b03f7b59514f812b27244a84c859b56de6fd3adf40eadbd8a9673d7815",
+    "src/trace_transport/reactive_sender_training.py": "3528b56cd9a722fddc98a2f5e5d97ec916c0d1d51b700abb357516fd77b96465",
+    "src/trace_transport/joint_monitor.py": "d7eba2407764b082fbbd241cfcbc12e613fbc9a94e33cfbe1741957a56c94e2c",
+    "src/trace_transport/goodput_evaluation.py": "3674571019f9a30301e50ce5c79dbb0dadbe580de4a980b9b71ec360598fdc89",
+    "src/trace_transport/messages.py": "10bdacf03e811220a781076a9c8277644e006606446afdc916253f7a2ddcc15d",
+    "src/trace_transport/receiver_learning.py": "e908f3d9d2669e535254fd2d2c670f132c4669338ef36b0384bd02ea305ced1f",
+    "src/trace_transport/live_sender.py": "f594fcecffa8a3513b3add35e470d7f46c5d380a48dce08d0ea7ff95c7bf55bd",
+    "src/trace_transport/joint_cli.py": "929579f58434bf9ccbfdd87006c5f7c110f368d4b576484bb2b95d86478ef5c8",
+    "src/trace_transport/binary_udp.py": "bfc9a5222437b9d5daf7f97fbab6d0ae6ec794a668fc2c12db1357bec7f15110",
+    "src/trace_transport/goodput_distribution.py": "dd8342c862b5c1a9b1ac1ec6d3cc6670c714414ebb2dff0162d193e3a0bb1c50",
+    "src/trace_transport/controllers.py": "56cb005bb8504cf289e87d75ce808d66234926663c8e22069e01ebe9ef3a79a8",
+    "src/trace_transport/receiver_v3.py": "cd6cacc77fec7c8bc5188181f84be4b9c09215b099388ff9a6f65478c98a12a6",
+    "scripts/reactive_sender_pilot.py": "9c34dbaa51a2b233e50c786046b81afa6848677089d5726b6b0af4f98255bd02"
+  },
+  "config_sha256": "0872e63b6f1e0cee50a61af0925e05af227fbe31bbb31bff204d8b734889a281"
+}

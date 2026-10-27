@@ -1,6 +1,6 @@
 # Next experiment: role-aligned reactive sender control
 
-Status: **initial Caliban pilot running; larger study still planned**. The proposal
+Status: **small pilot complete; registered 50k training running**. The proposal
 was written 2026-10-26 after PR #4 merged. The separately registered
 [initial pilot](reactive-sender-v7.md) launched 2026-10-27 UTC; no accepted learning
 result is claimed. This follows the completed
@@ -162,3 +162,7 @@ before launch, and the earlier pilot validation is not reused. This is not an
 isolated budget-only causal comparison because coverage also expands. The same
 development sensitivity states are replayed to bind new configuration/source;
 this is not independent replication. The old small job and source stay unchanged.
+
+The [50k study](reactive-sender-v7-training.md) launched on Caliban at
+2026-10-27 01:31:44 UTC with actual budgets/source/timing checks recorded. No final
+performance result is claimed.

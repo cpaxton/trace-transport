@@ -316,7 +316,7 @@ performance. First seed is checkpointed; no completed study or accepted win yet.
 CPU-only, 6 cores / 8 GiB / 12-hour cap; source frozen and checkpoints mirrored.
 
 
-Reactive sender v7 50k extension — **registered, not started**, 2026-10-27 UTC.
+Reactive sender v7 50k extension — **running**, actual start 2026-10-27 01:31:44 UTC; end pending.
 [Config](../../experiments/reactive-sender-v7-training.json),
 [budget rationale](reactive-sender-v7-plan.md#training-budget-extension-after-the-engineering-pilot).
 Same actor/optimizer/reward/guards; training-weight-only sufficient bounds show
@@ -332,3 +332,14 @@ finite input, so equal validation metrics do not establish absence of useful
 control. [Full results](../../artifacts/reactive-sender-v7-pilot-results.json),
 [bound audit](../../artifacts/reactive-sender-v7-initial-head-audit.json).
 The separate 50k plan uses prospective validation and unchanged quality criteria.
+
+
+Reactive sender v7 50k operational launch — **running**, actual start
+2026-10-27 01:31:44 UTC. [Method](reactive-sender-v7-training.md),
+[actual plan](../../artifacts/reactive-sender-v7-training-plan.json),
+[snapshot](../../artifacts/reactive-sender-v7-training-status.json).
+Six from-scratch runs x 50k producer macro decisions; 48 training / 24 prospective
+validation cases. Earlier small validation not reused. Hardware/source gates pass,
+actual policy gradients/episodes recorded. Training reward is not held-out
+performance; no completed study, accepted win or model selection. Same 6-core,
+8-GiB, 12-hour limits. Old small source/job remain unchanged.
