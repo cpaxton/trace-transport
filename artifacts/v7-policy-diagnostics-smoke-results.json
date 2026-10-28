@@ -1,0 +1,4497 @@
+{
+  "plan": {
+    "version": "v7-policy-diagnostics-v1",
+    "started_utc": "2026-10-27T23:26:56.437497+00:00",
+    "config": {
+      "version": "v7-policy-diagnostics-v1",
+      "parent_commit": "4574e8c9f7c10abe8d074c6a16afbf82e1b23d6b",
+      "workers": 4,
+      "prefix_sampling_seed": 701,
+      "scope": "Diagnostic reuse of prior training/validation cases; no new held-out acceptance, model selection, or training.",
+      "profiles": {
+        "smoke": {
+          "performance_cases": [
+            700006,
+            700021
+          ],
+          "sampling_seeds": [
+            101,
+            102
+          ],
+          "performance_models": [
+            "seed42-current-mlp",
+            "seed42-history-mlp"
+          ],
+          "credit_models": [
+            "seed42-current-mlp",
+            "seed42-history-mlp"
+          ],
+          "credit_cases": [
+            700006,
+            700021
+          ],
+          "credit_replicas": 4
+        },
+        "full": {
+          "performance_cases": [
+            730000,
+            730001,
+            730002,
+            730003,
+            730004,
+            730005,
+            730007,
+            730008,
+            730009,
+            730010,
+            730011,
+            730012,
+            730013,
+            730014,
+            730015,
+            730019,
+            730020,
+            730021,
+            730024,
+            730025,
+            730032,
+            730035,
+            730036,
+            730057
+          ],
+          "sampling_seeds": [
+            101,
+            102,
+            103
+          ],
+          "performance_models": [
+            "seed42-current-mlp",
+            "seed42-history-mlp",
+            "seed43-current-mlp",
+            "seed43-history-mlp",
+            "seed44-current-mlp",
+            "seed44-history-mlp"
+          ],
+          "credit_models": [
+            "seed42-current-mlp",
+            "seed42-history-mlp"
+          ],
+          "credit_cases": [
+            700006,
+            700004,
+            700015,
+            700021
+          ],
+          "credit_replicas": 16
+        }
+      }
+    },
+    "profile": "smoke",
+    "checkpoint_sha256": {
+      "seed42-current-mlp": "51b142b71fd53d61f1a99c358f3b62f6c40fe5a6babe22c095341f347afacf8a",
+      "seed42-history-mlp": "8db19a0a7a2db13078d29dfaf4475c380c1df4f4db8a13008691dae4824cad3c"
+    },
+    "source": {
+      "README.md": "014496d04337f13d39cd882ae79724e9387c1a02b6b0ed114bf8f0a24c758f34",
+      "experiments/goodput-v5-plan.json": "9e86bc3fd0086ea69a4c9a4768d6822a9d59fb0eecf15339147183b28e5879d8",
+      "experiments/goodput-v6-plan.json": "9faa3829068e18928abd84e72d0d846faf9004d7eb4f2007990a37a1f0449333",
+      "experiments/joint-goodput-v2-plan.json": "d8aa695ec7ca2cf9ac3f64147ef89a4a88b3de82cafbbcc8a8d534b34883fd2b",
+      "experiments/protocol-v3.json": "f84ac08e9b9ae8cc4d0280ab1b1d0d25b98e6b8d16cb930bc23afa8b288e5070",
+      "experiments/reactive-sender-v7-pilot.json": "fc41adc819469ebaf351896b7f21b79a2beb389ed2d977c791b797d717102845",
+      "experiments/reactive-sender-v7-training.json": "0872e63b6f1e0cee50a61af0925e05af227fbe31bbb31bff204d8b734889a281",
+      "experiments/receiver-v1.json": "e2e39da9752ae38b601d4d7fb75d212639b9d51195872847246f912d8ce5c3e8",
+      "experiments/receiver-v2.json": "8fd76fb284a7760bbd52576dd6fb4c54446bb0af6365891ee2fcdb2b51d05e4c",
+      "experiments/robust-v2.json": "9fb7c402c57c8c2042dc331282662480abab2ee0f655d3b2272b59671beac90d",
+      "experiments/v7-policy-diagnostics-v1.json": "dff2ce22178340e1e768ebc858aad3441ad35956ac6d9f3d7fa0584e9545e602",
+      "pyproject.toml": "309d4a595992ff052016e5227ddf119141c4a652d789297e6e17fd0ee5db9cb6",
+      "scripts/caliban_deploy.py": "b2e490a00efb7b64a7ffee765c9dd75347dd95640a0a3feb6ec811d296f283d5",
+      "scripts/caliban_study.py": "004b1d85b7906d70fb3b3c850f93de2baa39a508feece5cd6937e0c7334b901c",
+      "scripts/compare_learning.py": "86851f8afb7d2d3d3abd3b7039ea3bd21870b11371737d34cb4a8f8a40fb3b9d",
+      "scripts/device_binary_trials.py": "a57e01583a5b63dc053f1530d6c6c6edab3b898ecab4b261653cd9e7cea83794",
+      "scripts/device_link_snapshot.py": "1ada567b73f341d5e5bf5161ca5ed174ada8f2bd4d5a653ba68b0f0c07b17d8a",
+      "scripts/device_trials.py": "d71a5b21f4bb70cdd3746333b212a8cb325ff5ea7e19c525062f468f0a78174f",
+      "scripts/export_repository.py": "1a4655040d889f0970184b39b3ba1b40297bb2696136083d36c2469b46e74d9a",
+      "scripts/feedback_budget_experiment.py": "2e4f778605831223790278f51497fbf61055f0d416af87904291217b9c6bb956",
+      "scripts/freeze_local_study.py": "19681e321d2dfef28b5b568bf50eda86f71aeae1b75cc8b318d729665758bced",
+      "scripts/goodput_action_audit.py": "83b9d5b2e707b2e3987464123d43dbc83d4478d79fe9648853398a144d5826f9",
+      "scripts/goodput_changing_comparison.py": "1816dc211b73e5c987b1b4a8c7ad38b775a5e2005ef2a38a892f6eed26c8d008",
+      "scripts/goodput_distribution_audit.py": "eb447b2ecaa089ea6e5f33e03f4fd4cb8cbe6d66a583ec7d6ab8068b4ebc85ad",
+      "scripts/goodput_learn.py": "9d1ff8201fc2f3683547eff6ad705b4fc1973573f00df2b319618653a70f538b",
+      "scripts/goodput_repeatability.py": "59e56356291ce2c92796ab9a60718e8fc42760c02f9b7e67fa8bb0c140a3a7cb",
+      "scripts/goodput_status.py": "323bdddbdf08a2e375ebc671071c00428fbfe9760a9ec36da9369b0b53b9bd06",
+      "scripts/goodput_study.py": "c07bad6a85443ffc9db52367b06220b02f2374b85179b9fa261775bb2054109b",
+      "scripts/goodput_sweep.py": "78964b281058ddf7f3b15b07df1b73535f8ce8d7df08604eb3db33483ff46227",
+      "scripts/goodput_v3_pilot.py": "50385de6b0cf1348a5b31513a980854fb4a2195c571889a79ae37aef49b89589",
+      "scripts/joint_smoke.py": "e6ba66011e5a3adeb8fa5627a58ecdfc52595c9483730f6807ac43a93be13fc2",
+      "scripts/learning_diagnostics.py": "f566181a5f195db74e21918a2a8f2800199402997c6619d5296c55869fb2a547",
+      "scripts/mixed_workload.py": "c98ae2e808e5bcdbcd115976eec64da443b56be8d4f5e8bbe89d2b54e8df5b24",
+      "scripts/package_joint_study.py": "271163c9ecdb68557d490113d19124d74c2d316547e1c6d69c33635702ce1637",
+      "scripts/progress_ablation.py": "e81634c51fd14bd56cb7fd6bf5e53cd294ac57aca0b590e7a819052f388bf453",
+      "scripts/progress_baseline_audit.py": "5e0c32a04ef9f3b1c8a14077607aed79bb6a4ce12b152de1238e68ecdc6f7e98",
+      "scripts/progress_roles_audit.py": "a2a7b5427fa6c9c4ea4cb791cd576fcd954a4e022a2b65e3b271629dde28d413",
+      "scripts/protocol_generalization.py": "4f36908af76841ddd4d0fd7a663219aa76cabbd55331cbe6a6085a8e198e5aff",
+      "scripts/reactive_diagnostics.py": "4dc27f2b51df968d5b0e170481d6a94291611b10a3d5d6c097d392c5a42683e3",
+      "scripts/reactive_diagnostics_report.py": "c88598e7f511a9bdb4c53c018a835305eb45e000990175ad5590b102719d0028",
+      "scripts/reactive_pilot.py": "2bbcb786a845d665caaac8ee23f7bab70179f06ecc5ea8a0bb4740ec35d8aa6e",
+      "scripts/reactive_sender_head_audit.py": "83bddc6e7220148eb96e05341022c00a50ed0b0a5cee17430e9582e8d10d5ea8",
+      "scripts/reactive_sender_pilot.py": "9c34dbaa51a2b233e50c786046b81afa6848677089d5726b6b0af4f98255bd02",
+      "scripts/reactive_stochastic_audit.py": "b1875f4c9b9703016696a3c118d7e7f9665eda02a7bdb471ba644c77d0ce1ee8",
+      "scripts/receiver_counterfactual.py": "3b7dddb26d1d91e86479590b2cbff1d96d54fd0ce0d946e0775d0f438ce2b814",
+      "scripts/receiver_experiment.py": "8c71ed7d9cd14f0f726bce58bbc863d5cbb7bc299b1ec5a91848044f20d01d6f",
+      "scripts/receiver_generalization.py": "4580d0d683d23004566494687eefb205b14ac1d14e270528f16ce9586ee2f6fc",
+      "scripts/receiver_headroom.py": "f25e250f9ce97393642039bad8309dbe66afcdb1708111da792c1a0fe7dc4538",
+      "scripts/receiver_v3.py": "7b40dcd623a79dfb2c940bc448cdfc8077bc81fcfb4bba820b95eebb802a9ad4",
+      "scripts/receiver_wide_generalization.py": "99608f4ad5786dddfbbf7adaa327c14e84b3e8de8d5c24cedbe0724cb67cc04e",
+      "scripts/run_limited.py": "c5a1256a89784fd5b1d195d198a4853ec08ec6a6f8291f2c755b8e2ccdc20b4c",
+      "scripts/selector_coverage.py": "b2f767f24486b484a085bff6e48b39fa7a550963421bc845e1c7c23495c991a7",
+      "scripts/selector_execute.py": "eaf3200a6a07f3a175be68bad64dc25ac5e96f4abc0beb704896a6dd7e7965de",
+      "scripts/selector_learning.py": "52ddfb6eb679a5946632e598e610678a39374c80eedb7495df5d01c7f2d7a8ff",
+      "scripts/selector_report.py": "799994e6f98b42808318c7fda19b8f638465a2efe19d1d6183f04c72c9382cca",
+      "scripts/sender_residual_experiment.py": "4e43c211206553cd6b94a8e0fe6d40f0edfc2e999ee2075a250a587da69f51e0",
+      "scripts/v7_policy_diagnostics.py": "c5663b026f966d530af9053ec84610b55348471bcf6f015d97c8cabee8ff094a",
+      "src/trace_transport/__init__.py": "3f6e56c4bdc9e02dac983b290cd6610150f1cb3ebf49b0a79d081e1c2b1fa168",
+      "src/trace_transport/__main__.py": "307299fda7b77d22c64cb51430ec75e5f59d78e9c948786afb3b2544fe45e4b7",
+      "src/trace_transport/benchmark.py": "092108ebfe2b1be4053e1096e9a1c02c53d684da92c5e379e7d51bb6803d2ba8",
+      "src/trace_transport/binary_udp.py": "bfc9a5222437b9d5daf7f97fbab6d0ae6ec794a668fc2c12db1357bec7f15110",
+      "src/trace_transport/cli.py": "d3fdd0c0a006d6dbe69953bf9492456252a3fd33c63a9519c8d13be73f04f0c5",
+      "src/trace_transport/console.py": "2cf449c2baefe02d385f91f42ee3b8f0b5cdfbdc74ad374f5fd80a80a7e4da72",
+      "src/trace_transport/controllers.py": "56cb005bb8504cf289e87d75ce808d66234926663c8e22069e01ebe9ef3a79a8",
+      "src/trace_transport/curriculum.py": "3705e891bd43903a7a2580eb3f7e38881319b337af12de4a58e1b78186761dfa",
+      "src/trace_transport/environment.py": "374d5ebd8affa384148376e939b0835723cc81fc8c232920368a516d9365a303",
+      "src/trace_transport/experiment_io.py": "8d35df59b483e90cf4e86af20d4abe4520ea3a3fca8d47c4d14b67938f3d866e",
+      "src/trace_transport/feedback.py": "3b2c247f84a9a58d6d881702c2412c06c732e1e38e05bce3936705969b9d438a",
+      "src/trace_transport/goodput.py": "6ce12b094fa6875d197a6f1208600b44aebfcc0bc8a8b5161d6aeccfa7059a2d",
+      "src/trace_transport/goodput_deployment.py": "9a985127ebe0dbf35adf6233470043e8cd990173599eb45a13b6a6c58091070e",
+      "src/trace_transport/goodput_distribution.py": "dd8342c862b5c1a9b1ac1ec6d3cc6670c714414ebb2dff0162d193e3a0bb1c50",
+      "src/trace_transport/goodput_evaluation.py": "3674571019f9a30301e50ce5c79dbb0dadbe580de4a980b9b71ec360598fdc89",
+      "src/trace_transport/goodput_progress.py": "7879187cb1e22f5c22ed223e2e7f2b2c97a3b370cb8f4cf0b15a10372c8ff25c",
+      "src/trace_transport/goodput_reactive.py": "b8a9c3e86abe39a4a5598e19787abf90818163310e634c9034411d67e71ed045",
+      "src/trace_transport/joint_cli.py": "929579f58434bf9ccbfdd87006c5f7c110f368d4b576484bb2b95d86478ef5c8",
+      "src/trace_transport/joint_curriculum.py": "3aa0f7bd3ee90e9eb4f514e8c78c1c5ef0e63e8230bdb0fdded30442a8eb8f33",
+      "src/trace_transport/joint_evaluation.py": "64b1534b136b84135e9848d41fdd390837a908584e4f94ccbbb401b1d88e816f",
+      "src/trace_transport/joint_models.py": "389ab6b212208643d5eea0ac65d160b145a78e9cba0fabbd9b24e318e8e5c3ac",
+      "src/trace_transport/joint_monitor.py": "d7eba2407764b082fbbd241cfcbc12e613fbc9a94e33cfbe1741957a56c94e2c",
+      "src/trace_transport/joint_session.py": "b36901de59e6499873d4323fa1c158f9cdee71981294a2df0fe749ca10862c8f",
+      "src/trace_transport/joint_study.py": "72a0e17231e47b579576d4f9fd658df76cf755636d6788f83e267f2fc28f28b9",
+      "src/trace_transport/joint_traces.py": "22dfe3b1df4cc857192951c666a4c7db4ec97daeeaa1f0d8d2f55156d135aabf",
+      "src/trace_transport/joint_training.py": "6d7f205686c65fb8b1ec3b78752a541b3689c416a308ca0d21dec99e465e84a3",
+      "src/trace_transport/joint_workers.py": "7703a6b03f7b59514f812b27244a84c859b56de6fd3adf40eadbd8a9673d7815",
+      "src/trace_transport/learning.py": "1eaf67ee8a6c6982c7b3fb0123d9611677eef6d3f6b462c82fc73d357639a73f",
+      "src/trace_transport/learning_diagnostics.py": "55df48f3c962a23a1f9124d6c9c7caef6c84366015b332d5fdcc70d40bd8d2df",
+      "src/trace_transport/live_sender.py": "f594fcecffa8a3513b3add35e470d7f46c5d380a48dce08d0ea7ff95c7bf55bd",
+      "src/trace_transport/messages.py": "10bdacf03e811220a781076a9c8277644e006606446afdc916253f7a2ddcc15d",
+      "src/trace_transport/network_models.py": "4edad98e93825c811777dcf4359e9eddb9cc3dc2b93f66365882f488835dc303",
+      "src/trace_transport/protocol.py": "b4d9b2fb6a7ac6758015333b097675e1aacfe71d4192b5e9c6464e75f5b20a58",
+      "src/trace_transport/reactive_sender.py": "0eab3c56bbdc45ddf8c065154a68e18c58f900610a48649626bc5e6b6f64d3d2",
+      "src/trace_transport/reactive_sender_training.py": "3528b56cd9a722fddc98a2f5e5d97ec916c0d1d51b700abb357516fd77b96465",
+      "src/trace_transport/receiver_curriculum.py": "0d9eebc47eeec606815c916e1812b8aab8619e81382a99281e8fce271cce349f",
+      "src/trace_transport/receiver_discrete.py": "9e36cbefa4bb94a88cac5d01e2d384ca136dc9fa338b549085b97288706525b3",
+      "src/trace_transport/receiver_experiment.py": "e0cdf4c82cf2ca9543837b6d38b4e28935600e94277fd0e7999b988800e90ddd",
+      "src/trace_transport/receiver_learning.py": "e908f3d9d2669e535254fd2d2c670f132c4669338ef36b0384bd02ea305ced1f",
+      "src/trace_transport/receiver_v3.py": "cd6cacc77fec7c8bc5188181f84be4b9c09215b099388ff9a6f65478c98a12a6",
+      "src/trace_transport/rewards.py": "b25d6af09f38a5f78a73afdf415843f3386ffa77007d4845485e319c447e93ba",
+      "src/trace_transport/sender_experiment.py": "2a19a39640c0e6c3d8e6340aba98385ac938fcf802bea896576c44051e7f0c65",
+      "src/trace_transport/sender_residual.py": "6dfc633ad3ade6d9bc6d10b69e5d250c2e4f3676de51d2a8961fe7116fa996e5",
+      "src/trace_transport/session_receiver.py": "2ff31bd39f36e0144d9799d7b8b34ed978365c2b367ad31fb9e0a89760fc76a9",
+      "src/trace_transport/simulator.py": "c517bee8f4ad8f9935862170f084407f12a74fa2a6dfbff0b04d3a08d9a02ee7",
+      "src/trace_transport/suite.py": "b454b9d60b699d580896c3328c8d1ac41f1a17a72727d6d915d5e1dc9d28dca8",
+      "src/trace_transport/udp.py": "b680f9aa7b058b50d9dcf1ae6a59d931c316dc347f92c47b0b5311a4e13404ec",
+      "src/trace_transport/wire.py": "f72ed90a551ebf00dd725d05f3a432d1ee1643327038238bf1cc002f985e8bb8",
+      "tests/test_benchmark.py": "d37636b1f9811730f15e4170106cef0cccf6e2296f9b008f0b63eae4fc519125",
+      "tests/test_binary_udp.py": "2e568ff4cde9db58071ab2cdfa29339c95f2a020141db1e4600c67fa3afabd54",
+      "tests/test_caliban_workflow.py": "30a47feeaa76c843c9748c6b8f4bd310a1d191b2e9be955a51513e298286a9c8",
+      "tests/test_cli.py": "ef4d93139cf6364c3b24fb8a998795e157a4602e08da203c82488626001b1f31",
+      "tests/test_comparison_plan.py": "ccdf9af2572fd889a859818ac6178c7ac6532e6a72ba71faf473de48539dd486",
+      "tests/test_console.py": "0a5e0da6d9eba677572550eb533560c2735c2f2b1cf78afa837382dde5310ba4",
+      "tests/test_device_binary_trials.py": "64891ded8459045d422380958dcf505cc65087ad467fa5c1356fc8d03a6fbcee",
+      "tests/test_device_trials.py": "52c8e2f3fe2852ed1e35fcf138fd1469dffb00a4e2186259aadc7fefeed8cf59",
+      "tests/test_feedback.py": "c4d320468e8c37d8bd3e4326c89453bf6713a05cef15df1e746f9a082b5472db",
+      "tests/test_feedback_budget.py": "2b4f94312b1398af248510b35c82aa44c8a6aa8a19aca559badb710372c1ae5b",
+      "tests/test_goodput.py": "15f873c3687ccfa425d81db53287c5c66e551489f471b6d402b0ea3807291975",
+      "tests/test_goodput_deployment.py": "2aeac3ad2e3e038bf1a50800f516587f3135baf7ac07d882fc07eaa74c46570a",
+      "tests/test_goodput_distribution.py": "7c0f6872468a4bcc686f54bf2d1aca0185b2bdccf660c6dcbdd19adb2ead1538",
+      "tests/test_goodput_progress.py": "ce52a5a9f2eb9afed94702028e173bc781063223ca57070445955b462134f75a",
+      "tests/test_goodput_training.py": "7278a5b75a282353315b4864a3218c8c9e4769c5d6cc032b4044ec60d631d1ff",
+      "tests/test_installer.py": "ea327dc4ddbe730ab2717bb10944d9a7165abf867b53b7fa3cd0ce895368c7f6",
+      "tests/test_joint_curriculum.py": "70cbaaca38054b337ff9a69293fa97166798422b7a5936df95556dde8a0732c4",
+      "tests/test_joint_evaluation.py": "ce7d6f22af5f1fe33b7fc9ae98ff477c0a49594c549c1f478734d2cd32e5e326",
+      "tests/test_joint_models.py": "8400982904d647bf1aa9e0cf6eacc0bc3511922e45d3a5f177cf0fa0041e5cdf",
+      "tests/test_joint_monitor.py": "aa2bf8b13a472cf14f6ba07185ffacea0b5b0a9c594c71117c12b38fa56ebf07",
+      "tests/test_joint_session.py": "a3c4ebcafdfe9efb088ff4476eedb494f87ce8ca48b74f9b56f252fe81fbfe78",
+      "tests/test_joint_study.py": "993b2c1198bb00b6bbd32435690475951c002ad1c792ddb807b41f8ea33e85b9",
+      "tests/test_joint_traces.py": "5898057e759238af544376ca0ba8a5688db323a68e780b691a7aed5e7a655374",
+      "tests/test_joint_training.py": "87afb06b37ecd6f7ba08aefce4e43c8f6d9088cc75c5491fae4cce35d62adbf5",
+      "tests/test_joint_workers.py": "74eede8ae961e963d35c8b5237cefdc429a4c3f51367106416b9d5d277c5710c",
+      "tests/test_learning.py": "f95550d5245f883641512c6a09462333a36b276402baa7674c663bf3501a283a",
+      "tests/test_live_sender.py": "5e661594cdcb98b8686510184af24ef7bec17abeeff0b98a700586e6a7583c98",
+      "tests/test_network_models.py": "ab2ed74a95eaa1de88d9739419ddcb830bcd01a2766ee8be2e9f1e67b54359b8",
+      "tests/test_package_joint_study.py": "f8bcf4a448bdabb785c4048930c58616dc5d81e555e660f4eb3502569b16c51a",
+      "tests/test_protocol.py": "d5aaa7a3c8ce7b21d15464e4c0732f623a8e47d9209465b59ab8332823893f34",
+      "tests/test_reactive_diagnostics.py": "ee217f9260bb1f713f07a174708c531439dcfaf1737ff04278300f6f7d21154d",
+      "tests/test_reactive_receiver.py": "8252651385b45ce78e7d599b376e6dc0954019e807cfe313faf8fce33b84e8d4",
+      "tests/test_reactive_sender.py": "27c76cefc4f1c422fac1c3bf9b9c4295e6cba01163deb97af326153e93576e73",
+      "tests/test_receipts.py": "37902f836c44306e079d01521f67765ae9575931cd56e528594dd76d8d9fead0",
+      "tests/test_receiver_curriculum.py": "247226c09966ec375cec39917a5cab0934698430f0b3067579465177949666c0",
+      "tests/test_receiver_discrete.py": "c169648a1f74d90628897a6aa1f7b0fc121d5dfbff24dd51c2b8f89dfe270dcc",
+      "tests/test_review_hardening.py": "7395d11ab695575c3f764f5933f54e5bbe1cef655102e5328c7f3c98399942a7",
+      "tests/test_robust_learning.py": "a03a239457b2e52da3827927a89157741ba01a9fb9f5399d8cec876d303afeab",
+      "tests/test_run_limited.py": "ace0d8c6e3e274a6cf9d03418c2b86b5ae55278dd2073d4c25daa8159bfbb704",
+      "tests/test_selector_learning.py": "a497478d34bff5243f8fafaa9d29abda5c30cb8b303fbf7db4106d791bd842dd",
+      "tests/test_selector_report.py": "add57b0c13797741e4d3e9d18d396074009765b583dc4a0fb185994377f1030c",
+      "tests/test_sender_residual.py": "8a730844e3b61330e29c41e7df4d502ad7775007be8f5ecc2d0e7363e154dab3",
+      "tests/test_session_receiver.py": "e7b4377f6ecb1df8169cb073784d52e1ab6387565e48411153ab108cbfaa77f5",
+      "tests/test_simulator.py": "4e7c4e0c0eaed7920885a4782a3219eda9c8a49f2a59dae6a19188f4ed8ce590",
+      "tests/test_source_export.py": "d9be909019325769245c27f57a0ee2042691bc39ce6e1e92ace1b9cd26c99c1f",
+      "tests/test_suite.py": "8e003b3c6c266343d83de0033c5d92e6b73ab45d00adc4ec24a68e942247b60f",
+      "tests/test_time_gae.py": "0fa34626727268d1550b811a655087818991e68633b0fcf45a5fe9d1a8e660bc",
+      "tests/test_udp.py": "582f694707a4e762a67fd95c401dea940197adc3f08bd3538ddcadcf69ee0f39",
+      "tests/test_v7_policy_diagnostics.py": "d13a20c61561dbdbabe751ab3c14934b38207cedbd4c709520de6b99631395e9",
+      "tests/test_wire.py": "73977b2e079506384419dceb155ee0d147ca19ffa2bf4301c7d86a8d518d644b",
+      "uv.lock": "06255c018c49a0846baa88885298e7e7601e96e712e81b31027aac858c190ef2"
+    },
+    "task_count": 22,
+    "gamma": 0.999,
+    "gae_lambda": 0.98,
+    "discount_reference_seconds": 0.02,
+    "scope": "diagnostic only; unchanged checkpoints, no training or acceptance; case reuse and finite replica uncertainty explicit",
+    "accepted_win": false
+  },
+  "performance": {
+    "teacher": [
+      {
+        "record": {
+          "desired": {
+            "image": 182,
+            "map": 90,
+            "interactive": 480
+          },
+          "blocked": {},
+          "admitted": {
+            "image": 182,
+            "map": 90,
+            "interactive": 480
+          },
+          "messages": 752,
+          "completed": 752,
+          "wrong": 0,
+          "interactive_miss_rate": 0.0,
+          "interactive_on_time": 480,
+          "interactive_pending_deadlines": 0,
+          "interactive_unavoidable_bound": 0,
+          "interactive_avoidable_misses": 0,
+          "image_bytes": 2981888,
+          "map_bytes": 23592960,
+          "delivered_bytes": 26636288,
+          "total_wire_bytes": 39932942,
+          "feedback_bytes": 9182307,
+          "elapsed": 15.0,
+          "actual_image_fps": 12.133333333333333,
+          "admitted_image_fps": 15.166666666666666,
+          "pending_confirmation_bytes": 0,
+          "pending_messages": 0,
+          "events": 213660,
+          "network": [
+            {
+              "attempted_packets": 52384,
+              "admitted_packets": 52384,
+              "attempted_bytes": 30752555,
+              "admitted_bytes": 30752555,
+              "queue_drops": 0,
+              "random_drops": 0,
+              "outage_drops": 0,
+              "delivered_packets": 52384,
+              "corrupted_packets": 0,
+              "corruption_rejections": 0,
+              "generated_duplicates": 0
+            },
+            {
+              "attempted_packets": 52384,
+              "admitted_packets": 52384,
+              "attempted_bytes": 9180387,
+              "admitted_bytes": 9180387,
+              "queue_drops": 0,
+              "random_drops": 0,
+              "outage_drops": 0,
+              "delivered_packets": 52384,
+              "corrupted_packets": 0,
+              "corruption_rejections": 0,
+              "generated_duplicates": 0
+            }
+          ],
+          "interactive_p95": 0.0014819462066111286,
+          "profile": "goodput-v6",
+          "mode": "mixed",
+          "measurement_seconds": 12.0,
+          "drain_verified_bulk_bytes": 294912,
+          "verified_bulk_bytes": 26279936,
+          "confirmed_bulk_bytes": 26279936,
+          "verified_image_bytes": 2949120,
+          "verified_map_bytes": 23330816,
+          "per_host_verified_bytes": [
+            26279936
+          ],
+          "measurement_wire_bytes": 39932942,
+          "control_interval": 0.005,
+          "class_completion_after_drain": {
+            "interactive": {
+              "admitted": 480,
+              "receiver_complete": 480,
+              "confirmed": 480
+            },
+            "image": {
+              "admitted": 182,
+              "receiver_complete": 182,
+              "confirmed": 182
+            },
+            "map": {
+              "admitted": 90,
+              "receiver_complete": 90,
+              "confirmed": 90
+            },
+            "bulk": {
+              "admitted": 0,
+              "receiver_complete": 0,
+              "confirmed": 0
+            }
+          },
+          "accepted_bulk_payload_bytes": 26467328,
+          "accepted_bulk_payload_by_host": [
+            26467328
+          ],
+          "measurement_incomplete_bulk_payload_bytes": 187392,
+          "completion_headroom": {
+            "optimistic_wire_service_bytes": 37057419.82854893,
+            "minimum_bulk_object_bytes": 16384,
+            "configured_hosts": 1,
+            "minimum_payload_for_all_hosts": 16384,
+            "minimum_wire_bytes_per_object": 18464,
+            "minimum_wire_for_all_hosts": 18464,
+            "all_host_object_completion_provably_infeasible": false,
+            "optimistic_max_hosts_with_bulk_object": 1,
+            "caveat": "necessary service bound only; passing does not establish feasibility"
+          },
+          "seed": 700021,
+          "domain": {
+            "version": "goodput-domain-v6.0",
+            "family": "bufferbloat",
+            "churn": false,
+            "churn_times": [
+              4.240266615843455,
+              8.30519151375736
+            ],
+            "seed": 700021,
+            "synthetic": true,
+            "shared_airtime": false,
+            "distribution_shift": false,
+            "change_count": 0,
+            "control_interval": 0.005
+          }
+        },
+        "eligible_choices": {},
+        "eligible_decisions": 0,
+        "mean_probabilities": null,
+        "mean_entropy": null,
+        "actual_bias_changes": 0,
+        "macro_steps": 150,
+        "scope": "choices count scheduled eligible producer decisions; changes measure actual bias at macro boundaries"
+      },
+      {
+        "record": {
+          "desired": {
+            "image": 281,
+            "map": 68,
+            "interactive": 960
+          },
+          "blocked": {},
+          "admitted": {
+            "image": 281,
+            "map": 68,
+            "interactive": 960
+          },
+          "messages": 1309,
+          "completed": 1309,
+          "wrong": 0,
+          "interactive_miss_rate": 0.0,
+          "interactive_on_time": 960,
+          "interactive_pending_deadlines": 0,
+          "interactive_unavoidable_bound": 0,
+          "interactive_avoidable_misses": 0,
+          "image_bytes": 36831232,
+          "map_bytes": 142606336,
+          "delivered_bytes": 179499008,
+          "total_wire_bytes": 268488728,
+          "feedback_bytes": 61401306,
+          "elapsed": 15.0,
+          "actual_image_fps": 4.683333333333334,
+          "admitted_image_fps": 5.854166666666667,
+          "pending_confirmation_bytes": 0,
+          "pending_messages": 0,
+          "events": 1418976,
+          "network": [
+            {
+              "attempted_packets": 351424,
+              "admitted_packets": 351424,
+              "attempted_bytes": 207120542,
+              "admitted_bytes": 207120542,
+              "queue_drops": 0,
+              "random_drops": 0,
+              "outage_drops": 0,
+              "delivered_packets": 351424,
+              "corrupted_packets": 0,
+              "corruption_rejections": 0,
+              "generated_duplicates": 0
+            },
+            {
+              "attempted_packets": 351424,
+              "admitted_packets": 351424,
+              "attempted_bytes": 61368186,
+              "admitted_bytes": 61368186,
+              "queue_drops": 0,
+              "random_drops": 0,
+              "outage_drops": 0,
+              "delivered_packets": 351424,
+              "corrupted_packets": 0,
+              "corruption_rejections": 0,
+              "generated_duplicates": 0
+            }
+          ],
+          "interactive_p95": 0.0007624666458540206,
+          "profile": "goodput-v6",
+          "mode": "mixed",
+          "measurement_seconds": 12.0,
+          "drain_verified_bulk_bytes": 10485760,
+          "verified_bulk_bytes": 168951808,
+          "confirmed_bulk_bytes": 168951808,
+          "verified_image_bytes": 34734080,
+          "verified_map_bytes": 134217728,
+          "per_host_verified_bytes": [
+            42074112,
+            42336256,
+            42467328,
+            42074112
+          ],
+          "measurement_wire_bytes": 268488728,
+          "control_interval": 0.005,
+          "class_completion_after_drain": {
+            "interactive": {
+              "admitted": 960,
+              "receiver_complete": 960,
+              "confirmed": 960
+            },
+            "image": {
+              "admitted": 281,
+              "receiver_complete": 281,
+              "confirmed": 281
+            },
+            "map": {
+              "admitted": 68,
+              "receiver_complete": 68,
+              "confirmed": 68
+            },
+            "bulk": {
+              "admitted": 0,
+              "receiver_complete": 0,
+              "confirmed": 0
+            }
+          },
+          "accepted_bulk_payload_bytes": 170564096,
+          "accepted_bulk_payload_by_host": [
+            42167296,
+            42371072,
+            43821056,
+            42204672
+          ],
+          "measurement_incomplete_bulk_payload_bytes": 1612288,
+          "completion_headroom": {
+            "optimistic_wire_service_bytes": 211120013.27842128,
+            "minimum_bulk_object_bytes": 131072,
+            "configured_hosts": 4,
+            "minimum_payload_for_all_hosts": 524288,
+            "minimum_wire_bytes_per_object": 147712,
+            "minimum_wire_for_all_hosts": 590848,
+            "all_host_object_completion_provably_infeasible": false,
+            "optimistic_max_hosts_with_bulk_object": 4,
+            "caveat": "necessary service bound only; passing does not establish feasibility"
+          },
+          "seed": 700006,
+          "domain": {
+            "version": "goodput-domain-v6.0",
+            "family": "wired-lan",
+            "churn": false,
+            "churn_times": [
+              4.339443377834938,
+              8.351999835893368
+            ],
+            "seed": 700006,
+            "synthetic": true,
+            "shared_airtime": false,
+            "distribution_shift": false,
+            "change_count": 0,
+            "control_interval": 0.005
+          }
+        },
+        "eligible_choices": {},
+        "eligible_decisions": 0,
+        "mean_probabilities": null,
+        "mean_entropy": null,
+        "actual_bias_changes": 0,
+        "macro_steps": 150,
+        "scope": "choices count scheduled eligible producer decisions; changes measure actual bias at macro boundaries"
+      }
+    ],
+    "initial-sampled-101": [
+      {
+        "record": {
+          "desired": {
+            "image": 178,
+            "map": 88,
+            "interactive": 480
+          },
+          "blocked": {},
+          "admitted": {
+            "image": 178,
+            "map": 88,
+            "interactive": 480
+          },
+          "messages": 746,
+          "completed": 746,
+          "wrong": 0,
+          "interactive_miss_rate": 0.0,
+          "interactive_on_time": 480,
+          "interactive_pending_deadlines": 0,
+          "interactive_unavoidable_bound": 0,
+          "interactive_avoidable_misses": 0,
+          "image_bytes": 2916352,
+          "map_bytes": 23068672,
+          "delivered_bytes": 26046464,
+          "total_wire_bytes": 39049163,
+          "feedback_bytes": 8978445,
+          "elapsed": 15.0,
+          "actual_image_fps": 11.866666666666667,
+          "admitted_image_fps": 14.833333333333334,
+          "pending_confirmation_bytes": 0,
+          "pending_messages": 0,
+          "events": 209047,
+          "network": [
+            {
+              "attempted_packets": 51232,
+              "admitted_packets": 51232,
+              "attempted_bytes": 30072638,
+              "admitted_bytes": 30072638,
+              "queue_drops": 0,
+              "random_drops": 0,
+              "outage_drops": 0,
+              "delivered_packets": 51232,
+              "corrupted_packets": 0,
+              "corruption_rejections": 0,
+              "generated_duplicates": 0
+            },
+            {
+              "attempted_packets": 51232,
+              "admitted_packets": 51232,
+              "attempted_bytes": 8976525,
+              "admitted_bytes": 8976525,
+              "queue_drops": 0,
+              "random_drops": 0,
+              "outage_drops": 0,
+              "delivered_packets": 51232,
+              "corrupted_packets": 0,
+              "corruption_rejections": 0,
+              "generated_duplicates": 0
+            }
+          ],
+          "interactive_p95": 0.001509861710469826,
+          "profile": "goodput-v6",
+          "mode": "mixed",
+          "measurement_seconds": 12.0,
+          "drain_verified_bulk_bytes": 294912,
+          "verified_bulk_bytes": 25690112,
+          "confirmed_bulk_bytes": 25690112,
+          "verified_image_bytes": 2883584,
+          "verified_map_bytes": 22806528,
+          "per_host_verified_bytes": [
+            25690112
+          ],
+          "measurement_wire_bytes": 39049163,
+          "control_interval": 0.005,
+          "class_completion_after_drain": {
+            "interactive": {
+              "admitted": 480,
+              "receiver_complete": 480,
+              "confirmed": 480
+            },
+            "image": {
+              "admitted": 178,
+              "receiver_complete": 178,
+              "confirmed": 178
+            },
+            "map": {
+              "admitted": 88,
+              "receiver_complete": 88,
+              "confirmed": 88
+            },
+            "bulk": {
+              "admitted": 0,
+              "receiver_complete": 0,
+              "confirmed": 0
+            }
+          },
+          "accepted_bulk_payload_bytes": 25871872,
+          "accepted_bulk_payload_by_host": [
+            25871872
+          ],
+          "measurement_incomplete_bulk_payload_bytes": 181760,
+          "completion_headroom": {
+            "optimistic_wire_service_bytes": 37057419.82854893,
+            "minimum_bulk_object_bytes": 16384,
+            "configured_hosts": 1,
+            "minimum_payload_for_all_hosts": 16384,
+            "minimum_wire_bytes_per_object": 18464,
+            "minimum_wire_for_all_hosts": 18464,
+            "all_host_object_completion_provably_infeasible": false,
+            "optimistic_max_hosts_with_bulk_object": 1,
+            "caveat": "necessary service bound only; passing does not establish feasibility"
+          },
+          "seed": 700021,
+          "domain": {
+            "version": "goodput-domain-v6.0",
+            "family": "bufferbloat",
+            "churn": false,
+            "churn_times": [
+              4.240266615843455,
+              8.30519151375736
+            ],
+            "seed": 700021,
+            "synthetic": true,
+            "shared_airtime": false,
+            "distribution_shift": false,
+            "change_count": 0,
+            "control_interval": 0.005
+          }
+        },
+        "eligible_choices": {
+          "1": 76,
+          "0": 22,
+          "2": 23
+        },
+        "eligible_decisions": 121,
+        "mean_probabilities": [
+          0.20000001788139343,
+          0.6000000834465027,
+          0.20000001788139343
+        ],
+        "mean_entropy": 0.9502705335617065,
+        "actual_bias_changes": 62,
+        "macro_steps": 150,
+        "scope": "choices count scheduled eligible producer decisions; changes measure actual bias at macro boundaries"
+      },
+      {
+        "record": {
+          "desired": {
+            "image": 285,
+            "map": 69,
+            "interactive": 960
+          },
+          "blocked": {},
+          "admitted": {
+            "image": 285,
+            "map": 69,
+            "interactive": 960
+          },
+          "messages": 1314,
+          "completed": 1314,
+          "wrong": 0,
+          "interactive_miss_rate": 0.0,
+          "interactive_on_time": 960,
+          "interactive_pending_deadlines": 0,
+          "interactive_unavoidable_bound": 0,
+          "interactive_avoidable_misses": 0,
+          "image_bytes": 37355520,
+          "map_bytes": 144703488,
+          "delivered_bytes": 182120448,
+          "total_wire_bytes": 272431016,
+          "feedback_bytes": 62320736,
+          "elapsed": 15.0,
+          "actual_image_fps": 4.75,
+          "admitted_image_fps": 5.9375,
+          "pending_confirmation_bytes": 0,
+          "pending_messages": 0,
+          "events": 1439525,
+          "network": [
+            {
+              "attempted_packets": 356544,
+              "admitted_packets": 356544,
+              "attempted_bytes": 210143400,
+              "admitted_bytes": 210143400,
+              "queue_drops": 0,
+              "random_drops": 0,
+              "outage_drops": 0,
+              "delivered_packets": 356544,
+              "corrupted_packets": 0,
+              "corruption_rejections": 0,
+              "generated_duplicates": 0
+            },
+            {
+              "attempted_packets": 356544,
+              "admitted_packets": 356544,
+              "attempted_bytes": 62287616,
+              "admitted_bytes": 62287616,
+              "queue_drops": 0,
+              "random_drops": 0,
+              "outage_drops": 0,
+              "delivered_packets": 356544,
+              "corrupted_packets": 0,
+              "corruption_rejections": 0,
+              "generated_duplicates": 0
+            }
+          ],
+          "interactive_p95": 0.0007007304016384053,
+          "profile": "goodput-v6",
+          "mode": "mixed",
+          "measurement_seconds": 12.0,
+          "drain_verified_bulk_bytes": 10485760,
+          "verified_bulk_bytes": 171573248,
+          "confirmed_bulk_bytes": 171573248,
+          "verified_image_bytes": 35258368,
+          "verified_map_bytes": 136314880,
+          "per_host_verified_bytes": [
+            42074112,
+            42467328,
+            42467328,
+            44564480
+          ],
+          "measurement_wire_bytes": 272431016,
+          "control_interval": 0.005,
+          "class_completion_after_drain": {
+            "interactive": {
+              "admitted": 960,
+              "receiver_complete": 960,
+              "confirmed": 960
+            },
+            "image": {
+              "admitted": 285,
+              "receiver_complete": 285,
+              "confirmed": 285
+            },
+            "map": {
+              "admitted": 69,
+              "receiver_complete": 69,
+              "confirmed": 69
+            },
+            "bulk": {
+              "admitted": 0,
+              "receiver_complete": 0,
+              "confirmed": 0
+            }
+          },
+          "accepted_bulk_payload_bytes": 172501504,
+          "accepted_bulk_payload_by_host": [
+            42100736,
+            43013120,
+            42814976,
+            44572672
+          ],
+          "measurement_incomplete_bulk_payload_bytes": 928256,
+          "completion_headroom": {
+            "optimistic_wire_service_bytes": 211120013.27842128,
+            "minimum_bulk_object_bytes": 131072,
+            "configured_hosts": 4,
+            "minimum_payload_for_all_hosts": 524288,
+            "minimum_wire_bytes_per_object": 147712,
+            "minimum_wire_for_all_hosts": 590848,
+            "all_host_object_completion_provably_infeasible": false,
+            "optimistic_max_hosts_with_bulk_object": 4,
+            "caveat": "necessary service bound only; passing does not establish feasibility"
+          },
+          "seed": 700006,
+          "domain": {
+            "version": "goodput-domain-v6.0",
+            "family": "wired-lan",
+            "churn": false,
+            "churn_times": [
+              4.339443377834938,
+              8.351999835893368
+            ],
+            "seed": 700006,
+            "synthetic": true,
+            "shared_airtime": false,
+            "distribution_shift": false,
+            "change_count": 0,
+            "control_interval": 0.005
+          }
+        },
+        "eligible_choices": {
+          "1": 300,
+          "0": 113,
+          "2": 94
+        },
+        "eligible_decisions": 507,
+        "mean_probabilities": [
+          0.20000001782261173,
+          0.6000000833289393,
+          0.20000001782261173
+        ],
+        "mean_entropy": 0.9502704148226706,
+        "actual_bias_changes": 276,
+        "macro_steps": 150,
+        "scope": "choices count scheduled eligible producer decisions; changes measure actual bias at macro boundaries"
+      }
+    ],
+    "initial-sampled-102": [
+      {
+        "record": {
+          "desired": {
+            "image": 182,
+            "map": 90,
+            "interactive": 480
+          },
+          "blocked": {},
+          "admitted": {
+            "image": 182,
+            "map": 90,
+            "interactive": 480
+          },
+          "messages": 752,
+          "completed": 752,
+          "wrong": 0,
+          "interactive_miss_rate": 0.0,
+          "interactive_on_time": 480,
+          "interactive_pending_deadlines": 0,
+          "interactive_unavoidable_bound": 0,
+          "interactive_avoidable_misses": 0,
+          "image_bytes": 2981888,
+          "map_bytes": 23592960,
+          "delivered_bytes": 26636288,
+          "total_wire_bytes": 39934155,
+          "feedback_bytes": 9183512,
+          "elapsed": 15.0,
+          "actual_image_fps": 12.133333333333333,
+          "admitted_image_fps": 15.166666666666666,
+          "pending_confirmation_bytes": 0,
+          "pending_messages": 0,
+          "events": 213655,
+          "network": [
+            {
+              "attempted_packets": 52384,
+              "admitted_packets": 52384,
+              "attempted_bytes": 30752563,
+              "admitted_bytes": 30752563,
+              "queue_drops": 0,
+              "random_drops": 0,
+              "outage_drops": 0,
+              "delivered_packets": 52384,
+              "corrupted_packets": 0,
+              "corruption_rejections": 0,
+              "generated_duplicates": 0
+            },
+            {
+              "attempted_packets": 52384,
+              "admitted_packets": 52384,
+              "attempted_bytes": 9181592,
+              "admitted_bytes": 9181592,
+              "queue_drops": 0,
+              "random_drops": 0,
+              "outage_drops": 0,
+              "delivered_packets": 52384,
+              "corrupted_packets": 0,
+              "corruption_rejections": 0,
+              "generated_duplicates": 0
+            }
+          ],
+          "interactive_p95": 0.001511752003539968,
+          "profile": "goodput-v6",
+          "mode": "mixed",
+          "measurement_seconds": 12.0,
+          "drain_verified_bulk_bytes": 294912,
+          "verified_bulk_bytes": 26279936,
+          "confirmed_bulk_bytes": 26279936,
+          "verified_image_bytes": 2949120,
+          "verified_map_bytes": 23330816,
+          "per_host_verified_bytes": [
+            26279936
+          ],
+          "measurement_wire_bytes": 39934155,
+          "control_interval": 0.005,
+          "class_completion_after_drain": {
+            "interactive": {
+              "admitted": 480,
+              "receiver_complete": 480,
+              "confirmed": 480
+            },
+            "image": {
+              "admitted": 182,
+              "receiver_complete": 182,
+              "confirmed": 182
+            },
+            "map": {
+              "admitted": 90,
+              "receiver_complete": 90,
+              "confirmed": 90
+            },
+            "bulk": {
+              "admitted": 0,
+              "receiver_complete": 0,
+              "confirmed": 0
+            }
+          },
+          "accepted_bulk_payload_bytes": 26535936,
+          "accepted_bulk_payload_by_host": [
+            26535936
+          ],
+          "measurement_incomplete_bulk_payload_bytes": 256000,
+          "completion_headroom": {
+            "optimistic_wire_service_bytes": 37057419.82854893,
+            "minimum_bulk_object_bytes": 16384,
+            "configured_hosts": 1,
+            "minimum_payload_for_all_hosts": 16384,
+            "minimum_wire_bytes_per_object": 18464,
+            "minimum_wire_for_all_hosts": 18464,
+            "all_host_object_completion_provably_infeasible": false,
+            "optimistic_max_hosts_with_bulk_object": 1,
+            "caveat": "necessary service bound only; passing does not establish feasibility"
+          },
+          "seed": 700021,
+          "domain": {
+            "version": "goodput-domain-v6.0",
+            "family": "bufferbloat",
+            "churn": false,
+            "churn_times": [
+              4.240266615843455,
+              8.30519151375736
+            ],
+            "seed": 700021,
+            "synthetic": true,
+            "shared_airtime": false,
+            "distribution_shift": false,
+            "change_count": 0,
+            "control_interval": 0.005
+          }
+        },
+        "eligible_choices": {
+          "1": 72,
+          "2": 33,
+          "0": 16
+        },
+        "eligible_decisions": 121,
+        "mean_probabilities": [
+          0.20000001788139343,
+          0.6000000834465027,
+          0.20000001788139343
+        ],
+        "mean_entropy": 0.9502705335617065,
+        "actual_bias_changes": 63,
+        "macro_steps": 150,
+        "scope": "choices count scheduled eligible producer decisions; changes measure actual bias at macro boundaries"
+      },
+      {
+        "record": {
+          "desired": {
+            "image": 283,
+            "map": 68,
+            "interactive": 960
+          },
+          "blocked": {},
+          "admitted": {
+            "image": 283,
+            "map": 68,
+            "interactive": 960
+          },
+          "messages": 1311,
+          "completed": 1311,
+          "wrong": 0,
+          "interactive_miss_rate": 0.0,
+          "interactive_on_time": 960,
+          "interactive_pending_deadlines": 0,
+          "interactive_unavoidable_bound": 0,
+          "interactive_avoidable_misses": 0,
+          "image_bytes": 37093376,
+          "map_bytes": 142606336,
+          "delivered_bytes": 179761152,
+          "total_wire_bytes": 268906309,
+          "feedback_bytes": 61515749,
+          "elapsed": 15.0,
+          "actual_image_fps": 4.716666666666667,
+          "admitted_image_fps": 5.895833333333333,
+          "pending_confirmation_bytes": 0,
+          "pending_messages": 0,
+          "events": 1420960,
+          "network": [
+            {
+              "attempted_packets": 351936,
+              "admitted_packets": 351936,
+              "attempted_bytes": 207423680,
+              "admitted_bytes": 207423680,
+              "queue_drops": 0,
+              "random_drops": 0,
+              "outage_drops": 0,
+              "delivered_packets": 351936,
+              "corrupted_packets": 0,
+              "corruption_rejections": 0,
+              "generated_duplicates": 0
+            },
+            {
+              "attempted_packets": 351936,
+              "admitted_packets": 351936,
+              "attempted_bytes": 61482629,
+              "admitted_bytes": 61482629,
+              "queue_drops": 0,
+              "random_drops": 0,
+              "outage_drops": 0,
+              "delivered_packets": 351936,
+              "corrupted_packets": 0,
+              "corruption_rejections": 0,
+              "generated_duplicates": 0
+            }
+          ],
+          "interactive_p95": 0.0007104459070455427,
+          "profile": "goodput-v6",
+          "mode": "mixed",
+          "measurement_seconds": 12.0,
+          "drain_verified_bulk_bytes": 10485760,
+          "verified_bulk_bytes": 169213952,
+          "confirmed_bulk_bytes": 169213952,
+          "verified_image_bytes": 34996224,
+          "verified_map_bytes": 134217728,
+          "per_host_verified_bytes": [
+            41943040,
+            42467328,
+            42467328,
+            42336256
+          ],
+          "measurement_wire_bytes": 268906309,
+          "control_interval": 0.005,
+          "class_completion_after_drain": {
+            "interactive": {
+              "admitted": 960,
+              "receiver_complete": 960,
+              "confirmed": 960
+            },
+            "image": {
+              "admitted": 283,
+              "receiver_complete": 283,
+              "confirmed": 283
+            },
+            "map": {
+              "admitted": 68,
+              "receiver_complete": 68,
+              "confirmed": 68
+            },
+            "bulk": {
+              "admitted": 0,
+              "receiver_complete": 0,
+              "confirmed": 0
+            }
+          },
+          "accepted_bulk_payload_bytes": 171765760,
+          "accepted_bulk_payload_by_host": [
+            42034176,
+            43311616,
+            44012544,
+            42407424
+          ],
+          "measurement_incomplete_bulk_payload_bytes": 2551808,
+          "completion_headroom": {
+            "optimistic_wire_service_bytes": 211120013.27842128,
+            "minimum_bulk_object_bytes": 131072,
+            "configured_hosts": 4,
+            "minimum_payload_for_all_hosts": 524288,
+            "minimum_wire_bytes_per_object": 147712,
+            "minimum_wire_for_all_hosts": 590848,
+            "all_host_object_completion_provably_infeasible": false,
+            "optimistic_max_hosts_with_bulk_object": 4,
+            "caveat": "necessary service bound only; passing does not establish feasibility"
+          },
+          "seed": 700006,
+          "domain": {
+            "version": "goodput-domain-v6.0",
+            "family": "wired-lan",
+            "churn": false,
+            "churn_times": [
+              4.339443377834938,
+              8.351999835893368
+            ],
+            "seed": 700006,
+            "synthetic": true,
+            "shared_airtime": false,
+            "distribution_shift": false,
+            "change_count": 0,
+            "control_interval": 0.005
+          }
+        },
+        "eligible_choices": {
+          "0": 92,
+          "1": 297,
+          "2": 111
+        },
+        "eligible_decisions": 500,
+        "mean_probabilities": [
+          0.20000001776218415,
+          0.6000000832080841,
+          0.20000001776218415
+        ],
+        "mean_entropy": 0.9502704157829285,
+        "actual_bias_changes": 289,
+        "macro_steps": 150,
+        "scope": "choices count scheduled eligible producer decisions; changes measure actual bias at macro boundaries"
+      }
+    ],
+    "seed42-current-mlp-greedy": [
+      {
+        "record": {
+          "desired": {
+            "image": 182,
+            "map": 90,
+            "interactive": 480
+          },
+          "blocked": {},
+          "admitted": {
+            "image": 182,
+            "map": 90,
+            "interactive": 480
+          },
+          "messages": 752,
+          "completed": 752,
+          "wrong": 0,
+          "interactive_miss_rate": 0.0,
+          "interactive_on_time": 480,
+          "interactive_pending_deadlines": 0,
+          "interactive_unavoidable_bound": 0,
+          "interactive_avoidable_misses": 0,
+          "image_bytes": 2981888,
+          "map_bytes": 23592960,
+          "delivered_bytes": 26636288,
+          "total_wire_bytes": 39932942,
+          "feedback_bytes": 9182307,
+          "elapsed": 15.0,
+          "actual_image_fps": 12.133333333333333,
+          "admitted_image_fps": 15.166666666666666,
+          "pending_confirmation_bytes": 0,
+          "pending_messages": 0,
+          "events": 213660,
+          "network": [
+            {
+              "attempted_packets": 52384,
+              "admitted_packets": 52384,
+              "attempted_bytes": 30752555,
+              "admitted_bytes": 30752555,
+              "queue_drops": 0,
+              "random_drops": 0,
+              "outage_drops": 0,
+              "delivered_packets": 52384,
+              "corrupted_packets": 0,
+              "corruption_rejections": 0,
+              "generated_duplicates": 0
+            },
+            {
+              "attempted_packets": 52384,
+              "admitted_packets": 52384,
+              "attempted_bytes": 9180387,
+              "admitted_bytes": 9180387,
+              "queue_drops": 0,
+              "random_drops": 0,
+              "outage_drops": 0,
+              "delivered_packets": 52384,
+              "corrupted_packets": 0,
+              "corruption_rejections": 0,
+              "generated_duplicates": 0
+            }
+          ],
+          "interactive_p95": 0.0014819462066111286,
+          "profile": "goodput-v6",
+          "mode": "mixed",
+          "measurement_seconds": 12.0,
+          "drain_verified_bulk_bytes": 294912,
+          "verified_bulk_bytes": 26279936,
+          "confirmed_bulk_bytes": 26279936,
+          "verified_image_bytes": 2949120,
+          "verified_map_bytes": 23330816,
+          "per_host_verified_bytes": [
+            26279936
+          ],
+          "measurement_wire_bytes": 39932942,
+          "control_interval": 0.005,
+          "class_completion_after_drain": {
+            "interactive": {
+              "admitted": 480,
+              "receiver_complete": 480,
+              "confirmed": 480
+            },
+            "image": {
+              "admitted": 182,
+              "receiver_complete": 182,
+              "confirmed": 182
+            },
+            "map": {
+              "admitted": 90,
+              "receiver_complete": 90,
+              "confirmed": 90
+            },
+            "bulk": {
+              "admitted": 0,
+              "receiver_complete": 0,
+              "confirmed": 0
+            }
+          },
+          "accepted_bulk_payload_bytes": 26467328,
+          "accepted_bulk_payload_by_host": [
+            26467328
+          ],
+          "measurement_incomplete_bulk_payload_bytes": 187392,
+          "completion_headroom": {
+            "optimistic_wire_service_bytes": 37057419.82854893,
+            "minimum_bulk_object_bytes": 16384,
+            "configured_hosts": 1,
+            "minimum_payload_for_all_hosts": 16384,
+            "minimum_wire_bytes_per_object": 18464,
+            "minimum_wire_for_all_hosts": 18464,
+            "all_host_object_completion_provably_infeasible": false,
+            "optimistic_max_hosts_with_bulk_object": 1,
+            "caveat": "necessary service bound only; passing does not establish feasibility"
+          },
+          "seed": 700021,
+          "domain": {
+            "version": "goodput-domain-v6.0",
+            "family": "bufferbloat",
+            "churn": false,
+            "churn_times": [
+              4.240266615843455,
+              8.30519151375736
+            ],
+            "seed": 700021,
+            "synthetic": true,
+            "shared_airtime": false,
+            "distribution_shift": false,
+            "change_count": 0,
+            "control_interval": 0.005
+          }
+        },
+        "eligible_choices": {
+          "1": 121
+        },
+        "eligible_decisions": 121,
+        "mean_probabilities": [
+          0.0883814445581318,
+          0.7260347791939727,
+          0.18558377495481948
+        ],
+        "mean_entropy": 0.7593977003058127,
+        "actual_bias_changes": 0,
+        "macro_steps": 150,
+        "scope": "choices count scheduled eligible producer decisions; changes measure actual bias at macro boundaries"
+      },
+      {
+        "record": {
+          "desired": {
+            "image": 281,
+            "map": 68,
+            "interactive": 960
+          },
+          "blocked": {},
+          "admitted": {
+            "image": 281,
+            "map": 68,
+            "interactive": 960
+          },
+          "messages": 1309,
+          "completed": 1309,
+          "wrong": 0,
+          "interactive_miss_rate": 0.0,
+          "interactive_on_time": 960,
+          "interactive_pending_deadlines": 0,
+          "interactive_unavoidable_bound": 0,
+          "interactive_avoidable_misses": 0,
+          "image_bytes": 36831232,
+          "map_bytes": 142606336,
+          "delivered_bytes": 179499008,
+          "total_wire_bytes": 268488728,
+          "feedback_bytes": 61401306,
+          "elapsed": 15.0,
+          "actual_image_fps": 4.683333333333334,
+          "admitted_image_fps": 5.854166666666667,
+          "pending_confirmation_bytes": 0,
+          "pending_messages": 0,
+          "events": 1418976,
+          "network": [
+            {
+              "attempted_packets": 351424,
+              "admitted_packets": 351424,
+              "attempted_bytes": 207120542,
+              "admitted_bytes": 207120542,
+              "queue_drops": 0,
+              "random_drops": 0,
+              "outage_drops": 0,
+              "delivered_packets": 351424,
+              "corrupted_packets": 0,
+              "corruption_rejections": 0,
+              "generated_duplicates": 0
+            },
+            {
+              "attempted_packets": 351424,
+              "admitted_packets": 351424,
+              "attempted_bytes": 61368186,
+              "admitted_bytes": 61368186,
+              "queue_drops": 0,
+              "random_drops": 0,
+              "outage_drops": 0,
+              "delivered_packets": 351424,
+              "corrupted_packets": 0,
+              "corruption_rejections": 0,
+              "generated_duplicates": 0
+            }
+          ],
+          "interactive_p95": 0.0007624666458540206,
+          "profile": "goodput-v6",
+          "mode": "mixed",
+          "measurement_seconds": 12.0,
+          "drain_verified_bulk_bytes": 10485760,
+          "verified_bulk_bytes": 168951808,
+          "confirmed_bulk_bytes": 168951808,
+          "verified_image_bytes": 34734080,
+          "verified_map_bytes": 134217728,
+          "per_host_verified_bytes": [
+            42074112,
+            42336256,
+            42467328,
+            42074112
+          ],
+          "measurement_wire_bytes": 268488728,
+          "control_interval": 0.005,
+          "class_completion_after_drain": {
+            "interactive": {
+              "admitted": 960,
+              "receiver_complete": 960,
+              "confirmed": 960
+            },
+            "image": {
+              "admitted": 281,
+              "receiver_complete": 281,
+              "confirmed": 281
+            },
+            "map": {
+              "admitted": 68,
+              "receiver_complete": 68,
+              "confirmed": 68
+            },
+            "bulk": {
+              "admitted": 0,
+              "receiver_complete": 0,
+              "confirmed": 0
+            }
+          },
+          "accepted_bulk_payload_bytes": 170564096,
+          "accepted_bulk_payload_by_host": [
+            42167296,
+            42371072,
+            43821056,
+            42204672
+          ],
+          "measurement_incomplete_bulk_payload_bytes": 1612288,
+          "completion_headroom": {
+            "optimistic_wire_service_bytes": 211120013.27842128,
+            "minimum_bulk_object_bytes": 131072,
+            "configured_hosts": 4,
+            "minimum_payload_for_all_hosts": 524288,
+            "minimum_wire_bytes_per_object": 147712,
+            "minimum_wire_for_all_hosts": 590848,
+            "all_host_object_completion_provably_infeasible": false,
+            "optimistic_max_hosts_with_bulk_object": 4,
+            "caveat": "necessary service bound only; passing does not establish feasibility"
+          },
+          "seed": 700006,
+          "domain": {
+            "version": "goodput-domain-v6.0",
+            "family": "wired-lan",
+            "churn": false,
+            "churn_times": [
+              4.339443377834938,
+              8.351999835893368
+            ],
+            "seed": 700006,
+            "synthetic": true,
+            "shared_airtime": false,
+            "distribution_shift": false,
+            "change_count": 0,
+            "control_interval": 0.005
+          }
+        },
+        "eligible_choices": {
+          "1": 505
+        },
+        "eligible_decisions": 505,
+        "mean_probabilities": [
+          0.08443805793724438,
+          0.7326006379457983,
+          0.18296130848403025
+        ],
+        "mean_entropy": 0.7473319284986741,
+        "actual_bias_changes": 0,
+        "macro_steps": 150,
+        "scope": "choices count scheduled eligible producer decisions; changes measure actual bias at macro boundaries"
+      }
+    ],
+    "seed42-current-mlp-sampled-101": [
+      {
+        "record": {
+          "desired": {
+            "image": 182,
+            "map": 90,
+            "interactive": 480
+          },
+          "blocked": {},
+          "admitted": {
+            "image": 182,
+            "map": 90,
+            "interactive": 480
+          },
+          "messages": 752,
+          "completed": 752,
+          "wrong": 0,
+          "interactive_miss_rate": 0.0,
+          "interactive_on_time": 480,
+          "interactive_pending_deadlines": 0,
+          "interactive_unavoidable_bound": 0,
+          "interactive_avoidable_misses": 0,
+          "image_bytes": 2981888,
+          "map_bytes": 23592960,
+          "delivered_bytes": 26636288,
+          "total_wire_bytes": 39933629,
+          "feedback_bytes": 9182995,
+          "elapsed": 15.0,
+          "actual_image_fps": 12.133333333333333,
+          "admitted_image_fps": 15.166666666666666,
+          "pending_confirmation_bytes": 0,
+          "pending_messages": 0,
+          "events": 213657,
+          "network": [
+            {
+              "attempted_packets": 52384,
+              "admitted_packets": 52384,
+              "attempted_bytes": 30752554,
+              "admitted_bytes": 30752554,
+              "queue_drops": 0,
+              "random_drops": 0,
+              "outage_drops": 0,
+              "delivered_packets": 52384,
+              "corrupted_packets": 0,
+              "corruption_rejections": 0,
+              "generated_duplicates": 0
+            },
+            {
+              "attempted_packets": 52384,
+              "admitted_packets": 52384,
+              "attempted_bytes": 9181075,
+              "admitted_bytes": 9181075,
+              "queue_drops": 0,
+              "random_drops": 0,
+              "outage_drops": 0,
+              "delivered_packets": 52384,
+              "corrupted_packets": 0,
+              "corruption_rejections": 0,
+              "generated_duplicates": 0
+            }
+          ],
+          "interactive_p95": 0.0015449487793674165,
+          "profile": "goodput-v6",
+          "mode": "mixed",
+          "measurement_seconds": 12.0,
+          "drain_verified_bulk_bytes": 294912,
+          "verified_bulk_bytes": 26279936,
+          "confirmed_bulk_bytes": 26279936,
+          "verified_image_bytes": 2949120,
+          "verified_map_bytes": 23330816,
+          "per_host_verified_bytes": [
+            26279936
+          ],
+          "measurement_wire_bytes": 39933629,
+          "control_interval": 0.005,
+          "class_completion_after_drain": {
+            "interactive": {
+              "admitted": 480,
+              "receiver_complete": 480,
+              "confirmed": 480
+            },
+            "image": {
+              "admitted": 182,
+              "receiver_complete": 182,
+              "confirmed": 182
+            },
+            "map": {
+              "admitted": 90,
+              "receiver_complete": 90,
+              "confirmed": 90
+            },
+            "bulk": {
+              "admitted": 0,
+              "receiver_complete": 0,
+              "confirmed": 0
+            }
+          },
+          "accepted_bulk_payload_bytes": 26504704,
+          "accepted_bulk_payload_by_host": [
+            26504704
+          ],
+          "measurement_incomplete_bulk_payload_bytes": 224768,
+          "completion_headroom": {
+            "optimistic_wire_service_bytes": 37057419.82854893,
+            "minimum_bulk_object_bytes": 16384,
+            "configured_hosts": 1,
+            "minimum_payload_for_all_hosts": 16384,
+            "minimum_wire_bytes_per_object": 18464,
+            "minimum_wire_for_all_hosts": 18464,
+            "all_host_object_completion_provably_infeasible": false,
+            "optimistic_max_hosts_with_bulk_object": 1,
+            "caveat": "necessary service bound only; passing does not establish feasibility"
+          },
+          "seed": 700021,
+          "domain": {
+            "version": "goodput-domain-v6.0",
+            "family": "bufferbloat",
+            "churn": false,
+            "churn_times": [
+              4.240266615843455,
+              8.30519151375736
+            ],
+            "seed": 700021,
+            "synthetic": true,
+            "shared_airtime": false,
+            "distribution_shift": false,
+            "change_count": 0,
+            "control_interval": 0.005
+          }
+        },
+        "eligible_choices": {
+          "1": 86,
+          "0": 12,
+          "2": 23
+        },
+        "eligible_decisions": 121,
+        "mean_probabilities": [
+          0.08852433604149779,
+          0.7258495200764049,
+          0.1856261436357971
+        ],
+        "mean_entropy": 0.7597556079714751,
+        "actual_bias_changes": 54,
+        "macro_steps": 150,
+        "scope": "choices count scheduled eligible producer decisions; changes measure actual bias at macro boundaries"
+      },
+      {
+        "record": {
+          "desired": {
+            "image": 286,
+            "map": 68,
+            "interactive": 960
+          },
+          "blocked": {},
+          "admitted": {
+            "image": 286,
+            "map": 68,
+            "interactive": 960
+          },
+          "messages": 1314,
+          "completed": 1314,
+          "wrong": 0,
+          "interactive_miss_rate": 0.0,
+          "interactive_on_time": 960,
+          "interactive_pending_deadlines": 0,
+          "interactive_unavoidable_bound": 0,
+          "interactive_avoidable_misses": 0,
+          "image_bytes": 37486592,
+          "map_bytes": 142606336,
+          "delivered_bytes": 180154368,
+          "total_wire_bytes": 269485037,
+          "feedback_bytes": 61639853,
+          "elapsed": 15.0,
+          "actual_image_fps": 4.766666666666667,
+          "admitted_image_fps": 5.958333333333333,
+          "pending_confirmation_bytes": 0,
+          "pending_messages": 0,
+          "events": 1424051,
+          "network": [
+            {
+              "attempted_packets": 352704,
+              "admitted_packets": 352704,
+              "attempted_bytes": 207878304,
+              "admitted_bytes": 207878304,
+              "queue_drops": 0,
+              "random_drops": 0,
+              "outage_drops": 0,
+              "delivered_packets": 352704,
+              "corrupted_packets": 0,
+              "corruption_rejections": 0,
+              "generated_duplicates": 0
+            },
+            {
+              "attempted_packets": 352704,
+              "admitted_packets": 352704,
+              "attempted_bytes": 61606733,
+              "admitted_bytes": 61606733,
+              "queue_drops": 0,
+              "random_drops": 0,
+              "outage_drops": 0,
+              "delivered_packets": 352704,
+              "corrupted_packets": 0,
+              "corruption_rejections": 0,
+              "generated_duplicates": 0
+            }
+          ],
+          "interactive_p95": 0.0007575734403680977,
+          "profile": "goodput-v6",
+          "mode": "mixed",
+          "measurement_seconds": 12.0,
+          "drain_verified_bulk_bytes": 10485760,
+          "verified_bulk_bytes": 169607168,
+          "confirmed_bulk_bytes": 169607168,
+          "verified_image_bytes": 35389440,
+          "verified_map_bytes": 134217728,
+          "per_host_verified_bytes": [
+            42467328,
+            42205184,
+            42467328,
+            42467328
+          ],
+          "measurement_wire_bytes": 269485037,
+          "control_interval": 0.005,
+          "class_completion_after_drain": {
+            "interactive": {
+              "admitted": 960,
+              "receiver_complete": 960,
+              "confirmed": 960
+            },
+            "image": {
+              "admitted": 286,
+              "receiver_complete": 286,
+              "confirmed": 286
+            },
+            "map": {
+              "admitted": 68,
+              "receiver_complete": 68,
+              "confirmed": 68
+            },
+            "bulk": {
+              "admitted": 0,
+              "receiver_complete": 0,
+              "confirmed": 0
+            }
+          },
+          "accepted_bulk_payload_bytes": 171976192,
+          "accepted_bulk_payload_by_host": [
+            43777024,
+            42208768,
+            42507776,
+            43482624
+          ],
+          "measurement_incomplete_bulk_payload_bytes": 2369024,
+          "completion_headroom": {
+            "optimistic_wire_service_bytes": 211120013.27842128,
+            "minimum_bulk_object_bytes": 131072,
+            "configured_hosts": 4,
+            "minimum_payload_for_all_hosts": 524288,
+            "minimum_wire_bytes_per_object": 147712,
+            "minimum_wire_for_all_hosts": 590848,
+            "all_host_object_completion_provably_infeasible": false,
+            "optimistic_max_hosts_with_bulk_object": 4,
+            "caveat": "necessary service bound only; passing does not establish feasibility"
+          },
+          "seed": 700006,
+          "domain": {
+            "version": "goodput-domain-v6.0",
+            "family": "wired-lan",
+            "churn": false,
+            "churn_times": [
+              4.339443377834938,
+              8.351999835893368
+            ],
+            "seed": 700006,
+            "synthetic": true,
+            "shared_airtime": false,
+            "distribution_shift": false,
+            "change_count": 0,
+            "control_interval": 0.005
+          }
+        },
+        "eligible_choices": {
+          "1": 369,
+          "0": 44,
+          "2": 88
+        },
+        "eligible_decisions": 501,
+        "mean_probabilities": [
+          0.08452414431257876,
+          0.7324957852354069,
+          0.18298006105327796
+        ],
+        "mean_entropy": 0.7475526861088004,
+        "actual_bias_changes": 204,
+        "macro_steps": 150,
+        "scope": "choices count scheduled eligible producer decisions; changes measure actual bias at macro boundaries"
+      }
+    ],
+    "seed42-current-mlp-sampled-102": [
+      {
+        "record": {
+          "desired": {
+            "image": 184,
+            "map": 91,
+            "interactive": 480
+          },
+          "blocked": {},
+          "admitted": {
+            "image": 184,
+            "map": 91,
+            "interactive": 480
+          },
+          "messages": 755,
+          "completed": 755,
+          "wrong": 0,
+          "interactive_miss_rate": 0.0,
+          "interactive_on_time": 480,
+          "interactive_pending_deadlines": 0,
+          "interactive_unavoidable_bound": 0,
+          "interactive_avoidable_misses": 0,
+          "image_bytes": 3014656,
+          "map_bytes": 23855104,
+          "delivered_bytes": 26931200,
+          "total_wire_bytes": 40376000,
+          "feedback_bytes": 9285392,
+          "elapsed": 15.0,
+          "actual_image_fps": 12.266666666666667,
+          "admitted_image_fps": 15.333333333333334,
+          "pending_confirmation_bytes": 0,
+          "pending_messages": 0,
+          "events": 215974,
+          "network": [
+            {
+              "attempted_packets": 52960,
+              "admitted_packets": 52960,
+              "attempted_bytes": 31092528,
+              "admitted_bytes": 31092528,
+              "queue_drops": 0,
+              "random_drops": 0,
+              "outage_drops": 0,
+              "delivered_packets": 52960,
+              "corrupted_packets": 0,
+              "corruption_rejections": 0,
+              "generated_duplicates": 0
+            },
+            {
+              "attempted_packets": 52960,
+              "admitted_packets": 52960,
+              "attempted_bytes": 9283472,
+              "admitted_bytes": 9283472,
+              "queue_drops": 0,
+              "random_drops": 0,
+              "outage_drops": 0,
+              "delivered_packets": 52960,
+              "corrupted_packets": 0,
+              "corruption_rejections": 0,
+              "generated_duplicates": 0
+            }
+          ],
+          "interactive_p95": 0.0015123983479239378,
+          "profile": "goodput-v6",
+          "mode": "mixed",
+          "measurement_seconds": 12.0,
+          "drain_verified_bulk_bytes": 294912,
+          "verified_bulk_bytes": 26574848,
+          "confirmed_bulk_bytes": 26574848,
+          "verified_image_bytes": 2981888,
+          "verified_map_bytes": 23592960,
+          "per_host_verified_bytes": [
+            26574848
+          ],
+          "measurement_wire_bytes": 40376000,
+          "control_interval": 0.005,
+          "class_completion_after_drain": {
+            "interactive": {
+              "admitted": 480,
+              "receiver_complete": 480,
+              "confirmed": 480
+            },
+            "image": {
+              "admitted": 184,
+              "receiver_complete": 184,
+              "confirmed": 184
+            },
+            "map": {
+              "admitted": 91,
+              "receiver_complete": 91,
+              "confirmed": 91
+            },
+            "bulk": {
+              "admitted": 0,
+              "receiver_complete": 0,
+              "confirmed": 0
+            }
+          },
+          "accepted_bulk_payload_bytes": 26689536,
+          "accepted_bulk_payload_by_host": [
+            26689536
+          ],
+          "measurement_incomplete_bulk_payload_bytes": 114688,
+          "completion_headroom": {
+            "optimistic_wire_service_bytes": 37057419.82854893,
+            "minimum_bulk_object_bytes": 16384,
+            "configured_hosts": 1,
+            "minimum_payload_for_all_hosts": 16384,
+            "minimum_wire_bytes_per_object": 18464,
+            "minimum_wire_for_all_hosts": 18464,
+            "all_host_object_completion_provably_infeasible": false,
+            "optimistic_max_hosts_with_bulk_object": 1,
+            "caveat": "necessary service bound only; passing does not establish feasibility"
+          },
+          "seed": 700021,
+          "domain": {
+            "version": "goodput-domain-v6.0",
+            "family": "bufferbloat",
+            "churn": false,
+            "churn_times": [
+              4.240266615843455,
+              8.30519151375736
+            ],
+            "seed": 700021,
+            "synthetic": true,
+            "shared_airtime": false,
+            "distribution_shift": false,
+            "change_count": 0,
+            "control_interval": 0.005
+          }
+        },
+        "eligible_choices": {
+          "1": 82,
+          "2": 30,
+          "0": 9
+        },
+        "eligible_decisions": 121,
+        "mean_probabilities": [
+          0.08837141675397384,
+          0.7260473040509815,
+          0.18558127426904095
+        ],
+        "mean_entropy": 0.7593733082132891,
+        "actual_bias_changes": 58,
+        "macro_steps": 150,
+        "scope": "choices count scheduled eligible producer decisions; changes measure actual bias at macro boundaries"
+      },
+      {
+        "record": {
+          "desired": {
+            "image": 284,
+            "map": 68,
+            "interactive": 960
+          },
+          "blocked": {},
+          "admitted": {
+            "image": 284,
+            "map": 68,
+            "interactive": 960
+          },
+          "messages": 1312,
+          "completed": 1312,
+          "wrong": 0,
+          "interactive_miss_rate": 0.0,
+          "interactive_on_time": 960,
+          "interactive_pending_deadlines": 0,
+          "interactive_unavoidable_bound": 0,
+          "interactive_avoidable_misses": 0,
+          "image_bytes": 37224448,
+          "map_bytes": 142606336,
+          "delivered_bytes": 179892224,
+          "total_wire_bytes": 269093098,
+          "feedback_bytes": 61550984,
+          "elapsed": 15.0,
+          "actual_image_fps": 4.733333333333333,
+          "admitted_image_fps": 5.916666666666667,
+          "pending_confirmation_bytes": 0,
+          "pending_messages": 0,
+          "events": 1422007,
+          "network": [
+            {
+              "attempted_packets": 352192,
+              "admitted_packets": 352192,
+              "attempted_bytes": 207575234,
+              "admitted_bytes": 207575234,
+              "queue_drops": 0,
+              "random_drops": 0,
+              "outage_drops": 0,
+              "delivered_packets": 352192,
+              "corrupted_packets": 0,
+              "corruption_rejections": 0,
+              "generated_duplicates": 0
+            },
+            {
+              "attempted_packets": 352192,
+              "admitted_packets": 352192,
+              "attempted_bytes": 61517864,
+              "admitted_bytes": 61517864,
+              "queue_drops": 0,
+              "random_drops": 0,
+              "outage_drops": 0,
+              "delivered_packets": 352192,
+              "corrupted_packets": 0,
+              "corruption_rejections": 0,
+              "generated_duplicates": 0
+            }
+          ],
+          "interactive_p95": 0.0007003305074811589,
+          "profile": "goodput-v6",
+          "mode": "mixed",
+          "measurement_seconds": 12.0,
+          "drain_verified_bulk_bytes": 10485760,
+          "verified_bulk_bytes": 169345024,
+          "confirmed_bulk_bytes": 169345024,
+          "verified_image_bytes": 35127296,
+          "verified_map_bytes": 134217728,
+          "per_host_verified_bytes": [
+            42074112,
+            42467328,
+            42467328,
+            42336256
+          ],
+          "measurement_wire_bytes": 269093098,
+          "control_interval": 0.005,
+          "class_completion_after_drain": {
+            "interactive": {
+              "admitted": 960,
+              "receiver_complete": 960,
+              "confirmed": 960
+            },
+            "image": {
+              "admitted": 284,
+              "receiver_complete": 284,
+              "confirmed": 284
+            },
+            "map": {
+              "admitted": 68,
+              "receiver_complete": 68,
+              "confirmed": 68
+            },
+            "bulk": {
+              "admitted": 0,
+              "receiver_complete": 0,
+              "confirmed": 0
+            }
+          },
+          "accepted_bulk_payload_bytes": 171738112,
+          "accepted_bulk_payload_by_host": [
+            42097152,
+            43478528,
+            43768320,
+            42394112
+          ],
+          "measurement_incomplete_bulk_payload_bytes": 2393088,
+          "completion_headroom": {
+            "optimistic_wire_service_bytes": 211120013.27842128,
+            "minimum_bulk_object_bytes": 131072,
+            "configured_hosts": 4,
+            "minimum_payload_for_all_hosts": 524288,
+            "minimum_wire_bytes_per_object": 147712,
+            "minimum_wire_for_all_hosts": 590848,
+            "all_host_object_completion_provably_infeasible": false,
+            "optimistic_max_hosts_with_bulk_object": 4,
+            "caveat": "necessary service bound only; passing does not establish feasibility"
+          },
+          "seed": 700006,
+          "domain": {
+            "version": "goodput-domain-v6.0",
+            "family": "wired-lan",
+            "churn": false,
+            "churn_times": [
+              4.339443377834938,
+              8.351999835893368
+            ],
+            "seed": 700006,
+            "synthetic": true,
+            "shared_airtime": false,
+            "distribution_shift": false,
+            "change_count": 0,
+            "control_interval": 0.005
+          }
+        },
+        "eligible_choices": {
+          "1": 365,
+          "0": 41,
+          "2": 96
+        },
+        "eligible_decisions": 502,
+        "mean_probabilities": [
+          0.08419998653559571,
+          0.7328496882877502,
+          0.1829503224309222
+        ],
+        "mean_entropy": 0.7468101311014943,
+        "actual_bias_changes": 217,
+        "macro_steps": 150,
+        "scope": "choices count scheduled eligible producer decisions; changes measure actual bias at macro boundaries"
+      }
+    ],
+    "seed42-history-mlp-greedy": [
+      {
+        "record": {
+          "desired": {
+            "image": 182,
+            "map": 90,
+            "interactive": 480
+          },
+          "blocked": {},
+          "admitted": {
+            "image": 182,
+            "map": 90,
+            "interactive": 480
+          },
+          "messages": 752,
+          "completed": 752,
+          "wrong": 0,
+          "interactive_miss_rate": 0.0,
+          "interactive_on_time": 480,
+          "interactive_pending_deadlines": 0,
+          "interactive_unavoidable_bound": 0,
+          "interactive_avoidable_misses": 0,
+          "image_bytes": 2981888,
+          "map_bytes": 23592960,
+          "delivered_bytes": 26636288,
+          "total_wire_bytes": 39932942,
+          "feedback_bytes": 9182307,
+          "elapsed": 15.0,
+          "actual_image_fps": 12.133333333333333,
+          "admitted_image_fps": 15.166666666666666,
+          "pending_confirmation_bytes": 0,
+          "pending_messages": 0,
+          "events": 213660,
+          "network": [
+            {
+              "attempted_packets": 52384,
+              "admitted_packets": 52384,
+              "attempted_bytes": 30752555,
+              "admitted_bytes": 30752555,
+              "queue_drops": 0,
+              "random_drops": 0,
+              "outage_drops": 0,
+              "delivered_packets": 52384,
+              "corrupted_packets": 0,
+              "corruption_rejections": 0,
+              "generated_duplicates": 0
+            },
+            {
+              "attempted_packets": 52384,
+              "admitted_packets": 52384,
+              "attempted_bytes": 9180387,
+              "admitted_bytes": 9180387,
+              "queue_drops": 0,
+              "random_drops": 0,
+              "outage_drops": 0,
+              "delivered_packets": 52384,
+              "corrupted_packets": 0,
+              "corruption_rejections": 0,
+              "generated_duplicates": 0
+            }
+          ],
+          "interactive_p95": 0.0014819462066111286,
+          "profile": "goodput-v6",
+          "mode": "mixed",
+          "measurement_seconds": 12.0,
+          "drain_verified_bulk_bytes": 294912,
+          "verified_bulk_bytes": 26279936,
+          "confirmed_bulk_bytes": 26279936,
+          "verified_image_bytes": 2949120,
+          "verified_map_bytes": 23330816,
+          "per_host_verified_bytes": [
+            26279936
+          ],
+          "measurement_wire_bytes": 39932942,
+          "control_interval": 0.005,
+          "class_completion_after_drain": {
+            "interactive": {
+              "admitted": 480,
+              "receiver_complete": 480,
+              "confirmed": 480
+            },
+            "image": {
+              "admitted": 182,
+              "receiver_complete": 182,
+              "confirmed": 182
+            },
+            "map": {
+              "admitted": 90,
+              "receiver_complete": 90,
+              "confirmed": 90
+            },
+            "bulk": {
+              "admitted": 0,
+              "receiver_complete": 0,
+              "confirmed": 0
+            }
+          },
+          "accepted_bulk_payload_bytes": 26467328,
+          "accepted_bulk_payload_by_host": [
+            26467328
+          ],
+          "measurement_incomplete_bulk_payload_bytes": 187392,
+          "completion_headroom": {
+            "optimistic_wire_service_bytes": 37057419.82854893,
+            "minimum_bulk_object_bytes": 16384,
+            "configured_hosts": 1,
+            "minimum_payload_for_all_hosts": 16384,
+            "minimum_wire_bytes_per_object": 18464,
+            "minimum_wire_for_all_hosts": 18464,
+            "all_host_object_completion_provably_infeasible": false,
+            "optimistic_max_hosts_with_bulk_object": 1,
+            "caveat": "necessary service bound only; passing does not establish feasibility"
+          },
+          "seed": 700021,
+          "domain": {
+            "version": "goodput-domain-v6.0",
+            "family": "bufferbloat",
+            "churn": false,
+            "churn_times": [
+              4.240266615843455,
+              8.30519151375736
+            ],
+            "seed": 700021,
+            "synthetic": true,
+            "shared_airtime": false,
+            "distribution_shift": false,
+            "change_count": 0,
+            "control_interval": 0.005
+          }
+        },
+        "eligible_choices": {
+          "1": 121
+        },
+        "eligible_decisions": 121,
+        "mean_probabilities": [
+          0.19580140094126552,
+          0.5874589528919252,
+          0.21673965207801377
+        ],
+        "mean_entropy": 0.963184234031961,
+        "actual_bias_changes": 0,
+        "macro_steps": 150,
+        "scope": "choices count scheduled eligible producer decisions; changes measure actual bias at macro boundaries"
+      },
+      {
+        "record": {
+          "desired": {
+            "image": 281,
+            "map": 68,
+            "interactive": 960
+          },
+          "blocked": {},
+          "admitted": {
+            "image": 281,
+            "map": 68,
+            "interactive": 960
+          },
+          "messages": 1309,
+          "completed": 1309,
+          "wrong": 0,
+          "interactive_miss_rate": 0.0,
+          "interactive_on_time": 960,
+          "interactive_pending_deadlines": 0,
+          "interactive_unavoidable_bound": 0,
+          "interactive_avoidable_misses": 0,
+          "image_bytes": 36831232,
+          "map_bytes": 142606336,
+          "delivered_bytes": 179499008,
+          "total_wire_bytes": 268488728,
+          "feedback_bytes": 61401306,
+          "elapsed": 15.0,
+          "actual_image_fps": 4.683333333333334,
+          "admitted_image_fps": 5.854166666666667,
+          "pending_confirmation_bytes": 0,
+          "pending_messages": 0,
+          "events": 1418976,
+          "network": [
+            {
+              "attempted_packets": 351424,
+              "admitted_packets": 351424,
+              "attempted_bytes": 207120542,
+              "admitted_bytes": 207120542,
+              "queue_drops": 0,
+              "random_drops": 0,
+              "outage_drops": 0,
+              "delivered_packets": 351424,
+              "corrupted_packets": 0,
+              "corruption_rejections": 0,
+              "generated_duplicates": 0
+            },
+            {
+              "attempted_packets": 351424,
+              "admitted_packets": 351424,
+              "attempted_bytes": 61368186,
+              "admitted_bytes": 61368186,
+              "queue_drops": 0,
+              "random_drops": 0,
+              "outage_drops": 0,
+              "delivered_packets": 351424,
+              "corrupted_packets": 0,
+              "corruption_rejections": 0,
+              "generated_duplicates": 0
+            }
+          ],
+          "interactive_p95": 0.0007624666458540206,
+          "profile": "goodput-v6",
+          "mode": "mixed",
+          "measurement_seconds": 12.0,
+          "drain_verified_bulk_bytes": 10485760,
+          "verified_bulk_bytes": 168951808,
+          "confirmed_bulk_bytes": 168951808,
+          "verified_image_bytes": 34734080,
+          "verified_map_bytes": 134217728,
+          "per_host_verified_bytes": [
+            42074112,
+            42336256,
+            42467328,
+            42074112
+          ],
+          "measurement_wire_bytes": 268488728,
+          "control_interval": 0.005,
+          "class_completion_after_drain": {
+            "interactive": {
+              "admitted": 960,
+              "receiver_complete": 960,
+              "confirmed": 960
+            },
+            "image": {
+              "admitted": 281,
+              "receiver_complete": 281,
+              "confirmed": 281
+            },
+            "map": {
+              "admitted": 68,
+              "receiver_complete": 68,
+              "confirmed": 68
+            },
+            "bulk": {
+              "admitted": 0,
+              "receiver_complete": 0,
+              "confirmed": 0
+            }
+          },
+          "accepted_bulk_payload_bytes": 170564096,
+          "accepted_bulk_payload_by_host": [
+            42167296,
+            42371072,
+            43821056,
+            42204672
+          ],
+          "measurement_incomplete_bulk_payload_bytes": 1612288,
+          "completion_headroom": {
+            "optimistic_wire_service_bytes": 211120013.27842128,
+            "minimum_bulk_object_bytes": 131072,
+            "configured_hosts": 4,
+            "minimum_payload_for_all_hosts": 524288,
+            "minimum_wire_bytes_per_object": 147712,
+            "minimum_wire_for_all_hosts": 590848,
+            "all_host_object_completion_provably_infeasible": false,
+            "optimistic_max_hosts_with_bulk_object": 4,
+            "caveat": "necessary service bound only; passing does not establish feasibility"
+          },
+          "seed": 700006,
+          "domain": {
+            "version": "goodput-domain-v6.0",
+            "family": "wired-lan",
+            "churn": false,
+            "churn_times": [
+              4.339443377834938,
+              8.351999835893368
+            ],
+            "seed": 700006,
+            "synthetic": true,
+            "shared_airtime": false,
+            "distribution_shift": false,
+            "change_count": 0,
+            "control_interval": 0.005
+          }
+        },
+        "eligible_choices": {
+          "1": 505
+        },
+        "eligible_decisions": 505,
+        "mean_probabilities": [
+          0.1958069095517149,
+          0.5874008365196757,
+          0.21679226207261038
+        ],
+        "mean_entropy": 0.9632414204059261,
+        "actual_bias_changes": 0,
+        "macro_steps": 150,
+        "scope": "choices count scheduled eligible producer decisions; changes measure actual bias at macro boundaries"
+      }
+    ],
+    "seed42-history-mlp-sampled-101": [
+      {
+        "record": {
+          "desired": {
+            "image": 180,
+            "map": 89,
+            "interactive": 480
+          },
+          "blocked": {},
+          "admitted": {
+            "image": 180,
+            "map": 89,
+            "interactive": 480
+          },
+          "messages": 749,
+          "completed": 749,
+          "wrong": 0,
+          "interactive_miss_rate": 0.0,
+          "interactive_on_time": 480,
+          "interactive_pending_deadlines": 0,
+          "interactive_unavoidable_bound": 0,
+          "interactive_avoidable_misses": 0,
+          "image_bytes": 2949120,
+          "map_bytes": 23330816,
+          "delivered_bytes": 26341376,
+          "total_wire_bytes": 39490714,
+          "feedback_bytes": 9080048,
+          "elapsed": 15.0,
+          "actual_image_fps": 12.0,
+          "admitted_image_fps": 15.0,
+          "pending_confirmation_bytes": 0,
+          "pending_messages": 0,
+          "events": 211357,
+          "network": [
+            {
+              "attempted_packets": 51808,
+              "admitted_packets": 51808,
+              "attempted_bytes": 30412586,
+              "admitted_bytes": 30412586,
+              "queue_drops": 0,
+              "random_drops": 0,
+              "outage_drops": 0,
+              "delivered_packets": 51808,
+              "corrupted_packets": 0,
+              "corruption_rejections": 0,
+              "generated_duplicates": 0
+            },
+            {
+              "attempted_packets": 51808,
+              "admitted_packets": 51808,
+              "attempted_bytes": 9078128,
+              "admitted_bytes": 9078128,
+              "queue_drops": 0,
+              "random_drops": 0,
+              "outage_drops": 0,
+              "delivered_packets": 51808,
+              "corrupted_packets": 0,
+              "corruption_rejections": 0,
+              "generated_duplicates": 0
+            }
+          ],
+          "interactive_p95": 0.0015062182207130625,
+          "profile": "goodput-v6",
+          "mode": "mixed",
+          "measurement_seconds": 12.0,
+          "drain_verified_bulk_bytes": 294912,
+          "verified_bulk_bytes": 25985024,
+          "confirmed_bulk_bytes": 25985024,
+          "verified_image_bytes": 2916352,
+          "verified_map_bytes": 23068672,
+          "per_host_verified_bytes": [
+            25985024
+          ],
+          "measurement_wire_bytes": 39490714,
+          "control_interval": 0.005,
+          "class_completion_after_drain": {
+            "interactive": {
+              "admitted": 480,
+              "receiver_complete": 480,
+              "confirmed": 480
+            },
+            "image": {
+              "admitted": 180,
+              "receiver_complete": 180,
+              "confirmed": 180
+            },
+            "map": {
+              "admitted": 89,
+              "receiver_complete": 89,
+              "confirmed": 89
+            },
+            "bulk": {
+              "admitted": 0,
+              "receiver_complete": 0,
+              "confirmed": 0
+            }
+          },
+          "accepted_bulk_payload_bytes": 26134528,
+          "accepted_bulk_payload_by_host": [
+            26134528
+          ],
+          "measurement_incomplete_bulk_payload_bytes": 149504,
+          "completion_headroom": {
+            "optimistic_wire_service_bytes": 37057419.82854893,
+            "minimum_bulk_object_bytes": 16384,
+            "configured_hosts": 1,
+            "minimum_payload_for_all_hosts": 16384,
+            "minimum_wire_bytes_per_object": 18464,
+            "minimum_wire_for_all_hosts": 18464,
+            "all_host_object_completion_provably_infeasible": false,
+            "optimistic_max_hosts_with_bulk_object": 1,
+            "caveat": "necessary service bound only; passing does not establish feasibility"
+          },
+          "seed": 700021,
+          "domain": {
+            "version": "goodput-domain-v6.0",
+            "family": "bufferbloat",
+            "churn": false,
+            "churn_times": [
+              4.240266615843455,
+              8.30519151375736
+            ],
+            "seed": 700021,
+            "synthetic": true,
+            "shared_airtime": false,
+            "distribution_shift": false,
+            "change_count": 0,
+            "control_interval": 0.005
+          }
+        },
+        "eligible_choices": {
+          "1": 74,
+          "0": 20,
+          "2": 27
+        },
+        "eligible_decisions": 121,
+        "mean_probabilities": [
+          0.1958017168212528,
+          0.5874587253105542,
+          0.21673956045434495
+        ],
+        "mean_entropy": 0.9631844906767538,
+        "actual_bias_changes": 65,
+        "macro_steps": 150,
+        "scope": "choices count scheduled eligible producer decisions; changes measure actual bias at macro boundaries"
+      },
+      {
+        "record": {
+          "desired": {
+            "image": 285,
+            "map": 68,
+            "interactive": 960
+          },
+          "blocked": {},
+          "admitted": {
+            "image": 285,
+            "map": 68,
+            "interactive": 960
+          },
+          "messages": 1313,
+          "completed": 1313,
+          "wrong": 0,
+          "interactive_miss_rate": 0.0,
+          "interactive_on_time": 960,
+          "interactive_pending_deadlines": 0,
+          "interactive_unavoidable_bound": 0,
+          "interactive_avoidable_misses": 0,
+          "image_bytes": 37355520,
+          "map_bytes": 142606336,
+          "delivered_bytes": 180023296,
+          "total_wire_bytes": 269299757,
+          "feedback_bytes": 61606089,
+          "elapsed": 15.0,
+          "actual_image_fps": 4.75,
+          "admitted_image_fps": 5.9375,
+          "pending_confirmation_bytes": 0,
+          "pending_messages": 0,
+          "events": 1423003,
+          "network": [
+            {
+              "attempted_packets": 352448,
+              "admitted_packets": 352448,
+              "attempted_bytes": 207726788,
+              "admitted_bytes": 207726788,
+              "queue_drops": 0,
+              "random_drops": 0,
+              "outage_drops": 0,
+              "delivered_packets": 352448,
+              "corrupted_packets": 0,
+              "corruption_rejections": 0,
+              "generated_duplicates": 0
+            },
+            {
+              "attempted_packets": 352448,
+              "admitted_packets": 352448,
+              "attempted_bytes": 61572969,
+              "admitted_bytes": 61572969,
+              "queue_drops": 0,
+              "random_drops": 0,
+              "outage_drops": 0,
+              "delivered_packets": 352448,
+              "corrupted_packets": 0,
+              "corruption_rejections": 0,
+              "generated_duplicates": 0
+            }
+          ],
+          "interactive_p95": 0.0007321788842359567,
+          "profile": "goodput-v6",
+          "mode": "mixed",
+          "measurement_seconds": 12.0,
+          "drain_verified_bulk_bytes": 10485760,
+          "verified_bulk_bytes": 169476096,
+          "confirmed_bulk_bytes": 169476096,
+          "verified_image_bytes": 35258368,
+          "verified_map_bytes": 134217728,
+          "per_host_verified_bytes": [
+            42074112,
+            42467328,
+            42467328,
+            42467328
+          ],
+          "measurement_wire_bytes": 269299757,
+          "control_interval": 0.005,
+          "class_completion_after_drain": {
+            "interactive": {
+              "admitted": 960,
+              "receiver_complete": 960,
+              "confirmed": 960
+            },
+            "image": {
+              "admitted": 285,
+              "receiver_complete": 285,
+              "confirmed": 285
+            },
+            "map": {
+              "admitted": 68,
+              "receiver_complete": 68,
+              "confirmed": 68
+            },
+            "bulk": {
+              "admitted": 0,
+              "receiver_complete": 0,
+              "confirmed": 0
+            }
+          },
+          "accepted_bulk_payload_bytes": 172180480,
+          "accepted_bulk_payload_by_host": [
+            42164224,
+            42698752,
+            43056640,
+            44260864
+          ],
+          "measurement_incomplete_bulk_payload_bytes": 2704384,
+          "completion_headroom": {
+            "optimistic_wire_service_bytes": 211120013.27842128,
+            "minimum_bulk_object_bytes": 131072,
+            "configured_hosts": 4,
+            "minimum_payload_for_all_hosts": 524288,
+            "minimum_wire_bytes_per_object": 147712,
+            "minimum_wire_for_all_hosts": 590848,
+            "all_host_object_completion_provably_infeasible": false,
+            "optimistic_max_hosts_with_bulk_object": 4,
+            "caveat": "necessary service bound only; passing does not establish feasibility"
+          },
+          "seed": 700006,
+          "domain": {
+            "version": "goodput-domain-v6.0",
+            "family": "wired-lan",
+            "churn": false,
+            "churn_times": [
+              4.339443377834938,
+              8.351999835893368
+            ],
+            "seed": 700006,
+            "synthetic": true,
+            "shared_airtime": false,
+            "distribution_shift": false,
+            "change_count": 0,
+            "control_interval": 0.005
+          }
+        },
+        "eligible_choices": {
+          "1": 289,
+          "0": 112,
+          "2": 99
+        },
+        "eligible_decisions": 500,
+        "mean_probabilities": [
+          0.1958083041906357,
+          0.587399292230606,
+          0.21679240500926972
+        ],
+        "mean_entropy": 0.9632430219650269,
+        "actual_bias_changes": 280,
+        "macro_steps": 150,
+        "scope": "choices count scheduled eligible producer decisions; changes measure actual bias at macro boundaries"
+      }
+    ],
+    "seed42-history-mlp-sampled-102": [
+      {
+        "record": {
+          "desired": {
+            "image": 172,
+            "map": 86,
+            "interactive": 480
+          },
+          "blocked": {},
+          "admitted": {
+            "image": 172,
+            "map": 86,
+            "interactive": 480
+          },
+          "messages": 738,
+          "completed": 738,
+          "wrong": 0,
+          "interactive_miss_rate": 0.0,
+          "interactive_on_time": 480,
+          "interactive_pending_deadlines": 0,
+          "interactive_unavoidable_bound": 0,
+          "interactive_avoidable_misses": 0,
+          "image_bytes": 2818048,
+          "map_bytes": 22544384,
+          "delivered_bytes": 25423872,
+          "total_wire_bytes": 38114844,
+          "feedback_bytes": 8761963,
+          "elapsed": 15.0,
+          "actual_image_fps": 11.466666666666667,
+          "admitted_image_fps": 14.333333333333334,
+          "pending_confirmation_bytes": 0,
+          "pending_messages": 0,
+          "events": 204192,
+          "network": [
+            {
+              "attempted_packets": 50016,
+              "admitted_packets": 50016,
+              "attempted_bytes": 29354801,
+              "admitted_bytes": 29354801,
+              "queue_drops": 0,
+              "random_drops": 0,
+              "outage_drops": 0,
+              "delivered_packets": 50016,
+              "corrupted_packets": 0,
+              "corruption_rejections": 0,
+              "generated_duplicates": 0
+            },
+            {
+              "attempted_packets": 50016,
+              "admitted_packets": 50016,
+              "attempted_bytes": 8760043,
+              "admitted_bytes": 8760043,
+              "queue_drops": 0,
+              "random_drops": 0,
+              "outage_drops": 0,
+              "delivered_packets": 50016,
+              "corrupted_packets": 0,
+              "corruption_rejections": 0,
+              "generated_duplicates": 0
+            }
+          ],
+          "interactive_p95": 0.001539714440952,
+          "profile": "goodput-v6",
+          "mode": "mixed",
+          "measurement_seconds": 12.0,
+          "drain_verified_bulk_bytes": 294912,
+          "verified_bulk_bytes": 25067520,
+          "confirmed_bulk_bytes": 25067520,
+          "verified_image_bytes": 2785280,
+          "verified_map_bytes": 22282240,
+          "per_host_verified_bytes": [
+            25067520
+          ],
+          "measurement_wire_bytes": 38114844,
+          "control_interval": 0.005,
+          "class_completion_after_drain": {
+            "interactive": {
+              "admitted": 480,
+              "receiver_complete": 480,
+              "confirmed": 480
+            },
+            "image": {
+              "admitted": 172,
+              "receiver_complete": 172,
+              "confirmed": 172
+            },
+            "map": {
+              "admitted": 86,
+              "receiver_complete": 86,
+              "confirmed": 86
+            },
+            "bulk": {
+              "admitted": 0,
+              "receiver_complete": 0,
+              "confirmed": 0
+            }
+          },
+          "accepted_bulk_payload_bytes": 25076736,
+          "accepted_bulk_payload_by_host": [
+            25076736
+          ],
+          "measurement_incomplete_bulk_payload_bytes": 9216,
+          "completion_headroom": {
+            "optimistic_wire_service_bytes": 37057419.82854893,
+            "minimum_bulk_object_bytes": 16384,
+            "configured_hosts": 1,
+            "minimum_payload_for_all_hosts": 16384,
+            "minimum_wire_bytes_per_object": 18464,
+            "minimum_wire_for_all_hosts": 18464,
+            "all_host_object_completion_provably_infeasible": false,
+            "optimistic_max_hosts_with_bulk_object": 1,
+            "caveat": "necessary service bound only; passing does not establish feasibility"
+          },
+          "seed": 700021,
+          "domain": {
+            "version": "goodput-domain-v6.0",
+            "family": "bufferbloat",
+            "churn": false,
+            "churn_times": [
+              4.240266615843455,
+              8.30519151375736
+            ],
+            "seed": 700021,
+            "synthetic": true,
+            "shared_airtime": false,
+            "distribution_shift": false,
+            "change_count": 0,
+            "control_interval": 0.005
+          }
+        },
+        "eligible_choices": {
+          "1": 70,
+          "2": 36,
+          "0": 16
+        },
+        "eligible_decisions": 122,
+        "mean_probabilities": [
+          0.1958004992272033,
+          0.5874596106224372,
+          0.21673989613525202
+        ],
+        "mean_entropy": 0.9631835334613675,
+        "actual_bias_changes": 66,
+        "macro_steps": 150,
+        "scope": "choices count scheduled eligible producer decisions; changes measure actual bias at macro boundaries"
+      },
+      {
+        "record": {
+          "desired": {
+            "image": 285,
+            "map": 68,
+            "interactive": 960
+          },
+          "blocked": {},
+          "admitted": {
+            "image": 285,
+            "map": 68,
+            "interactive": 960
+          },
+          "messages": 1313,
+          "completed": 1313,
+          "wrong": 0,
+          "interactive_miss_rate": 0.0,
+          "interactive_on_time": 960,
+          "interactive_pending_deadlines": 0,
+          "interactive_unavoidable_bound": 0,
+          "interactive_avoidable_misses": 0,
+          "image_bytes": 37355520,
+          "map_bytes": 142606336,
+          "delivered_bytes": 180023296,
+          "total_wire_bytes": 269303526,
+          "feedback_bytes": 61609885,
+          "elapsed": 15.0,
+          "actual_image_fps": 4.75,
+          "admitted_image_fps": 5.9375,
+          "pending_confirmation_bytes": 0,
+          "pending_messages": 0,
+          "events": 1422983,
+          "network": [
+            {
+              "attempted_packets": 352448,
+              "admitted_packets": 352448,
+              "attempted_bytes": 207726761,
+              "admitted_bytes": 207726761,
+              "queue_drops": 0,
+              "random_drops": 0,
+              "outage_drops": 0,
+              "delivered_packets": 352448,
+              "corrupted_packets": 0,
+              "corruption_rejections": 0,
+              "generated_duplicates": 0
+            },
+            {
+              "attempted_packets": 352448,
+              "admitted_packets": 352448,
+              "attempted_bytes": 61576765,
+              "admitted_bytes": 61576765,
+              "queue_drops": 0,
+              "random_drops": 0,
+              "outage_drops": 0,
+              "delivered_packets": 352448,
+              "corrupted_packets": 0,
+              "corruption_rejections": 0,
+              "generated_duplicates": 0
+            }
+          ],
+          "interactive_p95": 0.0007556335213711601,
+          "profile": "goodput-v6",
+          "mode": "mixed",
+          "measurement_seconds": 12.0,
+          "drain_verified_bulk_bytes": 10485760,
+          "verified_bulk_bytes": 169476096,
+          "confirmed_bulk_bytes": 169476096,
+          "verified_image_bytes": 35258368,
+          "verified_map_bytes": 134217728,
+          "per_host_verified_bytes": [
+            42467328,
+            42467328,
+            44695552,
+            39845888
+          ],
+          "measurement_wire_bytes": 269303526,
+          "control_interval": 0.005,
+          "class_completion_after_drain": {
+            "interactive": {
+              "admitted": 960,
+              "receiver_complete": 960,
+              "confirmed": 960
+            },
+            "image": {
+              "admitted": 285,
+              "receiver_complete": 285,
+              "confirmed": 285
+            },
+            "map": {
+              "admitted": 68,
+              "receiver_complete": 68,
+              "confirmed": 68
+            },
+            "bulk": {
+              "admitted": 0,
+              "receiver_complete": 0,
+              "confirmed": 0
+            }
+          },
+          "accepted_bulk_payload_bytes": 172334592,
+          "accepted_bulk_payload_by_host": [
+            42653184,
+            43240448,
+            44761088,
+            41679872
+          ],
+          "measurement_incomplete_bulk_payload_bytes": 2858496,
+          "completion_headroom": {
+            "optimistic_wire_service_bytes": 211120013.27842128,
+            "minimum_bulk_object_bytes": 131072,
+            "configured_hosts": 4,
+            "minimum_payload_for_all_hosts": 524288,
+            "minimum_wire_bytes_per_object": 147712,
+            "minimum_wire_for_all_hosts": 590848,
+            "all_host_object_completion_provably_infeasible": false,
+            "optimistic_max_hosts_with_bulk_object": 4,
+            "caveat": "necessary service bound only; passing does not establish feasibility"
+          },
+          "seed": 700006,
+          "domain": {
+            "version": "goodput-domain-v6.0",
+            "family": "wired-lan",
+            "churn": false,
+            "churn_times": [
+              4.339443377834938,
+              8.351999835893368
+            ],
+            "seed": 700006,
+            "synthetic": true,
+            "shared_airtime": false,
+            "distribution_shift": false,
+            "change_count": 0,
+            "control_interval": 0.005
+          }
+        },
+        "eligible_choices": {
+          "0": 94,
+          "1": 289,
+          "2": 117
+        },
+        "eligible_decisions": 500,
+        "mean_probabilities": [
+          0.19580874305963517,
+          0.5873983783721923,
+          0.21679289108514785
+        ],
+        "mean_entropy": 0.9632439517974853,
+        "actual_bias_changes": 299,
+        "macro_steps": 150,
+        "scope": "choices count scheduled eligible producer decisions; changes measure actual bias at macro boundaries"
+      }
+    ]
+  },
+  "credit": {
+    "seed42-current-mlp": [
+      {
+        "seed": 700021,
+        "status": "complete",
+        "producer_index": 0,
+        "snapshot_seconds": 1.9999999999999793,
+        "prefix_mode": "sampled",
+        "prefix_seed": 701,
+        "probabilities": [
+          0.08751298487186432,
+          0.7271783947944641,
+          0.18530865013599396
+        ],
+        "arms": [
+          {
+            "choice": 0,
+            "bias": 0.8,
+            "trials": [
+              {
+                "discounted_return": 5.012740711559296,
+                "critic_value": 6.471497058868408,
+                "mc_advantage": -1.4587563473091123,
+                "gae_advantages": {
+                  "4": 0.12239861488342285,
+                  "16": 0.3772561252117157
+                },
+                "verified_bulk_delta": 20643840,
+                "missed_delta": 0,
+                "wire_delta": 31420652,
+                "continuation_seconds": 13.000000000000021,
+                "macro_steps": 130,
+                "replica_seed": 3386884701843750256
+              },
+              {
+                "discounted_return": 5.165431032190718,
+                "critic_value": 6.471497058868408,
+                "mc_advantage": -1.3060660266776898,
+                "gae_advantages": {
+                  "4": 0.16717717051506042,
+                  "16": 0.4234173595905304
+                },
+                "verified_bulk_delta": 21233664,
+                "missed_delta": 0,
+                "wire_delta": 32303848,
+                "continuation_seconds": 13.000000000000021,
+                "macro_steps": 130,
+                "replica_seed": 14092429056821751185
+              },
+              {
+                "discounted_return": 5.231378304986628,
+                "critic_value": 6.471497058868408,
+                "mc_advantage": -1.24011875388178,
+                "gae_advantages": {
+                  "4": 0.14224500954151154,
+                  "16": 0.39641788601875305
+                },
+                "verified_bulk_delta": 21528576,
+                "missed_delta": 0,
+                "wire_delta": 32748531,
+                "continuation_seconds": 13.000000000000021,
+                "macro_steps": 130,
+                "replica_seed": 1341511668657113676
+              },
+              {
+                "discounted_return": 5.161958912765806,
+                "critic_value": 6.471497058868408,
+                "mc_advantage": -1.3095381461026019,
+                "gae_advantages": {
+                  "4": 0.15858401358127594,
+                  "16": 0.40658333897590637
+                },
+                "verified_bulk_delta": 21233664,
+                "missed_delta": 0,
+                "wire_delta": 32305506,
+                "continuation_seconds": 13.000000000000021,
+                "macro_steps": 130,
+                "replica_seed": 17042926576273942490
+              }
+            ],
+            "mean_return": 5.142877240375611,
+            "return_std": 0.09244951472035788,
+            "mean_mc_advantage": -1.328619818492796,
+            "mean_gae_advantages": {
+              "4": 0.1476012021303177,
+              "16": 0.4009186774492264
+            },
+            "return_difference_from_teacher": 0.08527627302025476,
+            "return_difference_ci95": [
+              -0.07231218091749358,
+              0.25025564733588457
+            ]
+          },
+          {
+            "choice": 1,
+            "bias": 1.0,
+            "trials": [
+              {
+                "discounted_return": 5.226889936479158,
+                "critic_value": 6.471497058868408,
+                "mc_advantage": -1.24460712238925,
+                "gae_advantages": {
+                  "4": 0.2040281891822815,
+                  "16": 0.4526793658733368
+                },
+                "verified_bulk_delta": 21528576,
+                "missed_delta": 0,
+                "wire_delta": 32747290,
+                "continuation_seconds": 13.000000000000021,
+                "macro_steps": 130,
+                "replica_seed": 815376175456431698
+              },
+              {
+                "discounted_return": 4.878758918553177,
+                "critic_value": 6.471497058868408,
+                "mc_advantage": -1.5927381403152312,
+                "gae_advantages": {
+                  "4": 0.2850647568702698,
+                  "16": 0.41556835174560547
+                },
+                "verified_bulk_delta": 20054016,
+                "missed_delta": 0,
+                "wire_delta": 30535716,
+                "continuation_seconds": 13.000000000000021,
+                "macro_steps": 130,
+                "replica_seed": 13292924991858472427
+              },
+              {
+                "discounted_return": 4.948139258079052,
+                "critic_value": 6.471497058868408,
+                "mc_advantage": -1.5233578007893565,
+                "gae_advantages": {
+                  "4": 0.20277416706085205,
+                  "16": 0.4215998649597168
+                },
+                "verified_bulk_delta": 20348928,
+                "missed_delta": 0,
+                "wire_delta": 30977067,
+                "continuation_seconds": 13.000000000000021,
+                "macro_steps": 130,
+                "replica_seed": 13649205402955432123
+              },
+              {
+                "discounted_return": 5.1766157563100395,
+                "critic_value": 6.471497058868408,
+                "mc_advantage": -1.2948813025583688,
+                "gae_advantages": {
+                  "4": 0.25046953558921814,
+                  "16": 0.4643228352069855
+                },
+                "verified_bulk_delta": 21233664,
+                "missed_delta": 0,
+                "wire_delta": 32304812,
+                "continuation_seconds": 13.000000000000021,
+                "macro_steps": 130,
+                "replica_seed": 18081501170104063817
+              }
+            ],
+            "mean_return": 5.057600967355357,
+            "return_std": 0.170087839340323,
+            "mean_mc_advantage": -1.4138960915130516,
+            "mean_gae_advantages": {
+              "4": 0.23558416217565536,
+              "16": 0.43854260444641113
+            },
+            "return_difference_from_teacher": 0.0,
+            "return_difference_ci95": [
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "choice": 2,
+            "bias": 1.2,
+            "trials": [
+              {
+                "discounted_return": 5.2822003007649245,
+                "critic_value": 6.471497058868408,
+                "mc_advantage": -1.1892967581034837,
+                "gae_advantages": {
+                  "4": 0.19548001885414124,
+                  "16": 0.42408451437950134
+                },
+                "verified_bulk_delta": 21823488,
+                "missed_delta": 0,
+                "wire_delta": 33164568,
+                "continuation_seconds": 13.000000000000021,
+                "macro_steps": 130,
+                "replica_seed": 4869515323978496387
+              },
+              {
+                "discounted_return": 5.284614337939841,
+                "critic_value": 6.471497058868408,
+                "mc_advantage": -1.1868827209285673,
+                "gae_advantages": {
+                  "4": 0.2357049137353897,
+                  "16": 0.45209601521492004
+                },
+                "verified_bulk_delta": 21790720,
+                "missed_delta": 0,
+                "wire_delta": 33139058,
+                "continuation_seconds": 13.000000000000021,
+                "macro_steps": 130,
+                "replica_seed": 11875382569588871950
+              },
+              {
+                "discounted_return": 5.16932039776852,
+                "critic_value": 6.471497058868408,
+                "mc_advantage": -1.302176661099888,
+                "gae_advantages": {
+                  "4": 0.2310521900653839,
+                  "16": 0.4197827875614166
+                },
+                "verified_bulk_delta": 21233664,
+                "missed_delta": 0,
+                "wire_delta": 32306109,
+                "continuation_seconds": 13.000000000000021,
+                "macro_steps": 130,
+                "replica_seed": 10586682215082862110
+              },
+              {
+                "discounted_return": 5.301449869356892,
+                "critic_value": 6.471497058868408,
+                "mc_advantage": -1.170047189511516,
+                "gae_advantages": {
+                  "4": 0.27820226550102234,
+                  "16": 0.45219510793685913
+                },
+                "verified_bulk_delta": 21823488,
+                "missed_delta": 0,
+                "wire_delta": 33188943,
+                "continuation_seconds": 13.000000000000021,
+                "macro_steps": 130,
+                "replica_seed": 14166302620297032416
+              }
+            ],
+            "mean_return": 5.259396226457545,
+            "return_std": 0.06065790068592421,
+            "mean_mc_advantage": -1.2121008324108637,
+            "mean_gae_advantages": {
+              "4": 0.2351098470389843,
+              "16": 0.4370396062731743
+            },
+            "return_difference_from_teacher": 0.20179525910218832,
+            "return_difference_ci95": [
+              0.05395698510467548,
+              0.3526131461548001
+            ]
+          }
+        ],
+        "conditional_expected_mc_value": 5.102458306342432,
+        "critic_value": 6.471497058868408,
+        "mc_logit_gradient": [
+          0.003537181562582522,
+          -0.03261928775937249,
+          0.02908195413168206
+        ],
+        "gae_logit_gradients": {
+          "4": [
+            -0.007018140657515144,
+            0.005662930202636221,
+            0.0013552036660105231
+          ],
+          "16": [
+            -0.0029800656148813364,
+            0.0025968177829438295,
+            0.000383234868776134
+          ]
+        },
+        "scope": "conditional on-policy snapshot; independent future arms, not CRN; summary-critic aliasing, finite replicas and rollout-window placement limit attribution; per-agent logit contribution, not full shared-parameter PPO gradient"
+      },
+      {
+        "seed": 700006,
+        "status": "complete",
+        "producer_index": 0,
+        "snapshot_seconds": 1.9999999999999793,
+        "prefix_mode": "sampled",
+        "prefix_seed": 701,
+        "probabilities": [
+          0.08445898443460464,
+          0.7324829697608948,
+          0.18305803835391998
+        ],
+        "arms": [
+          {
+            "choice": 0,
+            "bias": 0.8,
+            "trials": [
+              {
+                "discounted_return": 35.80402273409266,
+                "critic_value": 7.528319358825684,
+                "mc_advantage": 28.27570337526698,
+                "gae_advantages": {
+                  "4": 2.453101873397827,
+                  "16": 3.8163321018218994
+                },
+                "verified_bulk_delta": 146538496,
+                "missed_delta": 0,
+                "wire_delta": 227101445,
+                "continuation_seconds": 13.000000000000021,
+                "macro_steps": 130,
+                "replica_seed": 3334835401198815573
+              },
+              {
+                "discounted_return": 35.826695510959496,
+                "critic_value": 7.528319358825684,
+                "mc_advantage": 28.298376152133812,
+                "gae_advantages": {
+                  "4": 2.4790468215942383,
+                  "16": 3.7987003326416016
+                },
+                "verified_bulk_delta": 146800640,
+                "missed_delta": 0,
+                "wire_delta": 227494102,
+                "continuation_seconds": 13.000000000000021,
+                "macro_steps": 130,
+                "replica_seed": 800631388835666961
+              },
+              {
+                "discounted_return": 35.35329041506367,
+                "critic_value": 7.528319358825684,
+                "mc_advantage": 27.824971056237985,
+                "gae_advantages": {
+                  "4": 2.448417901992798,
+                  "16": 3.748464345932007
+                },
+                "verified_bulk_delta": 144179200,
+                "missed_delta": 0,
+                "wire_delta": 223580167,
+                "continuation_seconds": 13.000000000000021,
+                "macro_steps": 130,
+                "replica_seed": 4295925748304494046
+              },
+              {
+                "discounted_return": 35.85242727750308,
+                "critic_value": 7.528319358825684,
+                "mc_advantage": 28.3241079186774,
+                "gae_advantages": {
+                  "4": 2.453671932220459,
+                  "16": 3.823033332824707
+                },
+                "verified_bulk_delta": 146800640,
+                "missed_delta": 0,
+                "wire_delta": 227494542,
+                "continuation_seconds": 13.000000000000021,
+                "macro_steps": 130,
+                "replica_seed": 2344251683894680110
+              }
+            ],
+            "mean_return": 35.70910898440472,
+            "return_std": 0.23803515043762155,
+            "mean_mc_advantage": 28.18078962557904,
+            "mean_gae_advantages": {
+              "4": 2.4585596323013306,
+              "16": 3.7966325283050537
+            },
+            "return_difference_from_teacher": 0.01414204126727725,
+            "return_difference_ci95": [
+              -0.23678105192941282,
+              0.2555789400679629
+            ]
+          },
+          {
+            "choice": 1,
+            "bias": 1.0,
+            "trials": [
+              {
+                "discounted_return": 35.83960714310737,
+                "critic_value": 7.528319358825684,
+                "mc_advantage": 28.31128778428169,
+                "gae_advantages": {
+                  "4": 2.4457902908325195,
+                  "16": 3.8056252002716064
+                },
+                "verified_bulk_delta": 146800640,
+                "missed_delta": 0,
+                "wire_delta": 227494219,
+                "continuation_seconds": 13.000000000000021,
+                "macro_steps": 130,
+                "replica_seed": 10514095688972740447
+              },
+              {
+                "discounted_return": 35.77082080253482,
+                "critic_value": 7.528319358825684,
+                "mc_advantage": 28.242501443709138,
+                "gae_advantages": {
+                  "4": 2.505331516265869,
+                  "16": 3.918684482574463
+                },
+                "verified_bulk_delta": 146407424,
+                "missed_delta": 0,
+                "wire_delta": 226907917,
+                "continuation_seconds": 13.000000000000021,
+                "macro_steps": 130,
+                "replica_seed": 2389739421755820685
+              },
+              {
+                "discounted_return": 35.7964434165635,
+                "critic_value": 7.528319358825684,
+                "mc_advantage": 28.268124057737815,
+                "gae_advantages": {
+                  "4": 2.4498813152313232,
+                  "16": 3.8523545265197754
+                },
+                "verified_bulk_delta": 146538496,
+                "missed_delta": 0,
+                "wire_delta": 227107706,
+                "continuation_seconds": 13.000000000000021,
+                "macro_steps": 130,
+                "replica_seed": 4266260947297807883
+              },
+              {
+                "discounted_return": 35.372996410344086,
+                "critic_value": 7.528319358825684,
+                "mc_advantage": 27.844677051518403,
+                "gae_advantages": {
+                  "4": 2.4614830017089844,
+                  "16": 3.922661304473877
+                },
+                "verified_bulk_delta": 144179200,
+                "missed_delta": 0,
+                "wire_delta": 223578122,
+                "continuation_seconds": 13.000000000000021,
+                "macro_steps": 130,
+                "replica_seed": 9692125746237458657
+              }
+            ],
+            "mean_return": 35.694966943137445,
+            "return_std": 0.21651566077233705,
+            "mean_mc_advantage": 28.16664758431176,
+            "mean_gae_advantages": {
+              "4": 2.465621531009674,
+              "16": 3.8748313784599304
+            },
+            "return_difference_from_teacher": 0.0,
+            "return_difference_ci95": [
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "choice": 2,
+            "bias": 1.2,
+            "trials": [
+              {
+                "discounted_return": 35.36629146264723,
+                "critic_value": 7.528319358825684,
+                "mc_advantage": 27.83797210382155,
+                "gae_advantages": {
+                  "4": 2.491381883621216,
+                  "16": 3.7921302318573
+                },
+                "verified_bulk_delta": 144179200,
+                "missed_delta": 0,
+                "wire_delta": 223581450,
+                "continuation_seconds": 13.000000000000021,
+                "macro_steps": 130,
+                "replica_seed": 14445248306473361482
+              },
+              {
+                "discounted_return": 35.768591821377655,
+                "critic_value": 7.528319358825684,
+                "mc_advantage": 28.24027246255197,
+                "gae_advantages": {
+                  "4": 2.485506057739258,
+                  "16": 3.784186363220215
+                },
+                "verified_bulk_delta": 146407424,
+                "missed_delta": 0,
+                "wire_delta": 226908904,
+                "continuation_seconds": 13.000000000000021,
+                "macro_steps": 130,
+                "replica_seed": 12038196049630650276
+              },
+              {
+                "discounted_return": 35.26479144447187,
+                "critic_value": 7.528319358825684,
+                "mc_advantage": 27.736472085646184,
+                "gae_advantages": {
+                  "4": 2.4895122051239014,
+                  "16": 3.6486096382141113
+                },
+                "verified_bulk_delta": 143785984,
+                "missed_delta": 0,
+                "wire_delta": 222994648,
+                "continuation_seconds": 13.000000000000021,
+                "macro_steps": 130,
+                "replica_seed": 10358366606665010871
+              },
+              {
+                "discounted_return": 35.748943317670374,
+                "critic_value": 7.528319358825684,
+                "mc_advantage": 28.22062395884469,
+                "gae_advantages": {
+                  "4": 2.4858992099761963,
+                  "16": 3.783130168914795
+                },
+                "verified_bulk_delta": 146276352,
+                "missed_delta": 0,
+                "wire_delta": 226713633,
+                "continuation_seconds": 13.000000000000021,
+                "macro_steps": 130,
+                "replica_seed": 5646102284014378520
+              }
+            ],
+            "mean_return": 35.53715451154178,
+            "return_std": 0.25935403638444476,
+            "mean_mc_advantage": 28.008835152716102,
+            "mean_gae_advantages": {
+              "4": 2.488074839115143,
+              "16": 3.7520141005516052
+            },
+            "return_difference_from_teacher": -0.15781243159566571,
+            "return_difference_ci95": [
+              -0.4176561134779117,
+              0.14810467468403635
+            ]
+          }
+        ],
+        "conditional_expected_mc_value": 35.66727226547672,
+        "critic_value": 7.528319358825684,
+        "mc_logit_gradient": [
+          0.0035334867927351633,
+          0.020285879739499354,
+          -0.023819100790348102
+        ],
+        "gae_logit_gradients": {
+          "4": [
+            -0.0008932127196325906,
+            -0.002573798199838433,
+            0.0034670293159628075
+          ],
+          "16": [
+            -0.004147910441680918,
+            0.021305962366431966,
+            -0.017158023271724943
+          ]
+        },
+        "scope": "conditional on-policy snapshot; independent future arms, not CRN; summary-critic aliasing, finite replicas and rollout-window placement limit attribution; per-agent logit contribution, not full shared-parameter PPO gradient"
+      }
+    ],
+    "seed42-history-mlp": [
+      {
+        "seed": 700021,
+        "status": "complete",
+        "producer_index": 0,
+        "snapshot_seconds": 1.9999999999999793,
+        "prefix_mode": "sampled",
+        "prefix_seed": 701,
+        "probabilities": [
+          0.1956886202096939,
+          0.587541401386261,
+          0.2167700082063675
+        ],
+        "arms": [
+          {
+            "choice": 0,
+            "bias": 0.8,
+            "trials": [
+              {
+                "discounted_return": 5.230285086679395,
+                "critic_value": 6.733879089355469,
+                "mc_advantage": -1.5035940026760741,
+                "gae_advantages": {
+                  "4": 0.04497376084327698,
+                  "16": 0.374973863363266
+                },
+                "verified_bulk_delta": 21561344,
+                "missed_delta": 0,
+                "wire_delta": 32832998,
+                "continuation_seconds": 13.000000000000021,
+                "macro_steps": 130,
+                "replica_seed": 3386884701843750256
+              },
+              {
+                "discounted_return": 5.105547571451011,
+                "critic_value": 6.733879089355469,
+                "mc_advantage": -1.6283315179044582,
+                "gae_advantages": {
+                  "4": -0.002733539789915085,
+                  "16": 0.3227371275424957
+                },
+                "verified_bulk_delta": 20971520,
+                "missed_delta": 0,
+                "wire_delta": 31946977,
+                "continuation_seconds": 13.000000000000021,
+                "macro_steps": 130,
+                "replica_seed": 14092429056821751185
+              },
+              {
+                "discounted_return": 5.160878571926718,
+                "critic_value": 6.733879089355469,
+                "mc_advantage": -1.573000517428751,
+                "gae_advantages": {
+                  "4": 0.035232529044151306,
+                  "16": 0.2977489233016968
+                },
+                "verified_bulk_delta": 21266432,
+                "missed_delta": 0,
+                "wire_delta": 32391714,
+                "continuation_seconds": 13.000000000000021,
+                "macro_steps": 130,
+                "replica_seed": 1341511668657113676
+              },
+              {
+                "discounted_return": 5.095160296966249,
+                "critic_value": 6.733879089355469,
+                "mc_advantage": -1.63871879238922,
+                "gae_advantages": {
+                  "4": 0.16002307832241058,
+                  "16": 0.338014155626297
+                },
+                "verified_bulk_delta": 20971520,
+                "missed_delta": 0,
+                "wire_delta": 31948678,
+                "continuation_seconds": 13.000000000000021,
+                "macro_steps": 130,
+                "replica_seed": 17042926576273942490
+              }
+            ],
+            "mean_return": 5.147967881755843,
+            "return_std": 0.06199712865604547,
+            "mean_mc_advantage": -1.5859112075996258,
+            "mean_gae_advantages": {
+              "4": 0.059373957104980946,
+              "16": 0.3333685174584389
+            },
+            "return_difference_from_teacher": -0.019962273342606807,
+            "return_difference_ci95": [
+              -0.1203493475718165,
+              0.06976351002693025
+            ]
+          },
+          {
+            "choice": 1,
+            "bias": 1.0,
+            "trials": [
+              {
+                "discounted_return": 5.083614392341055,
+                "critic_value": 6.733879089355469,
+                "mc_advantage": -1.6502646970144141,
+                "gae_advantages": {
+                  "4": 0.08855735510587692,
+                  "16": 0.36166703701019287
+                },
+                "verified_bulk_delta": 20955136,
+                "missed_delta": 0,
+                "wire_delta": 31922703,
+                "continuation_seconds": 13.000000000000021,
+                "macro_steps": 130,
+                "replica_seed": 815376175456431698
+              },
+              {
+                "discounted_return": 5.301197130899988,
+                "critic_value": 6.733879089355469,
+                "mc_advantage": -1.4326819584554809,
+                "gae_advantages": {
+                  "4": 0.173055961728096,
+                  "16": 0.37005746364593506
+                },
+                "verified_bulk_delta": 21856256,
+                "missed_delta": 0,
+                "wire_delta": 33275445,
+                "continuation_seconds": 13.000000000000021,
+                "macro_steps": 130,
+                "replica_seed": 13292924991858472427
+              },
+              {
+                "discounted_return": 5.1173195038451,
+                "critic_value": 6.733879089355469,
+                "mc_advantage": -1.6165595855103687,
+                "gae_advantages": {
+                  "4": 0.11366650462150574,
+                  "16": 0.37547287344932556
+                },
+                "verified_bulk_delta": 20971520,
+                "missed_delta": 0,
+                "wire_delta": 31948353,
+                "continuation_seconds": 13.000000000000021,
+                "macro_steps": 130,
+                "replica_seed": 13649205402955432123
+              },
+              {
+                "discounted_return": 5.169589593307655,
+                "critic_value": 6.733879089355469,
+                "mc_advantage": -1.564289496047814,
+                "gae_advantages": {
+                  "4": 0.17244760692119598,
+                  "16": 0.3965565860271454
+                },
+                "verified_bulk_delta": 21266432,
+                "missed_delta": 0,
+                "wire_delta": 32390874,
+                "continuation_seconds": 13.000000000000021,
+                "macro_steps": 130,
+                "replica_seed": 18081501170104063817
+              }
+            ],
+            "mean_return": 5.16793015509845,
+            "return_std": 0.09562675086694701,
+            "mean_mc_advantage": -1.5659489342570194,
+            "mean_gae_advantages": {
+              "4": 0.13693185709416866,
+              "16": 0.3759384900331497
+            },
+            "return_difference_from_teacher": 0.0,
+            "return_difference_ci95": [
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "choice": 2,
+            "bias": 1.2,
+            "trials": [
+              {
+                "discounted_return": 4.958489174454298,
+                "critic_value": 6.733879089355469,
+                "mc_advantage": -1.7753899149011705,
+                "gae_advantages": {
+                  "4": 0.08470243215560913,
+                  "16": 0.34830689430236816
+                },
+                "verified_bulk_delta": 20381696,
+                "missed_delta": 0,
+                "wire_delta": 31063626,
+                "continuation_seconds": 13.000000000000021,
+                "macro_steps": 130,
+                "replica_seed": 4869515323978496387
+              },
+              {
+                "discounted_return": 5.168958014139554,
+                "critic_value": 6.733879089355469,
+                "mc_advantage": -1.5649210752159144,
+                "gae_advantages": {
+                  "4": 0.1023569107055664,
+                  "16": 0.39029988646507263
+                },
+                "verified_bulk_delta": 21266432,
+                "missed_delta": 0,
+                "wire_delta": 32390383,
+                "continuation_seconds": 13.000000000000021,
+                "macro_steps": 130,
+                "replica_seed": 11875382569588871950
+              },
+              {
+                "discounted_return": 4.963052849163762,
+                "critic_value": 6.733879089355469,
+                "mc_advantage": -1.770826240191707,
+                "gae_advantages": {
+                  "4": 0.08915309607982635,
+                  "16": 0.310756653547287
+                },
+                "verified_bulk_delta": 20381696,
+                "missed_delta": 0,
+                "wire_delta": 31063913,
+                "continuation_seconds": 13.000000000000021,
+                "macro_steps": 130,
+                "replica_seed": 10586682215082862110
+              },
+              {
+                "discounted_return": 5.305993711578151,
+                "critic_value": 6.733879089355469,
+                "mc_advantage": -1.4278853777773177,
+                "gae_advantages": {
+                  "4": 0.23913230001926422,
+                  "16": 0.40942350029945374
+                },
+                "verified_bulk_delta": 21856256,
+                "missed_delta": 0,
+                "wire_delta": 33274677,
+                "continuation_seconds": 13.000000000000021,
+                "macro_steps": 130,
+                "replica_seed": 14166302620297032416
+              }
+            ],
+            "mean_return": 5.099123437333941,
+            "return_std": 0.16927825155068676,
+            "mean_mc_advantage": -1.6347556520215274,
+            "mean_gae_advantages": {
+              "4": 0.12883618474006653,
+              "16": 0.3646967336535454
+            },
+            "return_difference_from_teacher": -0.06880671776450864,
+            "return_difference_ci95": [
+              -0.2220336633404125,
+              0.10718346248277348
+            ]
+          }
+        ],
+        "conditional_expected_mc_value": 5.149108686613641,
+        "critic_value": 6.733879089355469,
+        "mc_logit_gradient": [
+          -0.00022324252855094044,
+          0.011058391969712112,
+          -0.010835302896557784
+        ],
+        "gae_logit_gradients": {
+          "4": [
+            -0.011863780456781436,
+            0.009948305835869017,
+            0.0019154710446407728
+          ],
+          "16": [
+            -0.006223416494070103,
+            0.006326248405543073,
+            -0.00010284279442179822
+          ]
+        },
+        "scope": "conditional on-policy snapshot; independent future arms, not CRN; summary-critic aliasing, finite replicas and rollout-window placement limit attribution; per-agent logit contribution, not full shared-parameter PPO gradient"
+      },
+      {
+        "seed": 700006,
+        "status": "complete",
+        "producer_index": 0,
+        "snapshot_seconds": 1.9999999999999793,
+        "prefix_mode": "sampled",
+        "prefix_seed": 701,
+        "probabilities": [
+          0.19568757712841034,
+          0.587541401386261,
+          0.21677106618881226
+        ],
+        "arms": [
+          {
+            "choice": 0,
+            "bias": 0.8,
+            "trials": [
+              {
+                "discounted_return": 35.78943815872949,
+                "critic_value": 7.7740478515625,
+                "mc_advantage": 28.01539030716699,
+                "gae_advantages": {
+                  "4": 2.4710819721221924,
+                  "16": 3.767657518386841
+                },
+                "verified_bulk_delta": 146407424,
+                "missed_delta": 0,
+                "wire_delta": 226839603,
+                "continuation_seconds": 13.000000000000021,
+                "macro_steps": 130,
+                "replica_seed": 3334835401198815573
+              },
+              {
+                "discounted_return": 35.87308942022343,
+                "critic_value": 7.7740478515625,
+                "mc_advantage": 28.09904156866093,
+                "gae_advantages": {
+                  "4": 2.475296974182129,
+                  "16": 3.7613868713378906
+                },
+                "verified_bulk_delta": 146800640,
+                "missed_delta": 0,
+                "wire_delta": 227426262,
+                "continuation_seconds": 13.000000000000021,
+                "macro_steps": 130,
+                "replica_seed": 800631388835666961
+              },
+              {
+                "discounted_return": 35.387253172655406,
+                "critic_value": 7.7740478515625,
+                "mc_advantage": 27.613205321092906,
+                "gae_advantages": {
+                  "4": 2.5803980827331543,
+                  "16": 3.841386318206787
+                },
+                "verified_bulk_delta": 144179200,
+                "missed_delta": 0,
+                "wire_delta": 223513369,
+                "continuation_seconds": 13.000000000000021,
+                "macro_steps": 130,
+                "replica_seed": 4295925748304494046
+              },
+              {
+                "discounted_return": 35.38982184610129,
+                "critic_value": 7.7740478515625,
+                "mc_advantage": 27.61577399453879,
+                "gae_advantages": {
+                  "4": 2.5274815559387207,
+                  "16": 3.9896035194396973
+                },
+                "verified_bulk_delta": 144179200,
+                "missed_delta": 0,
+                "wire_delta": 223514407,
+                "continuation_seconds": 13.000000000000021,
+                "macro_steps": 130,
+                "replica_seed": 2344251683894680110
+              }
+            ],
+            "mean_return": 35.6099006494274,
+            "return_std": 0.25788151342939786,
+            "mean_mc_advantage": 27.835852797864902,
+            "mean_gae_advantages": {
+              "4": 2.513564646244049,
+              "16": 3.840008556842804
+            },
+            "return_difference_from_teacher": -0.2140560973531791,
+            "return_difference_ci95": [
+              -0.442039897520708,
+              0.014157485058900314
+            ]
+          },
+          {
+            "choice": 1,
+            "bias": 1.0,
+            "trials": [
+              {
+                "discounted_return": 35.87064604286487,
+                "critic_value": 7.7740478515625,
+                "mc_advantage": 28.09659819130237,
+                "gae_advantages": {
+                  "4": 2.600167989730835,
+                  "16": 3.8225746154785156
+                },
+                "verified_bulk_delta": 146800640,
+                "missed_delta": 0,
+                "wire_delta": 227423356,
+                "continuation_seconds": 13.000000000000021,
+                "macro_steps": 130,
+                "replica_seed": 10514095688972740447
+              },
+              {
+                "discounted_return": 35.84081695229388,
+                "critic_value": 7.7740478515625,
+                "mc_advantage": 28.066769100731378,
+                "gae_advantages": {
+                  "4": 2.478069305419922,
+                  "16": 3.7684059143066406
+                },
+                "verified_bulk_delta": 146800640,
+                "missed_delta": 0,
+                "wire_delta": 227423261,
+                "continuation_seconds": 13.000000000000021,
+                "macro_steps": 130,
+                "replica_seed": 2389739421755820685
+              },
+              {
+                "discounted_return": 35.77002968014363,
+                "critic_value": 7.7740478515625,
+                "mc_advantage": 27.99598182858113,
+                "gae_advantages": {
+                  "4": 2.5764567852020264,
+                  "16": 3.8109378814697266
+                },
+                "verified_bulk_delta": 146276352,
+                "missed_delta": 0,
+                "wire_delta": 226647410,
+                "continuation_seconds": 13.000000000000021,
+                "macro_steps": 130,
+                "replica_seed": 4266260947297807883
+              },
+              {
+                "discounted_return": 35.814334311819955,
+                "critic_value": 7.7740478515625,
+                "mc_advantage": 28.040286460257455,
+                "gae_advantages": {
+                  "4": 2.5682218074798584,
+                  "16": 3.8040242195129395
+                },
+                "verified_bulk_delta": 146538496,
+                "missed_delta": 0,
+                "wire_delta": 227036904,
+                "continuation_seconds": 13.000000000000021,
+                "macro_steps": 130,
+                "replica_seed": 9692125746237458657
+              }
+            ],
+            "mean_return": 35.82395674678058,
+            "return_std": 0.042680505578990266,
+            "mean_mc_advantage": 28.04990889521808,
+            "mean_gae_advantages": {
+              "4": 2.5557289719581604,
+              "16": 3.8014856576919556
+            },
+            "return_difference_from_teacher": 0.0,
+            "return_difference_ci95": [
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "choice": 2,
+            "bias": 1.2,
+            "trials": [
+              {
+                "discounted_return": 35.86912220924577,
+                "critic_value": 7.7740478515625,
+                "mc_advantage": 28.095074357683274,
+                "gae_advantages": {
+                  "4": 2.5685744285583496,
+                  "16": 3.7276718616485596
+                },
+                "verified_bulk_delta": 146800640,
+                "missed_delta": 0,
+                "wire_delta": 227428823,
+                "continuation_seconds": 13.000000000000021,
+                "macro_steps": 130,
+                "replica_seed": 14445248306473361482
+              },
+              {
+                "discounted_return": 35.85878463867964,
+                "critic_value": 7.7740478515625,
+                "mc_advantage": 28.084736787117137,
+                "gae_advantages": {
+                  "4": 2.4950332641601562,
+                  "16": 3.750143527984619
+                },
+                "verified_bulk_delta": 146800640,
+                "missed_delta": 0,
+                "wire_delta": 227427538,
+                "continuation_seconds": 13.000000000000021,
+                "macro_steps": 130,
+                "replica_seed": 12038196049630650276
+              },
+              {
+                "discounted_return": 35.88036868557237,
+                "critic_value": 7.7740478515625,
+                "mc_advantage": 28.10632083400987,
+                "gae_advantages": {
+                  "4": 2.509688377380371,
+                  "16": 3.653982639312744
+                },
+                "verified_bulk_delta": 146800640,
+                "missed_delta": 0,
+                "wire_delta": 227429843,
+                "continuation_seconds": 13.000000000000021,
+                "macro_steps": 130,
+                "replica_seed": 10358366606665010871
+              },
+              {
+                "discounted_return": 36.1333233934159,
+                "critic_value": 7.7740478515625,
+                "mc_advantage": 28.3592755418534,
+                "gae_advantages": {
+                  "4": 2.5028843879699707,
+                  "16": 3.7831902503967285
+                },
+                "verified_bulk_delta": 148242432,
+                "missed_delta": 0,
+                "wire_delta": 229576553,
+                "continuation_seconds": 13.000000000000021,
+                "macro_steps": 130,
+                "replica_seed": 5646102284014378520
+              }
+            ],
+            "mean_return": 35.935399731728424,
+            "return_std": 0.13224317797920676,
+            "mean_mc_advantage": 28.161351880165924,
+            "mean_gae_advantages": {
+              "4": 2.519045114517212,
+              "16": 3.728747069835663
+            },
+            "return_difference_from_teacher": 0.11144298494784266,
+            "return_difference_ci95": [
+              0.020238598224992188,
+              0.2433163505927851
+            ]
+          }
+        ],
+        "conditional_expected_mc_value": 35.806227843842045,
+        "critic_value": 7.7740478515625,
+        "mc_logit_gradient": [
+          -0.03841879299941981,
+          0.010416464477548648,
+          0.0280007278587521
+        ],
+        "gae_logit_gradients": {
+          "4": [
+            -0.005080324704436465,
+            0.00951988595886948,
+            -0.004439674780094213
+          ],
+          "16": [
+            0.009148765578278454,
+            0.00483487731318301,
+            -0.013983812463248249
+          ]
+        },
+        "scope": "conditional on-policy snapshot; independent future arms, not CRN; summary-critic aliasing, finite replicas and rollout-window placement limit attribution; per-agent logit contribution, not full shared-parameter PPO gradient"
+      }
+    ]
+  },
+  "performance_summary": {
+    "teacher": {
+      "summary": {
+        "verified_goodput": 8134656.0,
+        "confirmed_goodput": 8134656.0,
+        "image_goodput": 1570133.3333333333,
+        "map_goodput": 6564522.666666667,
+        "interactive_miss_rate": 0.0,
+        "completion_fraction": 1.0,
+        "wire_per_useful_byte": 1.5797721399241305,
+        "wrong": 0,
+        "starved_hosts": 0,
+        "cases": 2,
+        "zero_completed_bulk_hosts": 0,
+        "zero_accepted_bulk_hosts": 0,
+        "accepted_bulk_goodput": 8209642.666666667,
+        "mean_bulk_progress_jain": 0.9998707769967866,
+        "provably_infeasible_completion_cases": 0
+      },
+      "comparison_to_teacher": null,
+      "note": "paired case bootstrap, not CRN or independent sampling-seed cases; diagnostic, not acceptance"
+    },
+    "initial-sampled-101": {
+      "summary": {
+        "verified_goodput": 8219306.666666667,
+        "confirmed_goodput": 8219306.666666667,
+        "image_goodput": 1589248.0,
+        "map_goodput": 6630058.666666667,
+        "interactive_miss_rate": 0.0,
+        "completion_fraction": 1.0,
+        "wire_per_useful_byte": 1.5790067603025721,
+        "wrong": 0,
+        "starved_hosts": 0,
+        "cases": 2,
+        "zero_completed_bulk_hosts": 0,
+        "zero_accepted_bulk_hosts": 0,
+        "accepted_bulk_goodput": 8265557.333333333,
+        "mean_bulk_progress_jain": 0.9997814224965922,
+        "provably_infeasible_completion_cases": 0
+      },
+      "comparison_to_teacher": {
+        "relative_goodput_gain": 0.010406176569318637,
+        "goodput_difference_ci95": [
+          -49152.0,
+          218453.3333333321
+        ],
+        "miss_difference_ci95": [
+          0.0,
+          0.0
+        ],
+        "guards": {
+          "deadline": true,
+          "wire": true,
+          "integrity": true,
+          "hosts": true,
+          "image": true,
+          "map": true,
+          "confirmation": true,
+          "completion": true,
+          "fairness": true,
+          "strata_progress": true,
+          "strata_verified": true
+        },
+        "win": false,
+        "host_guard_basis": "accepted bulk payload progress; completed-object counts reported separately"
+      },
+      "note": "paired case bootstrap, not CRN or independent sampling-seed cases; diagnostic, not acceptance"
+    },
+    "initial-sampled-102": {
+      "summary": {
+        "verified_goodput": 8145578.666666667,
+        "confirmed_goodput": 8145578.666666667,
+        "image_goodput": 1581056.0,
+        "map_goodput": 6564522.666666667,
+        "interactive_miss_rate": 0.0,
+        "completion_fraction": 1.0,
+        "wire_per_useful_byte": 1.5797960087631997,
+        "wrong": 0,
+        "starved_hosts": 0,
+        "cases": 2,
+        "zero_completed_bulk_hosts": 0,
+        "zero_accepted_bulk_hosts": 0,
+        "accepted_bulk_goodput": 8262570.666666667,
+        "mean_bulk_progress_jain": 0.9998378618697707,
+        "provably_infeasible_completion_cases": 0
+      },
+      "comparison_to_teacher": {
+        "relative_goodput_gain": 0.0013427324605572721,
+        "goodput_difference_ci95": [
+          0.0,
+          21845.33333333209
+        ],
+        "miss_difference_ci95": [
+          0.0,
+          0.0
+        ],
+        "guards": {
+          "deadline": true,
+          "wire": true,
+          "integrity": true,
+          "hosts": true,
+          "image": true,
+          "map": true,
+          "confirmation": true,
+          "completion": true,
+          "fairness": true,
+          "strata_progress": true,
+          "strata_verified": true
+        },
+        "win": false,
+        "host_guard_basis": "accepted bulk payload progress; completed-object counts reported separately"
+      },
+      "note": "paired case bootstrap, not CRN or independent sampling-seed cases; diagnostic, not acceptance"
+    },
+    "seed42-current-mlp-greedy": {
+      "summary": {
+        "verified_goodput": 8134656.0,
+        "confirmed_goodput": 8134656.0,
+        "image_goodput": 1570133.3333333333,
+        "map_goodput": 6564522.666666667,
+        "interactive_miss_rate": 0.0,
+        "completion_fraction": 1.0,
+        "wire_per_useful_byte": 1.5797721399241305,
+        "wrong": 0,
+        "starved_hosts": 0,
+        "cases": 2,
+        "zero_completed_bulk_hosts": 0,
+        "zero_accepted_bulk_hosts": 0,
+        "accepted_bulk_goodput": 8209642.666666667,
+        "mean_bulk_progress_jain": 0.9998707769967866,
+        "provably_infeasible_completion_cases": 0
+      },
+      "comparison_to_teacher": {
+        "relative_goodput_gain": 0.0,
+        "goodput_difference_ci95": [
+          0.0,
+          0.0
+        ],
+        "miss_difference_ci95": [
+          0.0,
+          0.0
+        ],
+        "guards": {
+          "deadline": true,
+          "wire": true,
+          "integrity": true,
+          "hosts": true,
+          "image": true,
+          "map": true,
+          "confirmation": true,
+          "completion": true,
+          "fairness": true,
+          "strata_progress": true,
+          "strata_verified": true
+        },
+        "win": false,
+        "host_guard_basis": "accepted bulk payload progress; completed-object counts reported separately"
+      },
+      "note": "paired case bootstrap, not CRN or independent sampling-seed cases; diagnostic, not acceptance"
+    },
+    "seed42-current-mlp-sampled-101": {
+      "summary": {
+        "verified_goodput": 8161962.666666667,
+        "confirmed_goodput": 8161962.666666667,
+        "image_goodput": 1597440.0,
+        "map_goodput": 6564522.666666667,
+        "interactive_miss_rate": 0.0,
+        "completion_fraction": 1.0,
+        "wire_per_useful_byte": 1.5795764993289196,
+        "wrong": 0,
+        "starved_hosts": 0,
+        "cases": 2,
+        "zero_completed_bulk_hosts": 0,
+        "zero_accepted_bulk_hosts": 0,
+        "accepted_bulk_goodput": 8270037.333333333,
+        "mean_bulk_progress_jain": 0.9998847375603683,
+        "provably_infeasible_completion_cases": 0
+      },
+      "comparison_to_teacher": {
+        "relative_goodput_gain": 0.0033568311513931803,
+        "goodput_difference_ci95": [
+          0.0,
+          54613.33333333209
+        ],
+        "miss_difference_ci95": [
+          0.0,
+          0.0
+        ],
+        "guards": {
+          "deadline": true,
+          "wire": true,
+          "integrity": true,
+          "hosts": true,
+          "image": true,
+          "map": true,
+          "confirmation": true,
+          "completion": true,
+          "fairness": true,
+          "strata_progress": true,
+          "strata_verified": true
+        },
+        "win": false,
+        "host_guard_basis": "accepted bulk payload progress; completed-object counts reported separately"
+      },
+      "note": "paired case bootstrap, not CRN or independent sampling-seed cases; diagnostic, not acceptance",
+      "comparison_to_initial_sampled": {
+        "relative_goodput_gain": -0.006976744186046546,
+        "goodput_difference_ci95": [
+          -163840.0,
+          49152.0
+        ],
+        "miss_difference_ci95": [
+          0.0,
+          0.0
+        ],
+        "guards": {
+          "deadline": true,
+          "wire": true,
+          "integrity": true,
+          "hosts": true,
+          "image": true,
+          "map": true,
+          "confirmation": true,
+          "completion": true,
+          "fairness": true,
+          "strata_progress": true,
+          "strata_verified": true
+        },
+        "win": false,
+        "host_guard_basis": "accepted bulk payload progress; completed-object counts reported separately"
+      }
+    },
+    "seed42-current-mlp-sampled-102": {
+      "summary": {
+        "verified_goodput": 8163328.0,
+        "confirmed_goodput": 8163328.0,
+        "image_goodput": 1587882.6666666667,
+        "map_goodput": 6575445.333333333,
+        "interactive_miss_rate": 0.0,
+        "completion_fraction": 1.0,
+        "wire_per_useful_byte": 1.5795697232795252,
+        "wrong": 0,
+        "starved_hosts": 0,
+        "cases": 2,
+        "zero_completed_bulk_hosts": 0,
+        "zero_accepted_bulk_hosts": 0,
+        "accepted_bulk_goodput": 8267818.666666667,
+        "mean_bulk_progress_jain": 0.9998654736138787,
+        "provably_infeasible_completion_cases": 0
+      },
+      "comparison_to_teacher": {
+        "relative_goodput_gain": 0.0035246727089628394,
+        "goodput_difference_ci95": [
+          24576.0,
+          32768.0
+        ],
+        "miss_difference_ci95": [
+          0.0,
+          0.0
+        ],
+        "guards": {
+          "deadline": true,
+          "wire": true,
+          "integrity": true,
+          "hosts": true,
+          "image": true,
+          "map": true,
+          "confirmation": true,
+          "completion": true,
+          "fairness": true,
+          "strata_progress": true,
+          "strata_verified": true
+        },
+        "win": false,
+        "host_guard_basis": "accepted bulk payload progress; completed-object counts reported separately"
+      },
+      "note": "paired case bootstrap, not CRN or independent sampling-seed cases; diagnostic, not acceptance",
+      "comparison_to_initial_sampled": {
+        "relative_goodput_gain": 0.002179014415018443,
+        "goodput_difference_ci95": [
+          10922.666666667908,
+          24576.0
+        ],
+        "miss_difference_ci95": [
+          0.0,
+          0.0
+        ],
+        "guards": {
+          "deadline": true,
+          "wire": true,
+          "integrity": true,
+          "hosts": true,
+          "image": true,
+          "map": true,
+          "confirmation": true,
+          "completion": true,
+          "fairness": true,
+          "strata_progress": true,
+          "strata_verified": true
+        },
+        "win": false,
+        "host_guard_basis": "accepted bulk payload progress; completed-object counts reported separately"
+      }
+    },
+    "seed42-history-mlp-greedy": {
+      "summary": {
+        "verified_goodput": 8134656.0,
+        "confirmed_goodput": 8134656.0,
+        "image_goodput": 1570133.3333333333,
+        "map_goodput": 6564522.666666667,
+        "interactive_miss_rate": 0.0,
+        "completion_fraction": 1.0,
+        "wire_per_useful_byte": 1.5797721399241305,
+        "wrong": 0,
+        "starved_hosts": 0,
+        "cases": 2,
+        "zero_completed_bulk_hosts": 0,
+        "zero_accepted_bulk_hosts": 0,
+        "accepted_bulk_goodput": 8209642.666666667,
+        "mean_bulk_progress_jain": 0.9998707769967866,
+        "provably_infeasible_completion_cases": 0
+      },
+      "comparison_to_teacher": {
+        "relative_goodput_gain": 0.0,
+        "goodput_difference_ci95": [
+          0.0,
+          0.0
+        ],
+        "miss_difference_ci95": [
+          0.0,
+          0.0
+        ],
+        "guards": {
+          "deadline": true,
+          "wire": true,
+          "integrity": true,
+          "hosts": true,
+          "image": true,
+          "map": true,
+          "confirmation": true,
+          "completion": true,
+          "fairness": true,
+          "strata_progress": true,
+          "strata_verified": true
+        },
+        "win": false,
+        "host_guard_basis": "accepted bulk payload progress; completed-object counts reported separately"
+      },
+      "note": "paired case bootstrap, not CRN or independent sampling-seed cases; diagnostic, not acceptance"
+    },
+    "seed42-history-mlp-sampled-101": {
+      "summary": {
+        "verified_goodput": 8144213.333333333,
+        "confirmed_goodput": 8144213.333333333,
+        "image_goodput": 1590613.3333333333,
+        "map_goodput": 6553600.0,
+        "interactive_miss_rate": 0.0,
+        "completion_fraction": 1.0,
+        "wire_per_useful_byte": 1.5798050834866801,
+        "wrong": 0,
+        "starved_hosts": 0,
+        "cases": 2,
+        "zero_completed_bulk_hosts": 0,
+        "zero_accepted_bulk_hosts": 0,
+        "accepted_bulk_goodput": 8263125.333333333,
+        "mean_bulk_progress_jain": 0.9998398876701047,
+        "provably_infeasible_completion_cases": 0
+      },
+      "comparison_to_teacher": {
+        "relative_goodput_gain": 0.0011748909029876131,
+        "goodput_difference_ci95": [
+          -24576.0,
+          43690.666666666046
+        ],
+        "miss_difference_ci95": [
+          0.0,
+          0.0
+        ],
+        "guards": {
+          "deadline": true,
+          "wire": true,
+          "integrity": true,
+          "hosts": true,
+          "image": true,
+          "map": true,
+          "confirmation": true,
+          "completion": true,
+          "fairness": true,
+          "strata_progress": true,
+          "strata_verified": true
+        },
+        "win": false,
+        "host_guard_basis": "accepted bulk payload progress; completed-object counts reported separately"
+      },
+      "note": "paired case bootstrap, not CRN or independent sampling-seed cases; diagnostic, not acceptance",
+      "comparison_to_initial_sampled": {
+        "relative_goodput_gain": -0.00913621262458475,
+        "goodput_difference_ci95": [
+          -174762.66666666605,
+          24576.0
+        ],
+        "miss_difference_ci95": [
+          0.0,
+          0.0
+        ],
+        "guards": {
+          "deadline": true,
+          "wire": true,
+          "integrity": true,
+          "hosts": true,
+          "image": true,
+          "map": true,
+          "confirmation": true,
+          "completion": true,
+          "fairness": true,
+          "strata_progress": true,
+          "strata_verified": true
+        },
+        "win": false,
+        "host_guard_basis": "accepted bulk payload progress; completed-object counts reported separately"
+      }
+    },
+    "seed42-history-mlp-sampled-102": {
+      "summary": {
+        "verified_goodput": 8105984.0,
+        "confirmed_goodput": 8105984.0,
+        "image_goodput": 1585152.0,
+        "map_goodput": 6520832.0,
+        "interactive_miss_rate": 0.0,
+        "completion_fraction": 1.0,
+        "wire_per_useful_byte": 1.5802028168326017,
+        "wrong": 0,
+        "starved_hosts": 0,
+        "cases": 2,
+        "zero_completed_bulk_hosts": 0,
+        "zero_accepted_bulk_hosts": 0,
+        "accepted_bulk_goodput": 8225472.0,
+        "mean_bulk_progress_jain": 0.9996639021639633,
+        "provably_infeasible_completion_cases": 0
+      },
+      "comparison_to_teacher": {
+        "relative_goodput_gain": -0.0035246727089627283,
+        "goodput_difference_ci95": [
+          -101034.66666666651,
+          43690.666666666046
+        ],
+        "miss_difference_ci95": [
+          0.0,
+          0.0
+        ],
+        "guards": {
+          "deadline": true,
+          "wire": true,
+          "integrity": true,
+          "hosts": true,
+          "image": true,
+          "map": true,
+          "confirmation": true,
+          "completion": true,
+          "fairness": true,
+          "strata_progress": false,
+          "strata_verified": true
+        },
+        "win": false,
+        "host_guard_basis": "accepted bulk payload progress; completed-object counts reported separately"
+      },
+      "note": "paired case bootstrap, not CRN or independent sampling-seed cases; diagnostic, not acceptance",
+      "comparison_to_initial_sampled": {
+        "relative_goodput_gain": -0.004860878310425809,
+        "goodput_difference_ci95": [
+          -101034.66666666651,
+          21845.333333333954
+        ],
+        "miss_difference_ci95": [
+          0.0,
+          0.0
+        ],
+        "guards": {
+          "deadline": true,
+          "wire": true,
+          "integrity": true,
+          "hosts": true,
+          "image": true,
+          "map": true,
+          "confirmation": true,
+          "completion": true,
+          "fairness": true,
+          "strata_progress": false,
+          "strata_verified": true
+        },
+        "win": false,
+        "host_guard_basis": "accepted bulk payload progress; completed-object counts reported separately"
+      }
+    }
+  },
+  "completed_utc": "2026-10-28T00:00:27.762105+00:00"
+}

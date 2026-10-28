@@ -1,0 +1,84 @@
+{
+  "version": "v7-policy-diagnostics-v1",
+  "parent_commit": "4574e8c9f7c10abe8d074c6a16afbf82e1b23d6b",
+  "workers": 4,
+  "prefix_sampling_seed": 701,
+  "scope": "Diagnostic reuse of prior training/validation cases; no new held-out acceptance, model selection, or training.",
+  "profiles": {
+    "smoke": {
+      "performance_cases": [
+        700006,
+        700021
+      ],
+      "sampling_seeds": [
+        101,
+        102
+      ],
+      "performance_models": [
+        "seed42-current-mlp",
+        "seed42-history-mlp"
+      ],
+      "credit_models": [
+        "seed42-current-mlp",
+        "seed42-history-mlp"
+      ],
+      "credit_cases": [
+        700006,
+        700021
+      ],
+      "credit_replicas": 4
+    },
+    "full": {
+      "performance_cases": [
+        730000,
+        730001,
+        730002,
+        730003,
+        730004,
+        730005,
+        730007,
+        730008,
+        730009,
+        730010,
+        730011,
+        730012,
+        730013,
+        730014,
+        730015,
+        730019,
+        730020,
+        730021,
+        730024,
+        730025,
+        730032,
+        730035,
+        730036,
+        730057
+      ],
+      "sampling_seeds": [
+        101,
+        102,
+        103
+      ],
+      "performance_models": [
+        "seed42-current-mlp",
+        "seed42-history-mlp",
+        "seed43-current-mlp",
+        "seed43-history-mlp",
+        "seed44-current-mlp",
+        "seed44-history-mlp"
+      ],
+      "credit_models": [
+        "seed42-current-mlp",
+        "seed42-history-mlp"
+      ],
+      "credit_cases": [
+        700006,
+        700004,
+        700015,
+        700021
+      ],
+      "credit_replicas": 16
+    }
+  }
+}
