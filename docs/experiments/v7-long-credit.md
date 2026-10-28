@@ -1,6 +1,9 @@
 # V7 longer credit pilot
 
-Registered 2026-10-28. Status: **planned; no results**. This follows the exploratory
+Registered 2026-10-28. Status: **engineering running**, actual start 2026-10-28T22:57:17.703736+00:00.
+[Actual plan](../../artifacts/v7-long-credit-engineering-plan.json).
+The pilot is queued in the same bounded service and starts only after successful
+engineering completion; no training-performance promotion rule or results yet. This follows the exploratory
 [credit smoke](v7-policy-diagnostics.md), not a confirmed training defect.
 
 ## Fixed comparison

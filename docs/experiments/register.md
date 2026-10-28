@@ -376,4 +376,4 @@ No failure or new unchanged larger job; original reserved tests remain unopened.
 
 | Actual start | Actual end | Experiment | Status | Configuration and evidence |
 | --- | --- | --- | --- | --- |
-| Not started | — | v7 2×2 rollout 16/64 × lambda .98/.998 | Planned; 32-decision engineering check then eight fixed 50k runs; no results | [Plan](v7-long-credit.md), [config](../../experiments/v7-long-credit-v1.json) |
+| 2026-10-28T22:57:17.703736+00:00 (engineering) | — | v7 2×2 rollout 16/64 × lambda .98/.998 | Engineering running; eight fixed 50k runs queued after successful completion; no results | [Plan](v7-long-credit.md), [config](../../experiments/v7-long-credit-v1.json), [actual engineering plan](../../artifacts/v7-long-credit-engineering-plan.json) |
