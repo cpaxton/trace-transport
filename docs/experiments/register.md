@@ -371,3 +371,9 @@ No failure or new unchanged larger job; original reserved tests remain unopened.
 | Actual start | Actual end | Experiment | Status | Configuration and evidence |
 | --- | --- | --- | --- | --- |
 | 2026-10-27T23:26:56.437497+00:00 | 2026-10-28T00:00:27.762105+00:00 | v7 sampled deployment and conditional credit | Smoke complete, no demonstrated learning win; exploratory credit discrepancy; full remains planned | [Plan](v7-policy-diagnostics.md), [fixed configuration](../../experiments/v7-policy-diagnostics-v1.json), [actual smoke plan](../../artifacts/v7-policy-diagnostics-smoke-plan.json), [smoke results](../../artifacts/v7-policy-diagnostics-smoke-results.json) |
+
+## Longer-credit training pilot (registered 2026-10-28)
+
+| Actual start | Actual end | Experiment | Status | Configuration and evidence |
+| --- | --- | --- | --- | --- |
+| Not started | — | v7 2×2 rollout 16/64 × lambda .98/.998 | Planned; 32-decision engineering check then eight fixed 50k runs; no results | [Plan](v7-long-credit.md), [config](../../experiments/v7-long-credit-v1.json) |
