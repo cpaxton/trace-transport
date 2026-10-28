@@ -1,8 +1,9 @@
 # V7 frozen-policy and credit diagnostics
 
-Registered 2026-10-27. Smoke status: **running**, actual start 2026-10-27T23:26:56.437497+00:00; no results yet.
+Registered 2026-10-27. Smoke status: **complete, no demonstrated learning win**. Actual start/end:
+2026-10-27 23:26:56–2026-10-28 00:00:27 UTC.
 [Recorded run plan](../../artifacts/v7-policy-diagnostics-smoke-plan.json). Full profile remains planned.
-This follow-up is stacked on PR #5 and does not train or select another model.
+This follow-up to merged PR #5 does not train or select another model.
 The completed 50k-decision study still has no demonstrated learning win.
 
 We will test whether sampled deployment differs from greedy deployment, whether
@@ -62,6 +63,49 @@ Run on Caliban through `scripts.run_limited` with four workers, six CPU equivale
 8 GiB memory, single-threaded BLAS/Torch, and a bounded runtime. Do not replace old
 sources, editable installs, or checkpoint directories. Output includes the frozen
 plan, task progress, raw per-case records, action distributions and conditional
-credit replicas in `results.json`. Raw runs stay outside Git. Add actual UTC
-start/end dates and curated artifacts to the register and paper after execution;
-this document reports no new scientific result.
+credit replicas in `results.json`. Raw training runs stay outside Git. The completed smoke results below, their
+actual UTC dates, and their limitations are recorded in the register and paper.
+
+## Completed development smoke
+
+[Results](../../artifacts/v7-policy-diagnostics-smoke-results.json): all 22 tasks
+completed successfully in 33 minutes 31 seconds: 18 performance episodes and 48
+conditional continuations. The seven diagnostic tests passed on Caliban. Only two
+training cases (wired LAN and bufferbloat), one optimizer seed per architecture,
+two sampling seeds and four replicas/action were used; this is not held-out
+acceptance or a broad performance comparison.
+
+| Deployment | Verified goodput change vs teacher | Change vs matched initial sampled policy |
+| --- | --- | --- |
+| Both greedy trained actors | 0% | Not applicable |
+| Current MLP sampled, seed 101 | +0.34% | −0.70% |
+| Current MLP sampled, seed 102 | +0.35% | +0.22% |
+| History MLP sampled, seed 101 | +0.12% | −0.91% |
+| History MLP sampled, seed 102 | −0.35% | −0.49% |
+| Initial sampled, seed 101 | +1.04% | Baseline |
+| Initial sampled, seed 102 | +0.13% | Baseline |
+
+All evaluated modes had zero wrong deliveries, 100% completion and zero
+interactive misses on these two training cases. All acceptance comparisons return
+false. The small gains are not consistent improvements over initialization;
+case-bootstrap intervals over only two cases provide very limited evidence.
+Sampling seeds stay separate, rather than artificially enlarging the case count.
+
+The credit probe supplies an exploratory lead. For the current MLP in bufferbloat,
+forcing bias 1.2 increased estimated discounted continuation return by 0.202
+vs bias 1.0 (independent-arm bootstrap 95% interval [0.054, 0.353]). Its estimated
+full-return teacher-logit gradient was negative (−0.0326), whereas the 4/16-step
+GAE gradients were positive (+0.00566/+0.00260). For the history MLP in wired LAN,
+bias 1.2 increased return by 0.111 [0.020, 0.243], but its 4/16-step GAE logit
+gradients for that action were negative. These are different on-policy prefixes;
+they are not matched architecture comparisons. Other action intervals include
+zero. Intervals are exploratory, based on four replicas, without multiple-testing
+correction; no robust action ranking or policy improvement follows.
+
+Both wired snapshots also have critic predictions around 7.5–7.8 versus estimated
+conditional full-return values around 35.7–35.8. The critic observes a compressed
+summary, not the full snapshot; this discrepancy does not prove a code bug.
+The result motivates checking value estimation and credit horizons with more
+replicas and states before another unchanged training run. It does not show that
+longer GAE alone will solve the task. Full-profile diagnostics remain planned and
+have not run; no new training or reserved acceptance evaluation was launched.
