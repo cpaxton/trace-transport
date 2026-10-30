@@ -1,10 +1,13 @@
 # V7 longer credit pilot
 
-Registered 2026-10-28. Status: **engineering running**, actual start 2026-10-28T22:57:17.703736+00:00.
-[Actual plan](../../artifacts/v7-long-credit-engineering-plan.json).
-The pilot is queued in the same bounded service and starts only after successful
-engineering completion; no training-performance promotion rule or results yet. This follows the exploratory
-[credit smoke](v7-policy-diagnostics.md), not a confirmed training defect.
+Registered 2026-10-28. Status: **complete, negative; no accepted learning win**.
+Engineering ran 2026-10-28 22:57:17–23:00:57 UTC; pilot ran
+2026-10-28 23:00:59–2026-10-29 03:40:23 UTC. Both services' stages completed
+successfully, without a runtime-cap failure. [Engineering plan](../../artifacts/v7-long-credit-engineering-plan.json),
+[engineering results](../../artifacts/v7-long-credit-engineering-results.json),
+[pilot results and actual plan](../../artifacts/v7-long-credit-pilot-results.json).
+This follows the exploratory [credit smoke](v7-policy-diagnostics.md), not a
+confirmed training defect. The frozen preregistered design follows below.
 
 ## Fixed comparison
 
@@ -64,3 +67,47 @@ source manifest. Run through `scripts.run_limited`: six CPU equivalents, 8 GiB,
 single-threaded BLAS/Torch, file logs, one active experiment, 12-hour maximum.
 Serialize engineering then pilot; never mutate or resume an old study directory.
 Update this record with actual dates and outcomes. No claimed win at registration.
+
+## Completed pilot result
+
+All eight fixed runs finished: **400,016 eligible producer decisions**, including
+small recorded overshoots. Evaluation contains 648 full episodes: 24 reused
+validation cases × (teacher/initial sampled 101/initial sampled 102 plus three
+modes for each of eight trained models). Engineering added 20 episodes. No model
+selection, new tuning, or reserved acceptance evaluation occurred.
+
+| Rollout | Lambda | Greedy goodput change vs teacher (both optimizer seeds) | Sampled goodput range vs teacher (two optimizer × two sampling seeds) |
+| --- | --- | --- | --- |
+| 16 | .98 | 0% | −0.45% to +0.55% |
+| 16 | .998 | 0% | −1.02% to −0.24% |
+| 64 | .98 | 0% | −0.12% to +0.36% |
+| 64 | .998 | 0% | −1.15% to −0.40% |
+
+These ranges describe separate runs, not pooled estimates or confidence intervals.
+All eight greedy models exactly match the teacher's aggregate metrics: 701,212
+verified bulk B/s, 24.25% interactive misses, 96.07% message completion and zero
+wrong deliveries. Relative quality guards pass; goodput gain is zero. Equal
+metrics do not certify that every action equals teacher.
+
+All 16 sampled evaluations have zero wrong deliveries but fail the deadline guard
+and at least one per-family progress guard. Interactive misses range from 24.43%
+to 25.40%, versus teacher 24.25%. Sampled trained-vs-initial goodput ranges from
+−0.65% to +1.67%; these changes do not establish a quality-preserving win. Every
+comparison to teacher returns win=false. Longer collection with unchanged lambda
+has mixed small effects, while higher lambda yields negative goodput changes in
+all eight sampled evaluations. This does not prove higher lambda is generally
+harmful; this pilot has only two optimizer seeds and reused development cases.
+
+For seed 42, 16-step arms made 456 updates and 64-step arms 114–115; for seed 43,
+426 versus 107. Thus interaction budgets are matched, while optimizer work differs
+substantially. Both seed-42 longer arms finished 192 episodes; seed-43 arms 180.
+In-sample critic diagnostics use different bootstrapped targets across lambda
+settings and are not evidence of improved full-return calibration.
+
+The tested rollout/retention changes alone did not unlock a deployable advantage
+at 50k decisions. The small earlier action-value discrepancies therefore remain
+exploratory leads, not an established explanation or a solved bug. Do not promote
+another unchanged longer run from this result. A useful next investigation would
+measure actor action diversity and full-return critic calibration across more
+states, then test a single targeted change with fixed optimizer work or explicit
+update-budget controls. Such follow-ups remain unrun.
