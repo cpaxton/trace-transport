@@ -870,6 +870,26 @@ optimizer defect or an accepted performance gain. Full-profile diagnostics and
 reserved acceptance evaluation remain unrun.
 
 
+A preregistered development pilot tests rollout length 16 versus 64 and
+physical-time GAE $\lambda=0.98$ versus $0.998$, with unchanged
+$\gamma=0.999$ per 20 ms, actor/critic architecture, task and reward. Eight
+current-MLP runs (optimizer seeds 42/43, 50k producer decisions per arm) complete
+between 2026-10-28 23:00:59 and 2026-10-29 03:40:23 UTC, totaling 400,016 decisions.
+On 24 reused development-validation cases, all eight greedy models exactly match
+the teacher's aggregate metrics, including 701,212 verified B/s and 24.25\%
+interactive misses. Sampled deployment with two separate action seeds ranges
+from $-1.15\%$ to $+0.55\%$ goodput versus teacher; all 16 sampled evaluations
+fail the deadline guard and at least one family-progress guard, with zero wrong
+deliveries. Higher-lambda sampled runs all have negative goodput differences;
+longer-rollout effects with unchanged lambda are mixed and small. No qualified
+learning win occurs. Interaction budgets are matched, but longer rollouts make
+107--115 updates versus 426--456 for short rollouts, confounding optimizer-work
+attribution. Two optimizer seeds and reused validation limit inference; no
+reserved acceptance evaluation or new performance-selected training is launched.
+The earlier credit discrepancy did not translate into a demonstrated gain from
+these horizon changes alone at the tested budget.
+
+
 \section{Implementation stages and open questions}
 Implemented stages include reliable CPU transfer, history-based sender learning,
 receiver learning, joint sender/receiver training over CPU packet workers, and
