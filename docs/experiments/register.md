@@ -377,3 +377,9 @@ No failure or new unchanged larger job; original reserved tests remain unopened.
 | Actual start | Actual end | Experiment | Status | Configuration and evidence |
 | --- | --- | --- | --- | --- |
 | Engineering: 2026-10-28T22:57:17.703736+00:00; pilot: 2026-10-28T23:00:59.839969+00:00 | Engineering: 2026-10-28T23:00:57.061069+00:00; pilot: 2026-10-29T03:40:23.025082+00:00 | v7 2×2 rollout 16/64 × lambda .98/.998 | Complete, negative: 400,016 decisions; all greedy tie teacher; sampled −1.15% to +0.55% goodput, all fail deadline guard; no accepted win | [Plan](v7-long-credit.md), [config](../../experiments/v7-long-credit-v1.json), [actual engineering plan](../../artifacts/v7-long-credit-engineering-plan.json), [engineering results](../../artifacts/v7-long-credit-engineering-results.json), [pilot results](../../artifacts/v7-long-credit-pilot-results.json) |
+
+## Local decision predictability (registered 2026-10-31)
+
+| Actual start | Actual end | Experiment | Status | Configuration and evidence |
+| --- | --- | --- | --- | --- |
+| Not started | — | v7 local-history action-value predictability | Planned; independent fit/score futures, case-level split; no RL or results | [Plan](v7-local-predictability.md), [config](../../experiments/v7-local-predictability-v1.json) |
