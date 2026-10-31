@@ -1,6 +1,9 @@
 # Is local history predictive of useful rate decisions?
 
-Registered 2026-10-31. Status: **planned; no results**. Follow-up to the negative
+Registered 2026-10-31. Status: **engineering running**, actual start 2026-10-31T18:59:12.610485+00:00.
+[Actual engineering plan](../../artifacts/v7-local-predictability-engineering-plan.json).
+Pilot is queued after successful engineering completion in the same bounded service;
+no results or performance-based promotion. All seven targeted tests passed on Caliban. Follow-up to the negative
 [longer-credit pilot](v7-long-credit.md). This isolates local action predictability
 before further RL. A negative outcome concerns these observations, actions,
 prefixes, continuation and finite data, not all possible learned protocols.

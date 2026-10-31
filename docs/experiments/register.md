@@ -382,4 +382,4 @@ No failure or new unchanged larger job; original reserved tests remain unopened.
 
 | Actual start | Actual end | Experiment | Status | Configuration and evidence |
 | --- | --- | --- | --- | --- |
-| Not started | — | v7 local-history action-value predictability | Planned; independent fit/score futures, case-level split; no RL or results | [Plan](v7-local-predictability.md), [config](../../experiments/v7-local-predictability-v1.json) |
+| 2026-10-31T18:59:12.610485+00:00 (engineering) | — | v7 local-history action-value predictability | Engineering running; pilot queued; independent fit/score futures and case split; no RL/results | [Plan](v7-local-predictability.md), [config](../../experiments/v7-local-predictability-v1.json), [actual engineering plan](../../artifacts/v7-local-predictability-engineering-plan.json) |
