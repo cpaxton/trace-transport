@@ -19,6 +19,7 @@ class Config:
     decisions:int=2000
     environments:int=4
     rollout:int=16
+    gae_lambda:float=.98
     epochs:int=3
     minibatch:int=256
     learning_rate:float=.0001
@@ -26,6 +27,7 @@ class Config:
     kind:str='current-mlp'
     def __post_init__(self):
         if min(self.decisions,self.environments,self.rollout,self.epochs,self.minibatch)<1 or self.environments>4:raise ValueError('invalid bounded training budget')
+        if not math.isfinite(self.gae_lambda) or not 0<=self.gae_lambda<=1 or self.rollout>256:raise ValueError('invalid credit horizon')
         if self.kind not in ('current-mlp','history-mlp') or not math.isfinite(self.learning_rate) or self.learning_rate<=0:raise ValueError('invalid policy configuration')
 
 
@@ -108,7 +110,7 @@ def train(output,config,seeds,source,*,on_update=None):
                     else:obs[i]=result[0]
                 if decisions>=config.decisions:break
             with torch.no_grad():bootstrap=critic(torch.tensor(np.stack([o['critic'] for o in obs])))
-            adv,target=time_generalized_advantages(torch.stack(rewards),torch.stack(values),torch.stack(terminals),bootstrap,torch.stack(elapsed),gamma=.999,lam=.98)
+            adv,target=time_generalized_advantages(torch.stack(rewards),torch.stack(values),torch.stack(terminals),bootstrap,torch.stack(elapsed),gamma=.999,lam=config.gae_lambda)
             actor_stats=dict(samples=0,gradient_norm=0.,kl=0.)
             if records:
                 fields={k:torch.cat([r[k] for r in records]) for k in records[0]};advantages=adv.flatten()[fields.pop('world')]
@@ -129,9 +131,15 @@ def train(output,config,seeds,source,*,on_update=None):
             for _ in range(config.epochs):
                 for ids in torch.randperm(len(cs)).split(config.minibatch):
                     loss=.5*(critic(cs[ids])-targets[ids]).square().mean();optimizers[1].zero_grad();loss.backward();nn.utils.clip_grad_norm_(critic.parameters(),.5);optimizers[1].step()
+            with torch.no_grad():
+                errors=critic(cs)-targets;variance=targets.var(unbiased=False)
+                value_stats=dict(target_mean=float(targets.mean()),target_std=float(variance.sqrt()),
+                    post_update_mse=float(errors.square().mean()),
+                    explained_variance=float(1-errors.var(unbiased=False)/variance) if variance>1e-12 else None,
+                    scope='in-sample bootstrapped training targets, not full-return accuracy')
             updates+=1;duration=time.monotonic()-start
             progress=dict(phase='training',pid=os.getpid(),macro_decisions=decisions,world_macro_steps=world_steps,kernel_steps=kernel_steps,
-                updates=updates,elapsed_seconds=duration,macro_decisions_per_second=decisions/max(duration,1e-9),completed_episodes=len(episodes),
+                updates=updates,critic=value_stats,collected_macro_steps=len(rewards),elapsed_seconds=duration,macro_decisions_per_second=decisions/max(duration,1e-9),completed_episodes=len(episodes),
                 distinct_training_worlds=len(visited),mean_raw_macro_reward=float(np.mean(raw)),actor=actor_stats,
                 actor_batch_ms_p50_p95=np.quantile(inference[-100:],[.5,.95]).tolist() if inference else None,
                 note='training reward, not validation performance; all actor samples are eligible bulk producers')
