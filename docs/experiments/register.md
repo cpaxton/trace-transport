@@ -388,4 +388,4 @@ No failure or new unchanged larger job; original reserved tests remain unopened.
 
 | Actual start | Actual end | Experiment | Status | Configuration and evidence |
 | --- | --- | --- | --- | --- |
-| Not started | — | v7 fresh-future precision replication | Planned; 64 futures/bank/action at all 24 prior test snapshots; predictors frozen; no results | [Plan](v7-precision-replication.md), [config](../../experiments/v7-precision-replication-v1.json) |
+| 2026-11-01T23:53:46.195136+00:00 (engineering) | — | v7 fresh-future precision replication | Engineering running; 64-future pilot queued at all 24 test snapshots; predictors frozen; no results | [Plan](v7-precision-replication.md), [config](../../experiments/v7-precision-replication-v1.json), [actual engineering plan](../../artifacts/v7-precision-replication-engineering-plan.json) |

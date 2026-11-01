@@ -1,6 +1,9 @@
 # Fresh-future precision replication
 
-Registered 2026-11-01. Status: **planned; no results**. This follows the completed
+Registered 2026-11-01. Status: **engineering running**, actual start 2026-11-01T23:53:46.195136+00:00.
+[Actual engineering plan](../../artifacts/v7-precision-replication-engineering-plan.json).
+Pilot is queued after successful engineering completion. All four targeted tests
+passed on Caliban; no performance result or training promotion is claimed. This follows the completed
 [local-predictability study](v7-local-predictability.md), whose privileged action
 table did not generalize between future banks. Its apparent headroom remains
 unresolved, rather than an established failure of all learned protocols.
