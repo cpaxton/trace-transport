@@ -890,6 +890,26 @@ The earlier credit discrepancy did not translate into a demonstrated gain from
 these horizon changes alone at the tested budget.
 
 
+A subsequent local-predictability diagnostic completes on 2026-10-31,
+19:43:14--22:53:51 UTC, using 24 training and 12 reused diagnostic test cases,
+two teacher-trajectory snapshots per case, and eight independent futures per
+action in each of separate fitting/scoring banks. Two ineligible training
+snapshots are skipped; 46 training and 24 test snapshots yield 3,360 terminal
+continuations. All nine current-only, history-MLP and small-transformer predictors
+fit their training labels closely but have negative independent-scoring return
+differences versus teacher on test cases; all exploratory 95\% intervals include
+zero. History models also fail to demonstrate improvement over current-only or
+training-selected constant controls. The privileged snapshot fitting-table
+choice scores $-0.0408$ versus teacher (interval $[-0.1835,0.0745]$), while the
+same-scoring-bank maximum gives selection-biased apparent headroom $+0.0638$.
+Fitting/scoring action maxima agree at 6/24 test snapshots. This supplies no
+reliable local-prediction gain and shows why hindsight selection cannot establish
+learnable headroom. Eight futures per bank, limited snapshots and fixed teacher
+continuation leave true headroom unresolved; the result does not prove local
+information is fundamentally insufficient or disqualify other learned protocol
+controls. No adaptive-policy transport win or reserved acceptance is claimed.
+
+
 \section{Implementation stages and open questions}
 Implemented stages include reliable CPU transfer, history-based sender learning,
 receiver learning, joint sender/receiver training over CPU packet workers, and

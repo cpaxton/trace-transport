@@ -1,0 +1,13 @@
+{
+  "version": "v7-predictability-replay-v1",
+  "verified_modes": 12,
+  "terminal_continuations": 3360,
+  "training_snapshots": 46,
+  "test_snapshots": 24,
+  "case_splits_verified": true,
+  "all_replica_seeds_unique": true,
+  "saved_models_replay_exactly": true,
+  "data_sha256": "91f5e2f4b4d27c1d682d9c79ac6acc17e0adf8e0877d0519283f085c961eb8a4",
+  "result_sha256": "6901699fc7935eef11495eb1bc66f1ed0275236c22e5b76f693f2783ee82a54f",
+  "verified_utc": "2026-11-01T17:52:57.019128+00:00"
+}
