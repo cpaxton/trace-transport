@@ -1,12 +1,16 @@
 # Is local history predictive of useful rate decisions?
 
-Registered 2026-10-31. Status: **engineering running**, actual start 2026-10-31T18:59:12.610485+00:00.
-[Actual engineering plan](../../artifacts/v7-local-predictability-engineering-plan.json).
-Pilot is queued after successful engineering completion in the same bounded service;
-no results or performance-based promotion. All seven targeted tests passed on Caliban. Follow-up to the negative
-[longer-credit pilot](v7-long-credit.md). This isolates local action predictability
-before further RL. A negative outcome concerns these observations, actions,
-prefixes, continuation and finite data, not all possible learned protocols.
+Registered 2026-10-31. Status: **complete; no demonstrated local-predictability
+advantage, headroom inconclusive**. Engineering ran 2026-10-31 18:59:12–19:43:11
+UTC; pilot ran 2026-10-31 19:43:14–22:53:51 UTC. Both finished successfully.
+[Engineering plan](../../artifacts/v7-local-predictability-engineering-plan.json),
+[engineering results](../../artifacts/v7-local-predictability-engineering-results.json),
+[pilot results](../../artifacts/v7-local-predictability-pilot-results.json).
+All seven targeted tests passed on Caliban. This follows the negative
+[longer-credit pilot](v7-long-credit.md); no new RL or deployment occurred.
+A negative result concerns these observations, actions, teacher prefixes and
+continuations, and finite data. It does not rule out learned protocols generally.
+The frozen design follows.
 
 ## Frozen design
 
@@ -99,3 +103,57 @@ a 24-hour cap. Write snapshots, models and partial/completed cases directly to a
 private persistent study directory; keep these raw data and weights out of Git.
 Curate actual dates, coverage, uncertainty and results into the register and paper
 when available. Prior studies and source directories remain untouched.
+
+## Completed pilot
+
+All 24 training and 12 test cases were processed. Two training snapshots were
+skipped (the later snapshot of cases 700017 and 700023 had no eligible producer
+before the fixed deadline); no test snapshots were skipped. The result is 46
+training and 24 test snapshots with **3,360** terminal continuations, plus the
+engineering check's 48. Nine fixed predictors were fit; no test selection occurred.
+
+| Choice rule | Independent scoring return difference vs teacher | 95% exploratory interval |
+| --- | --- | --- |
+| Teacher | 0 | [0, 0] |
+| Training-selected constant (bias 0.8) | −0.0339 | [−0.1757, +0.0964] |
+| Privileged snapshot fitting-table choice | −0.0408 | [−0.1835, +0.0745] |
+| Current-only models, seeds 1/2/3 | −0.0194 / −0.0309 / −0.0701 | All include zero |
+| History MLP, seeds 1/2/3 | −0.1027 / −0.0793 / −0.0938 | All include zero |
+| Transformer, seeds 1/2/3 | −0.0559 / −0.0541 / −0.0905 | All include zero |
+
+These are case-balanced, conditional discounted-reward differences per snapshot,
+not percentages, transfer goodput or composed-policy performance. All history and
+transformer point estimates are worse than their seed-matched current-only control
+and the training-selected constant; all those comparison intervals also include
+zero. The nine models nearly fit their training labels (normalized training MSE
+below 0.0002), but do not demonstrate useful out-of-case prediction. Finite model
+capacity is therefore not an obvious explanation for training-fit failure; this
+does not establish that any predictor can generalize from only 24 training cases.
+
+The fitting-bank and scoring-bank maximizing actions agree at only 6/24 test
+snapshots (25%). Selecting the maximum on the same scoring bank gives apparent
+mean headroom +0.0638, but the independently scored privileged fitting-table
+choice gives −0.0408 with a wide interval. Thus optimistic hindsight estimates
+are not evidence of a stable exploitable signal in this study. The privileged
+choice is noisy and is not a true upper bound; these observations do not prove
+that useful actions never exist.
+
+Mean interactive-miss differences for the nine predictors are all positive
+(+0.46 to +2.23 misses per conditional continuation); these are counts, not
+percentage points, and no confidence intervals or acceptance guards are claimed
+for these task-metric differences. Verified-byte changes are mixed. A reward-only
+positive result, had one occurred, would still require transport-quality checks.
+
+The evidence does not justify more unchanged RL or asserting the overall premise
+is false. It leaves small one-decision rate-control headroom unresolved, with
+only eight futures per bank, two teacher-trajectory snapshots per case, a limited
+observation window and finite predictors. A sharper follow-up could replicate
+fixed states with many more futures before changing observations or actions;
+that follow-up has not been run. Adaptive-policy execution and original reserved
+transport acceptance remain unopened. Private raw datasets/models remain outside
+Git; source hashes and public result summaries identify the frozen experiment.
+
+[Post-run replay audit](../../artifacts/v7-local-predictability-replay.json) verifies
+all 12 mode summaries exactly from the saved predictors and private dataset,
+correct split coverage, and uniqueness of all 3,360 future replica seeds.
+The audit records the raw-data hash; it does not introduce a new experiment.
