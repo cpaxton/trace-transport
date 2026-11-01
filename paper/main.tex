@@ -847,6 +847,29 @@ accepted learning win. No unchanged larger run is launched; further work should
 isolate action-value signal, credit assignment and sampled-versus-greedy behavior.
 
 
+A frozen-policy development diagnostic completes on Caliban between
+2026-10-27 23:26:56 and 2026-10-28 00:00:27 UTC. It uses only two training
+cases, seed 42 of each MLP architecture, two independent action-sampling seeds,
+and four conditional futures per forced action (18 performance episodes and
+48 continuations). Both greedy policies retain teacher parity; sampled trained
+policies change verified goodput by $-0.35\%$ to $+0.35\%$ versus the teacher,
+and $-0.91\%$ to $+0.22\%$ versus their matched initialized sampled policy.
+All modes complete all messages without wrong deliveries or interactive misses
+on these two cases; no comparison establishes a qualified learning win.
+At one current-MLP bufferbloat snapshot, forcing rate bias 1.2 rather than 1.0
+increases estimated full discounted continuation return by 0.202 (independent-arm
+bootstrap 95\% interval $[0.054,0.353]$), while the full-return teacher-logit
+gradient is negative and the 4/16-step GAE teacher-logit gradients are positive.
+A history-MLP wired snapshot likewise favors bias 1.2 by full return but discourages
+it by truncated GAE. These exploratory four-replica intervals are not corrected
+for multiple comparisons and do not establish robust action rankings.
+Wired-snapshot critic values near 7.5--7.8 are well below conditional Monte Carlo
+values near 35.7--35.8; compressed critic observations and finite replicas limit
+attribution. This motivates broader credit/value diagnostics, not a demonstrated
+optimizer defect or an accepted performance gain. Full-profile diagnostics and
+reserved acceptance evaluation remain unrun.
+
+
 \section{Implementation stages and open questions}
 Implemented stages include reliable CPU transfer, history-based sender learning,
 receiver learning, joint sender/receiver training over CPU packet workers, and

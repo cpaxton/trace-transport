@@ -365,3 +365,9 @@ Five policies are certified greedy-teacher over bounded hidden states; the sixth
 has equal validation metrics but is not certified. No action identity is inferred
 from metrics alone. Earlier running/interim notes are historical and superseded.
 No failure or new unchanged larger job; original reserved tests remain unopened.
+
+## Frozen-policy diagnostics (registered 2026-10-27)
+
+| Actual start | Actual end | Experiment | Status | Configuration and evidence |
+| --- | --- | --- | --- | --- |
+| 2026-10-27T23:26:56.437497+00:00 | 2026-10-28T00:00:27.762105+00:00 | v7 sampled deployment and conditional credit | Smoke complete, no demonstrated learning win; exploratory credit discrepancy; full remains planned | [Plan](v7-policy-diagnostics.md), [fixed configuration](../../experiments/v7-policy-diagnostics-v1.json), [actual smoke plan](../../artifacts/v7-policy-diagnostics-smoke-plan.json), [smoke results](../../artifacts/v7-policy-diagnostics-smoke-results.json) |
