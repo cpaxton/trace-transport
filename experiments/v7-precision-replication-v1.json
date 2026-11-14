@@ -1,0 +1,52 @@
+{
+  "version": "v7-precision-replication-v1",
+  "registered_date": "2026-11-01",
+  "workers": 4,
+  "model_seeds": [
+    1,
+    2,
+    3
+  ],
+  "constant_action": 0,
+  "reference_data_sha256": "91f5e2f4b4d27c1d682d9c79ac6acc17e0adf8e0877d0519283f085c961eb8a4",
+  "reference_result_sha256": "6901699fc7935eef11495eb1bc66f1ed0275236c22e5b76f693f2783ee82a54f",
+  "profiles": {
+    "engineering": {
+      "cases": [
+        730000,
+        730001
+      ],
+      "replicas": 2,
+      "replica_offset": 8
+    },
+    "pilot": {
+      "cases": [
+        730000,
+        730001,
+        730002,
+        730004,
+        730005,
+        730008,
+        730009,
+        730010,
+        730014,
+        730015,
+        730021,
+        730036
+      ],
+      "replicas": 64,
+      "replica_offset": 16
+    }
+  },
+  "frozen_model_sha256": {
+    "current-1": "a8f4eb813368459c99f0b97c3a054b01e5c8c7fb0a9d1900749ba8131dc7e1fb",
+    "current-2": "5977628c8c102c7394e5ea5ab74d6ed0c90c5a02975118d5300afb474e4d4b3e",
+    "current-3": "546bedeb0fdde39b0a29c443e0a9d0ce852ba5150708a4b8714a20b85232bf86",
+    "history-1": "561e81dd05116f867737434300624ede4ad4123daf1b861fea412a5dd87171a8",
+    "history-2": "5ed8a2499f5982cea18106c7e901fa490ebe23b27710919b2b2ebb4779c21096",
+    "history-3": "642a6aaacb117a74e80c6a33b219d28a8b6bd24a48a335d13e6fb445a6dbd14b",
+    "transformer-1": "573aab40374bc66ba29689f7f98e11313a84c639b12aa39689d4ce7bb83f3d84",
+    "transformer-2": "b466b9cc21d2133fd7dfeb474642cb0508cd81ec061ab6e29e5ac8486f988536",
+    "transformer-3": "8fd26f8d1a8a7013e55e5b2e25580611afb5c624e49fc4f64e4c92ccc27e5c7c"
+  }
+}

@@ -383,3 +383,9 @@ No failure or new unchanged larger job; original reserved tests remain unopened.
 | Actual start | Actual end | Experiment | Status | Configuration and evidence |
 | --- | --- | --- | --- | --- |
 | Engineering: 2026-10-31T18:59:12.610485+00:00; pilot: 2026-10-31T19:43:14.139626+00:00 | Engineering: 2026-10-31T19:43:11.479624+00:00; pilot: 2026-10-31T22:53:51.718419+00:00 | v7 local-history action-value predictability | Complete; no demonstrated predictability advantage; 3,360 pilot continuations; privileged fit-table also fails independent scoring; headroom remains inconclusive | [Plan](v7-local-predictability.md), [config](../../experiments/v7-local-predictability-v1.json), [actual engineering plan](../../artifacts/v7-local-predictability-engineering-plan.json), [engineering results](../../artifacts/v7-local-predictability-engineering-results.json), [pilot results](../../artifacts/v7-local-predictability-pilot-results.json) |
+
+## Precision replication (registered 2026-11-01)
+
+| Actual start | Actual end | Experiment | Status | Configuration and evidence |
+| --- | --- | --- | --- | --- |
+| Engineering: 2026-11-01T23:53:46.195136+00:00; pilot: 2026-11-02T00:05:34.164225+00:00 | Engineering: 2026-11-02T00:05:31.697177+00:00; pilot: 2026-11-02T10:11:15.767478+00:00 | v7 fresh-future precision replication | Complete; 9,216 new continuations, no reliable independent-bank gain; true headroom unresolved; models frozen | [Plan](v7-precision-replication.md), [config](../../experiments/v7-precision-replication-v1.json), [actual engineering plan](../../artifacts/v7-precision-replication-engineering-plan.json), [engineering results](../../artifacts/v7-precision-replication-engineering-results.json), [pilot results](../../artifacts/v7-precision-replication-pilot-results.json) |
