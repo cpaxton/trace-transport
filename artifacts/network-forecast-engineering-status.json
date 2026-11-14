@@ -1,0 +1,49 @@
+{
+  "version": "network-forecast-engineering-status-v1",
+  "started_utc": "2026-11-14T15:25:34.071275+00:00",
+  "completed_utc": "2026-11-14T15:26:47.062101+00:00",
+  "profile": "engineering",
+  "schema": [
+    "rate",
+    "window",
+    "flight",
+    "ack_rate",
+    "wire_rate",
+    "rtt",
+    "min_rtt",
+    "loss_rate",
+    "interactive_bytes",
+    "image_bytes",
+    "map_bytes",
+    "bulk_bytes",
+    "oldest_age",
+    "min_slack",
+    "pending",
+    "feedback_age",
+    "last_rate_action",
+    "last_window_action",
+    "pressure",
+    "interactive_hz",
+    "image_hz",
+    "map_hz",
+    "local_ack_pending",
+    "local_ack_age",
+    "log_target_bias",
+    "decision_hold"
+  ],
+  "cases_by_split": {
+    "train": 2,
+    "calibration": 2,
+    "test": 2
+  },
+  "samples_by_split": {
+    "train": 102,
+    "calibration": 85,
+    "test": 85
+  },
+  "all_fixed_modes_completed": true,
+  "fit_steps": 10,
+  "accepted_win": false,
+  "raw_result_sha256": "f64c19f59a83efef626bf1afe2b18d2796e19339f15d685405ce86436a157ac2",
+  "scope": "six-case plumbing completion only; no predictive-performance conclusion; raw models/predictions/data retained privately"
+}

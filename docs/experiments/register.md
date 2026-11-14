@@ -388,4 +388,4 @@ No failure or new unchanged larger job; original reserved tests remain unopened.
 
 | Actual start | Actual end | Experiment | Status | Configuration and evidence |
 | --- | --- | --- | --- | --- |
-| Not started | — | network-forecast-v1 | Planned; prospective case split, delivery/SRTT/ACK-silence forecasts; no RL or results | [Plan](network-forecast-v1.md), [config](../../experiments/network-forecast-v1.json) |
+| Engineering: 2026-11-14T15:25:34.071275+00:00; pilot: 2026-11-14T15:26:49.773163+00:00 | Engineering: 2026-11-14T15:26:47.062101+00:00; pilot: — | network-forecast-v1 | Engineering complete; pilot running; prospective case split, no RL or predictive result yet | [Plan](network-forecast-v1.md), [config](../../experiments/network-forecast-v1.json), [engineering status](../../artifacts/network-forecast-engineering-status.json), [actual pilot plan](../../artifacts/network-forecast-pilot-plan.json) |

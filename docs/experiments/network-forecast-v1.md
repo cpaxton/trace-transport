@@ -1,6 +1,12 @@
 # Network forecasting before learned scheduling
 
-Registered 2026-11-14. Status: **planned; no results**. The completed
+Registered 2026-11-14. Status: **pilot running**. Engineering completed 2026-11-14T15:25:34.071275+00:00 to
+2026-11-14T15:26:47.062101+00:00; pilot actually started 2026-11-14T15:26:49.773163+00:00.
+[Engineering status](../../artifacts/network-forecast-engineering-status.json),
+[actual pilot plan](../../artifacts/network-forecast-pilot-plan.json),
+[seed-allocation audit](../../artifacts/network-forecast-seed-audit.json).
+All eight targeted tests passed on Caliban. Engineering is a plumbing check;
+no pilot forecast-quality result is available yet. The completed
 [precision study (PR #9)](https://github.com/cpaxton/trace-transport/pull/9)
 did not establish useful independent-bank action values. This experiment asks
 whether local history predicts observable future service directly. Forecast
@@ -105,7 +111,7 @@ storage. Run a single Caliban service: four collection workers, six CPU
 equivalents, 8 GiB, one numerical thread, file logs, 24-hour cap. Preserve prior
 studies. Record actual dates and results in the register and paper when available.
 
-CLI: `python -m scripts.network_forecast --config CONFIG --output NEW_DIRECTORY
+CLI (learning dependencies required): `uv run --locked --extra learn python -m scripts.network_forecast --config CONFIG --output NEW_DIRECTORY
 --profile engineering|pilot` from a frozen source-bundle directory.
 
 The next planned research stage is object scheduling for commands, image objects
