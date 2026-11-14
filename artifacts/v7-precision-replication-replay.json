@@ -1,0 +1,14 @@
+{
+  "version": "v7-precision-replay-v1",
+  "verified_modes": 12,
+  "cases": 12,
+  "snapshots": 24,
+  "terminal_continuations": 9216,
+  "all_futures_new": true,
+  "exact_snapshot_matches": true,
+  "frozen_weights_verified": true,
+  "all_report_fields_reproduced": true,
+  "data_sha256": "8ebbc2a51ed824d47bf71d765cd05d044efba8cb9e656103b5873ecbe32a6b5f",
+  "result_sha256": "f72439fa782d4188a13a7932dda864b5bdc758be528d109929e7f0b2540e194b",
+  "verified_utc": "2026-11-14T03:06:47.289544+00:00"
+}
