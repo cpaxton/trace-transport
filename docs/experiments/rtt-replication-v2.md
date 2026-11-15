@@ -1,6 +1,11 @@
 # Corrected frozen SRTT replication (v2)
 
-Registered 2026-11-15. Status: **planned; no results**. V1 is retired due to
+Registered 2026-11-15. Status: **replication running**. Engineering ran 2026-11-15T16:39:36.920972+00:00 to
+2026-11-15T16:39:43.448476+00:00; replication started 2026-11-15T16:39:48.178386+00:00.
+[Engineering status](../../artifacts/rtt-replication-v2-engineering-status.json),
+[actual plan](../../artifacts/rtt-replication-v2-plan.json). Original calibration
+selected **adjusted-persistence** after the decoder correction. All 14
+targeted forecast/RTT tests passed on Caliban; no corrected prospective result yet. V1 is retired due to
 an RTT units error. [Correction](../../artifacts/rtt-baseline-units-correction.json).
 V2 fixes only deterministic baseline interpretation; original neural weights,
 inputs, labels and simulation remain unchanged. New tests match the decoder to

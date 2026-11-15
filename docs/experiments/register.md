@@ -400,4 +400,4 @@ No failure or new unchanged larger job; original reserved tests remain unopened.
 
 | Actual start | Actual end | Experiment | Status | Configuration and evidence |
 | --- | --- | --- | --- | --- |
-| Not started | — | rtt-replication-v2 | Planned; corrected RTT decoder, frozen neural weights, 96 new cases; v1 retired | [Plan](rtt-replication-v2.md), [config](../../experiments/rtt-replication-v2.json), [correction](../../artifacts/rtt-baseline-units-correction.json) |
+| Engineering: 2026-11-15T16:39:36.920972+00:00; replication: 2026-11-15T16:39:48.178386+00:00 | Engineering: 2026-11-15T16:39:43.448476+00:00; replication: — | rtt-replication-v2 | Running; corrected units, frozen neural weights, 96 new cases, adjusted-persistence comparator; v1 retired | [Plan](rtt-replication-v2.md), [config](../../experiments/rtt-replication-v2.json), [actual plan](../../artifacts/rtt-replication-v2-plan.json), [correction](../../artifacts/rtt-baseline-units-correction.json) |
