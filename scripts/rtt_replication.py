@@ -1,5 +1,7 @@
 """Frozen-current-model RTT replication with prospective cases and stronger baselines."""
 import argparse
+import ast
+import zipfile
 from concurrent.futures import ProcessPoolExecutor,as_completed
 from datetime import datetime,timezone
 import hashlib
@@ -10,12 +12,13 @@ import numpy as np
 import torch
 from trace_transport.experiment_io import write
 from scripts.network_forecast import (SCHEMA,HORIZONS,ForecastNet,collect_case,load_split,
-    case_weights,weighted_quantile,predict_model,predict_baseline,summarize)
+    case_weights,weighted_quantile,predict_model,predict_baseline,summarize,decode_srtt)
 
 BASELINES=('raw-persistence','adjusted-persistence','rtt-ewma','bounded-trend','ridge-current')
 
 
 def validate(config,profile):
+    if config.get('version')!='rtt-replication-v2':raise ValueError('v1 retired: RTT units bug; use v2 config')
     all_cases=[]
     for p in config['profiles'].values():
         seeds=p['cases']
@@ -38,7 +41,7 @@ def current_design(data,normalization=None):
 
 
 def rtt_points(data,kind,ridge=None):
-    rtt=data['history'][:,:,SCHEMA.index('rtt')].astype(float)*.1;valid=data['valid']&(rtt>0)
+    rtt=decode_srtt(data['history'][:,:,SCHEMA.index('rtt')]);valid=data['valid']&(rtt>0)
     latest=rtt[:,-1];n=len(rtt)
     if kind in ['raw-persistence','adjusted-persistence']:point=np.repeat(latest[:,None],3,1)
     elif kind=='rtt-ewma':
@@ -69,7 +72,6 @@ def fit_baselines(train,config,original_ewma):
         point=rtt_points(train,kind,ridge);residual=np.zeros((3,3))
         for h in range(3):residual[h]=weighted_quantile(train['y'][:,h,1]-point[:,h],w[:,h],[.1,.5,.9])
         if kind=='raw-persistence':residual[:,1]=0. # Preserve the raw point; force ordered intervals around it below.
-        if kind=='adjusted-persistence':residual=np.asarray(original_ewma['residual_quantiles'])[:,1,:].copy()
         fits[kind]=dict(residual=residual,ridge=ridge if kind=='ridge-current' else None)
     return fits
 
@@ -128,6 +130,22 @@ def jsonable(x):
     return x
 
 
+def verify_frozen_functions(original,current):
+    names=('observe_counters','future_targets','collect_case','load_split','case_weights',
+           'weighted_quantile','ForecastNet','predict_model','summarize','train_model',
+           'const:SCHEMA','const:COLUMNS','const:HORIZONS','const:QUANTILES')
+    def definitions(text):
+        found={}
+        for node in ast.parse(text).body:
+            if isinstance(node,(ast.FunctionDef,ast.ClassDef)):found[node.name]=ast.dump(node,include_attributes=False)
+            elif isinstance(node,ast.Assign):
+                for target in node.targets:
+                    if isinstance(target,ast.Name):found['const:'+target.id]=ast.dump(node,include_attributes=False)
+        return found
+    old=definitions(original);new=definitions(current)
+    if any(old.get(n)!=new.get(n) or n not in old for n in names):raise ValueError('collector/model implementation changed')
+
+
 def main():
     p=argparse.ArgumentParser(description=__doc__);p.add_argument('--config',type=Path,required=True);p.add_argument('--reference-root',type=Path,required=True)
     p.add_argument('--output',type=Path,required=True);p.add_argument('--profile',choices=['engineering','replication'],default='engineering');args=p.parse_args()
@@ -138,7 +156,9 @@ def main():
         if hashlib.sha256(Path(rel).read_bytes()).hexdigest()!=h:raise ValueError('source mismatch')
     reference=json.loads((root/'results.json').read_text())
     if hashlib.sha256((root/'results.json').read_bytes()).hexdigest()!=config['reference_result_sha256']:raise ValueError('reference result mismatch')
-    if source.get('scripts/network_forecast.py')!=reference['plan']['source']['scripts/network_forecast.py']:raise ValueError('collector/predictor implementation changed')
+    with zipfile.ZipFile(root.parent/'source.zip') as archive:original=archive.read('scripts/network_forecast.py')
+    if hashlib.sha256(original).hexdigest()!=reference['plan']['source']['scripts/network_forecast.py']:raise ValueError('original helper source mismatch')
+    verify_frozen_functions(original.decode(),Path('scripts/network_forecast.py').read_text())
     core={k:v for k,v in source.items() if k.startswith('src/')}
     if core!={k:v for k,v in reference['plan']['source'].items() if k.startswith('src/')}:raise ValueError('simulator changed')
     for name,h in config['frozen_model_sha256'].items():
@@ -150,7 +170,7 @@ def main():
     old=json.loads((root/'baseline-fits.json').read_text())['ewma'];ewma={k:np.asarray(v) if isinstance(v,list) else v for k,v in old.items()}
     fits=fit_baselines(train,config,ewma);models=load_frozen(root);cal_modes,_=evaluate(cal,fits,ewma,models)
     chosen=min(BASELINES,key=lambda k:cal_modes[k]['summary']['1.0']['srtt_mae_seconds'])
-    plan=dict(version='rtt-replication-v1',started_utc=datetime.now(timezone.utc).isoformat(),config=config,profile=args.profile,source=source,
+    plan=dict(version='rtt-replication-v2',started_utc=datetime.now(timezone.utc).isoformat(),config=config,profile=args.profile,source=source,
         selected_baseline=chosen,selection_scope='original calibration cases only; no new cases or original test labels used for fitting/selection',accepted_win=False)
     write(out/'plan.json',plan);write(out/'baseline-fits.json',jsonable(fits));write(out/'calibration.json',cal_modes)
     del train,cal

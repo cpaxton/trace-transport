@@ -11,14 +11,14 @@ from scripts.network_forecast import fit_baseline,summarize,SCHEMA
 
 
 def test_fresh_split_and_fixed_model_coverage():
-    c=json.loads(Path('experiments/rtt-replication-v1.json').read_text());s=validate(c,'replication')
+    c=json.loads(Path('experiments/rtt-replication-v2.json').read_text());s=validate(c,'replication')
     assert len(s['cases'])==96 and len(c['frozen_model_sha256'])==9
     c['profiles']['engineering']['cases'][0]=s['cases'][0]
     with pytest.raises(ValueError,match='overlap'):validate(c,'replication')
 
 
 def test_raw_persistence_is_exact_and_trend_is_bounded():
-    d=dataset([1,2]);d['history'][:,:,SCHEMA.index('rtt')]=np.linspace(.2,1.,64)
+    d=dataset([1,2]);d['history'][:,:,SCHEMA.index('rtt')]=np.log1p(np.linspace(.02,.1,64)/.001)
     raw=rtt_points(d,'raw-persistence');assert np.allclose(np.expm1(raw)*.1,.1)
     trend=np.expm1(rtt_points(d,'bounded-trend'))*.1
     assert (trend>=0).all() and (trend<=.2+1e-8).all()
@@ -47,3 +47,11 @@ def test_rtt_comparison_clusters_cases_and_ignores_unlabelled_cases():
     c=rtt_comparison(other,base)
     assert c['mae_difference_seconds']==pytest.approx(.002)
     assert c['difference_ci95_seconds']==pytest.approx([.002,.002]) and c['cases_with_fresh_rtt']==2
+
+
+def test_frozen_function_guard_allows_only_baseline_repair():
+    from scripts.rtt_replication import verify_frozen_functions
+    text=Path('scripts/network_forecast.py').read_text()
+    verify_frozen_functions(text,text.replace('return np.expm1(np.asarray(encoded,dtype=float))*.001','return np.expm1(np.asarray(encoded,dtype=float))*.002'))
+    with pytest.raises(ValueError,match='implementation changed'):
+        verify_frozen_functions(text,text.replace('world=MacroWorld(task[', 'world=CHANGED(task['))
