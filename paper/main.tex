@@ -925,8 +925,16 @@ The previously reported secondary SRTT improvement is withdrawn after a
 a linear value. Raw labels and neural predictions are unchanged; affected RTT
 baseline comparisons cannot support a prediction advantage. The subsequent
 96-case RTT replication is retired for that comparison error. The ACK primary
-remains negative and unaffected. Corrected deterministic baselines and a
-fresh-case v2 replication are required; no scheduler or transport gain is claimed.
+remains negative and unaffected. Corrected historical rescoring gives persistence 14.77 ms versus the unchanged
+current ensemble 18.52 ms on the original 48 cases, reversing the earlier claim.
+A corrected frozen-model v2 test completes 96 fresh cases on 2026-11-15,
+16:39:48--16:47:42 UTC (4,374 samples). Original calibration selects adjusted
+persistence. One-second SRTT MAE is 17.95 ms for current-only versus 14.69 ms for
+persistence, 22.2\% higher point error; paired difference interval
+$[-0.01,7.89]$ ms includes zero. The registered v2 criterion fails. Neural
+weights, input/label collection and simulation remain frozen; a real-observer
+decoder regression test and exact saved-prediction replay verify the correction.
+No learned RTT advantage, scheduler or transport gain is claimed.
 
 
 
