@@ -1,5 +1,11 @@
 # Network forecasting before learned scheduling
 
+> **RTT correction, 2026-11-15:** The previously reported RTT baseline
+> comparisons are withdrawn. The observer uses log1p(SRTT / 1 ms), but the
+> baseline decoded a linear value. Neural weights, raw labels and the failed ACK
+> primary are unaffected. Old replay verified reproducibility, not feature units.
+> [Correction record](../../artifacts/rtt-baseline-units-correction.json).
+
 Registered 2026-11-14. Status: **complete; registered primary forecast criterion
 failed**. Engineering ran 15:25:34–15:26:47 UTC and pilot ran
 **2026-11-14 15:26:49–15:42:07 UTC**. All cases/fixed fits completed successfully.
@@ -146,7 +152,7 @@ No learned ensemble beats EWMA's ACK-byte point MAE at any of the three horizons
 at 2 s the moving-average baseline has the best baseline point estimate. The
 constant baseline's much larger ACK error is not an appropriate sole comparator.
 
-There is a secondary latency lead: the current-only ensemble reduces one-second
+Historical, withdrawn RTT comparison: the current-only ensemble reduces one-second
 SRTT error from 23.99 to 18.52 ms (22.8%). A **post-hoc**, unadjusted paired
 interval for its MAE difference is [−11.01, −0.86] ms. This exploratory comparison
 was calculated after seeing test results; it does not replace the registered

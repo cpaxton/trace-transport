@@ -920,11 +920,14 @@ primary baseline. The fixed transformer ensemble has one-second ACK-byte MAE
 interval $[-927,20816]$ B includes zero. Its 78.7\% coverage for nominal 80\%
 intervals passes the coverage criterion but the registered primary gain criterion
 fails. All fixed models are reported; no scheduler or transport win is claimed.
-A post-hoc secondary current-only ensemble reduces fresh-label SRTT MAE from
-23.99 to 18.52 ms (22.8\%); its exploratory unadjusted paired interval is
-$[-11.01,-0.86]$ ms. This latency lead requires prospective replication and does
-not overturn the failed primary. Network cases, rather than overlapping windows,
-are the units of uncertainty. No RL or reserved transport acceptance is launched.
+The previously reported secondary SRTT improvement is withdrawn after a
+2026-11-15 units audit: baseline code decoded a v4/v6 log1p(SRTT/1 ms) feature as
+a linear value. Raw labels and neural predictions are unchanged; affected RTT
+baseline comparisons cannot support a prediction advantage. The subsequent
+96-case RTT replication is retired for that comparison error. The ACK primary
+remains negative and unaffected. Corrected deterministic baselines and a
+fresh-case v2 replication are required; no scheduler or transport gain is claimed.
+
 
 
 \section{Implementation stages and open questions}

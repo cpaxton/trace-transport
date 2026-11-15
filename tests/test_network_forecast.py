@@ -12,7 +12,7 @@ from scripts.network_forecast import (SCHEMA,HORIZONS,validate,future_targets,co
 def dataset(seeds):
     n=len(seeds);x=np.zeros((n,64,len(SCHEMA)),np.float32);rate=50000.
     x[:,:,SCHEMA.index('ack_rate')]=np.log1p(rate/128000.)
-    x[:,:,SCHEMA.index('rtt')]=1.
+    x[:,:,SCHEMA.index('rtt')]=np.log1p(.1/.001)
     y=np.zeros((n,3,3),np.float32);y[:,:,0]=np.log1p(rate/128000.);y[:,:,1]=np.log(2.)
     dt=np.broadcast_to(HORIZONS,(n,3)).copy()
     return dict(history=x,valid=np.ones((n,64),bool),y=y,mask=np.ones((n,3,3),bool),duration=dt,
@@ -90,3 +90,13 @@ def test_zero_delivery_can_be_included_in_forecast_interval():
     p=predict_model((model,torch.zeros(len(SCHEMA)),torch.ones(len(SCHEMA))),d)
     assert np.array_equal(p[0,:,:3],np.zeros((3,3)))
     assert (p[0,:,6]==.5).all()
+
+
+def test_srtt_decoder_matches_actual_v6_observer():
+    from trace_transport.reactive_sender import MacroWorld,FEATURES
+    from scripts.network_forecast import decode_srtt
+    world=MacroWorld(700006,production=.2,drain=.1)
+    for srtt in [.002,.1,.5]:
+        world.env.sessions[0].srtt=srtt
+        encoded=world.env.observe()['sender'][0,FEATURES.index('rtt')]
+        assert float(decode_srtt(encoded))==pytest.approx(srtt,rel=1e-6)

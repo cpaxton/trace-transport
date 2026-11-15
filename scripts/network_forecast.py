@@ -123,10 +123,15 @@ def weighted_quantile(values,weights,qs):
     cumulative=np.cumsum(w)/w.sum();return np.interp(qs,cumulative,x)
 
 
+def decode_srtt(encoded):
+    """v6 inherits v4's log1p(SRTT / 1 ms) observation encoding."""
+    return np.expm1(np.asarray(encoded,dtype=float))*.001
+
+
 def baseline_points(data,kind,history_seconds=2.):
     x=data['history'];v=data['valid'];n=len(x);h=len(HORIZONS);width=history_seconds/x.shape[1]
     ack=np.expm1(x[:,:,SCHEMA.index('ack_rate')])*128000.
-    rtt=x[:,:,SCHEMA.index('rtt')]*.1
+    rtt=decode_srtt(x[:,:,SCHEMA.index('rtt')])
     if kind=='persistence':w=np.zeros_like(ack);w[:,-1]=1.
     elif kind=='moving-average':w=v.astype(float)
     elif kind=='ewma':w=np.broadcast_to(2.**(-np.arange(x.shape[1]-1,-1,-1)*width/.25),ack.shape)*v
