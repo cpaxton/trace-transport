@@ -384,8 +384,20 @@ No failure or new unchanged larger job; original reserved tests remain unopened.
 | --- | --- | --- | --- | --- |
 | Engineering: 2026-10-31T18:59:12.610485+00:00; pilot: 2026-10-31T19:43:14.139626+00:00 | Engineering: 2026-10-31T19:43:11.479624+00:00; pilot: 2026-10-31T22:53:51.718419+00:00 | v7 local-history action-value predictability | Complete; no demonstrated predictability advantage; 3,360 pilot continuations; privileged fit-table also fails independent scoring; headroom remains inconclusive | [Plan](v7-local-predictability.md), [config](../../experiments/v7-local-predictability-v1.json), [actual engineering plan](../../artifacts/v7-local-predictability-engineering-plan.json), [engineering results](../../artifacts/v7-local-predictability-engineering-results.json), [pilot results](../../artifacts/v7-local-predictability-pilot-results.json) |
 
+## Precision replication (registered 2026-11-01)
+
+| Actual start | Actual end | Experiment | Status | Configuration and evidence |
+| --- | --- | --- | --- | --- |
+| Engineering: 2026-11-01T23:53:46.195136+00:00; pilot: 2026-11-02T00:05:34.164225+00:00 | Engineering: 2026-11-02T00:05:31.697177+00:00; pilot: 2026-11-02T10:11:15.767478+00:00 | v7 fresh-future precision replication | Complete; 9,216 new continuations, no reliable independent-bank gain; true headroom unresolved; models frozen | [Plan](v7-precision-replication.md), [config](../../experiments/v7-precision-replication-v1.json), [actual engineering plan](../../artifacts/v7-precision-replication-engineering-plan.json), [engineering results](../../artifacts/v7-precision-replication-engineering-results.json), [pilot results](../../artifacts/v7-precision-replication-pilot-results.json) |
+
 ## Network forecasting (registered 2026-11-14)
 
 | Actual start | Actual end | Experiment | Status | Configuration and evidence |
 | --- | --- | --- | --- | --- |
 | Engineering: 2026-11-14T15:25:34.071275+00:00; pilot: 2026-11-14T15:26:49.773163+00:00 | Engineering: 2026-11-14T15:26:47.062101+00:00; pilot: 2026-11-14T15:42:07.481816+00:00 | network-forecast-v1 | Complete; primary failed (ACK MAE 20.9% higher vs EWMA, interval includes zero); exploratory current-MLP SRTT lead; no transport win | [Plan](network-forecast-v1.md), [config](../../experiments/network-forecast-v1.json), [engineering status](../../artifacts/network-forecast-engineering-status.json), [actual pilot plan](../../artifacts/network-forecast-pilot-plan.json), [results](../../artifacts/network-forecast-pilot-results.json), [exploratory secondary analysis](../../artifacts/network-forecast-secondary.json) |
+
+## SRTT confirmation (registered 2026-11-15)
+
+| Actual start | Actual end | Experiment | Status | Configuration and evidence |
+| --- | --- | --- | --- | --- |
+| Not started | — | rtt-replication-v1 | Planned; 96 fresh cases, frozen neural models, stronger baselines fit on old train/calibration; no results | [Plan](rtt-replication-v1.md), [config](../../experiments/rtt-replication-v1.json) |
