@@ -180,3 +180,14 @@ not run; original reserved transport acceptance remains unopened.
 verifies every case hash, disjoint splits, all nine model files, all 32 saved
 prediction arrays, exact metric reproduction and calibration-only baseline
 selection. No retraining occurred during verification.
+
+## Corrected historical RTT rescoring (2026-11-15)
+
+[Post-hoc corrected analysis](../../artifacts/network-forecast-rtt-corrected-reanalysis.json)
+keeps all neural weights and original test labels fixed. Corrected persistence
+has 14.77 ms one-second SRTT MAE versus the current ensemble's unchanged 18.52 ms:
+the model is **25.4% worse**, paired difference +3.75 ms [1.12, 6.94] ms on those
+same 48 cases. This is a mechanical baseline correction on already-seen cases,
+not new confirmation. It reverses the earlier baseline comparison, whose
+claimed improvement is withdrawn. ACK-byte metrics are unchanged. A separate
+fresh v2 run will test the corrected comparison prospectively.
