@@ -1,16 +1,14 @@
 # Network forecasting before learned scheduling
 
-Registered 2026-11-14. Status: **pilot running**. Engineering completed 2026-11-14T15:25:34.071275+00:00 to
-2026-11-14T15:26:47.062101+00:00; pilot actually started 2026-11-14T15:26:49.773163+00:00.
+Registered 2026-11-14. Status: **complete; registered primary forecast criterion
+failed**. Engineering ran 15:25:34–15:26:47 UTC and pilot ran
+**2026-11-14 15:26:49–15:42:07 UTC**. All cases/fixed fits completed successfully.
 [Engineering status](../../artifacts/network-forecast-engineering-status.json),
 [actual pilot plan](../../artifacts/network-forecast-pilot-plan.json),
-[seed-allocation audit](../../artifacts/network-forecast-seed-audit.json).
-All eight targeted tests passed on Caliban. Engineering is a plumbing check;
-no pilot forecast-quality result is available yet. The completed
-[precision study (PR #9)](https://github.com/cpaxton/trace-transport/pull/9)
-did not establish useful independent-bank action values. This experiment asks
-whether local history predicts observable future service directly. Forecast
-accuracy and application utility are separate evidence; no RL is trained here.
+[seed-allocation audit](../../artifacts/network-forecast-seed-audit.json),
+[full results](../../artifacts/network-forecast-pilot-results.json).
+All eight targeted tests passed on Caliban. No RL or scheduler deployment occurred.
+The fixed design follows; results and limitations appear below.
 
 ## Task and labels
 
@@ -119,3 +117,60 @@ and map deltas using forecast service budgets. Its baselines should include
 priority, deadline and fair-queueing rules, with exact-delivery checks and
 application latency/freshness goals. That scheduler has not been implemented or
 trained by this forecast study; forecast quality must be assessed first.
+
+## Completed prospective test
+
+All 168 pilot cases completed: 96 training (4,306 samples), 24 calibration (980),
+48 test (2,297). Samples are overlapping endpoint/time snapshots, not independent
+cases. Nine models each fit 1,000 fixed steps; all nine plus three ensembles and
+four baselines are reported. The six engineering cases are disjoint. All raw case
+arrays, private weights, prediction arrays and fitted baseline parameters remain
+in private persistent storage, with hashes in the public result.
+
+Calibration selected **EWMA** for the primary one-second ACK-byte comparison.
+
+| Predictor | Test 1s ACK-byte MAE | Nominal 80% interval coverage | Test 1s fresh-label SRTT MAE |
+| --- | --- | --- | --- |
+| EWMA | 39,071 B | 84.5% | 24.0 ms |
+| Current-only ensemble | 51,395 B | 74.7% | 18.5 ms |
+| History MLP ensemble | 82,448 B | 45.6% | 25.6 ms |
+| Transformer ensemble (primary) | 47,241 B | 78.7% | 19.0 ms |
+
+Transformer ACK-byte error is **20.9% higher**, rather than the required >=10%
+reduction. Its paired difference is +8,170 B, family-stratified case-bootstrap
+95% interval [−927, +20,816] B; the interval includes zero. Interval coverage
+passes the registered range, but gain and paired-difference criteria fail.
+`forecast_evidence=false`; there is no accepted transport win. The transformer ensemble versus
+current-only ACK-error difference is −4,154 B [−13,192, +9,915] B, also uncertain.
+No learned ensemble beats EWMA's ACK-byte point MAE at any of the three horizons;
+at 2 s the moving-average baseline has the best baseline point estimate. The
+constant baseline's much larger ACK error is not an appropriate sole comparator.
+
+There is a secondary latency lead: the current-only ensemble reduces one-second
+SRTT error from 23.99 to 18.52 ms (22.8%). A **post-hoc**, unadjusted paired
+interval for its MAE difference is [−11.01, −0.86] ms. This exploratory comparison
+was calculated after seeing test results; it does not replace the registered
+primary. All three ensemble SRTT comparisons are included in the
+[secondary artifact](../../artifacts/network-forecast-secondary.json). The
+transformer's SRTT improvement has an interval crossing zero. Fresh cases and a
+newly registered latency-specific criterion are needed before relying on the
+selected current-only lead. These errors concern future sender SRTT conditional
+on fresh RTT samples, not physical delay during periods without samples.
+
+ACK-silence prevalence is only 1.37% on one-second test windows (case-weighted).
+The constant-frequency baseline already has Brier score 0.01354, versus 0.01289
+for current-only and 0.01311 for transformer. Large improvements over a weak
+binary persistence/silence heuristic do not establish a strong classifier. All
+calibration diagrams and other horizons are descriptive secondary results.
+
+The test establishes neither superior ACK-service forecasting nor a need for a
+transformer. It leaves an exploratory small current-state latency predictor worth
+replicating. Do not promote a scheduler or report an application win from these
+numbers. A later scheduling experiment could keep the EWMA service budget and
+separately test a freshly validated learned-delay component. That experiment has
+not run; original reserved transport acceptance remains unopened.
+
+[Saved-artifact replay audit](../../artifacts/network-forecast-replay.json)
+verifies every case hash, disjoint splits, all nine model files, all 32 saved
+prediction arrays, exact metric reproduction and calibration-only baseline
+selection. No retraining occurred during verification.

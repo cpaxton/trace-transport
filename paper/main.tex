@@ -910,6 +910,23 @@ information is fundamentally insufficient or disqualify other learned protocol
 controls. No adaptive-policy transport win or reserved acceptance is claimed.
 
 
+A prospective supervised service-forecasting pilot completes on 2026-11-14
+15:26:49--15:42:07 UTC with 96 training, 24 calibration and 48 test cases
+(4,306/980/2,297 endpoint/time samples). It predicts 0.5/1/2-second acknowledged
+payload, future sender SRTT conditional on fresh RTT samples, and ACK-progress
+silence from two-second causal local histories. Calibration selects EWMA as the
+primary baseline. The fixed transformer ensemble has one-second ACK-byte MAE
+47,241 B versus EWMA 39,071 B, a 20.9\% higher point error; paired difference
+interval $[-927,20816]$ B includes zero. Its 78.7\% coverage for nominal 80\%
+intervals passes the coverage criterion but the registered primary gain criterion
+fails. All fixed models are reported; no scheduler or transport win is claimed.
+A post-hoc secondary current-only ensemble reduces fresh-label SRTT MAE from
+23.99 to 18.52 ms (22.8\%); its exploratory unadjusted paired interval is
+$[-11.01,-0.86]$ ms. This latency lead requires prospective replication and does
+not overturn the failed primary. Network cases, rather than overlapping windows,
+are the units of uncertainty. No RL or reserved transport acceptance is launched.
+
+
 \section{Implementation stages and open questions}
 Implemented stages include reliable CPU transfer, history-based sender learning,
 receiver learning, joint sender/receiver training over CPU packet workers, and
