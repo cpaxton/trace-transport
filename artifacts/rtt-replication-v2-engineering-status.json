@@ -1,0 +1,11 @@
+{
+  "version": "rtt-replication-v2-engineering-status",
+  "started_utc": "2026-11-15T16:39:36.920972+00:00",
+  "completed_utc": "2026-11-15T16:39:43.448476+00:00",
+  "cases": 2,
+  "modes_completed": 17,
+  "selected_baseline": "adjusted-persistence",
+  "raw_result_sha256": "b14a78ff3e9516bcd2efbc2f969bb402fc44660e75c40beb5a1cdd4e107f5559",
+  "accepted_win": false,
+  "scope": "plumbing only; corrected units; no performance conclusion"
+}

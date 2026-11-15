@@ -1,0 +1,15 @@
+{
+  "version": "rtt-replication-replay-v2",
+  "cases": 96,
+  "samples": 4374,
+  "verified_modes": 17,
+  "frozen_weights_verified": true,
+  "case_hashes_verified": true,
+  "original_train_only_baseline_fit_verified": true,
+  "original_calibration_selection_verified": true,
+  "fresh_case_ids_verified": true,
+  "exact_predictions_and_reports_replayed": true,
+  "result_sha256": "471132c77037460da73f6a1022acd214999ce581285a803a1aee57cd70d95f3f",
+  "verified_utc": "2026-11-15T16:54:00.932571+00:00",
+  "numerical_environment": "OPENBLAS_NUM_THREADS=OMP_NUM_THREADS=MKL_NUM_THREADS=1; torch intra-op threads=1, matching the original service"
+}

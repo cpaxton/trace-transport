@@ -389,3 +389,15 @@ No failure or new unchanged larger job; original reserved tests remain unopened.
 | Actual start | Actual end | Experiment | Status | Configuration and evidence |
 | --- | --- | --- | --- | --- |
 | Engineering: 2026-11-14T15:25:34.071275+00:00; pilot: 2026-11-14T15:26:49.773163+00:00 | Engineering: 2026-11-14T15:26:47.062101+00:00; pilot: 2026-11-14T15:42:07.481816+00:00 | network-forecast-v1 | Complete; primary failed (ACK MAE 20.9% higher vs EWMA, interval includes zero); RTT secondary claim withdrawn due baseline units; no transport win | [Plan](network-forecast-v1.md), [config](../../experiments/network-forecast-v1.json), [engineering status](../../artifacts/network-forecast-engineering-status.json), [actual pilot plan](../../artifacts/network-forecast-pilot-plan.json), [results](../../artifacts/network-forecast-pilot-results.json), [exploratory secondary analysis](../../artifacts/network-forecast-secondary.json) |
+
+## SRTT confirmation (registered 2026-11-15)
+
+| Actual start | Actual end | Experiment | Status | Configuration and evidence |
+| --- | --- | --- | --- | --- |
+| Engineering: 2026-11-15T16:18:24.225491+00:00; replication: 2026-11-15T16:19:30.601464+00:00 | Engineering: 2026-11-15T16:19:25.927170+00:00; replication: 2026-11-15T16:25:15.634160+00:00 | rtt-replication-v1 | Retired after completion (96 cases): invalid RTT baseline units; no confirmation claim | [Plan](rtt-replication-v1.md), [config](../../experiments/rtt-replication-v1.json), [engineering status](../../artifacts/rtt-replication-engineering-status.json), [actual replication plan](../../artifacts/rtt-replication-plan.json), [retirement/correction](../../artifacts/rtt-baseline-units-correction.json) |
+
+## Corrected SRTT replication (registered 2026-11-15)
+
+| Actual start | Actual end | Experiment | Status | Configuration and evidence |
+| --- | --- | --- | --- | --- |
+| Engineering: 2026-11-15T16:39:36.920972+00:00; replication: 2026-11-15T16:39:48.178386+00:00 | Engineering: 2026-11-15T16:39:43.448476+00:00; replication: 2026-11-15T16:47:42.030661+00:00 | rtt-replication-v2 | Complete, negative: corrected persistence 14.69 ms vs current ensemble 17.95 ms (22.2% higher point error); no RTT or transport win; v1 retired | [Plan](rtt-replication-v2.md), [config](../../experiments/rtt-replication-v2.json), [actual plan](../../artifacts/rtt-replication-v2-plan.json), [results](../../artifacts/rtt-replication-v2-results.json), [replay](../../artifacts/rtt-replication-v2-replay.json), [correction](../../artifacts/rtt-baseline-units-correction.json) |

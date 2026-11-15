@@ -1,0 +1,11 @@
+{
+  "version": "rtt-replication-engineering-status-v1",
+  "started_utc": "2026-11-15T16:18:24.225491+00:00",
+  "completed_utc": "2026-11-15T16:19:25.927170+00:00",
+  "cases": 2,
+  "modes_completed": 17,
+  "selected_baseline": "ridge-current",
+  "accepted_win": false,
+  "raw_result_sha256": "98e0aef155c1301e5391e5328a372c8f5efb334c4dc66acc0b4ffde4d1a8181f",
+  "scope": "two-case plumbing completion only; no confirmation or performance claim; raw outputs remain private"
+}
