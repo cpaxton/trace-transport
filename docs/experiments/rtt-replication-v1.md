@@ -1,6 +1,12 @@
 # Confirm the exploratory SRTT forecast lead
 
-Registered 2026-11-15. Status: **planned; no results**. Follow-up to
+Registered 2026-11-15. Status: **replication running**. Engineering ran 2026-11-15T16:18:24.225491+00:00 to
+2026-11-15T16:19:25.927170+00:00; new-case replication started 2026-11-15T16:19:30.601464+00:00.
+[Engineering status](../../artifacts/rtt-replication-engineering-status.json),
+[actual plan](../../artifacts/rtt-replication-plan.json). All four targeted tests
+passed on Caliban. Original calibration selected **ridge-current**
+as comparator before new cases were collected. No fresh-case performance result
+is available yet. Follow-up to
 [network-forecast-v1](network-forecast-v1.md), whose primary ACK-byte comparison
 failed. The current-only ensemble's 22.8% SRTT error reduction was selected after
 looking at the old test results; a fresh test is required to confirm it.

@@ -400,4 +400,4 @@ No failure or new unchanged larger job; original reserved tests remain unopened.
 
 | Actual start | Actual end | Experiment | Status | Configuration and evidence |
 | --- | --- | --- | --- | --- |
-| Not started | — | rtt-replication-v1 | Planned; 96 fresh cases, frozen neural models, stronger baselines fit on old train/calibration; no results | [Plan](rtt-replication-v1.md), [config](../../experiments/rtt-replication-v1.json) |
+| Engineering: 2026-11-15T16:18:24.225491+00:00; replication: 2026-11-15T16:19:30.601464+00:00 | Engineering: 2026-11-15T16:19:25.927170+00:00; replication: — | rtt-replication-v1 | Engineering complete; 96-case replication running; comparator ridge-current selected on original calibration; no new result | [Plan](rtt-replication-v1.md), [config](../../experiments/rtt-replication-v1.json), [engineering status](../../artifacts/rtt-replication-engineering-status.json), [actual replication plan](../../artifacts/rtt-replication-plan.json) |
