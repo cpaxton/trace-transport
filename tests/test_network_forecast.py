@@ -100,3 +100,7 @@ def test_srtt_decoder_matches_actual_v6_observer():
         world.env.sessions[0].srtt=srtt
         encoded=world.env.observe()['sender'][0,FEATURES.index('rtt')]
         assert float(decode_srtt(encoded))==pytest.approx(srtt,rel=1e-6)
+        from scripts.network_forecast import baseline_points
+        d=dataset([1]);d['history'][:,:,SCHEMA.index('rtt')]=encoded
+        point,_=baseline_points(d,'persistence')
+        assert float(np.expm1(point[0,0,1])*.1)==pytest.approx(srtt,rel=1e-6)
