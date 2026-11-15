@@ -1,0 +1,37 @@
+{
+  "version": "network-forecast-secondary-v1",
+  "scope": "Post-hoc exploratory 1s SRTT comparisons, all three architecture ensembles shown; unadjusted for multiple comparisons; no change to failed primary criterion.",
+  "comparisons": {
+    "current-ensemble": {
+      "mae_difference_seconds": -0.0054697139346039795,
+      "difference_ci95_seconds": [
+        -0.011013144550528707,
+        -0.0008602155951062048
+      ],
+      "relative_mae_reduction": 0.22797770473541323
+    },
+    "history-ensemble": {
+      "mae_difference_seconds": 0.0015636393405701725,
+      "difference_ci95_seconds": [
+        -0.005911844047347987,
+        0.010119021343514157
+      ],
+      "relative_mae_reduction": -0.06517249570255612
+    },
+    "transformer-ensemble": {
+      "mae_difference_seconds": -0.005010718503230796,
+      "difference_ci95_seconds": [
+        -0.010839321102071139,
+        0.00048817541206532
+      ],
+      "relative_mae_reduction": 0.20884677281107944
+    }
+  },
+  "posthoc": true,
+  "reference": "ewma SRTT persistence with training-fitted residuals",
+  "horizon_seconds": 1.0,
+  "bootstrap_seed": 604,
+  "bootstrap_draws": 2000,
+  "method": "paired case bootstrap within family strata; cases weighted equally; all three ensemble comparisons reported; no multiplicity correction",
+  "input_result_sha256": "f28fa6a6e7c628d4ed1d10ec0c199df5c6595db3cf30e140610326bdde6efc68"
+}

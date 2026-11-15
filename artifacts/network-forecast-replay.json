@@ -1,0 +1,23 @@
+{
+  "version": "network-forecast-replay-v1",
+  "verified_predictions": 32,
+  "verified_model_files": 9,
+  "verified_artifacts": 42,
+  "cases": {
+    "train": 96,
+    "calibration": 24,
+    "test": 48
+  },
+  "samples": {
+    "train": 4306,
+    "calibration": 980,
+    "test": 2297
+  },
+  "all_splits_disjoint": true,
+  "all_case_hashes_verified": true,
+  "exact_prediction_replay": true,
+  "exact_metric_replay": true,
+  "calibration_baseline_selection_verified": true,
+  "result_sha256": "f28fa6a6e7c628d4ed1d10ec0c199df5c6595db3cf30e140610326bdde6efc68",
+  "verified_utc": "2026-11-15T00:25:45.773061+00:00"
+}

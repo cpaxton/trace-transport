@@ -1,0 +1,14 @@
+{
+  "version": "rtt-baseline-units-correction-v1",
+  "recorded_utc": "2026-11-15T16:33:07.129685+00:00",
+  "defect": "v4/v6 observations encode RTT as log1p(SRTT/.001); baseline code treated it as SRTT/.1",
+  "correction": "Decode as expm1(encoded)*.001. Keep raw data/labels/neural weights unchanged; refit corrected deterministic baselines on original training data and select on original calibration.",
+  "affected": "Prior RTT comparisons in forecast-v1 and RTT-replication-v1 are withdrawn for comparative interpretation. Original ACK primary remains failed and unaffected.",
+  "rtt_v1_started_utc": "2026-11-15T16:19:30.601464+00:00",
+  "rtt_v1_completed_utc": "2026-11-15T16:25:15.634160+00:00",
+  "rtt_v1_cases": 96,
+  "rtt_v1_samples": 4022,
+  "original_forecast_result_sha256": "f28fa6a6e7c628d4ed1d10ec0c199df5c6595db3cf30e140610326bdde6efc68",
+  "rtt_v1_result_sha256": "892ac193700143fdf42d47e303c8e2a35a3c7e596a3c66f08a94f0ebfeb4c7e9",
+  "scope": "Bug correction/retirement, no new performance claim; frozen raw runs and source archives retained privately; v2 uses fresh cases."
+}
