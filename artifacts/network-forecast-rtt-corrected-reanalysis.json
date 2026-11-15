@@ -1,0 +1,46 @@
+{
+  "version": "historical-rtt-units-reanalysis-v1",
+  "scope": "Post-hoc deterministic baseline correction on original 48 test cases. No neural retraining or new-case evidence; primary ACK result unchanged.",
+  "original_result_sha256": "f28fa6a6e7c628d4ed1d10ec0c199df5c6595db3cf30e140610326bdde6efc68",
+  "selected_on_original_calibration": "adjusted-persistence",
+  "test_cases": 48,
+  "srtt_1s_mae_seconds": {
+    "raw-persistence": 0.014769736366038573,
+    "adjusted-persistence": 0.01476973408319638,
+    "rtt-ewma": 0.014426355361513037,
+    "bounded-trend": 0.019129998986312832,
+    "ridge-current": 0.01791146832821637,
+    "current-1": 0.020149474430969587,
+    "current-2": 0.017292719704552584,
+    "current-3": 0.01924031891186193,
+    "history-1": 0.02651164817619132,
+    "history-2": 0.027652507281786424,
+    "history-3": 0.02810479736800001,
+    "transformer-1": 0.018950276985244274,
+    "transformer-2": 0.02029775209077328,
+    "transformer-3": 0.019111524071600137,
+    "current-ensemble": 0.018522605581691984,
+    "history-ensemble": 0.025555958856865887,
+    "transformer-ensemble": 0.018981601013065102
+  },
+  "frozen_current_vs_corrected": {
+    "mae_difference_seconds": 0.0037528714984957426,
+    "difference_ci95_seconds": [
+      0.0011211585580202994,
+      0.0069371858992174395
+    ],
+    "relative_mae_reduction": -0.2540920152899202,
+    "cases_with_fresh_rtt": 48,
+    "scope": "paired family-stratified case bootstrap, overlapping windows/endpoints clustered; fixed fitted models; conditional on fresh RTT labels"
+  },
+  "frozen_current_vs_raw": {
+    "mae_difference_seconds": 0.003752869215653572,
+    "difference_ci95_seconds": [
+      0.0011211409076635254,
+      0.0069372053553854165
+    ],
+    "relative_mae_reduction": -0.25409182145476517,
+    "cases_with_fresh_rtt": 48,
+    "scope": "paired family-stratified case bootstrap, overlapping windows/endpoints clustered; fixed fitted models; conditional on fresh RTT labels"
+  }
+}
